@@ -879,34 +879,28 @@ namespace Anewluv.Services.Authentication
 
                                 }
 
-                            
-                                //member 
-                                var EmailViewModel = new EmailViewModel
-                                {
-                                    memberEmailViewModel = new EmailModel
-                                    {
-                                        templateid = (int)templateenum.MemberPasswordChangeMemberNotification,
-                                        messagetypeid = (int)messagetypeenum.UserUpdate,
-                                        addresstypeid = (int)addresstypeenum.SiteUser, 
-                                        emailaddress = profile.emailaddress,
-                                        screename = profile.screenname,
-                                        username =profile.username,
-                                        passwordtoken = sguid1
-                                       // body = string.Format(d2,profile.screenname,profile.username,generatedpassword),
-                                       // subject = templatesubjectenum.MemberPasswordChangeMemberNotification.ToDescription()
-                                    },
-                                    adminEmailViewModel = new EmailModel
-                                    {
-                                        templateid = (int)templateenum.MemberPasswordChangedAdminNotification,
-                                    //    body =  string.Format (d3,profile.username,profile.emailaddress),
-                                        messagetypeid = (int)messagetypeenum.SysAdminUpdate,
-                                        addresstypeid = (int)addresstypeenum.SystemAdmin,
-                                        //subject = templatesubjectenum.MemberPasswordChangedAdminNotification.ToDescription()
-                                    }
-                                };
 
+                                var EmailModels = new List<EmailModel>();
+
+                                EmailModels.Add(new EmailModel
+                                {
+                                    templateid = (int)templateenum.MemberPasswordChangeMemberNotification,
+                                    messagetypeid = (int)messagetypeenum.UserUpdate,
+                                    addresstypeid = (int)addresstypeenum.SiteUser,
+                                    emailaddress = profile.emailaddress,
+                                    screenname = profile.screenname,
+                                    username = profile.username,
+                                    passwordtoken = sguid1
+                                });
+                                EmailModels.Add(new EmailModel
+                                {
+                                    templateid = (int)templateenum.MemberPasswordChangedAdminNotification,
+                                    messagetypeid = (int)messagetypeenum.SysAdminUpdate,
+                                    addresstypeid = (int)addresstypeenum.SystemAdmin,
+                                });
                                 //this sends both admin and user emails  
-                                Api.AsyncCalls.sendmessagebytemplate(EmailViewModel);
+                                Api.AsyncCalls.sendmessagesbytemplate(EmailModels); 
+                               
 
                                 return "true";
                             }

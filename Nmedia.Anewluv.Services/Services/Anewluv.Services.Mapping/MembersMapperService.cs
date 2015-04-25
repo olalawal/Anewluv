@@ -61,7 +61,7 @@ namespace Anewluv.Services.Mapping
 
 
 
-        public MembersMapperService([IAnewluvEntitesScope]IUnitOfWorkAsync unitOfWork,[InSpatialEntitesScope]IGeoDataStoredProcedures storedProcedures)
+        public MembersMapperService([IAnewluvEntitesScope]IUnitOfWorkAsync unitOfWork,[ISpatialEntitesScope]IGeoDataStoredProcedures storedProcedures)
         {
 
             if (unitOfWork == null)

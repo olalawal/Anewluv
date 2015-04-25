@@ -24,6 +24,7 @@ using LoggingLibrary;
 using Nmedia.Infrastructure.Domain.Data;
 using Nmedia.Infrastructure.Mvc;
 using Repository.Pattern.UnitOfWork;
+using Nmedia.Infrastructure.DependencyInjection;
 
 
 
@@ -43,9 +44,9 @@ namespace Nmedia.Services.Notification
         //private IPromotionRepository  promotionrepository;
 
           private readonly IUnitOfWorkAsync _unitOfWorkAsync;
+          private readonly IUnitOfWorkAsync _unitOfWorkAsyncAnewluv;
 
-
-        public NotificationService(IUnitOfWorkAsync unitOfWork)
+          public NotificationService([INotificationEntitiesScope]IUnitOfWorkAsync unitOfWork, [IAnewluvEntitesScope]IUnitOfWorkAsync unitofWorkAnewluv)
         {
 
             if (unitOfWork == null)
@@ -60,6 +61,7 @@ namespace Nmedia.Services.Notification
 
             //promotionrepository = _promotionrepository;
             _unitOfWorkAsync = unitOfWork;
+            _unitOfWorkAsyncAnewluv = unitofWorkAnewluv;
             //disable proxy stuff by default
             //_unitOfWork.DisableProxyCreation = true;
             //  _apikey  = HttpContext.Current.Request.QueryString["apikey"];
@@ -226,7 +228,7 @@ namespace Nmedia.Services.Notification
                             //TO DO show the profile id 
                         EmailViewModel returnmodel = new EmailViewModel
                         {
-                            adminEmailViewModel = new EmailModel { subject = template.subject.description, body = template.body.description }
+                            EmailModel  = new EmailModel { subject = template.subject.description, body = template.body.description }
                         };
                        
 
@@ -237,7 +239,7 @@ namespace Nmedia.Services.Notification
                             c.template = template;
                             c.messagetype = messagetype; //(int)messagetypeenum.DeveloperError;
                             c.body = TemplateParser.RazorFileTemplate(template.filename.description, ref returnmodel, TemplatePath); // c.template == null ? TemplateParser.RazorFileTemplate("", ref error) :                                                            
-                            c.subject = returnmodel.adminEmailViewModel.subject;
+                            c.subject = returnmodel.EmailModel.subject;
                             c.recipients = recipientemailaddresss;
                             c.sendingapplication = "NotificationService";
                             c.systemaddress = systemsenderaddress;
@@ -276,1050 +278,137 @@ namespace Nmedia.Services.Notification
         }
 
 
-        public async Task<string> sendmessagebytemplate(EmailViewModel model)
+        public async Task<string> sendmessagesbytemplate(List<EmailModel> models)
         {
+            //parse the address type
+            //determine if we are sending a To or From email.
 
-           // EmailViewModel viewmodel = new EmailViewModel();
-
-          //    using (var db = _unitOfWork)
-            {
-               // db.IsAuditEnabled = false; //do not audit on adds
-                //db.DisableProxyCreation = true;
-             //   using (var transaction = db.BeginTransaction())
-                {
-                    try
-                    {
-                        //parse the address type
-
-                        //determine if we are sending a To or From email.
-
+                 try
+                 {
+                        // var templateenum = (templateenum)Enum.Parse(typeof(templateenum), model.templateid);
+                        //Id's messed up in DB use the first 
+                        //6	1	Anewluv@sendmail.com	NULL	smtp.sendgrid.net	olawal	azure_b5dd8d41de89841c3093bbb13c07425d@azure.com	kw8LHWnK9rnH7zQ	True	2015-04-20 00:00:00.000	NULL               
+                        dynamic systemsenderaddress = _unitOfWorkAsync.Repository<systemaddress>().Query(a=>a.id == (int)systemaddresseenum.SendGridSMTPrelay).Select().FirstOrDefault();
+                        //11-29-2013 get the template path from web config
+                        var TemplatePath = ConfigurationManager.AppSettings["razortemplatefilelocation"];
 
                         //Task that returns nothing
                         await Task.Factory.StartNew(() =>
                         {
-                            
-                           // var templateenum = (templateenum)Enum.Parse(typeof(templateenum), model.templateid);
-                            //Id's messed up in DB use the first 
-                            //6	1	Anewluv@sendmail.com	NULL	smtp.sendgrid.net	olawal	azure_b5dd8d41de89841c3093bbb13c07425d@azure.com	kw8LHWnK9rnH7zQ	True	2015-04-20 00:00:00.000	NULL               
-                            dynamic systemsenderaddress = _unitOfWorkAsync.Repository<systemaddress>().Query(a=>a.id == (int)systemaddresseenum.SendGridSMTPrelay).Select().FirstOrDefault();                           
-                            //11-29-2013 get the template path from web config
-                            var TemplatePath = ConfigurationManager.AppSettings["razortemplatefilelocation"];
+                             foreach(EmailModel model in models)
+                             {
+                                try
+                                 {
+                                   
 
-                            if (model.memberEmailViewModel != null)
-                            {
-                                EmailModel currentEmailModel = new EmailModel();
-                                message message = new message();
-                                ICollection<address> addresses = new List<address>();
+                                    if (model != null)
+                                    {
+                                        EmailViewModel currentEmailViewModel = new EmailViewModel();
+                                        message message = new message();
+                                        ICollection<address> addresses = new List<address>();
 
-                                //member part
-                                //************************************************************************
-                                var template = _unitOfWorkAsync.Repository<lu_template>().Query(f => f.id == model.memberEmailViewModel.templateid)
-                                     .Include(z => z.filename).Include(z => z.body).Include(z => z.subject).Select().FirstOrDefault();
+                                       //TO DO load from cache
+                                        var template = _unitOfWorkAsync.Repository<lu_template>().Query(f => f.id == model.templateid)
+                                            .Include(z => z.filename).Include(z => z.body).Include(z => z.subject).Select().FirstOrDefault();
 
-                                currentEmailModel = getemailbyEmailViewModel(model.memberEmailViewModel, template, _unitOfWorkAsync);
-                                model.memberEmailViewModel = currentEmailModel;
-                                //create the user address
-                                addresses.Add(getorcreateaddaddress(model.memberEmailViewModel, _unitOfWorkAsync));
+                                        currentEmailViewModel = getemailVMbyEmailModel(model, template);
+                                        //model.memberEmailViewModel = currentEmailModel;
+                                        //create the user address
+                                        addresses.Add(getorcreateaddaddress(model, _unitOfWorkAsync));
 
+                                        //the member message created and sent here
+                                        message = (message.Create(c =>
+                                        {
+                                            c.template_id = template.id;
+                                            c.messagetype_id = currentEmailViewModel.EmailModel.messagetypeid;
+                                            c.body = TemplateParser.RazorFileTemplate(template.filename.description + ".cshtml", ref currentEmailViewModel, TemplatePath); // c.template == null ? TemplateParser.RazorFileTemplate("", ref error) :                                                            
+                                            c.subject = currentEmailViewModel.EmailModel.subject;
+                                            c.recipients = addresses;
+                                            c.sendingapplication = "NotificationService";
+                                            c.systemaddress = systemsenderaddress;
+                                        }));
 
-                                //the member message created and sent here
-                                message = (message.Create(c =>
-                                {
-                                    c.template_id = template.id;
-                                    c.messagetype_id = currentEmailModel.messagetypeid;
-                                    c.body = TemplateParser.RazorFileTemplate(template.filename.description + ".cshtml", ref model, TemplatePath); // c.template == null ? TemplateParser.RazorFileTemplate("", ref error) :                                                            
-                                    c.subject = currentEmailModel.subject;
-                                    c.recipients = addresses;
-                                    c.sendingapplication = "NotificationService";
-                                    c.systemaddress = systemsenderaddress;
-                                }));
+                                        message.sent = message.body != null ? sendemail(message) : false;//attempt to send the message
+                                        message.sendattempts = message.body != null ? 1 : 0;
+                                        //  db.Add(message);
+                                        // int j = db.Commit();
 
-                                message.sent = message.body != null ? sendemail(message) : false;//attempt to send the message
-                                message.sendattempts = message.body != null ? 1 : 0;
-                                //  db.Add(message);
-                                // int j = db.Commit();
+                                        _unitOfWorkAsync.Repository<message>().Insert(message);
+                                        var j = _unitOfWorkAsync.SaveChanges();
+                                    }                         
 
-                                _unitOfWorkAsync.Repository<message>().Insert(message);
-                                var j = _unitOfWorkAsync.SaveChanges();
-                            }
-                            if (model.adminEmailViewModel != null)
-                            {
-                                //send admin email here
-                                //************************************************************
+                                 }
+                                 catch (Exception ex)
+                                 {
+                                     //log individual error for this email and move to next
+                                 }
+                             }
 
-                                EmailModel currentEmailModel = new EmailModel();
-                                message message = new message();
-                                ICollection<address> addresses = new List<address>();
-                                //get the template 
-                                var template = _unitOfWorkAsync.Repository<lu_template>().Query(f => f.id == model.adminEmailViewModel.templateid)
-                                    .Include(z => z.filename).Include(z => z.body).Include(z => z.subject).Select().FirstOrDefault();
-                               
-                                 //get the body and subject formatted
-                                currentEmailModel = getemailbyEmailViewModel(model.adminEmailViewModel, template, _unitOfWorkAsync);
-                                model.adminEmailViewModel = currentEmailModel;
-                                //get the addresss for all admins for now down the line filter based on message type ?
-                                addresses = _unitOfWorkAsync.Repository<address>().Query(z => z.addresstype_id == (int)addresstypeenum.SystemAdmin).Select().ToList();
-
-                                //the member message created and sent here
-                                message = (message.Create(c =>
-                                {
-                                    c.template_id = template.id;
-                                    c.messagetype_id = currentEmailModel.messagetypeid;
-                                    c.body = TemplateParser.RazorFileTemplate(template.filename.description + ".cshtml", ref model, TemplatePath); // c.template == null ? TemplateParser.RazorFileTemplate("", ref error) :                                                            
-                                    c.subject = currentEmailModel.subject;
-                                    c.recipients = addresses;
-                                    c.sendingapplication = "NotificationService";
-                                    c.systemaddress = systemsenderaddress;
-                                }));
-
-
-                                currentEmailModel = getemailbyEmailViewModel(model.memberEmailViewModel, template, _unitOfWorkAsync);
-                                message.sendattempts = message.body != null ? 1 : 0;
-                                //  db.Add(message);
-                                // int j = db.Commit();
-
-                                _unitOfWorkAsync.Repository<message>().Insert(message);
-                               var j = _unitOfWorkAsync.SaveChanges();
-                            }
-
+                             return "true";
                         });
-                        // return task ;
-                        return null;
-                        //return new CompletedAsyncResult<EmailModel>(returnmodel);
                     }
                     catch (Exception ex)
                     {
-                        //// transaction.Rollback();
-                        //can parse the error to build a more custom error mssage and populate fualt faultreason
-                        FaultReason faultreason = new FaultReason("Generic Error");
-                        string ErrorMessage = "";
-                        string ErrorDetail = "ErrorMessage: " + ex.Message;
-                        //log the error but dont notifiy
-                        // new Logging(applicationEnum.notificationservice).WriteSingleEntry(logseverityEnum.Warning, LogenviromentEnum.dev, ex, null, null, false);
-                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-                        //log error mesasge
-                        // new Logging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.Warning , ex, null, null,false);
+                        //to do log error
+                        //thow service error
 
                     }
-                }
-            }
 
-
-
-
-        }
-
-
-        ////Send generic message using the noted email viewmodel to determine the template etc and everything else requires
-        //public async Task sendmessage(EmailViewModel model, string systemaddresstype)
-        //{
-
-        //    EmailModel emailmodels = new EmailModel();
-
-        //    using (var db = new NotificationContext())
-        //    {
-        //       // db.IsAuditEnabled = false; //do not audit on adds
-        //        //db.DisableProxyCreation = true;
-        //     //   using (var transaction = db.BeginTransaction())
-        //        {
-
-        //            try
-        //            {
-
-
-        //                  //Task that returns nothing
-        //                await Task.Factory.StartNew(() =>
-        //                {
-
-
-        //                //parse the address type
-        //                var systemaddresstypeenum = (systemaddresstypeenum)Enum.Parse(typeof(systemaddresstypeenum), systemaddresstype);
-        //                int value = (int)systemaddresstypeenum;
-        //                // var list = _unitOfWorkAsync.Repository<systemaddress>().Queryable().ToList();
-        //                var addresstypes = _unitOfWorkAsync.Repository<systemaddress>().Queryable().ToList();
-
-        //                //  dynamic systemsenderaddress = (from x in (_unitOfWorkAsync.Repository<systemaddress>().Queryable().ToList()) select x).First();
-
-        //                systemaddress systemsenderaddress = (from x in (_unitOfWorkAsync.Repository<systemaddress>().Queryable().ToList().Where(f => f.systemaddresstype_id == value)) select x).FirstOrDefault();
-        //                lu_template template = (from x in (_unitOfWorkAsync.Repository<lu_template>().Queryable().ToList().Where(f => f.id == (int)(model.template.id))) select x).First();
-        //                //verify message type, if meessage type is empty just send the user update
-        //                var messagetype = model.messagetype != null ? (from x in (_unitOfWorkAsync.Repository<lu_messagetype>().Queryable().ToList().Where(f => f.id == model.messagetype.id)) select x).First() :
-        //                                                          (from x in (_unitOfWorkAsync.Repository<lu_messagetype>().Queryable().ToList().Where(f => f.id == (int)(messagetypeenum.UserUpdate))) select x).First();
-        //                //check to see if the recipeint address already exists if not add i
-        //                //took out filtering for now , if an email address was passed we will just send it , trusting the sending app.
-        //                address current = _unitOfWorkAsync.Repository<address>().Queryable().ToList().Where(p => p.emailaddress.ToUpper() == model.memberEmailViewModel.to.ToUpper()).FirstOrDefault(); //&& (p.addresstype_id == (int)addresstypeenum.PromotionUser | p.addresstype.description.ToUpper() == "DEVELOPER")  ).FirstOrDefault();
-
-        //                if (current == null)
-        //                {
-        //                    current = new address();
-        //                    // var addresstype = new lu_addresstype();
-        //                    //   current.addresstype = addresstype;
-        //                    //add the email address                         
-        //                    current.addresstype_id = model.memberEmailViewModel.addresstype != null ? model.memberEmailViewModel.addresstype.GetValueOrDefault() : (int)addresstypeenum.PromotionUser;
-        //                    current.username = model.memberEmailViewModel.username;
-        //                    current.otheridentifer = model.adminEmailViewModel.userlogon;
-        //                    current.emailaddress = model.memberEmailViewModel.to;
-        //                    current.active = true;
-        //                    current.creationdate = DateTime.Now;
-        //                    db.Add(current);
-        //                    int i = db.Commit();
-        //                }
-
-        //                //get the ID since it is required either way , got to be a betetr way to do this than to query twice
-        //                // var currentaddress = _unitOfWorkAsync.Repository<address>().Queryable().Where(p => p.emailaddress.ToUpper() == model.to.ToUpper() && p.addresstype_id == (int)addresstypeenum.PromotionUser).FirstOrDefault();
-
-        //                ICollection<address> addresses = new List<address>();
-        //                //add the address 
-        //                addresses.Add(current);
-
-
-        //                message message = new message();
-        //                //use create method it like this 
-
-        //                //11-29-2013 get the template path from web config
-        //                var TemplatePath = ConfigurationManager.AppSettings["razortemplatefilelocation"];
-
-        //                message = (message.Create(c =>
-        //                {
-        //                    //c.id = (int)templateenum.;
-        //                    c.template = template;
-        //                    c.messagetype = messagetype; //(int)messagetypeenum.DeveloperError;
-        //                    c.body = TemplateParser.RazorFileTemplate(template.filename.description, ref model, TemplatePath); // c.template == null ? TemplateParser.RazorFileTemplate("", ref error) :                                                            
-        //                    c.subject = model.memberEmailViewModel.subject;
-        //                    c.recipients = addresses;
-        //                    c.sendingapplication = "NotificationService";
-        //                    c.systemaddress = systemsenderaddress;
-        //                }));
-
-
-        //                message.sent = message.body != null ? sendemail(message) : false;//attempt to send the message
-        //                message.sendattempts = message.body != null ? 1 : 0;
-        //                db.Add(message);
-        //                int j = db.Commit();
-        //               // transaction.Commit();
-        //                });
-        //                // return new CompletedAsyncResult<EmailModel>(model);
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                //// transaction.Rollback();
-        //                //can parse the error to build a more custom error mssage and populate fualt faultreason
-        //                FaultReason faultreason = new FaultReason("Generic Error");
-        //                //string ErrorMessage = "";
-        //                string ErrorDetail = "ErrorMessage: " + ex.Message;
-        //                //log the error but dont notifiy
-        //                new Logging(applicationEnum.notificationservice).WriteSingleEntry(logseverityEnum.Warning, LogenviromentEnum.dev, ex, null, null, false);
-        //                //throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-        //                //log error mesasge
-        //                // new Logging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.Warning , ex, null, null,false);
-
-        //            }
-
-        //        }
-
-        //    }
-        //}
-
-        
-        ////TO Do find a way to differentiate between user and Member
-        //public EmailViewModel sendcontactusemail(ContactUsModel model)
-        //{
-
-        //    try
-        //    {
-        //        // var testmembertemplate =(int)(templateenum.MemberContactUsMemberMesage );
-        //        //var testadmintemplate = (int)(templateenum.MemberContactUsAdminMessage);
-
-        //        dynamic systemsenderaddress = (from x in (_notificationcontext.systemaddress.Where(f => f.id == (int)(systemaddresstypeenum.DoNotReplyAddress))) select x).First();
-        //        lu_template membertemplate = (from x in (_notificationcontext.lu_template.Where(f => f.id == (int)(templateenum.MemberContactUsMemberMesage))) select x).First();
-        //        lu_template admintemplate = (from x in (_notificationcontext.lu_template.Where(f => f.id == (int)(templateenum.MemberContactUsAdminMessage))) select x).First();
-
-        //        //build the recipeint addresses from contract us model i.f they dont exist create new ones 
-        //        //First get system addresses for admin
-        //        dynamic adminrecipientemailaddresss = (from x in (_notificationcontext.address.Where(f => f.id == (int)(addresstypeenum.SiteSupportAdmin))) select x);
-
-        //        //create new addres for user who already has one otherwise just add to new item
-        //        var memberrecipientaddress = (from x in (_notificationcontext.address.Where(f => f.emailaddress == model.Email)) select x);
-        //        if (!(memberrecipientaddress.Count() > 0))
-        //        {
-        //            var address = new address
-        //            {
-        //                addresstype = _notificationcontext.lu_addresstype.Where(f => f.id == (int)addresstypeenum.SiteUser).FirstOrDefault(),
-        //                emailaddress = model.Email,
-        //                otheridentifer = model.Name,  //use this for chat notifications maybe
-        //                active = true,
-        //                creationdate = DateTime.Now
-        //            };
-        //            saveaddress(address);   //TO DO maybe remove this                      
-        //        }
-
-        //        //TO DO remove these large models after testing is complete
-        //        EmailViewModel returnmodel = new EmailViewModel();
-
-        //        //12-19-2012 olawal Here we added this  , so we can populate the screen name
-        //        MembersViewModel membersviewmodel = new MembersViewModel();
-        //        profile profile = new profile { screenname = model.Name, emailaddress = model.Email };
-        //        membersviewmodel.profile = profile;
-        //        //add it
-        //        returnmodel.MembersViewModel = membersviewmodel;
-
-        //        returnmodel.memberEmailViewModel = getemailbytemplateid(templateenum.MemberContactUsMemberMesage);
-        //        returnmodel.adminEmailViewModel = getemailbytemplateid(templateenum.MemberContactUsAdminMessage);
-        //        //fill in the rest of the email model values i.e format the subject and body
-        //        //subject
-        //        returnmodel.memberEmailViewModel.subject = String.Format(returnmodel.memberEmailViewModel.subject);
-        //        returnmodel.adminEmailViewModel.subject = String.Format(returnmodel.adminEmailViewModel.subject);
-        //        //Body
-        //        returnmodel.memberEmailViewModel.body = String.Format(returnmodel.memberEmailViewModel.body, model.Name, model.Subject, model.Message);
-        //        returnmodel.adminEmailViewModel.body = String.Format(returnmodel.adminEmailViewModel.body, model.Name, model.Email, model.Subject, model.Message);
-
-        //        //Build and send the user Message first               
-
-        //        message message = new message();
-        //        message.template = _notificationcontext.lu_template.Where(f => f.id == (int)templateenum.MemberContactUsMemberMesage).First();
-        //        message.messagetype = _notificationcontext.lu_messagetype.Where(f => f.id == (int)messagetypeenum.UserContactUsnotification).First();
-        //        message.content = TemplateParser.RazorFileTemplate(membertemplate.filename, ref returnmodel);
-        //        message.body = returnmodel.memberEmailViewModel.body;
-        //        message.subject = returnmodel.memberEmailViewModel.subject;
-        //        message.recipients = memberrecipientaddress.ToList();
-        //        message.sendingapplication = "InfoNotificationService";
-        //        message.creationdate = DateTime.Now;
-        //        message.sendattempts = 0;
-        //        message.systemaddress = systemsenderaddress;
-
-
-        //        message.sent = sendemail(message); //attempt to send the message
-        //        savemessage(message);  //save the message into Initial Catalog= 
-
-        //        ////now send the admin message
-        //        ////use create method it like this 
-        //        message = (message.Create(c =>
-        //        {
-        //            //c.id = (int)templateenum.GenericErrorMessage;
-        //            c.template.id = (int)templateenum.MemberContactUsAdminMessage;
-        //            c.messagetype.id = (int)messagetypeenum.UserContactUsnotification;
-        //            c.content = TemplateParser.RazorFileTemplate(admintemplate.filename, ref returnmodel); // c.template == null ? TemplateParser.RazorFileTemplate("", ref error) :                                                            
-        //            c.body = returnmodel.adminEmailViewModel.body;
-        //            c.subject = returnmodel.adminEmailViewModel.subject;
-        //            c.recipients = adminrecipientemailaddresss.ToList();
-        //            c.sendingapplication = "InfoNotificationService";
-        //            c.systemaddress = systemsenderaddress;
-        //        }));
-
-        //        message.sent = sendemail(message); //attempt to send the message
-        //        savemessage(message);  //save the message into Initial Catalog= 
-
-        //        //TO DO remove this after testing is complete;
-        //        return returnmodel;
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //log error mesasge
-        //        new  Logging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
-        //        throw;
-        //    }
-        //    // return null;
-        //}
-
-        ////TO DO revisit this to send back the matches here
-        //public EmailViewModel sendemailmatchesemailbyprofileid(int profileid)
-        //{
-
-
-        //    try
-        //    {
-        //        MembersViewModel model = _membersmapperrepository.getmemberdata(profileid);
-        //        EmailViewModel returnmodel = new EmailViewModel();
-        //        returnmodel.EmailMatches = _membersmapperrepository.getemailmatches(new ProfileModel { profileid = profileid });
-        //        //get featured member
-        //        returnmodel.FeaturedMember = _membersmapperrepository.getmembersearchviewmodel(profileid, featuredmemberid, false);
-        //        returnmodel.memberEmailViewModel = getemailbytemplateid(templateenum.MemberMatchesSentMemberNotification);
-        //        returnmodel.adminEmailViewModel = getemailbytemplateid(templateenum.MemberMatchestSentAdminNotificaton);
-        //        //fill in the rest of the email model values 
-        //        //fill in the rest of the email model values i.e format the subject and body
-        //        //subject
-        //        returnmodel.memberEmailViewModel.subject = String.Format(returnmodel.memberEmailViewModel.subject);
-        //        returnmodel.adminEmailViewModel.subject = String.Format(returnmodel.adminEmailViewModel.subject);
-        //        //Body
-        //        returnmodel.memberEmailViewModel.body = String.Format(returnmodel.memberEmailViewModel.body, model.profile.screenname, returnmodel.EmailMatches.Count(), DateTime.Now, model.profile.id);
-        //        returnmodel.adminEmailViewModel.body = String.Format(returnmodel.adminEmailViewModel.body, model.profile.username, model.profile.emailaddress, returnmodel.EmailMatches.Count(), DateTime.Now);
-        //        //send the emails here i think trhough the service
-        //        //once things are finally done there will he only a boolean return
-
-        //        returnmodel.HasMatches = (returnmodel.EmailMatches.Count > 0) ? true : false;
-
-        //        dynamic systemsenderaddress = (from x in (_notificationcontext.systemaddress.Where(f => f.id == (int)(systemaddresstypeenum.DoNotReplyAddress))) select x).First();
-        //        lu_template membertemplate = (from x in (_notificationcontext.lu_template.Where(f => f.id == (int)(templateenum.MemberMatchesSentMemberNotification))) select x).First();
-        //        lu_template admintemplate = (from x in (_notificationcontext.lu_template.Where(f => f.id == (int)(templateenum.MemberMatchestSentAdminNotificaton))) select x).First();
-
-        //        //build the recipeint addresses from contract us model i.f they dont exist create new ones 
-        //        //First get system addresses for admin
-        //        dynamic adminrecipientemailaddresss = (from x in (_notificationcontext.address.Where(f => f.id == (int)(addresstypeenum.SiteSupportAdmin))) select x);
-
-        //        //create new addres for user who already has one otherwise just add to new item
-        //        var memberrecipientaddress = (from x in (_notificationcontext.address.Where(f => f.emailaddress == model.profile.emailaddress)) select x);
-        //        if (!(memberrecipientaddress.Count() > 0))
-        //        {
-        //            var address = new address
-        //            {
-        //                addresstype = _notificationcontext.lu_addresstype.Where(f => f.id == (int)addresstypeenum.SiteUser).FirstOrDefault(),
-        //                emailaddress = model.profile.emailaddress,
-        //                otheridentifer = model.profile.username,  //use this for chat notifications maybe
-        //                active = true,
-        //                creationdate = DateTime.Now
-        //            };
-        //            saveaddress(address);   //TO DO maybe remove this                      
-        //        }
-
-
-        //        //Build and send the user Message first               
-
-        //        message message = new message();
-        //        message.template = _notificationcontext.lu_template.Where(f => f.id == (int)templateenum.MemberMatchesSentMemberNotification).First();
-        //        message.messagetype = _notificationcontext.lu_messagetype.Where(f => f.id == (int)messagetypeenum.UserUpdate).First();
-        //        message.content = TemplateParser.RazorFileTemplate(membertemplate.filename, ref returnmodel);
-        //        message.body = returnmodel.memberEmailViewModel.body;
-        //        message.subject = returnmodel.memberEmailViewModel.subject;
-        //        message.recipients = memberrecipientaddress.ToList();
-        //        message.sendingapplication = "InfoNotificationService";
-        //        message.creationdate = DateTime.Now;
-        //        message.sendattempts = 0;
-        //        message.systemaddress = systemsenderaddress;
-
-
-        //        message.sent = sendemail(message); //attempt to send the message
-        //        savemessage(message);  //save the message into Initial Catalog= 
-
-        //        ////now send the admin message
-        //        ////use create method it like this 
-        //        message = (message.Create(c =>
-        //        {
-        //            //c.id = (int)templateenum.GenericErrorMessage;
-        //            c.template.id = (int)templateenum.MemberMatchestSentAdminNotificaton;
-        //            c.messagetype.id = (int)messagetypeenum.SysAdminUpdate;
-        //            c.content = TemplateParser.RazorFileTemplate(admintemplate.filename, ref returnmodel); // c.template == null ? TemplateParser.RazorFileTemplate("", ref error) :                                                            
-        //            c.body = returnmodel.adminEmailViewModel.body;
-        //            c.subject = returnmodel.adminEmailViewModel.subject;
-        //            c.recipients = adminrecipientemailaddresss.ToList();
-        //            c.sendingapplication = "InfoNotificationService";
-        //            c.systemaddress = systemsenderaddress;
-        //        }));
-
-        //        message.sent = sendemail(message); //attempt to send the message
-        //        savemessage(message);  //save the message into Initial Catalog= 
-
-        //        //TO DO remove this after testing is complete;
-        //        return returnmodel;
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //log error mesasge
-        //        new  Logging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
-        //        throw;
-        //    }
-
-
-
-
-
-        //}
-
-        //public EmailViewModel sendmembercreatedemail(registermodel model)
-        //{
-        //    try
-        //    {
-        //        EmailViewModel returnmodel = new EmailViewModel();
-        //        returnmodel.memberEmailViewModel = getemailbytemplateid(templateenum.MemberCreatedMemberNotification);
-        //        returnmodel.adminEmailViewModel = getemailbytemplateid(templateenum.MemberCreatedAdminNotification);
-
-        //        //fill in the rest of the email model values i.e format the subject and body
-        //        //subject
-        //        returnmodel.memberEmailViewModel.subject = String.Format(returnmodel.memberEmailViewModel.subject);
-        //        returnmodel.adminEmailViewModel.subject = String.Format(returnmodel.adminEmailViewModel.subject);
-
-        //        //Body
-        //        returnmodel.memberEmailViewModel.body = String.Format(returnmodel.memberEmailViewModel.body, model.screenname, model.username, model.activationcode);
-        //        returnmodel.adminEmailViewModel.body = String.Format(returnmodel.adminEmailViewModel.body, model.screenname, model.emailaddress);
-        //        return returnmodel;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //log error mesasge
-        //        new  Logging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
-        //        throw;
-        //    }
-        //    return null;
-        //}
-
-        //public EmailViewModel sendmembercreatedopenidemail(registermodel model)
-        //{
-
-
-        //    try
-        //    {
-
-        //        EmailViewModel returnmodel = new EmailViewModel();
-        //        returnmodel.memberEmailViewModel = getemailbytemplateid(templateenum.MemberCreatedMemberNotification);
-        //        returnmodel.adminEmailViewModel = getemailbytemplateid(templateenum.MemberCreatedAdminNotification);
-
-        //        //fill in the rest of the email model values i.e format the subject and body
-        //        //subject
-        //        returnmodel.memberEmailViewModel.subject = String.Format(returnmodel.memberEmailViewModel.subject);
-        //        returnmodel.adminEmailViewModel.subject = String.Format(returnmodel.adminEmailViewModel.subject, model.openidprovider);
-
-        //        //Body
-        //        returnmodel.memberEmailViewModel.body = String.Format(returnmodel.memberEmailViewModel.body, model.screenname, model.openidprovider, model.username);
-        //        returnmodel.adminEmailViewModel.body = String.Format(returnmodel.adminEmailViewModel.body, model.screenname, model.emailaddress, model.openidprovider);
-
-        //        return returnmodel;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //log error mesasge
-        //        new  Logging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
-        //        throw;
-        //    }
-        //    return null;
-
-        //}
-
-        //public EmailViewModel sendmemberpasswordchangedemail(LogonViewModel model)
-        //{
-
-        //    try
-        //    {
-        //        EmailViewModel returnmodel = new EmailViewModel();
-
-        //        returnmodel.memberEmailViewModel = getemailbytemplateid(templateenum.MemberPasswordChangeMemberNotification);
-        //        returnmodel.adminEmailViewModel = getemailbytemplateid(templateenum.MemberPasswordChangedAdminNotification);
-
-        //        //fill in the rest of the email model values i.e format the subject and body
-        //        //subject
-        //        returnmodel.memberEmailViewModel.subject = String.Format(returnmodel.memberEmailViewModel.subject);
-        //        returnmodel.adminEmailViewModel.subject = String.Format(returnmodel.adminEmailViewModel.subject);
-
-        //        //Body
-        //        returnmodel.memberEmailViewModel.body = String.Format(returnmodel.memberEmailViewModel.body, model.LogOnModel.ScreenName, model.LogOnModel.UserName, model.LogOnModel.Password, model.LogOnModel.ProfileID);
-        //        returnmodel.adminEmailViewModel.body = String.Format(returnmodel.adminEmailViewModel.body, model.LogOnModel.UserName, model.LostAccountInfoModel.Email);
-
-        //        //send the emails here i think trhough the service
-        //        //once things are finally done there will he only a boolean return
-
-
-        //        return returnmodel;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //log error mesasge
-        //        new  Logging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
-        //        throw;
-        //    }
-        //    return null;
-
-        //}
-
-        //public EmailViewModel sendmemberprofileactivatedemailbyprofileid(int profileid)
-        //{
-
-
-        //    try
-        //    {
-        //        //get the profile info
-        //        profile model = _membersrepository.getprofilebyprofileid(new ProfileModel { profileid = profileid });
-
-        //        EmailViewModel returnmodel = new EmailViewModel();
-
-        //        returnmodel.memberEmailViewModel = getemailbytemplateid(templateenum.MemberActivatedMemberNotification);
-        //        returnmodel.adminEmailViewModel = getemailbytemplateid(templateenum.MemberActivatedAdminNotification);
-
-        //        //fill in the rest of the email model values i.e format the subject and body
-        //        //subject
-        //        returnmodel.memberEmailViewModel.subject = String.Format(returnmodel.memberEmailViewModel.subject);
-        //        returnmodel.adminEmailViewModel.subject = String.Format(returnmodel.adminEmailViewModel.subject);
-
-        //        //Body
-        //        returnmodel.memberEmailViewModel.body = String.Format(returnmodel.memberEmailViewModel.body, model.screenname, model.username);
-        //        returnmodel.adminEmailViewModel.body = String.Format(returnmodel.adminEmailViewModel.body, model.username, model.emailaddress);
-
-        //        //send the emails here i think trhough the service
-        //        //once things are finally done there will he only a boolean return
-
-
-        //        return returnmodel;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //handle logging here
-        //    }
-        //    return null;
-        //}
-
-        //public EmailViewModel sendmemberactivationcoderecoveredemailbyprofileid(int profileid)
-        //{
-
-        //    try
-        //    {
-        //        //get the profile info
-        //        profile model = _membersrepository.getprofilebyprofileid(new ProfileModel { profileid = profileid });
-
-        //        EmailViewModel returnmodel = new EmailViewModel();
-
-        //        returnmodel.memberEmailViewModel = getemailbytemplateid(templateenum.MemberActivationCodeRecoveredMemberNotification);
-        //        returnmodel.adminEmailViewModel = getemailbytemplateid(templateenum.MemberActivationCodeRecoveredAdminNotification);
-
-        //        //fill in the rest of the email model values i.e format the subject and body
-        //        //subject
-        //        returnmodel.memberEmailViewModel.subject = String.Format(returnmodel.memberEmailViewModel.subject);
-        //        returnmodel.adminEmailViewModel.subject = String.Format(returnmodel.adminEmailViewModel.subject);
-
-        //        //Body
-        //        returnmodel.memberEmailViewModel.body = String.Format(returnmodel.memberEmailViewModel.body, model.screenname, model.username, model.activationcode);
-        //        returnmodel.adminEmailViewModel.body = String.Format(returnmodel.adminEmailViewModel.body, model.username, model.emailaddress);
-
-        //        //send the emails here i think trhough the service
-        //        //once things are finally done there will he only a boolean return
-
-
-        //        return returnmodel;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //handle logging here
-        //    }
-        //    return null;
-        //}
-
-        //public EmailViewModel sendmemberemailmemssagereceivedemailbyprofileid(int recipientprofileid, int senderprofileid)
-        //{
-
-
-        //    try
-        //    {
-        //        //get the profile info
-        //        profile recipient = _membersrepository.getprofilebyprofileid(new ProfileModel { profileid = recipientprofileid });
-        //        profile sender = _membersrepository.getprofilebyprofileid(new ProfileModel { profileid = senderprofileid });
-
-        //        EmailViewModel returnmodel = new EmailViewModel();
-
-        //        returnmodel.memberEmailViewModel = getemailbytemplateid(templateenum.MemberActivationCodeRecoveredMemberNotification);
-        //        returnmodel.adminEmailViewModel = getemailbytemplateid(templateenum.MemberActivationCodeRecoveredAdminNotification);
-
-        //        //fill in the rest of the email model values i.e format the subject and body
-        //        //subject
-        //        returnmodel.memberEmailViewModel.subject = String.Format(returnmodel.memberEmailViewModel.subject);
-        //        returnmodel.adminEmailViewModel.subject = String.Format(returnmodel.adminEmailViewModel.subject);
-
-        //        //Body
-        //        returnmodel.memberEmailViewModel.body = String.Format(returnmodel.memberEmailViewModel.body, recipient.screenname, sender.screenname, sender.id);
-        //        returnmodel.adminEmailViewModel.body = String.Format(returnmodel.adminEmailViewModel.body, recipient.emailaddress, sender.emailaddress);
-
-        //        //send the emails here i think trhough the service
-        //        //once things are finally done there will he only a boolean return
-
-
-        //        return returnmodel;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //handle logging here
-        //    }
-        //    return null;
-        //}
-
-        //public EmailViewModel sendmemberpeekreceivedemailbyprofileid(int recipientprofileid, int senderprofileid)
-        //{
-
-
-        //    try
-        //    {
-        //        //get the profile info
-        //        profile recipient = _membersrepository.getprofilebyprofileid(new ProfileModel { profileid = recipientprofileid });
-        //        profile sender = _membersrepository.getprofilebyprofileid(new ProfileModel { profileid = senderprofileid });
-
-        //        EmailViewModel returnmodel = new EmailViewModel();
-
-        //        returnmodel.memberEmailViewModel = getemailbytemplateid(templateenum.MemberRecivedPeekMemberNotification);
-        //        returnmodel.adminEmailViewModel = getemailbytemplateid(templateenum.MemberRecivedPeekAdminNotification);
-
-        //        //fill in the rest of the email model values i.e format the subject and body
-        //        //subject
-        //        returnmodel.memberEmailViewModel.subject = String.Format(returnmodel.memberEmailViewModel.subject);
-        //        returnmodel.adminEmailViewModel.subject = String.Format(returnmodel.adminEmailViewModel.subject);
-
-        //        //Body
-        //        returnmodel.memberEmailViewModel.body = String.Format(returnmodel.memberEmailViewModel.body, recipient.screenname, sender.screenname, sender.id);
-        //        returnmodel.adminEmailViewModel.body = String.Format(returnmodel.adminEmailViewModel.body, recipient.emailaddress, sender.emailaddress);
-
-        //        //send the emails here i think trhough the service
-        //        //once things are finally done there will he only a boolean return
-
-
-        //        return returnmodel;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //handle logging here
-        //    }
-        //    return null;
-        //}
-
-        //public EmailViewModel sendmemberlikereceivedemailbyprofileid(int recipientprofileid, int senderprofileid)
-        //{
-
-
-
-        //    try
-        //    {
-        //        //get the profile info
-        //        profile recipient = _membersrepository.getprofilebyprofileid(new ProfileModel { profileid = recipientprofileid });
-        //        profile sender = _membersrepository.getprofilebyprofileid(new ProfileModel { profileid = senderprofileid });
-
-        //        EmailViewModel returnmodel = new EmailViewModel();
-
-        //        returnmodel.memberEmailViewModel = getemailbytemplateid(templateenum.MemberRecivedLikeMemberNotification);
-        //        returnmodel.adminEmailViewModel = getemailbytemplateid(templateenum.MemberRecivedLikeAdminNotification);
-
-        //        //fill in the rest of the email model values i.e format the subject and body
-        //        //subject
-        //        returnmodel.memberEmailViewModel.subject = String.Format(returnmodel.memberEmailViewModel.subject);
-        //        returnmodel.adminEmailViewModel.subject = String.Format(returnmodel.adminEmailViewModel.subject);
-
-        //        //Body
-        //        returnmodel.memberEmailViewModel.body = String.Format(returnmodel.memberEmailViewModel.body, recipient.screenname, sender.screenname, sender.id);
-        //        returnmodel.adminEmailViewModel.body = String.Format(returnmodel.adminEmailViewModel.body, recipient.emailaddress, sender.emailaddress);
-
-        //        //send the emails here i think trhough the service
-        //        //once things are finally done there will he only a boolean return
-
-
-        //        return returnmodel;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //handle logging here
-        //    }
-        //    return null;
-
-        //}
-
-        //public EmailViewModel sendmemberinterestreceivedemailbyprofileid(int recipientprofileid, int senderprofileid)
-        //{
-
-
-
-        //    try
-        //    {
-        //        //get the profile info
-        //        profile recipient = _membersrepository.getprofilebyprofileid(new ProfileModel { profileid = recipientprofileid });
-        //        profile sender = _membersrepository.getprofilebyprofileid(new ProfileModel { profileid = senderprofileid });
-
-        //        EmailViewModel returnmodel = new EmailViewModel();
-
-        //        returnmodel.memberEmailViewModel = getemailbytemplateid(templateenum.MemberRecivedInterestMemberNotification);
-        //        returnmodel.adminEmailViewModel = getemailbytemplateid(templateenum.MemberRecivedInterestAdminNotification);
-
-        //        //fill in the rest of the email model values i.e format the subject and body
-        //        //subject
-        //        returnmodel.memberEmailViewModel.subject = String.Format(returnmodel.memberEmailViewModel.subject);
-        //        returnmodel.adminEmailViewModel.subject = String.Format(returnmodel.adminEmailViewModel.subject);
-
-        //        //Body
-        //        returnmodel.memberEmailViewModel.body = String.Format(returnmodel.memberEmailViewModel.body, recipient.screenname, sender.screenname, sender.id);
-        //        returnmodel.adminEmailViewModel.body = String.Format(returnmodel.adminEmailViewModel.body, recipient.emailaddress, sender.emailaddress);
-
-        //        //send the emails here i think trhough the service
-        //        //once things are finally done there will he only a boolean return
-
-
-        //        return returnmodel;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //handle logging here
-        //    }
-        //    return null;
-        //}
-
-        //public EmailViewModel sendmemberchatrequestreceivedemailbyprofileid(int recipientprofileid, int senderprofileid)
-        //{
-
-
-        //    try
-        //    {
-        //        //get the profile info
-        //        profile recipient = _membersrepository.getprofilebyprofileid(new ProfileModel { profileid = recipientprofileid });
-        //        profile sender = _membersrepository.getprofilebyprofileid(new ProfileModel { profileid = senderprofileid });
-        //        EmailViewModel returnmodel = new EmailViewModel();
-        //        returnmodel.memberEmailViewModel = getemailbytemplateid(templateenum.MemberRecivedChatRequestMemberNotification);
-        //        returnmodel.adminEmailViewModel = getemailbytemplateid(templateenum.MemberRecivedChatRequestAdminNotification);
-
-        //        //fill in the rest of the email model values i.e format the subject and body
-        //        //subject
-        //        returnmodel.memberEmailViewModel.subject = String.Format(returnmodel.memberEmailViewModel.subject);
-        //        returnmodel.adminEmailViewModel.subject = String.Format(returnmodel.adminEmailViewModel.subject);
-
-        //        //Body
-        //        returnmodel.memberEmailViewModel.body = String.Format(returnmodel.memberEmailViewModel.body, recipient.screenname, sender.screenname, sender.id);
-        //        returnmodel.adminEmailViewModel.body = String.Format(returnmodel.adminEmailViewModel.body, recipient.emailaddress, sender.emailaddress);
-
-        //        //send the emails here i think trhough the service
-        //        //once things are finally done there will he only a boolean return
-
-
-        //        return returnmodel;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //handle logging here
-        //    }
-        //    return null;
-
-        //}
-
-        //public EmailViewModel sendmemberofflinechatmessagereceivedemailbyprofileid(int recipientprofileid, int senderprofileid)
-        //{
-
-
-        //    try
-        //    {
-        //        //get the profile info
-        //        profile recipient = _membersrepository.getprofilebyprofileid(new ProfileModel { profileid = recipientprofileid });
-        //        profile sender = _membersrepository.getprofilebyprofileid(new ProfileModel { profileid = senderprofileid });
-        //        EmailViewModel returnmodel = new EmailViewModel();
-        //        returnmodel.memberEmailViewModel = getemailbytemplateid(templateenum.MemberRecivedOfflineChatMessageMemberNotification);
-        //        returnmodel.adminEmailViewModel = getemailbytemplateid(templateenum.MemberRecivedOfflineChatMessageAdminNotification);
-        //        //fill in the rest of the email model values i.e format the subject and body
-        //        //subject
-        //        returnmodel.memberEmailViewModel.subject = String.Format(returnmodel.memberEmailViewModel.subject);
-        //        returnmodel.adminEmailViewModel.subject = String.Format(returnmodel.adminEmailViewModel.subject);
-        //        //Body
-        //        returnmodel.memberEmailViewModel.body = String.Format(returnmodel.memberEmailViewModel.body, recipient.screenname, sender.screenname, sender.id);
-        //        returnmodel.adminEmailViewModel.body = String.Format(returnmodel.adminEmailViewModel.body, recipient.emailaddress, sender.emailaddress);
-        //        //send the emails here i think trhough the service
-        //        //once things are finally done there will he only a boolean return
-        //        return returnmodel;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //handle logging here
-        //    }
-        //    return null;
-
-
-        //}
-
-        //public EmailViewModel sendmemberphotorejectedemailbyprofileid(int profileid, int adminprofileid, photorejectionreasonEnum reason)
-        //{
-
-
-        //    try
-        //    {
-        //        //get the profile info
-        //        profile recipient = _membersrepository.getprofilebyprofileid(new ProfileModel { profileid = profileid });
-        //        profile admin = _membersrepository.getprofilebyprofileid(new ProfileModel { profileid = adminprofileid });
-        //        //get rejecttion reason
-        //        string reasondesc = _datingcontext.lu_photorejectionreason.Where(p => p.id == (int)reason).FirstOrDefault().description;
-        //        EmailViewModel returnmodel = new EmailViewModel();
-        //        returnmodel.memberEmailViewModel = getemailbytemplateid(templateenum.MemberPhotoRejectedMemberNotification);
-        //        returnmodel.adminEmailViewModel = getemailbytemplateid(templateenum.MemberPhotoRejectedAdminNotification);
-        //        //fill in the rest of the email model values i.e format the subject and body
-        //        //subject
-        //        returnmodel.memberEmailViewModel.subject = String.Format(returnmodel.memberEmailViewModel.subject);
-        //        returnmodel.adminEmailViewModel.subject = String.Format(returnmodel.adminEmailViewModel.subject);
-        //        //Body
-        //        returnmodel.memberEmailViewModel.body = String.Format(returnmodel.memberEmailViewModel.body, recipient.screenname, reasondesc);
-        //        returnmodel.adminEmailViewModel.body = String.Format(returnmodel.adminEmailViewModel.body, recipient.username, recipient.emailaddress, admin.username);
-        //        //send the emails here i think trhough the service
-        //        //once things are finally done there will he only a boolean return
-        //        return returnmodel;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //handle logging here
-        //    }
-        //    return null;
-
-        //}
-
-        //public EmailViewModel sendmemberphotouploadedemailbyprofileid(int profileid)
-        //{
-
-
-        //    try
-        //    {
-        //        //get the profile info
-        //        profile recipient = _membersrepository.getprofilebyprofileid(new ProfileModel { profileid = profileid });
-        //        // profile admin = _membersrepository.getprofilebyprofileid(new ProfileModel { profileid = adminprofileid });
-        //        //get rejecttion reason
-        //        // string reasondesc = _datingcontext.lu_photorejectionreason.Where(p => p.id == (int)reason).FirstOrDefault().description;
-        //        EmailViewModel returnmodel = new EmailViewModel();
-        //        returnmodel.memberEmailViewModel = getemailbytemplateid(templateenum.MemberPhotoUploadedMemberNotification);
-        //        returnmodel.adminEmailViewModel = getemailbytemplateid(templateenum.MemberPhotoUploadedAdminNotification);
-        //        //fill in the rest of the email model values i.e format the subject and body
-        //        //subject
-        //        returnmodel.memberEmailViewModel.subject = String.Format(returnmodel.memberEmailViewModel.subject);
-        //        returnmodel.adminEmailViewModel.subject = String.Format(returnmodel.adminEmailViewModel.subject);
-        //        //Body
-        //        returnmodel.memberEmailViewModel.body = String.Format(returnmodel.memberEmailViewModel.body, recipient.screenname);
-        //        returnmodel.adminEmailViewModel.body = String.Format(returnmodel.adminEmailViewModel.body, recipient.username, recipient.emailaddress);
-        //        //send the emails here i think trhough the service
-        //        //once things are finally done there will he only a boolean return
-        //        return returnmodel;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //handle logging here
-        //    }
-        //    return null;
-
-        //}
-
-        //public EmailViewModel sendadminspamblockedemailbyprofileid(int blockedprofileid)
-        //{
-
-        //    try
-        //    {
-        //        //get the profile info
-        //        profile recipient = _membersrepository.getprofilebyprofileid(new ProfileModel { profileid = blockedprofileid });
-        //        // profile admin = _membersrepository.getprofilebyprofileid(new ProfileModel { profileid = adminprofileid });
-        //        //get rejecttion reason
-        //        // string reasondesc = _datingcontext.lu_photorejectionreason.Where(p => p.id == (int)reason).FirstOrDefault().description;
-
-        //        EmailViewModel returnmodel = new EmailViewModel();
-        //        returnmodel.memberEmailViewModel = getemailbytemplateid(templateenum.MemberPhotoUploadedMemberNotification);
-        //        returnmodel.adminEmailViewModel = getemailbytemplateid(templateenum.MemberPhotoUploadedAdminNotification);
-        //        //fill in the rest of the email model values i.e format the subject and body
-        //        //subject
-        //        returnmodel.memberEmailViewModel.subject = String.Format(returnmodel.memberEmailViewModel.subject);
-        //        returnmodel.adminEmailViewModel.subject = String.Format(returnmodel.adminEmailViewModel.subject);
-        //        //Body
-        //        returnmodel.memberEmailViewModel.body = String.Format(returnmodel.memberEmailViewModel.body, recipient.screenname);
-        //        returnmodel.adminEmailViewModel.body = String.Format(returnmodel.adminEmailViewModel.body, recipient.username, recipient.emailaddress);
-        //        //send the emails here i think trhough the service
-        //        //once things are finally done there will he only a boolean return
-        //        return returnmodel;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //handle logging here
-        //    }
-        //    return null;
-        //}
-
-        //public EmailViewModel sendadminmemberspamblockedemailbyprofileid(int spamblockedprofileid, string reason, string blockedby)
-        //{
-
-
-        //    try
-        //    {
-        //        //get the profile info
-        //        profile blocked = _membersrepository.getprofilebyprofileid(new ProfileModel { profileid = spamblockedprofileid });
-        //        EmailViewModel returnmodel = new EmailViewModel();
-        //        returnmodel.adminEmailViewModel = getemailbytemplateid(templateenum.MemberSpamBlockedAdminNotification);
-        //        //fill in the rest of the email model values i.e format the subject and body
-        //        //subject
-        //        returnmodel.adminEmailViewModel.subject = String.Format(returnmodel.adminEmailViewModel.subject, blockedby);
-        //        //Body
-        //        returnmodel.adminEmailViewModel.body = String.Format(returnmodel.adminEmailViewModel.body, blocked.username, blocked.emailaddress, reason);
-        //        //send the emails here i think trhough the service
-        //        //once things are finally done there will he only a boolean return
-        //        return returnmodel;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //handle logging here
-        //    }
-        //    return null;
-
-        //}
-
-        //public EmailViewModel sendadminmemberblockedemailbyprofileid(int blockedprofileid, int blockerprofileid)
-        //{
-
-
-        //    try
-        //    {
-        //        //get the profile info
-        //        profile blocked = _membersrepository.getprofilebyprofileid(new ProfileModel { profileid = blockedprofileid });
-        //        profile blocker = _membersrepository.getprofilebyprofileid(new ProfileModel { profileid = blockerprofileid });
-
-        //        //get the notes since the block was created first before email was sent
-        //        var blockreason = _datingcontext.blocks.Where(p => p.blockprofile_id == blockedprofileid && p.id == blockedprofileid).FirstOrDefault();
-        //        EmailViewModel returnmodel = new EmailViewModel();
-        //        returnmodel.adminEmailViewModel = getemailbytemplateid(templateenum.MemberSpamBlockedAdminNotification);
-        //        //fill in the rest of the email model values i.e format the subject and body
-        //        //subject
-        //        returnmodel.adminEmailViewModel.subject = String.Format(returnmodel.adminEmailViewModel.subject);
-        //        //Body
-        //        returnmodel.adminEmailViewModel.body = String.Format(returnmodel.adminEmailViewModel.body, blocked.emailaddress, blocker.emailaddress, blockreason.notes.FirstOrDefault());
-        //        //send the emails here i think trhough the service
-        //        //once things are finally done there will he only a boolean return
-        //        return returnmodel;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //handle logging here
-        //    }
-        //    return null;
-        //}
-
-        ////There is no message for Members to know when photos are approved btw
-        //public EmailViewModel sendadminmemberphotoapprovedemailbyprofileid(int approvedprofileid, int adminprofileid)
-        //{
-
-        //    try
-        //    {
-        //        //get the profile info
-        //        profile profile = _membersrepository.getprofilebyprofileid(new ProfileModel { profileid = approvedprofileid });
-        //        profile admin = _membersrepository.getprofilebyprofileid(new ProfileModel { profileid = adminprofileid });
-        //        EmailViewModel returnmodel = new EmailViewModel();
-        //        returnmodel.adminEmailViewModel = getemailbytemplateid(templateenum.MemberPhotoApprovedAdminNotification);
-        //        //fill in the rest of the email model values i.e format the subject and body
-        //        //subject
-        //        returnmodel.adminEmailViewModel.subject = String.Format(returnmodel.adminEmailViewModel.subject);
-        //        //Body
-        //        returnmodel.adminEmailViewModel.body = String.Format(returnmodel.adminEmailViewModel.body, profile.username, profile.emailaddress, admin.screenname);
-        //        //send the emails here i think trhough the service
-        //        //once things are finally done there will he only a boolean return
-        //        return returnmodel;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //handle logging here
-        //    }
-        //    return null;
-
-
-        //}
-
-
-        //public EmailModel getemailbytemplateid(templateenum template)
-        //{
-        //    EmailModel emaildetail = new EmailModel();
-
-        //    try
-        //    {
-        //        emaildetail.body = _notificationcontext.lu_template.Where(p => p.id == (int)template).FirstOrDefault().bodystring.description;
-        //        emaildetail.subject = _notificationcontext.lu_template.Where(p => p.id == (int)template).FirstOrDefault().subjectstring.description;
-        //        //TO DO figure out if we will populate other values here
-        //        return emaildetail;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //handle logging here
-        //    }
-        //    return null;
-
-        //}
-
-
+                 return "false";
+      }
+       
 
 
 
         #region "Private methods"
-        //Private reusable internal functions 
+
+        private EmailViewModel getemailVMbyEmailModel(EmailModel model, lu_template template)
+        {
+            EmailViewModel emaildetail = new EmailViewModel();
+
+            try
+            {
+
+                string subject = template.subject.description;
+                string body = template.body.description;
+                templateenum selectedtemplate = (templateenum)model.templateid;
+
+
+                switch (selectedtemplate)
+                {
+                    case templateenum.GenericErrorMessage:
+                        // Console.WriteLine("Case 1");
+                        break;
+                    case templateenum.MemberPasswordChangeMemberNotification:
+                        model.subject = subject;
+                        model.body = string.Format(body, model.screenname, model.username, model.passwordtoken);
+                        emaildetail.EmailModel = model;  //add the new updated model
+                        break;
+                    default:
+                        Console.WriteLine("Default case");
+                        break;
+                }
+
+
+
+                //TO DO figure out if we will populate other values here
+                return emaildetail;
+            }
+            catch (Exception ex)
+            {
+                //handle logging here
+                using (var logger = new Logging(applicationEnum.NotificationService))
+                {
+                    logger.WriteSingleEntry(logseverityEnum.Warning, enviromentEnum.dev, ex, null, null, false);
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason              
+                }
+            }
+            return null;
+
+        }
+
+            
+       //Private reusable internal functions 
         //TO DO this should be handled as a separate send for each so we can update the susccess individually
         //Private reusable internal functions  
         //TO DO this should be handled as a separate send for each so we can update the susccess individually
@@ -1381,11 +470,9 @@ namespace Nmedia.Services.Notification
 
             return isEmailSendSuccessfully;
         }
-
-      
        
        //TO do might want to be able to send multiple emails at once instead instead of verifiying each 
-       private address getorcreateaddaddress(EmailModel Model, IUnitOfWorkAsync db)
+        private address getorcreateaddaddress(EmailModel Model, IUnitOfWorkAsync db)
        {
        
          //check to see if the recipeint address already exists if not add i
@@ -1421,53 +508,8 @@ namespace Nmedia.Services.Notification
                         message message = new message();
                         return current;
        
-       }
+       }              
        
-       
-       private EmailModel getemailbyEmailViewModel(EmailModel model,lu_template template, IUnitOfWorkAsync db)
-        {
-           // EmailModel emaildetail = new EmailModel();
-
-            try
-            {
-
-                string subject = template.subject.description;
-                string body = template.body.description;
-                templateenum  selectedtemplate = (templateenum)model.templateid;
-
-
-                switch (selectedtemplate)
-                {
-                    case templateenum.GenericErrorMessage :
-                       // Console.WriteLine("Case 1");
-                        break;
-                    case templateenum.MemberPasswordChangeMemberNotification:
-                        model.subject = subject;
-                        model.body = string.Format(body, model.screename, model.username, model.passwordtoken);
-                        break;
-                    default:
-                        Console.WriteLine("Default case");
-                        break;
-                }
-
-
-                 
-                //TO DO figure out if we will populate other values here
-                return model;
-            }
-            catch (Exception ex)
-            {
-                //handle logging here
-                using (var logger = new Logging(applicationEnum.NotificationService))
-                {
-                    logger.WriteSingleEntry(logseverityEnum.Warning, enviromentEnum.dev, ex, null, null, false);
-                    //can parse the error to build a more custom error mssage and populate fualt faultreason              
-                }
-            }
-            return null;
-
-        }
-
         //Private reusable internal functions  
         private message sendemailtemplateinfo(templateenum template, IUnitOfWorkAsync db)
         {
@@ -1493,3 +535,44 @@ namespace Nmedia.Services.Notification
        
     }
 }
+
+
+   //if (model.adminEmailViewModel != null)
+   //                         {
+   //                             //send admin email here
+   //                             //************************************************************
+
+   //                             EmailModel currentEmailModel = new EmailModel();
+   //                             message message = new message();
+   //                             ICollection<address> addresses = new List<address>();
+   //                             //get the template 
+   //                             var template = _unitOfWorkAsync.Repository<lu_template>().Query(f => f.id == model.adminEmailViewModel.templateid)
+   //                                 .Include(z => z.filename).Include(z => z.body).Include(z => z.subject).Select().FirstOrDefault();
+                               
+   //                              //get the body and subject formatted
+   //                             currentEmailModel = getemailbyEmailViewModel(model.adminEmailViewModel, template);
+   //                             model.adminEmailViewModel = currentEmailModel;
+   //                             //get the addresss for all admins for now down the line filter based on message type ?
+   //                             addresses = _unitOfWorkAsync.Repository<address>().Query(z => z.addresstype_id == (int)addresstypeenum.SystemAdmin).Select().ToList();
+
+   //                             //the member message created and sent here
+   //                             message = (message.Create(c =>
+   //                             {
+   //                                 c.template_id = template.id;
+   //                                 c.messagetype_id = currentEmailModel.messagetypeid;
+   //                                 c.body = TemplateParser.RazorFileTemplate(template.filename.description + ".cshtml", ref model, TemplatePath); // c.template == null ? TemplateParser.RazorFileTemplate("", ref error) :                                                            
+   //                                 c.subject = currentEmailModel.subject;
+   //                                 c.recipients = addresses;
+   //                                 c.sendingapplication = "NotificationService";
+   //                                 c.systemaddress = systemsenderaddress;
+   //                             }));
+
+
+   //                             currentEmailModel = getemailbyEmailViewModel(model.memberEmailViewModel, template, _unitOfWorkAsync);
+   //                             message.sendattempts = message.body != null ? 1 : 0;
+   //                             //  db.Add(message);
+   //                             // int j = db.Commit();
+
+   //                             _unitOfWorkAsync.Repository<message>().Insert(message);
+   //                            var j = _unitOfWorkAsync.SaveChanges();
+   //                         }

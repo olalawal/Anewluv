@@ -29,7 +29,7 @@ using Ninject;
 using System.Data.Entity;
 using GeoData.Domain.Models;
 using Nmedia.Infrastructure.DependencyInjection;
-using Anewluv.Services.DependencyResolution.Ninject.predicates;
+//using Anewluv.Services.DependencyResolution.Ninject.predicates;
 using Repository.Pattern.DataContext;
 using Repository.Pattern.UnitOfWork;
 using Repository.Pattern.Ef6;

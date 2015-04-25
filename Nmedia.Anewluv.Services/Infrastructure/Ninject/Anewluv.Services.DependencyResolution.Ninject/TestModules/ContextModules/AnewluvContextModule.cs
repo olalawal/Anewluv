@@ -17,7 +17,7 @@ using Repository.Pattern.DataContext;
 
 using Ninject.Activation;
 using Ninject;
-using Anewluv.Services.DependencyResolution.Ninject.predicates;
+//using Anewluv.Services.DependencyResolution.Ninject.predicates;
 using Nmedia.Infrastructure.DependencyInjection;
 
 namespace Anewluv.Services.DependencyResolution.Ninject.Modules

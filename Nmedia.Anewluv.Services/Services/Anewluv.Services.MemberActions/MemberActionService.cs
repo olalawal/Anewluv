@@ -48,7 +48,7 @@ namespace Anewluv.Services.MemberActions
         //  private IMemberActionsRepository  _memberactionsrepository;
         // private string _apikey;
 
-        public MemberActionsService([IAnewluvEntitesScope]IUnitOfWorkAsync unitOfWork, [InSpatialEntitesScope]IGeoDataStoredProcedures storedProcedures)
+        public MemberActionsService([IAnewluvEntitesScope]IUnitOfWorkAsync unitOfWork, [ISpatialEntitesScope]IGeoDataStoredProcedures storedProcedures)
         {
 
             if (unitOfWork == null)
@@ -1130,7 +1130,7 @@ namespace Anewluv.Services.MemberActions
 
         #region "Agregate methods that pull i.e all settings"
 
-
+        
         public async Task<MemberActionsModel> getmemberactionsbyprofileid(ProfileModel model)
         {
             var MemberActions = new MemberActionsModel();

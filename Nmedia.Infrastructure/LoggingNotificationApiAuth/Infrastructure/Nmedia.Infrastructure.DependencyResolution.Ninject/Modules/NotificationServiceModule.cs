@@ -14,6 +14,8 @@ using Nmedia.Services.Contracts;
 using Repository.Pattern.DataContext;
 using Repository.Pattern.UnitOfWork;
 using Repository.Pattern.Ef6;
+using Nmedia.Infrastructure.DependencyInjection;
+using Anewluv.Domain;
 
 namespace Nmedia.Infrastructure.DependencyResolution.Ninject.Modules
 {
@@ -21,25 +23,21 @@ namespace Nmedia.Infrastructure.DependencyResolution.Ninject.Modules
     {
         public override void Load()
         {
+        
             
-            //public NotificationService(IUnitOfWorkAsync unitOfWork)
+            //old
+            //Bind<IDataContextAsync>().To<NotificationContext>().InRequestScope(); ;  //.WhenTargetHas<IAnewluvEntitesScope>().InRequestScope();
+           // Bind<IUnitOfWorkAsync>().To<UnitOfWork>().InRequestScope(); ;  //.WhenTargetHas<InSpatialEntitesScope>().InRequestScope();
 
-         //   this.Bind<NotificationContext>().ToSelf().InRequestScope();
-            //this.Bind<WellsFargo.DataAccess.Interfaces.IContext>().ToConstructor(x => new PromotionContext()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("WellsFargo.Promotion.Services.PromotionService")).InTransientScope ();
-            //this.Bind<WellsFargo.DataAccess.Interfaces.IContext>().ToMethod(ctx => ctx.Kernel.Get<PromotionContext>());//).ToMethod()(x => new PromotionContext()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("WellsFargo.Promotion.Services.PromotionService")).InTransientScope();
+             Bind<IDataContextAsync>().ToMethod(c => c.Kernel.Get<AnewluvContext>())
+            .WhenAnyAncestorMatches(Predicates.TargetHas<IAnewluvEntitesScope>).InRequestScope();
+             Bind<IDataContextAsync>().ToMethod(c => c.Kernel.Get<NotificationContext>())
+            .WhenAnyAncestorMatches(Predicates.TargetHas<INotificationEntitiesScope>).InRequestScope();
 
-            // var webApiEFRepository = kernel.Get<IRepository<Entity>>("WebApiEFRepository");
-            //  this.Unbind(typeof(IUnitOfWork));
-            //Kernel.Bind<IUnitOfWork>().ToConstructor(ctorArg => new EFUnitOfWork(ctorArg.Inject<WellsFargo.DataAccess.Interfaces.IContext>())).InTransientScope();
-          //  this.Bind<IUnitOfWork>().ToMethod(ctx => ctx.Kernel.Get<NotificationContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Nmedia.Services.Notification.NotificationService"));
-            // this.Unbind(typeof(DbContext));
-          //  this.Bind<DbContext>().ToMethod(ctx => ctx.Kernel.Get<NotificationContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Nmedia.Services.Notification.NotificationService"));
-
-            //the Unit of work module should already be loaded by now
-           // this.Bind<INotificationService>().ToSelf().InRequestScope();
-
-            Bind<IDataContextAsync>().To<NotificationContext>().InRequestScope(); ;  //.WhenTargetHas<IAnewluvEntitesScope>().InRequestScope();
-            Bind<IUnitOfWorkAsync>().To<UnitOfWork>().InRequestScope(); ;  //.WhenTargetHas<InSpatialEntitesScope>().InRequestScope();
+           // this.Bind<IDataContextAsync>().To<AnewluvContext>().WhenTargetHas<IAnewluvEntitesScope>().InRequestScope();
+           // this.Bind<IDataContextAsync>().To<PostalData2Context>().WhenTargetHas<InSpatialEntitesScope>().InRequestScope();
+            this.Bind<IUnitOfWorkAsync>().To<UnitOfWork>().WhenTargetHas<IAnewluvEntitesScope>().InRequestScope();
+            this.Bind<IUnitOfWorkAsync>().To<UnitOfWork>().WhenTargetHas<ISpatialEntitesScope>().InRequestScope();;
 
 
         }

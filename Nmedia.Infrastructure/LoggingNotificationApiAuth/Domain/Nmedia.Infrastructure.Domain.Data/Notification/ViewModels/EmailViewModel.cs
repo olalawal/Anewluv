@@ -25,8 +25,9 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
             try
             {
                // this.promotionobjects = new List<promotionobject>();
-                this.memberEmailViewModel = new EmailModel();
-                this.adminEmailViewModel = new EmailModel();
+                this.EmailModel = new EmailModel();
+               // this.adminEmailViewModel = new EmailModel();
+                
              //   this.messagetype = new lu_messagetype();
              //   this.emailmatches = new List<MemberSearchViewModel>();
              //   this.FeaturedMember = new MemberSearchViewModel();
@@ -41,26 +42,35 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
 
         }
 
-     
+        //Models for actual email data , body username etc
+        //[DataMember]
+        //public List<EmailModel> IncomingEmailViewModel { get; set; }
         [DataMember]
-        public EmailModel memberEmailViewModel { get; set; }
+        public EmailModel EmailModel { get; set; }  
+  
+       
+        //global notifications
         [DataMember]
-        public EmailModel adminEmailViewModel { get; set; }    
+        public string SysteMessages { get; set; } //12-19-2012 olawal added for error message logging 
         [DataMember]
-        public MembersViewModel MembersViewModel { get; set; }  //lits this members data    
+        public string News { get; set; }  //Lists news  
+        
+        //Viewmodels for detailed profile data only needed for featured member or who emailed or sent chat
         [DataMember]
-        public string SysteMessages { get; set; } //12-19-2012 olawal added for error message logging       
+        public MembersViewModel MemberDetail { get; set; }  //lists the deatil for the user who did the original action 
         [DataMember]
-        public lu_messagetype messagetype { get; set; }
+        public MemberActionsModel MemberActions { get; set; }
         [DataMember]
-        public lu_template template { get; set; }
-        public List<MemberSearchViewModel> emailmatches { get; set; }
+        public MemberSearchViewModel FeaturedMember { get; set; } //Stores the featured member that applys to this user
+       
+
+
+        //macthes stuff
         [DataMember]
-        public MemberSearchViewModel FeaturedMember { get; set; } //Stores the featured member that applys to this user        
-        [DataMember]     
         public bool HasMatches { get; set; }  //tels you if there are any matches 
         [DataMember]
-        public MemberSearchViewModel contact { get; set; } //Stores the current members info that contacted or was contacted by the email recipient
-        
+        public List<MemberSearchViewModel> emailmatches { get; set; }
+      
+
     }
 }

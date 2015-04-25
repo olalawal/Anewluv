@@ -22,7 +22,7 @@ using System.Data.Entity;
 using Anewluv.Domain;
 using GeoData.Domain.Models;
 using Nmedia.Infrastructure.DependencyInjection;
-using Anewluv.Services.DependencyResolution.Ninject.predicates;
+//using Anewluv.Services.DependencyResolution.Ninject.predicates;
 using Repository.Pattern.UnitOfWork;
 using Repository.Pattern.DataContext;
 using Repository.Pattern.Ef6;
@@ -54,12 +54,12 @@ namespace Anewluv.Services.DependencyResolution.Ninject.Modules
             Bind<IDataContextAsync>().ToMethod(c => c.Kernel.Get<AnewluvContext>())
             .WhenAnyAncestorMatches(Predicates.TargetHas<IAnewluvEntitesScope>).InRequestScope();
             Bind<IDataContextAsync>().ToMethod(c => c.Kernel.Get<PostalData2Context>())
-            .WhenAnyAncestorMatches(Predicates.TargetHas<InSpatialEntitesScope>).InRequestScope();
+            .WhenAnyAncestorMatches(Predicates.TargetHas<ISpatialEntitesScope>).InRequestScope();
 
             // this.Bind<IDataContextAsync>().To<AnewluvContext>().WhenTargetHas<IAnewluvEntitesScope>().InRequestScope();
             // this.Bind<IDataContextAsync>().To<PostalData2Context>().WhenTargetHas<InSpatialEntitesScope>().InRequestScope();
             this.Bind<IUnitOfWorkAsync>().To<UnitOfWork>().InRequestScope();
-            this.Bind<IGeoDataStoredProcedures>().To<PostalData2Context>().WhenTargetHas<InSpatialEntitesScope>().InRequestScope(); ;
+            this.Bind<IGeoDataStoredProcedures>().To<PostalData2Context>().WhenTargetHas<ISpatialEntitesScope>().InRequestScope(); ;
 
 
         }

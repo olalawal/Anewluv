@@ -27,26 +27,20 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
      [DataMember]
      public string subject { get; set; }
      [DataMember]
-     public string body { get; set; }
-     [DataMember]
-     public string News { get; set; }  //Lists news 
+     public string body { get; set; }    
      [DataMember]
      public string Messages { get; set; }  //Personal user updates strored here
      [DataMember]
      public string username { get; set; }  //Personal user updates strored here
      [DataMember]
-     public string targetscreename { get; set; }  //Personal user updates strored here
+     public string targetscreenname { get; set; }  //Personal user updates strored here
      [DataMember]
-     public string screename { get; set; }  //Personal user updates strored here
+     public string screenname { get; set; }  //Personal user updates strored here
      [DataMember]
      public string userlogon { get; set; }  //Personal user updates strored here
      [DataMember]
      public string passwordtoken { get; set; }  //Personal user updates strored here
 
-     [DataMember]
-     public string profileid1 { get; set; }  //Personal user updates strored here
-     [DataMember]
-     public string profileid2 { get; set; }  //Personal user updates strored here
         
      //[DataMember]
     // public int? addresstypeid { get; set; }  //Personal user updates strored here

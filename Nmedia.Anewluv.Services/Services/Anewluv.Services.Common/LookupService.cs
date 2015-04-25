@@ -38,7 +38,7 @@ namespace Anewluv.Services.Common
 
 
 
-        public LookupService([IAnewluvEntitesScope]IUnitOfWorkAsync unitOfWork,[InSpatialEntitesScope]IGeoDataStoredProcedures storedProcedures)
+        public LookupService([IAnewluvEntitesScope]IUnitOfWorkAsync unitOfWork,[ISpatialEntitesScope]IGeoDataStoredProcedures storedProcedures)
         {
 
             if (unitOfWork == null)

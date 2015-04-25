@@ -212,13 +212,13 @@ namespace Anewluv.Api
 
 
         #region "Notification Service calls"
-        public static string  sendmessagebytemplate(EmailViewModel model)
+        public static string  sendmessagesbytemplate(List<EmailModel> model)
         {
             try
             {
 
 
-              var  returnedTaskTResult = Api.NotificationService.sendmessagebytemplate(model).Result;
+              var  returnedTaskTResult = Api.NotificationService.sendmessagesbytemplate(model).Result;
                 //string result = await returnedTaskTResult;
                 // IsApiKeyValid = await 
                // return result;

@@ -638,29 +638,29 @@ namespace Anewluv.Services.Media
                                 _unitOfWorkAsync.Repository<action>().Insert(newaction);
                                 AnewluvMessages.errormessages.Add("Photo Rejected");
 
-                                //member 
-                                var EmailViewModel = new EmailViewModel
+                           
+                                var EmailModels = new List<EmailModel>();
+
+                                EmailModels.Add(new EmailModel
                                 {
-                                    memberEmailViewModel = new EmailModel
-                                    {
-                                        templateid = (int)templateenum.MemberPhotoRejectedMemberNotification,
-                                        messagetypeid = (int)messagetypeenum.UserUpdate,
-                                        addresstypeid = (int)addresstypeenum.SiteUser,
-                                        emailaddress =PhotoModify.profilemetadata.profile.emailaddress,
-                                        screename = PhotoModify.profilemetadata.profile.screenname,
-                                        //subject = templatesubjectenum.MemberPhotoRejectedMemberNotification.ToDescription()
-                                    },
-                                    adminEmailViewModel = new EmailModel
-                                    {
-                                        templateid = (int)templateenum.MemberPhotoRejectedAdminNotification,
-                                        messagetypeid = (int)messagetypeenum.SysAdminUpdate,
-                                        addresstypeid = (int)addresstypeenum.SystemAdmin,
-                                      //  subject = templatesubjectenum.MemberRecivedEmailMessageAdminNotification.ToDescription()
-                                    }
-                                };
+                                    templateid = (int)templateenum.MemberPhotoRejectedMemberNotification,
+                                    messagetypeid = (int)messagetypeenum.UserUpdate,
+                                    addresstypeid = (int)addresstypeenum.SiteUser,
+                                    emailaddress = PhotoModify.profilemetadata.profile.emailaddress,
+                                    screenname = PhotoModify.profilemetadata.profile.screenname,
+                                });
+
+
+                                EmailModels.Add(new EmailModel
+                                {
+                                    templateid = (int)templateenum.MemberPhotoRejectedAdminNotification,
+                                    messagetypeid = (int)messagetypeenum.SysAdminUpdate,
+                                    addresstypeid = (int)addresstypeenum.SystemAdmin,
+                                });
+
 
                                 //this sends both admin and user emails  
-                                Api.AsyncCalls.sendmessagebytemplate(EmailViewModel);
+                                Api.AsyncCalls.sendmessagesbytemplate(EmailModels);   
 
                                     
                                 }
@@ -691,19 +691,18 @@ namespace Anewluv.Services.Media
                                 AnewluvMessages.errormessages.Add("Photo Approved");
 
                                 //member 
-                                var EmailViewModel = new EmailViewModel
-                                {
-                                   
-                                    adminEmailViewModel = new EmailModel
-                                    {
-                                        templateid = (int)templateenum.MemberPhotoApprovedAdminNotification,
-                                        messagetypeid = (int)messagetypeenum.SysAdminUpdate,
-                                        addresstypeid = (int)addresstypeenum.SystemAdmin,
-                                       // subject = templatesubjectenum.MemberPhotoApprovedAdminNotification.ToDescription()
-                                    }
-                                };
+                                var EmailModels = new List<EmailModel>();
 
-                                Api.AsyncCalls.sendmessagebytemplate(EmailViewModel);
+                                EmailModels.Add(new EmailModel
+                                {
+                                    templateid = (int)templateenum.MemberPhotoApprovedAdminNotification,
+                                    messagetypeid = (int)messagetypeenum.SysAdminUpdate,
+                                    addresstypeid = (int)addresstypeenum.SystemAdmin,
+                                    // subject = templatesubjectenum.MemberPhotoApprovedAdminNotification.ToDescription()
+                                });
+
+
+                                Api.AsyncCalls.sendmessagesbytemplate(EmailModels);
                             }
 
                             else
@@ -857,18 +856,15 @@ namespace Anewluv.Services.Media
                                 {
                                     //update admins 
                                     //member 
-                                    var EmailViewModel = new EmailViewModel
-                                    {
-                                       
-                                        adminEmailViewModel = new EmailModel
-                                        {
-                                            templateid = (int)templateenum.MemberPhotoUploadedAdminNotification,
+                                     var EmailModels = new List<EmailModel>();
+
+                                        EmailModels.Add ( new EmailModel {
+                                              templateid = (int)templateenum.MemberPhotoUploadedAdminNotification,
                                             messagetypeid = (int)messagetypeenum.SysAdminUpdate,
                                             addresstypeid = (int)addresstypeenum.SystemAdmin//,
-                                          //  subject = templatesubjectenum.MemberPhotoUploadedAdminNotification.ToDescription()
-                                        }
-                                    };
-                                    Api.AsyncCalls.sendmessagebytemplate(EmailViewModel);
+                                           });
+
+                                        Api.AsyncCalls.sendmessagesbytemplate(EmailModels);
                                 }
 
                                 return AnewluvMessage;
@@ -895,7 +891,7 @@ namespace Anewluv.Services.Media
 
                     // responsemessage = new ResponseMessage("", message.message, "");
                     // response.ResponseMessages.Add(responsemessage);
-                    return AnewluvMessage;
+                  
                }
                  
  }
@@ -979,20 +975,17 @@ namespace Anewluv.Services.Media
                                    // transaction.Commit();
                                 }
 
-                                //update admins 
-                                //member 
-                                var EmailViewModel = new EmailViewModel
-                                {
+                                var EmailModels = new List<EmailModel>();
 
-                                     adminEmailViewModel  = new EmailModel
-                                    {
-                                        templateid = (int)templateenum.MemberPhotoUploadedAdminNotification,
-                                        messagetypeid = (int)messagetypeenum.SysAdminUpdate,
-                                        addresstypeid = (int)addresstypeenum.SystemAdmin
-                                       // subject = templatesubjectenum.MemberPhotoUploadedAdminNotification.ToDescription()
-                                    }
-                                };
-                                Api.AsyncCalls.sendmessagebytemplate(EmailViewModel);
+                                EmailModels.Add(new EmailModel
+                                {
+                                    templateid = (int)templateenum.MemberPhotoUploadedAdminNotification,
+                                    messagetypeid = (int)messagetypeenum.SysAdminUpdate,
+                                    addresstypeid = (int)addresstypeenum.SystemAdmin
+                                });
+
+
+                                Api.AsyncCalls.sendmessagesbytemplate(EmailModels);
 
                                 message.messages.Add("photo added succesfully ");
                             }

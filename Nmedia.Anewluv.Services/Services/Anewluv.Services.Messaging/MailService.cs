@@ -292,32 +292,28 @@ namespace Anewluv.Services.Messaging
                                         //TO DO call the Notification Service to QUUE up this message. For now 
                                        // All messages are sent on the fly but long term we will add it to the QUUE and then the sevice will send peroidoically.
 
-                                        //member 
-                                       var EmailViewModel = new EmailViewModel
-                                       {
-                                           memberEmailViewModel = new EmailModel
+                                        var EmailModels = new List<EmailModel>();
+                                      
+                                         EmailModels.Add ( new EmailModel
                                            {
                                                templateid = (int)templateenum.MemberRecivedEmailMessageMemberNotification,
                                                messagetypeid = (int)messagetypeenum.UserUpdate,                                           
                                                addresstypeid = (int)addresstypeenum.SiteUser,
                                                emailaddress = newmailboxmessage.recipientprofilemetadata.profile.emailaddress,
-                                               targetscreename = newmailboxmessage.recipientprofilemetadata.profile.screenname,
-                                               screename = profile.screenname,
-
-                                               //body = string.Format(templatebodyenum.MemberRecivedEmailMessageMemberNotification.ToDescription(), recipientprofile.screenname, profile.screenname, profile.screenname),
-                                               //subject = templatesubjectenum.MemberRecivedEmailMessageMemberNotification.ToDescription()
-                                           },
-                                               adminEmailViewModel = new EmailModel {
+                                               targetscreenname = newmailboxmessage.recipientprofilemetadata.profile.screenname,
+                                               screenname = profile.screenname                                            
+                                           });
+                                           
+                                           
+                                         EmailModels.Add ( new EmailModel {
                                                templateid = (int)templateenum.MemberRecivedEmailMessageAdminNotification,
                                                messagetypeid = (int)messagetypeenum.SysAdminUpdate,
-                                               addresstypeid = (int)addresstypeenum.SystemAdmin,
-                                              // body = string.Format(templatebodyenum.MemberRecivedEmailMessageAdminNotification.ToDescription(), recipientprofile.emailaddress, profile.emailaddress),
-                                              // subject =templatesubjectenum.MemberRecivedEmailMessageAdminNotification.ToDescription()
-                                           }
-                                       };
+                                               addresstypeid = (int)addresstypeenum.SystemAdmin
+                                           });
                                       
+                                       
                                        //this sends both admin and user emails  
-                                       Api.AsyncCalls.sendmessagebytemplate(EmailViewModel);    
+                                       Api.AsyncCalls.sendmessagesbytemplate(EmailModels);    
                                        AnewluvMessages.messages.Add("Email was sent Succesfully");
                                     }
                                     else
