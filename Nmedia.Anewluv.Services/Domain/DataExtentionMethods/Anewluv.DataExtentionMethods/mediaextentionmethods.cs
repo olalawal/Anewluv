@@ -23,6 +23,44 @@ namespace Anewluv.DataExtentionMethods
 
         }
 
+
+        public static PhotosSortedCountsViewModel getphotossortedcountsbyprofileid(this IRepository<photo> repo, PhotoModel model)
+        {
+
+            var returnmodel = new PhotosSortedCountsViewModel();
+            try
+            {
+                IQueryable<photo> photomodel = repo.Query(z => z.profile_id == model.profileid.Value &
+                        (z.approvalstatus_id != (int)photoapprovalstatusEnum.Rejected) &  //filter not approved
+                        (z.photostatus_id != (int)photostatusEnum.deletedbyadmin | z.photostatus_id != (int)photostatusEnum.deletedbyuser))  //filter deleted                   
+                        .Include(p => p.profilemetadata)
+                        .Include(p => p.photo_securitylevel.Select(z => z.lu_securityleveltype))
+                        .Include(p => p.profilemetadata.profile.membersinroles.Select(z => z.lu_role))
+                        .Select().AsQueryable();
+                
+
+                //public photos
+                returnmodel.PublicPhotoCount = photomodel.Where(a => a.photostatus_id == (int)photoapprovalstatusEnum.Approved && a.photo_securitylevel.Count() == 0).Count();
+                //not reviewed
+                returnmodel.NotApprovedPhotoCount = photomodel.Where(a => a.photostatus_id == (int)photoapprovalstatusEnum.NotReviewed && a.photo_securitylevel.Count() == 0).Count();
+                //rejected
+                returnmodel.RejectedPhotoCount = photomodel.Where(a => a.photostatus_id == (int)photoapprovalstatusEnum.NotReviewed && a.photo_securitylevel.Count() == 0).Count();
+                //interests only view
+                returnmodel.InterestsOnlyPhotoCount = photomodel.Where(a => a.photo_securitylevel.Count() > 0 && a.photo_securitylevel.Any(d => d.securityleveltype_id == (int)securityleveltypeEnum.Intrests)).Count();
+                //likes only view
+                returnmodel.LikesOnlyPhotoCount = photomodel.Where(a => a.photo_securitylevel.Count() > 0 && a.photo_securitylevel.Any(d => d.securityleveltype_id == (int)securityleveltypeEnum.Likes)).Count();
+                //private 
+                returnmodel.PrivatePhotoCount = photomodel.Where(a => a.photo_securitylevel.Count() > 0 && a.photo_securitylevel.Any(d => d.securityleveltype_id == (int)securityleveltypeEnum.NoOne)).Count();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return returnmodel;
+        }
+
+
         public static photo getphotobyphotoid(this IRepository<photo> repo, PhotoModel model)
         {
             return repo.Query(o => o.id == model.photoid.GetValueOrDefault()).Select().FirstOrDefault();
@@ -110,7 +148,7 @@ namespace Anewluv.DataExtentionMethods
                 //added roles
                 //filterer out photos that are not approved
                 IQueryable<photoconversion> photomodel = repo.Query(z => z.photo.profile_id == model.profileid.Value &
-                    (z.photo.approvalstatus_id != (int)photoapprovalstatusEnum.Rejected | z.photo.approvalstatus_id != (int)photoapprovalstatusEnum.NotReviewed) &  //filter not approved
+                    (z.photo.approvalstatus_id != (int)photoapprovalstatusEnum.Rejected) &  //filter not approved
                     (z.photo.photostatus_id != (int)photostatusEnum.deletedbyadmin | z.photo.photostatus_id != (int)photostatusEnum.deletedbyuser))  //filter deleted 
                      .Include(p => p.lu_photoformat)
                     .Include(p => p.photo.profilemetadata)
@@ -145,7 +183,12 @@ namespace Anewluv.DataExtentionMethods
                     photomodel = photomodel.Where(a => a.formattype_id == model.photoformatid.Value);
                 if (model.photoformatid == null) //default is medium quality
                     photomodel = photomodel.Where(a => a.formattype_id ==  (int)photoformatEnum.Medium);
-                
+
+                //filter out unaproved photos that were just uploaded
+                 if(model.phototapprovalstatusid !=null)
+                     photomodel = photomodel.Where(z => z.photo.approvalstatus_id == model.phototapprovalstatusid.Value);
+                 if (model.phototapprovalstatusid == null)
+                     photomodel = photomodel.Where(z => z.photo.approvalstatus_id != (int)photoapprovalstatusEnum.NotReviewed);
              
 
                
@@ -550,6 +593,7 @@ namespace Anewluv.DataExtentionMethods
             var results = pageData.Select(p => new PhotoViewModel                             
                               {
                                   photoid = p.photo.id,
+                                  photo = b64Converters.ByteArraytob64string(p.image),
                                   profileid = p.photo.profile_id,
                                   screenname = p.photo.profilemetadata.profile.screenname,
                                   approved = p.photo.approvalstatus_id == (int)photoapprovalstatusEnum.Approved ? true : false,

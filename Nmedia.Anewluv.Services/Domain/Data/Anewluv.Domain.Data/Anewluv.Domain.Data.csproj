@@ -213,6 +213,7 @@
     <Compile Include="Anewluv\ViewModels\Actions\MembeActionsModel.cs" />
     <Compile Include="Anewluv\ViewModels\Activity\ActivityModel.cs" />
     <Compile Include="Anewluv\ViewModels\FullProfileViewModel.cs" />
+    <Compile Include="Anewluv\ViewModels\PhotoRelated\PhotoEditTabsViewModel .cs" />
     <Compile Include="Anewluv\ViewModels\PhotoRelated\PhotoAlbumModel.cs" />
     <Compile Include="Anewluv\SearchEditModels\AdvancedSearchModel.cs" />
     <Compile Include="Anewluv\SearchEditModels\PhotoSearchResultsViewModel.cs" />

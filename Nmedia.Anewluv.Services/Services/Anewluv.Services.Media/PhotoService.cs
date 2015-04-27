@@ -87,7 +87,7 @@ namespace Anewluv.Services.Media
 
             if (photouploaded.imageb64string != null)
             {
-
+              //photoImageresizerformatEnum
                 try
                 {
                    //var db = _unitOfWorkAsync;
@@ -173,6 +173,45 @@ namespace Anewluv.Services.Media
 
         #region "main Query methods"
 
+       /// <summary>
+       /// sorts the types of photos for a user and returns the counts which is nice for things like lists of photo types
+       /// </summary>
+       /// <param name="model"></param>
+       /// <returns></returns>
+        public async Task<PhotosSortedCountsViewModel> getphotosortedcounts(PhotoModel model)
+        {
+            {
+                try
+                {
+                    var task = Task.Factory.StartNew(() =>
+                    {
+                       return  _unitOfWorkAsync.Repository<photo>().getphotossortedcountsbyprofileid(model);
+                      
+                    });
+                    return await task.ConfigureAwait(false);
+
+
+                }
+                catch (Exception ex)
+                {
+                    //instantiate logger here so it does not break anything else.
+                    logger = new Logging(applicationEnum.MediaService);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in photo service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                }
+
+            }
+
+
+
+        }    
+        //****TO DO pass apikey/token and make sure the token matches the profileid whose photos are being acccess and the token is active as well
+       //get the api key from the wcf session tho
+        //when accessing private photos or photo albums
        //This should be the only method used to get photos
        public async Task<PhotoSearchResultsViewModel> getfilteredphotospaged(PhotoModel model)
        {

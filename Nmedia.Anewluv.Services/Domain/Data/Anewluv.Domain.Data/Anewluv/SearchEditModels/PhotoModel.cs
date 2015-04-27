@@ -28,6 +28,8 @@ namespace Anewluv.Domain.Data.ViewModels
         [DataMember]
         public int? phototstatusid { get; set; }
         [DataMember]
+        public int? phototapprovalstatusid { get; set; }
+        [DataMember]
         public int? photoformatid { get; set; }
 
         //secruity level changing

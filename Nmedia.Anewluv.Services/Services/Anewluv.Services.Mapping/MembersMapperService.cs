@@ -215,6 +215,7 @@ namespace Anewluv.Services.Mapping
 
                     var task = Task.Factory.StartNew(() =>
                     {
+                       
                         //THIS NEEDS to go away and be done in the profile browsemodel !!!!
                         var NewProfileBrowseModel = new ProfileBrowseModel
                         {  
@@ -223,7 +224,8 @@ namespace Anewluv.Services.Mapping
                           //ViewerProfileDetails = membermappingextentions.mapmembersearchviewmodel(null, new MemberSearchViewModel { id = model.profileid.Value }, model.allphotos, db, geodb),
                             //profile of the person being viewed
                             ProfileDetails = membermappingextentions.mapmembersearchviewmodel(model.profileid.Value, new MemberSearchViewModel { id = model.viewingprofileid.GetValueOrDefault() },  db, geodb),
-                            ProfileCriteria = membermappingextentions.getprofilecriteriamodel(model.viewingprofileid.GetValueOrDefault(), db)
+                            ProfileCriteria = membermappingextentions.getprofilecriteriamodel(model.viewingprofileid.GetValueOrDefault(), db),
+                            ViewActionsToProfile = membermappingextentions.mapmemberactionsrelationships(model.profileid.Value,model.viewingprofileid.Value, db)
                         };
 
                         //TO DO add a cache object for the profilebrowesemodel and Memberseachmodel of the currently logged in user

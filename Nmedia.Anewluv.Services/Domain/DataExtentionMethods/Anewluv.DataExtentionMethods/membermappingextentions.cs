@@ -143,33 +143,42 @@ namespace Anewluv.DataExtentionMethods
             MemberToMemberActionsModel actions = new MemberToMemberActionsModel();
             try
             {
+             
+
+                
                 //get the viwers actions to this member first :
                 var vieweractionstoprofile = db.Repository<action>().getmyactionbyprofileid(viewerprofileid).Where(z => z.target_profile_id == profileid).ToList();
                 var profileactionstoviewer = db.Repository<action>().getmyactionbyprofileid(profileid).Where(z => z.target_profile_id == viewerprofileid).ToList();
 
-                actions.peekedataviewerdate = profileactionstoviewer.Where(z => z.actiontype_id == (int)actiontypeEnum.Peek).OrderByDescending(p => p.creationdate).FirstOrDefault().creationdate;
-                actions.peekedataviewercount = profileactionstoviewer.Where(z => z.actiontype_id == (int)actiontypeEnum.Peek).Count();
 
-                actions.peekedatbyviewerdate = vieweractionstoprofile.Where(z => z.actiontype_id == (int)actiontypeEnum.Peek).OrderByDescending(p => p.creationdate).FirstOrDefault().creationdate;
-                actions.peekedatbyviewercount = vieweractionstoprofile.Where(z => z.actiontype_id == (int)actiontypeEnum.Peek).Count();
+                actions.peekedataviewerdate = profileactionstoviewer.Count() > 0 ? profileactionstoviewer.Where(z => z.actiontype_id == (int)actiontypeEnum.Peek).OrderByDescending(p => p.creationdate).FirstOrDefault().creationdate : null;              
+                actions.peekedataviewercount =  profileactionstoviewer.Count() > 0? profileactionstoviewer.Where(z => z.actiontype_id == (int)actiontypeEnum.Peek).Count():0;
 
-                actions.likedviewerdate = profileactionstoviewer.Where(z => z.actiontype_id == (int)actiontypeEnum.Like).OrderByDescending(p => p.creationdate).FirstOrDefault().creationdate;
-                actions.likedviewercount = profileactionstoviewer.Where(z => z.actiontype_id == (int)actiontypeEnum.Like).Count();
 
-                actions.likedbyviewerdate = vieweractionstoprofile.Where(z => z.actiontype_id == (int)actiontypeEnum.Like).OrderByDescending(p => p.creationdate).FirstOrDefault().creationdate;
-                actions.likedbyviewercount = vieweractionstoprofile.Where(z => z.actiontype_id == (int)actiontypeEnum.Like).Count();
 
-                actions.blockedviewerdate = profileactionstoviewer.Where(z => z.actiontype_id == (int)actiontypeEnum.Block).OrderByDescending(p => p.creationdate).FirstOrDefault().creationdate;
-                actions.blockedviewercount = profileactionstoviewer.Where(z => z.actiontype_id == (int)actiontypeEnum.Block).Count();
+                actions.likedviewerdate =  profileactionstoviewer.Count() > 0?  profileactionstoviewer.Where(z => z.actiontype_id == (int)actiontypeEnum.Like).OrderByDescending(p => p.creationdate).FirstOrDefault().creationdate:null;
+                actions.likedviewercount =  profileactionstoviewer.Count() > 0?  profileactionstoviewer.Where(z => z.actiontype_id == (int)actiontypeEnum.Like).Count():0;
 
-                actions.blockedbyviewerdate = vieweractionstoprofile.Where(z => z.actiontype_id == (int)actiontypeEnum.Block).OrderByDescending(p => p.creationdate).FirstOrDefault().creationdate;
-                actions.blockedbyviewecount = vieweractionstoprofile.Where(z => z.actiontype_id == (int)actiontypeEnum.Block).Count();
+                actions.blockedviewerdate = profileactionstoviewer.Count() > 0? profileactionstoviewer.Where(z => z.actiontype_id == (int)actiontypeEnum.Block).OrderByDescending(p => p.creationdate).FirstOrDefault().creationdate:null;
+                actions.blockedviewercount = profileactionstoviewer.Count() > 0? profileactionstoviewer.Where(z => z.actiontype_id == (int)actiontypeEnum.Block).Count():0;
 
-                actions.intrestsenttoviewerDate = profileactionstoviewer.Where(z => z.actiontype_id == (int)actiontypeEnum.Interest).OrderByDescending(p => p.creationdate).FirstOrDefault().creationdate;
-                actions.intrestsenttoviewercount = profileactionstoviewer.Where(z => z.actiontype_id == (int)actiontypeEnum.Interest).Count();
+              
 
-                actions.interestsentbyviewerDate = vieweractionstoprofile.Where(z => z.actiontype_id == (int)actiontypeEnum.Interest).OrderByDescending(p => p.creationdate).FirstOrDefault().creationdate;
-                actions.interestsentbyviewercount = vieweractionstoprofile.Where(z => z.actiontype_id == (int)actiontypeEnum.Interest).Count();
+                actions.intrestsenttoviewerDate = profileactionstoviewer.Count() > 0?  profileactionstoviewer.Where(z => z.actiontype_id == (int)actiontypeEnum.Interest).OrderByDescending(p => p.creationdate).FirstOrDefault().creationdate:null;
+                actions.intrestsenttoviewercount =  profileactionstoviewer.Count() > 0?  profileactionstoviewer.Where(z => z.actiontype_id == (int)actiontypeEnum.Interest).Count():0;
+
+                
+                actions.peekedatbyviewerdate =  vieweractionstoprofile.Count() > 0?  vieweractionstoprofile.Where(z => z.actiontype_id == (int)actiontypeEnum.Peek).OrderByDescending(p => p.creationdate).FirstOrDefault().creationdate:null;
+                actions.peekedatbyviewercount = vieweractionstoprofile.Count() > 0? vieweractionstoprofile.Where(z => z.actiontype_id == (int)actiontypeEnum.Peek).Count():0;
+
+                actions.likedbyviewerdate =  vieweractionstoprofile.Count() > 0?vieweractionstoprofile.Where(z => z.actiontype_id == (int)actiontypeEnum.Like).OrderByDescending(p => p.creationdate).FirstOrDefault().creationdate:null;
+                actions.likedbyviewercount = vieweractionstoprofile.Count() > 0? vieweractionstoprofile.Where(z => z.actiontype_id == (int)actiontypeEnum.Like).Count():0;
+                
+                actions.interestsentbyviewerDate =  vieweractionstoprofile.Count() > 0?vieweractionstoprofile.Where(z => z.actiontype_id == (int)actiontypeEnum.Interest).OrderByDescending(p => p.creationdate).FirstOrDefault().creationdate:null;
+                actions.interestsentbyviewercount =  vieweractionstoprofile.Count() > 0?vieweractionstoprofile.Where(z => z.actiontype_id == (int)actiontypeEnum.Interest).Count():0;
+
+                actions.blockedbyviewerdate = vieweractionstoprofile.Count() > 0? vieweractionstoprofile.Where(z => z.actiontype_id == (int)actiontypeEnum.Block).OrderByDescending(p => p.creationdate).FirstOrDefault().creationdate:null;
+                actions.blockedbyviewecount = vieweractionstoprofile.Count() > 0? vieweractionstoprofile.Where(z => z.actiontype_id == (int)actiontypeEnum.Block).Count():0;
 
                 return actions;
             }
@@ -295,7 +304,7 @@ namespace Anewluv.DataExtentionMethods
                     //else
                     //{
                         // model.profilephotos.SingleProfilePhoto = photorepository.getphotomodelbyprofileid(profile.id, photoformatEnum.Thumbnail);
-                    model.galleryphoto = db.Repository<photoconversion>().getgalleryphotomodelbyprofileid(profile.id, (int)photoformatEnum.Thumbnail);
+                    model.galleryphoto = db.Repository<photoconversion>().getgalleryphotomodelbyprofileid(profile.id, (int)photoformatEnum.Medium);
 
                    // }
 
@@ -472,113 +481,115 @@ namespace Anewluv.DataExtentionMethods
                     CriteriaModel.BasicSearchSettings.agemin = (PerfectMatchSettings == null || PerfectMatchSettings.agemin == null) ? 18 : PerfectMatchSettings.agemin;
                     CriteriaModel.BasicSearchSettings.agemax = (PerfectMatchSettings == null || PerfectMatchSettings.agemax == null) ? 99 : PerfectMatchSettings.agemax;
 
-                    //TO DO add this to search settings for now use what is in profiledata
-                    //These will come from search settings table in the future at some point
-                    //  CriteriaModel.BasicSearchSettings. = georepository.getcountrynamebycountryid((byte)metadata.profile.profiledata.countryid);  //TO DO allow a range of countries to be selected i.e multi select
-                    CriteriaModel.BasicSearchSettings.locationlist = PerfectMatchSettings.locations.ToList();
-                    //  CriteriaModel.BasicSearchSettings.postalcode  = metadata.profile.profiledata.postalcode;  //this could be for countries withoute p codes
-
-                    
-                    //populate list values
-                    foreach (var item in PerfectMatchSettings.details.Where(p=>p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.gender))
+                    if (PerfectMatchSettings != null)
                     {
-                        
-                        CriteriaModel.BasicSearchSettings.genderlist.Add(CachingFactory.SharedObjectHelper.getgenderlist(db).Where(p => p.id == item.value).FirstOrDefault());
+                        //TO DO add this to search settings for now use what is in profiledata
+                        //These will come from search settings table in the future at some point
+                        //  CriteriaModel.BasicSearchSettings. = georepository.getcountrynamebycountryid((byte)metadata.profile.profiledata.countryid);  //TO DO allow a range of countries to be selected i.e multi select
+                        CriteriaModel.BasicSearchSettings.locationlist = (PerfectMatchSettings == null || PerfectMatchSettings.locations != null) ? PerfectMatchSettings.locations.ToList() : null;
+                        //  CriteriaModel.BasicSearchSettings.postalcode  = metadata.profile.profiledata.postalcode;  //this could be for countries withoute p codes
+
+
+                        //populate list values
+                        foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.gender))
+                        {
+
+                            CriteriaModel.BasicSearchSettings.genderlist.Add(CachingFactory.SharedObjectHelper.getgenderlist(db).Where(p => p.id == item.value).FirstOrDefault());
+                        }
+
+                        //appearance search settings here
+                        CriteriaModel.AppearanceSearchSettings.heightmaxbyculture = (PerfectMatchSettings == null || PerfectMatchSettings.heightmax == null) ? Extensions.ToFeetInches(48) : Extensions.ToFeetInches((double)PerfectMatchSettings.heightmax);
+                        CriteriaModel.AppearanceSearchSettings.heightminbyculture = (PerfectMatchSettings == null || PerfectMatchSettings.heightmin == null) ? Extensions.ToFeetInches(89) : Extensions.ToFeetInches((double)PerfectMatchSettings.heightmin);
+
+                        foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.ethnicity))
+                        {
+                            CriteriaModel.AppearanceSearchSettings.ethnicitylist.Add(CachingFactory.SharedObjectHelper.getethnicitylist(db).Where(p => p.id == item.value).FirstOrDefault());
+                        }
+
+                        foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.bodytype))
+                        {
+                            CriteriaModel.AppearanceSearchSettings.bodytypeslist.Add(CachingFactory.SharedObjectHelper.getbodytypelist(db).Where(p => p.id == item.value).FirstOrDefault());
+                        }
+
+                        foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.eyecolor))
+                        {
+                            CriteriaModel.AppearanceSearchSettings.eyecolorlist.Add(CachingFactory.SharedObjectHelper.geteyecolorlist(db).Where(p => p.id == item.value).FirstOrDefault());
+                        }
+
+                        foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.haircolor))
+                        {
+                            CriteriaModel.AppearanceSearchSettings.haircolorlist.Add(CachingFactory.SharedObjectHelper.gethaircolorlist(db).Where(p => p.id == item.value).FirstOrDefault());
+                        }
+
+
+                        foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.hotfeature))
+                        {
+                            CriteriaModel.AppearanceSearchSettings.hotfeaturelist.Add(CachingFactory.SharedObjectHelper.gethotfeaturelist(db).Where(p => p.id == item.value).FirstOrDefault());
+                        }
+
+                        //populate lifestyle values here
+
+                        foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.educationlevel))
+                        {
+                            CriteriaModel.LifeStyleSearchSettings.educationlevellist.Add(CachingFactory.SharedObjectHelper.geteducationlevellist(db).Where(p => p.id == item.value).FirstOrDefault());
+                        }
+
+                        foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.lookingfor))
+                        { CriteriaModel.LifeStyleSearchSettings.lookingforlist.Add(CachingFactory.SharedObjectHelper.getlookingforlist(db).Where(p => p.id == item.value).FirstOrDefault()); }
+
+                        foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.employmentstatus))
+                        { CriteriaModel.LifeStyleSearchSettings.employmentstatuslist.Add(CachingFactory.SharedObjectHelper.getemploymentstatuslist(db).Where(p => p.id == item.value).FirstOrDefault()); }
+
+                        foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.havekids))
+                        { CriteriaModel.LifeStyleSearchSettings.havekidslist.Add(CachingFactory.SharedObjectHelper.gethavekidslist(db).Where(p => p.id == item.value).FirstOrDefault()); }
+
+                        foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.livingsituation))
+                        { CriteriaModel.LifeStyleSearchSettings.livingsituationlist.Add(CachingFactory.SharedObjectHelper.getlivingsituationlist(db).Where(p => p.id == item.value).FirstOrDefault()); }
+
+                        foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.maritialstatus))
+                        { CriteriaModel.LifeStyleSearchSettings.maritalstatuslist.Add(CachingFactory.SharedObjectHelper.getmaritalstatuslist(db).Where(p => p.id == item.value).FirstOrDefault()); }
+
+                        foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.wantskids))
+                        { CriteriaModel.LifeStyleSearchSettings.wantskidslist.Add(CachingFactory.SharedObjectHelper.getwantskidslist(db).Where(p => p.id == item.value).FirstOrDefault()); }
+
+                        foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.profession))
+                        { CriteriaModel.LifeStyleSearchSettings.professionlist.Add(CachingFactory.SharedObjectHelper.getprofessionlist(db).Where(p => p.id == item.value).FirstOrDefault()); }
+
+                        foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.incomelevel))
+                        { CriteriaModel.LifeStyleSearchSettings.incomelevellist.Add(CachingFactory.SharedObjectHelper.getincomelevellist(db).Where(p => p.id == item.value).FirstOrDefault()); }
+
+                        //Character settings for search here
+                        foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.diet))
+                        { CriteriaModel.CharacterSearchSettings.dietlist.Add(CachingFactory.SharedObjectHelper.getdietlist(db).Where(p => p.id == item.value).FirstOrDefault()); }
+
+                        foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.humor))
+                        { CriteriaModel.CharacterSearchSettings.humorlist.Add(CachingFactory.SharedObjectHelper.gethumorlist(db).Where(p => p.id == item.value).FirstOrDefault()); }
+
+                        foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.hobby))
+                        { CriteriaModel.CharacterSearchSettings.hobbylist.Add(CachingFactory.SharedObjectHelper.gethobbylist(db).Where(p => p.id == item.value).FirstOrDefault()); }
+
+                        foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.drink))
+                        { CriteriaModel.CharacterSearchSettings.drinkslist.Add(CachingFactory.SharedObjectHelper.getdrinkslist(db).Where(p => p.id == item.value).FirstOrDefault()); }
+
+                        //FIX after Initial Catalog= update
+                        foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.excercise))
+                        { CriteriaModel.CharacterSearchSettings.exerciselist.Add(CachingFactory.SharedObjectHelper.getexerciselist(db).Where(p => p.id == item.value).FirstOrDefault()); }
+
+                        foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.smokes))
+                        { CriteriaModel.CharacterSearchSettings.smokeslist.Add(CachingFactory.SharedObjectHelper.getsmokeslist(db).Where(p => p.id == item.value).FirstOrDefault()); }
+
+                        foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.sign))
+                        { CriteriaModel.CharacterSearchSettings.signlist.Add(CachingFactory.SharedObjectHelper.getsignlist(db).Where(p => p.id == item.value).FirstOrDefault()); }
+
+                        foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.politicalview))
+                        { CriteriaModel.CharacterSearchSettings.politicalviewlist.Add(CachingFactory.SharedObjectHelper.getpoliticalviewlist(db).Where(p => p.id == item.value).FirstOrDefault()); }
+
+                        foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.religion))
+                        { CriteriaModel.CharacterSearchSettings.religionlist.Add(CachingFactory.SharedObjectHelper.getreligionlist(db).Where(p => p.id == item.value).FirstOrDefault()); }
+
+                        foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.religiousattendance))
+                        { CriteriaModel.CharacterSearchSettings.religiousattendancelist.Add(CachingFactory.SharedObjectHelper.getreligiousattendancelist(db).Where(p => p.id == item.value).FirstOrDefault()); }
                     }
-                   
-                    //appearance search settings here
-                    CriteriaModel.AppearanceSearchSettings.heightmaxbyculture = (PerfectMatchSettings == null || PerfectMatchSettings.heightmax == null) ? Extensions.ToFeetInches(48) : Extensions.ToFeetInches((double)PerfectMatchSettings.heightmax);
-                    CriteriaModel.AppearanceSearchSettings.heightminbyculture = (PerfectMatchSettings == null || PerfectMatchSettings.heightmin == null) ? Extensions.ToFeetInches(89) : Extensions.ToFeetInches((double)PerfectMatchSettings.heightmin);
-
-                    foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.ethnicity))
-                    {
-                        CriteriaModel.AppearanceSearchSettings.ethnicitylist.Add(CachingFactory.SharedObjectHelper.getethnicitylist(db).Where(p => p.id == item.value).FirstOrDefault());
-                    }
-
-                    foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.bodytype))
-                    {
-                        CriteriaModel.AppearanceSearchSettings.bodytypeslist.Add(CachingFactory.SharedObjectHelper.getbodytypelist(db).Where(p => p.id == item.value).FirstOrDefault());
-                    }
-
-                    foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.eyecolor))
-                    {
-                        CriteriaModel.AppearanceSearchSettings.eyecolorlist.Add(CachingFactory.SharedObjectHelper.geteyecolorlist(db).Where(p => p.id == item.value).FirstOrDefault());
-                    }
-
-                    foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.haircolor))
-                    {
-                        CriteriaModel.AppearanceSearchSettings.haircolorlist.Add(CachingFactory.SharedObjectHelper.gethaircolorlist(db).Where(p => p.id == item.value).FirstOrDefault());
-                    }
-
-
-                    foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.hotfeature))
-                    {
-                        CriteriaModel.AppearanceSearchSettings.hotfeaturelist.Add(CachingFactory.SharedObjectHelper.gethotfeaturelist(db).Where(p => p.id == item.value).FirstOrDefault());
-                    }
-
-                    //populate lifestyle values here
-
-                    foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.educationlevel))
-                    { 
-                        CriteriaModel.LifeStyleSearchSettings.educationlevellist.Add(CachingFactory.SharedObjectHelper.geteducationlevellist(db).Where(p => p.id == item.value).FirstOrDefault());
-                    }
-
-                    foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.lookingfor))
-                    { CriteriaModel.LifeStyleSearchSettings.lookingforlist.Add(CachingFactory.SharedObjectHelper.getlookingforlist(db).Where(p => p.id == item.value).FirstOrDefault()); }
-
-                    foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.employmentstatus))
-                    { CriteriaModel.LifeStyleSearchSettings.employmentstatuslist.Add(CachingFactory.SharedObjectHelper.getemploymentstatuslist(db).Where(p => p.id == item.value).FirstOrDefault()); }
-
-                    foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.havekids))
-                    { CriteriaModel.LifeStyleSearchSettings.havekidslist.Add(CachingFactory.SharedObjectHelper.gethavekidslist(db).Where(p => p.id == item.value).FirstOrDefault()); }
-
-                    foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.livingsituation))
-                    { CriteriaModel.LifeStyleSearchSettings.livingsituationlist.Add(CachingFactory.SharedObjectHelper.getlivingsituationlist(db).Where(p => p.id == item.value).FirstOrDefault()); }
-
-                    foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.maritialstatus))
-                    { CriteriaModel.LifeStyleSearchSettings.maritalstatuslist.Add(CachingFactory.SharedObjectHelper.getmaritalstatuslist(db).Where(p => p.id == item.value).FirstOrDefault()); }
-
-                    foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.wantskids))
-                    { CriteriaModel.LifeStyleSearchSettings.wantskidslist.Add(CachingFactory.SharedObjectHelper.getwantskidslist(db).Where(p => p.id == item.value).FirstOrDefault()); }
-
-                    foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.profession))
-                    { CriteriaModel.LifeStyleSearchSettings.professionlist.Add(CachingFactory.SharedObjectHelper.getprofessionlist(db).Where(p => p.id == item.value).FirstOrDefault()); }
-
-                    foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.incomelevel))
-                    { CriteriaModel.LifeStyleSearchSettings.incomelevellist.Add(CachingFactory.SharedObjectHelper.getincomelevellist(db).Where(p => p.id == item.value).FirstOrDefault()); }
-
-                    //Character settings for search here
-                    foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.diet))
-                    { CriteriaModel.CharacterSearchSettings.dietlist.Add(CachingFactory.SharedObjectHelper.getdietlist(db).Where(p => p.id == item.value).FirstOrDefault()); }
-
-                    foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.humor))
-                    { CriteriaModel.CharacterSearchSettings.humorlist.Add(CachingFactory.SharedObjectHelper.gethumorlist(db).Where(p => p.id == item.value).FirstOrDefault()); }
-
-                    foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.hobby))
-                    { CriteriaModel.CharacterSearchSettings.hobbylist.Add(CachingFactory.SharedObjectHelper.gethobbylist(db).Where(p => p.id == item.value).FirstOrDefault()); }
-
-                    foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.drink))
-                    { CriteriaModel.CharacterSearchSettings.drinkslist.Add(CachingFactory.SharedObjectHelper.getdrinkslist(db).Where(p => p.id == item.value).FirstOrDefault()); }
-
-                    //FIX after Initial Catalog= update
-                    foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.excercise))
-                    { CriteriaModel.CharacterSearchSettings.exerciselist.Add(CachingFactory.SharedObjectHelper.getexerciselist(db).Where(p => p.id == item.value).FirstOrDefault()); }
-                   
-                    foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.smokes))
-                    { CriteriaModel.CharacterSearchSettings.smokeslist.Add(CachingFactory.SharedObjectHelper.getsmokeslist(db).Where(p => p.id == item.value).FirstOrDefault()); }
-
-                    foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.sign))
-                    { CriteriaModel.CharacterSearchSettings.signlist.Add(CachingFactory.SharedObjectHelper.getsignlist(db).Where(p => p.id == item.value).FirstOrDefault()); }
-
-                    foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.politicalview))
-                    { CriteriaModel.CharacterSearchSettings.politicalviewlist.Add(CachingFactory.SharedObjectHelper.getpoliticalviewlist(db).Where(p => p.id == item.value).FirstOrDefault()); }
-
-                    foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.religion))
-                    { CriteriaModel.CharacterSearchSettings.religionlist.Add(CachingFactory.SharedObjectHelper.getreligionlist(db).Where(p => p.id == item.value).FirstOrDefault()); }
-                    
-                    foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.religiousattendance))
-                    { CriteriaModel.CharacterSearchSettings.religiousattendancelist.Add(CachingFactory.SharedObjectHelper.getreligiousattendancelist(db).Where(p => p.id == item.value).FirstOrDefault()); }
-
 
                     return CriteriaModel;
 
