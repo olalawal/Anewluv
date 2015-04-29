@@ -32,26 +32,33 @@ namespace Anewluv.DataExtentionMethods
                 //added roles
 
                 IQueryable<mailboxmessagefolder> mailboxmessagefolderlist = repo.Query(z => z.mailboxfolder.profile_id  == model.profileid.Value )
-                    .Include(p => p.mailboxfolder.profilemetadata.profile).Include(p => p.mailboxfolder.profilemetadata.profile.membersinroles.Select(z => z.profile_id == model.profileid.Value))
-                    .Include(m=>m.mailboxmessage.recipientprofilemetadata.profile.profiledata).Include(m=>m.mailboxmessage.senderprofilemetadata.profile.profiledata)
+                    .Include(p => p.mailboxfolder.profilemetadata.profile)
+                    .Include(p => p.mailboxfolder.profilemetadata.profile.membersinroles.Select(z => z.lu_role))
+                    .Include(m=>m.mailboxmessage.recipientprofilemetadata.profile.profiledata)
+                    .Include(m=>m.mailboxmessage.senderprofilemetadata.profile.profiledata)
                     .Select().AsQueryable();
 
 
                 //remove profiles that blocked me  .i,e should be invlisble to me
-                mailboxmessagefolderlist = (from m in mailboxmessagefolderlist.Where(a => a.mailboxmessage.sender_id ==  model.profileid.Value)
-                                           where ( !otherblocks.Any(f => f.target_profile_id != m.mailboxmessage.sender_id  )) select m ).AsQueryable();     
 
-               
+
+                //return mailboxmessagefolderlist;
                 
                 //to do roles ? allowing what photos they can view i.e the high rez stuff or more than 2 -3 etc
 
                 //folder id
                 if (model.mailboxfolderid != null)
-                    mailboxmessagefolderlist = mailboxmessagefolderlist.Where(p => p.mailboxfolder.id == model.mailboxfolderid);
+                    mailboxmessagefolderlist = mailboxmessagefolderlist.Where(p => p.mailboxfolder.id == model.mailboxfolderid.Value);
                 //folder name filter
-                if (model.mailboxfoldername != "" | model.mailboxfoldername != null)
+                if (model.mailboxfoldername != null)
                     mailboxmessagefolderlist = mailboxmessagefolderlist.Where(p => p.mailboxfolder.displayname == model.mailboxfoldername);
                 
+                   //filter out blockedp messages here
+                //remove profiles that blocked me  .i,e should be invlisble to me
+                // mailboxmessagefolderlist = (from m in mailboxmessagefolderlist.Where(a => a.mailboxmessage.sender_id ==  model.profileid.Value)
+                //                          where ( !otherblocks.Any(f => f.target_profile_id != m.mailboxmessage.sender_id  )) select m ).AsQueryable();
+
+
                 return mailboxmessagefolderlist;
 
 
@@ -174,55 +181,64 @@ namespace Anewluv.DataExtentionMethods
         {
 
 
-            // int? totalrecordcount = MemberSearchViewmodels.Count;
-            //handle zero and null paging values
-            if (page == null || page == 0) page = 1;
-            if (numberperpage == null || numberperpage == 0) numberperpage = 4;
-            bool allowpaging = (source.Count() >= (page * numberperpage) ? true : false);
-            var pageData = page > 1 & allowpaging ?
-                new PaginatedList<mailboxmessagefolder>().GetCurrentPages(source.ToList(), page ?? 1, numberperpage ?? 20) : source.Take(numberperpage.GetValueOrDefault());
-
-
-            var results = pageData.Select(p => new MailViewModel
+            try
             {
-                senderprofile_id = p.mailboxmessage.senderprofilemetadata.profile_id ,
-                senderscreenname = p.mailboxmessage.senderprofilemetadata.profile.screenname,
-                recipientprofile_id = p.mailboxmessage.recipientprofilemetadata.profile_id ,
-                recipientscreenname =p.mailboxmessage.recipientprofilemetadata.profile.screenname ,
+                // int? totalrecordcount = MemberSearchViewmodels.Count;
+                //handle zero and null paging values
+                if (page == null || page == 0) page = 1;
+                if (numberperpage == null || numberperpage == 0) numberperpage = 4;
+                bool allowpaging = (source.Count() >= (page * numberperpage) ? true : false);
+                var pageData = page > 1 & allowpaging ?
+                    new PaginatedList<mailboxmessagefolder>().GetCurrentPages(source.ToList(), page ?? 1, numberperpage ?? 20) : source.Take(numberperpage.GetValueOrDefault());
 
-               senderstatus_id = p.mailboxmessage.senderprofilemetadata.profile.status_id,
-               recipientstatus_id = p.mailboxmessage.recipientprofilemetadata.profile.status_id,   
-               body = p.mailboxmessage.body,
-               subject =p.mailboxmessage.subject,             
-               mailboxmessageid = p.mailboxmessage_id ,
-               mailboxfoldername =p.mailboxfolder.displayname,   
-               mailboxfolder_id = p.mailboxfolder_id,               
-               recipientage =  DataFormatingExtensions.CalculateAge( p.mailboxmessage.senderprofilemetadata.profile.profiledata.birthdate.Value),
-               senderage = DataFormatingExtensions.CalculateAge( p.mailboxmessage.recipientprofilemetadata.profile.profiledata.birthdate.Value),           
-                          
-                sendercity = p.mailboxmessage.senderprofilemetadata.profile.profiledata.city,
-                senderstate =p.mailboxmessage.senderprofilemetadata.profile.profiledata.stateprovince,
-                //TOD DO hard code country list from common and get it from cached version to filter , skipping for now
-                sendercountry =p.mailboxmessage.senderprofilemetadata.profile.profiledata.countryid.ToString() ,
 
-                 recipientcity = p.mailboxmessage.recipientprofilemetadata.profile.profiledata.city,
-               recipientstate =p.mailboxmessage.recipientprofilemetadata.profile.profiledata.stateprovince,
-                //TOD DO hard code country list from common and get it from cached version to filter , skipping for now
-                recipientcountry =p.mailboxmessage.recipientprofilemetadata.profile.profiledata.countryid.ToString() ,
+                var results = pageData.Select(p => new MailViewModel
+                {
+                    senderprofile_id = p.mailboxmessage.senderprofilemetadata.profile_id,
+                    senderscreenname = p.mailboxmessage.senderprofilemetadata.profile.screenname,
+                    recipientprofile_id = p.mailboxmessage.recipientprofilemetadata.profile_id,
+                    recipientscreenname = p.mailboxmessage.recipientprofilemetadata.profile.screenname,
 
-                creationdate =p.mailboxmessage.creationdate,
-                read = p.read,
-                replieddate = p.replieddate,     
-                sendergalleryphoto = db.Repository<photoconversion>()
-                .getgalleryphotomodelbyprofileid(p.mailboxmessage.senderprofilemetadata.profile_id , (int)photoformatEnum.Thumbnail),     
-                recipientgalleryphoto = db.Repository<photoconversion>()
-                .getgalleryphotomodelbyprofileid(p.mailboxmessage.recipientprofilemetadata.profile_id , (int)photoformatEnum.Thumbnail)
-                   
-              
-    
-                 }).ToList();
+                    senderstatus_id = p.mailboxmessage.senderprofilemetadata.profile.status_id,
+                    recipientstatus_id = p.mailboxmessage.recipientprofilemetadata.profile.status_id,
+                    body = p.mailboxmessage.body,
+                    subject = p.mailboxmessage.subject,
+                    mailboxmessageid = p.mailboxmessage_id,
+                    mailboxfoldername = p.mailboxfolder.displayname,
+                    mailboxfolder_id = p.mailboxfolder_id,
+                    recipientage = DataFormatingExtensions.CalculateAge(p.mailboxmessage.senderprofilemetadata.profile.profiledata.birthdate.Value),
+                    senderage = DataFormatingExtensions.CalculateAge(p.mailboxmessage.recipientprofilemetadata.profile.profiledata.birthdate.Value),
 
-            return new MailSearchResultsViewModel { results = results, totalresults = source.Count() };
+                    sendercity = p.mailboxmessage.senderprofilemetadata.profile.profiledata.city,
+                    senderstate = p.mailboxmessage.senderprofilemetadata.profile.profiledata.stateprovince,
+                    //TOD DO hard code country list from common and get it from cached version to filter , skipping for now
+                    sendercountry = p.mailboxmessage.senderprofilemetadata.profile.profiledata.countryid.ToString(),
+
+                    recipientcity = p.mailboxmessage.recipientprofilemetadata.profile.profiledata.city,
+                    recipientstate = p.mailboxmessage.recipientprofilemetadata.profile.profiledata.stateprovince,
+                    //TOD DO hard code country list from common and get it from cached version to filter , skipping for now
+                    recipientcountry = p.mailboxmessage.recipientprofilemetadata.profile.profiledata.countryid.ToString(),
+
+                    creationdate = p.mailboxmessage.creationdate,
+                    read = p.read,
+                    replieddate = p.replieddate,
+                    sendergalleryphoto = db.Repository<photoconversion>()
+                    .getgalleryphotomodelbyprofileid(p.mailboxmessage.senderprofilemetadata.profile_id, (int)photoformatEnum.Medium),                    
+                    recipientgalleryphoto = db.Repository<photoconversion>()
+                    .getgalleryphotomodelbyprofileid(p.mailboxmessage.recipientprofilemetadata.profile_id, (int)photoformatEnum.Medium)
+
+
+
+                }).ToList();
+
+                return new MailSearchResultsViewModel { results = results, totalresults = source.Count() };
+            }
+            catch (Exception ex)
+            { 
+            //log error
+                throw ex;
+            
+            }
 
         }
 
