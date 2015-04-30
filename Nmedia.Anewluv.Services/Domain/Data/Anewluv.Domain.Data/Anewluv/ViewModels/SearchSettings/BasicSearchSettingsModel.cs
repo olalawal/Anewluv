@@ -30,7 +30,7 @@ namespace Anewluv.Domain.Data.ViewModels
         [DataMember]
         public string searchname { get; set; }
         [DataMember]
-        public int mygenderid { get; set; }
+        public int? mygenderid { get; set; }
 
         [DataMember]
         public int? agemax { get; set; }

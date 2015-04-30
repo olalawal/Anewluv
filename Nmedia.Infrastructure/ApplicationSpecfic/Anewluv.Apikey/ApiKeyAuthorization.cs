@@ -114,8 +114,8 @@ namespace Anewluv.Apikey
                 nonauthenticatedURLS.Add("Nmedia.Infrastructure.Web.Services.Authorization");
 
                 //for testing non auth on this
-                nonauthenticatedURLS.Add("Anewluv.Web.Services.Members");
-                nonauthenticatedURLS.Add("Anewluv.Web.Services.MemberActions");
+               // nonauthenticatedURLS.Add("Anewluv.Web.Services.Members");
+               // nonauthenticatedURLS.Add("Anewluv.Web.Services.MemberActions");
 
                 //these methods use internal rest calls so need to be excluded
                 //nonauthenticatedURLS.Add("updateuserlogintimebyprofileidandsessionid");  // do this this way until we determine how to add headers
@@ -127,17 +127,19 @@ namespace Anewluv.Apikey
                 //TO do we need to create a server side method that generates or randomizes the apikey so folks cannot use our calls for other things
                 //withoute permission.  For mobile a permemant apikey can be embeded in the code, for web the web server has a call to allow the client to grab the IP 
                 //do not expose it in the client somehow.
-                apikeyonlyURLS.Add("Anewluv.Web.Services.Authentication");                                  
-                apikeyonlyURLS.Add("Anewluv.Web.Services.Common");
-                apikeyonlyURLS.Add("Anewluv.Web.Services.Spatial");
-                apikeyonlyURLS.Add("/Anewluv.Web.Services.Media/PhotoService.svc/Rest/addphotos");  //everyone can call addphotos
+                apikeyonlyURLS.Add("anewluv.web.services.authentication");                                  
+                apikeyonlyURLS.Add("anewluv.web.services.common");
+                apikeyonlyURLS.Add("anewluv.web.services.spatial");
+                apikeyonlyURLS.Add("/anewluv.web.services.media/photoservice.svc/rest/addphotos");  //everyone can call addphotos
 
 
-                
+
+                //TO DO add special handling to the service side to disallow the pulling on anyones basic search settings even tho it cant be changed.
                 //added quick search to this apikey only to allow for quick search to 
                 //to bypass userid and password auth
-                apikeyonlyURLS.Add("/Anewluv.Web.Services.Members/MembersMapperService.svc/Rest/getquicksearch");
-                apikeyonlyURLS.Add("/Anewluv.Web.Services.Edit/SearchEditService.svc/Rest/getbasicsearchsettings");
+                apikeyonlyURLS.Add("/anewluv.web.services.members/membersmapperservice.svc/rest/getquicksearch");
+                apikeyonlyURLS.Add("/anewluv.web.services.edit/searcheditservice.svc/rest/getbasicsearchsettings");
+                
                
 
                              
@@ -177,7 +179,7 @@ namespace Anewluv.Apikey
                 if (nonauthenticatedURLS.Contains(urisegments[1].ToString().Replace("/", ""))) return true;
                 
                 //flag the API key only auth URLS
-                if ((apikeyonlyURLS.Contains(urisegments[1].ToString().Replace("/", "")) || apikeyonlyURLS.Contains(path))) apikeyauthonly = true; ;
+                if ((apikeyonlyURLS.Contains(urisegments[1].ToString().ToLower().Replace("/", "")) || apikeyonlyURLS.Contains(path.ToLower()))) apikeyauthonly = true; ;
                                 
 
                 //allows service to be discovereable with no api key

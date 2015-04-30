@@ -637,7 +637,7 @@ namespace Anewluv.Services.Edit
                 var agelist = CachingFactory.SharedObjectHelper.getagelist();
                        
                     model.agemin = p.agemin == null ? 18 : p.agemin.GetValueOrDefault();
-                    model.mygenderid =  p.profilemetadata != null? p.profilemetadata.profile.profiledata.gender_id.GetValueOrDefault():1;
+                    model.mygenderid =  p.profilemetadata != null? p.profilemetadata.profile.profiledata.gender_id.Value:(int?)null;
                     model.agemax = p.agemax == null ? 99 : p.agemax.GetValueOrDefault();
                     model.creationdate = p.creationdate == null ? (DateTime?)null : p.creationdate.GetValueOrDefault();                 
                     model.distancefromme=  p.distancefromme == null ? 500 : p.distancefromme.GetValueOrDefault();
