@@ -222,8 +222,10 @@ namespace Anewluv.DataExtentionMethods
                     creationdate = p.mailboxmessage.creationdate,
                     read = p.read,
                     replieddate = p.replieddate,
+                    sendergenderid = p.mailboxmessage.senderprofilemetadata.profile.profiledata.gender_id.Value,
                     sendergalleryphoto = db.Repository<photoconversion>()
-                    .getgalleryphotomodelbyprofileid(p.mailboxmessage.senderprofilemetadata.profile_id, (int)photoformatEnum.Medium),                    
+                    .getgalleryphotomodelbyprofileid(p.mailboxmessage.senderprofilemetadata.profile_id, (int)photoformatEnum.Medium),
+                    recipientgenderid = p.mailboxmessage.recipientprofilemetadata.profile.profiledata.gender_id.Value,
                     recipientgalleryphoto = db.Repository<photoconversion>()
                     .getgalleryphotomodelbyprofileid(p.mailboxmessage.recipientprofilemetadata.profile_id, (int)photoformatEnum.Medium)
 

@@ -168,7 +168,7 @@ namespace Anewluv.DataExtentionMethods
         {
             //MembersRepository membersrepository = new MembersRepository();
             //get the correct value from DB
-            return (repo.Query(p => p.emailaddress == model.email) != null);
+            return (repo.Query(p => p.emailaddress == model.email).Select().FirstOrDefault() != null);
 
 
         }
@@ -177,13 +177,16 @@ namespace Anewluv.DataExtentionMethods
         {
             //MembersRepository membersrepository = new MembersRepository();
             //get the correct value from DB
-            return (repo.Query(p => p.screenname == model.screenname) != null);
+            return (repo.Query(p => p.screenname == model.screenname).Select().FirstOrDefault() != null);
 
         }
 
         public static bool checkifusernamealreadyexists(this IRepository<profile> repo, ProfileModel model)
         {
-            return (repo.Query(p => p.username == model.username) != null);
+            var match = repo.Query(p => p.username == model.username).Select().FirstOrDefault();
+
+            if (match != null) return true;
+                return false;
         }
 
         //TO DO need enum for stats

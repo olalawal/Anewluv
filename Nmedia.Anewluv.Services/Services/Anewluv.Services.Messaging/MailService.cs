@@ -117,7 +117,27 @@ namespace Anewluv.Services.Messaging
                 return await task.ConfigureAwait(false);
             }
 
-        
+       //TO DO create the conversation list all mails in order 
+       public async Task<MailSearchResultsViewModel> getorderedconversations(MailModel model)
+       {
+           var task = Task.Factory.StartNew(() =>
+           {
+               var repo = _unitOfWorkAsync.Repository<mailboxmessagefolder>();
+               var dd = mailextentions.getmailfilteredandpaged(repo, model, _unitOfWorkAsync);
+
+
+               //Log the activity for history
+               Api.AnewLuvLogging.LogProfileActivity
+                   (new ProfileModel { profileid = model.profileid.Value },
+                   (int)activitytypeEnum.updateprofile,
+                   _context);
+
+               return dd;
+
+
+           });
+           return await task.ConfigureAwait(false);
+       }
 
 
         #region "update methods"

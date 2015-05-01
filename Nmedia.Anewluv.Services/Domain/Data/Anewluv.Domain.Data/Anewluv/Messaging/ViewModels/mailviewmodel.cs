@@ -60,10 +60,16 @@ namespace Anewluv.Domain.Data.ViewModels
        [DataMember]   public DateTime? readdate { get; set; }
         [DataMember]  public bool? read { get; set; }
        [DataMember]   public DateTime? replieddate { get; set; }
-       [DataMember]
+       
+        
+        [DataMember]
+        public int sendergenderid { get; set; }
+        [DataMember]
        public PhotoViewModel sendergalleryphoto { get; set; }
      //  [DataMember]
       // public bool senderhasgalleryphoto { get; set; }
+        [DataMember]
+        public int recipientgenderid { get; set; }
        [DataMember]
        public PhotoViewModel recipientgalleryphoto { get; set; }
       // [DataMember]
