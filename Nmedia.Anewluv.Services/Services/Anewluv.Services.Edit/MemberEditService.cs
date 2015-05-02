@@ -119,7 +119,7 @@ namespace Anewluv.Services.Edit
                              // SharedRepository sharedrepository = new SharedRepository();
                              //Ages = sharedrepository.AgesSelectList;
 
-                             model.birthdate = p.profiledata.birthdate; //== null ? null :  p.profiledata.lu_birthdate;
+                          model.birthdate = p.profiledata.birthdate; //== null ? null :  p.profiledata.lu_birthdate;
                          //  model.agemin = p.agemin == null ? 18 : p.agemin.GetValueOrDefault();
                          model.gender = p.profiledata.lu_gender == null ? null : p.profiledata.lu_gender;
                          model.countryid = p.profiledata.countryid == null ? null : p.profiledata.countryid;
@@ -127,6 +127,8 @@ namespace Anewluv.Services.Edit
                          model.postalcode = p.profiledata.postalcode == null ? null : p.profiledata.postalcode;
                          model.aboutme = p.profiledata.aboutme == null ? null : p.profiledata.aboutme;
                          model.phonenumber = p.profiledata.phone == null ? null : p.profiledata.phone;
+                         model.catchyintroline = p.profiledata.mycatchyintroLine;
+                         model.aboutme = p.profiledata.aboutme;
 
                          return model;
                     });

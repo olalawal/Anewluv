@@ -169,7 +169,7 @@ namespace Anewluv.Apikey
 
                 
                 //if last segment is rest or help dont do anything we are fine
-                if (urisegments[segmentcount - 1].Contains(restsegment) || urisegments[segmentcount - 1].Contains(helpsegment) || urisegments.ToList().Contains(operationssegment)) return true; 
+                if (urisegments[segmentcount - 1].ToLower().Contains(restsegment.ToLower()) || urisegments[segmentcount - 1].ToLower().Contains(helpsegment.ToLower()) || urisegments.ToList().Contains(operationssegment)) return true; 
 
                 //if (urisegments.ToList().Contains(restsegment) && (urisegments.ToList().Contains(helpsegment) | urisegments.ToList().Contains(helpsegment.Replace("/",""))))
                  //   return true;
