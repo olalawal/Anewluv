@@ -91,8 +91,32 @@ namespace Anewluv.DataExtentionMethods
         {
 
             return repo.Query(p => p.id == model.profileid.Value).Include(x => x.profiledata)
-                .Include(z => z.profilemetadata)
-                .Include(p => p.membersinroles.Select(z => z.lu_role))                 
+              
+                .Include(p => p.membersinroles.Select(z => z.lu_role))
+                    .Include(x => x.profiledata)
+                     .Include(x => x.profiledata.lu_bodytype)
+                     .Include(x => x.profiledata.lu_diet)
+                 .Include(x => x.profiledata.lu_drinks)
+                  .Include(x => x.profiledata.lu_educationlevel)
+                   .Include(x => x.profiledata.lu_employmentstatus)
+                    .Include(x => x.profiledata.lu_exercise)
+                     .Include(x => x.profiledata.lu_eyecolor)
+                      .Include(x => x.profiledata.lu_gender)
+                      .Include(x => x.profiledata.lu_haircolor)
+                      .Include(x => x.profiledata.lu_havekids)
+                      .Include(x => x.profiledata.lu_humor)
+                      .Include(x => x.profiledata.lu_incomelevel)
+                      .Include(x => x.profiledata.lu_livingsituation)
+                      .Include(x => x.profiledata.lu_maritalstatus)
+                      .Include(x => x.profiledata.lu_politicalview)
+                      .Include(x => x.profiledata.lu_profession)
+                      .Include(x => x.profiledata.lu_religion)
+                      .Include(x => x.profiledata.lu_religiousattendance)
+                      .Include(x => x.profiledata.lu_sign)
+                      .Include(x => x.profiledata.lu_smokes)
+                       .Include(x => x.profiledata.lu_wantskids)
+
+
                 .Include(i => i.profilemetadata.searchsettings.Select(s => s.details)).Select().FirstOrDefault();
                // .Include(z => z.profilemetadata.searchsettings).Select().FirstOrDefault();
         }
