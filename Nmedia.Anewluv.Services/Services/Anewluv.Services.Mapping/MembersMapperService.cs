@@ -2030,7 +2030,7 @@ namespace Anewluv.Services.Mapping
                     lastloggedonstring = profileextentionmethods.getlastloggedinstring(x.lastlogindate.GetValueOrDefault()),
                     lastlogindate = x.lastlogindate,
                     distancefromme = x.distancefromme,
-                    galleryphoto = db.Repository<photoconversion>().getgalleryphotomodelbyprofileid(x.id, (int)photoformatEnum.Thumbnail),
+                    galleryphoto = db.Repository<photoconversion>().getgalleryphotomodelbyprofileid(x.id, (int)photoformatEnum.Medium),
                     lookingforagefrom = x.lookingforagefrom,
                     lookingForageto = x.lookingForageto,
                     online = db.Repository<profile>().getuseronlinestatus(new ProfileModel { profileid = x.id })

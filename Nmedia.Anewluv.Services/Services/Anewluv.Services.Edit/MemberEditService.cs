@@ -103,7 +103,8 @@ namespace Anewluv.Services.Edit
              {
                    var task = Task.Factory.StartNew(() =>
                     {
-                         profile p = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = editprofilemodel.profileid});
+                      
+                         var p = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = editprofilemodel.profileid });
                          BasicSettingsModel model = new BasicSettingsModel();
 
                          //populate values here ok ?
