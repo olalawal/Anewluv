@@ -1,0 +1,16 @@
+
+full doc
+http://blogs.msdn.com/b/brunoterkaly/archive/2014/03/31/moving-a-wcf-service-and-database-to-the-cloud.aspx
+
+
+database deployment or db only help :
+
+http://robertgreiner.com/2012/05/using-entity-framework-database-migrations-to-update-a-remote-database/
+
+i.e 
+Update-Database -TARGETMIGRATION:$InitialDatabase -StartUpProjectName "ToTheCloud.Infrastructure" -ConnectionString "Server=tcp:<server_name>.database.windows.net,1433;Database=<database_name>;User ID=<db_user_name>@<server_name>;Password=<password>;Trusted_Connection=False;Encrypt=True;MultipleActiveResultSets=True;Max Pool Size=100;" -ConnectionProviderName "System.Data.SqlClient"
+
+
+then
+
+Update-Database -StartUpProjectName "ToTheCloud.Infrastructure" -ConnectionString "Server=tcp:<server_name>.database.windows.net,1433;Database=<database_name>;User ID=<db_user_name>@<server_name>;Password=<password>;Trusted_Connection=False;Encrypt=True;MultipleActiveResultSets=True;Max Pool Size=100;" -ConnectionProviderName "System.Data.SqlClient"

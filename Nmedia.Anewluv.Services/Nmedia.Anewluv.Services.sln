@@ -152,6 +152,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnewLuvFTS.DomainAndData", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Anewluv.Web.Services.Messaging", "Hosting\Anewluv.Web.Services.Messaging\Anewluv.Web.Services.Messaging.csproj", "{C00A7B66-E74B-4BBF-ABCC-FADB50589E85}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DeploymentToAzure", "DeploymentToAzure", "{EED3C895-7CC2-4D5A-BC97-0B22A932B727}"
+	ProjectSection(SolutionItems) = preProject
+		Azure deployment help.txt = Azure deployment help.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
