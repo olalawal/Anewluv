@@ -71,8 +71,9 @@ namespace Anewluv.Domain.Data.ViewModels
         public int? currentpage { get; set; }
 
         //search stuff for photos
+        //check if the user is viewing sombody elese's photos
         [DataMember]
-        public int? viewerprofileid { get; set; }
+        public int? viewingprofileid { get; set; }
 
         //admin otions for rejecting phtoos
         public bool? photoapproved { get; set; }

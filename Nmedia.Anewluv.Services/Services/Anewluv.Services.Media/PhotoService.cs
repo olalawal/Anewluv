@@ -248,7 +248,48 @@ namespace Anewluv.Services.Media
 
 
 
+       }
+
+
+       //****TO DO use the profileid to determine if the viewer has access to what based on security settings in the filter
+       public async Task<PhotoSearchResultsViewModel> getothersfilteredphotospaged(PhotoModel model)
+       {
+           {
+               try
+               {
+                   var task = Task.Factory.StartNew(() =>
+                   {
+
+                       var repo = _unitOfWorkAsync.Repository<photoconversion>();
+                       var dd = mediaextentionmethods.getothersfilteredphotospaged
+                           (repo, model);
+
+                       return dd;
+
+
+                   });
+                   return await task.ConfigureAwait(false);
+
+
+               }
+               catch (Exception ex)
+               {
+                   //instantiate logger here so it does not break anything else.
+                   logger = new Logging(applicationEnum.MediaService);
+                   logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
+                   //can parse the error to build a more custom error mssage and populate fualt faultreason
+                   FaultReason faultreason = new FaultReason("Error in photo service");
+                   string ErrorMessage = "";
+                   string ErrorDetail = "ErrorMessage: " + ex.Message;
+                   throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+               }
+
+           }
+
+
+
        }    
+    
        public async Task<PhotoViewModel> getfilteredphoto(PhotoModel model)
        {
            {
