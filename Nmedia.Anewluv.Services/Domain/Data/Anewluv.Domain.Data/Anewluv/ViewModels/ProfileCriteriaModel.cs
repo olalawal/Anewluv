@@ -72,9 +72,13 @@ namespace Anewluv.Domain.Data.ViewModels
        public List<string> HotFeature = new List<string>();
 
           //1-29-2013 olawal these are for match settings 
+           [DataMember]
        public BasicSearchSettingsModel  BasicSearchSettings { get; set; }
+           [DataMember]
        public AppearanceSearchSettingsModel   AppearanceSearchSettings { get; set; }
+           [DataMember]
        public LifeStyleSearchSettingsModel  LifeStyleSearchSettings { get; set; }
+           [DataMember]
        public CharacterSearchSettingsModel  CharacterSearchSettings { get; set; }
           
        

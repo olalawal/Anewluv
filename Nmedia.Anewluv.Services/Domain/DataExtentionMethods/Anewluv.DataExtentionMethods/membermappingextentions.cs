@@ -452,21 +452,29 @@ namespace Anewluv.DataExtentionMethods
 
                     foreach (var item in metadata.profiledata_ethnicity)
                     {
+                        //hack for duplicate ethnicity data tesst and apply to all
+                        if ( !CriteriaModel.Ethnicity.Contains(item.lu_ethnicity.description))
                         CriteriaModel.Ethnicity.Add(item.lu_ethnicity.description);
                     }
 
                     foreach (var item in metadata.profiledata_hobby)
                     {
+                        //hack for duplicate ethnicity data tesst and apply to all
+                        if (!CriteriaModel.Hobbies.Contains(item.lu_hobby.description))
                         CriteriaModel.Hobbies.Add(item.lu_hobby.description);
                     }
 
                     foreach (var item in metadata.profiledata_lookingfor)
                     {
+                        //hack for duplicate ethnicity data tesst and apply to all
+                        if (!CriteriaModel.LookingFor.Contains(item.lu_lookingfor.description))
                         CriteriaModel.LookingFor.Add(item.lu_lookingfor.description);
                     }
 
                     foreach (var item in metadata.profiledata_hotfeature)
                     {
+                        //hack for duplicate ethnicity data tesst and apply to all
+                        if (!CriteriaModel.HotFeature.Contains(item.lu_hotfeature.description))
                         CriteriaModel.HotFeature.Add(item.lu_hotfeature.description);
                     }
 
