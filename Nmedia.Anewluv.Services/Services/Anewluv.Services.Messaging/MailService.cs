@@ -260,8 +260,8 @@ namespace Anewluv.Services.Messaging
                                 
                                     //TO DO use activity stuff to manage this
                                    //first check the sent qotat for this user
-                                    var profile = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = model.profileid.Value});
-                                    var recipientprofile = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = model.recipeintprofileid.Value});
+                                var profile = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileidwithmailboxfolders(new ProfileModel { profileid = model.profileid.Value });
+                                var recipientprofile = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileidwithmailboxfolders(new ProfileModel { profileid = model.recipeintprofileid.Value });
                                     //get the recipeints inbox
                                    
                                      if (profile.dailsentmessagequota.Value > 5)
@@ -270,10 +270,12 @@ namespace Anewluv.Services.Messaging
                                          return AnewluvMessages;
                                      }
 
+                                     var inboxid = (int)mailfoldertypeEnum.Inbox;
+
                                     // get the folderr details
-                                     mailboxfolder sendermailboxfolder = _unitOfWorkAsync.Repository<mailboxfolder>().Queryable().Where(u => u.id == (int)mailfoldertypeEnum.Sent && u.profile_id == model.profileid.Value).FirstOrDefault();
-                                     mailboxfolder recipientmailboxfolder = _unitOfWorkAsync.Repository<mailboxfolder>().Queryable().Where(u => u.id == (int)mailfoldertypeEnum.Inbox && u.profile_id == model.recipeintprofileid.Value).FirstOrDefault();
-                                     if (sendermailboxfolder != null | recipientmailboxfolder !=null)
+                                     mailboxfolder sendermailboxfolder =  profile.profilemetadata.mailboxfolders.Where(u => u.defaultfolder_id == (int)mailfoldertypeEnum.Sent ).FirstOrDefault();
+                                     mailboxfolder recipientmailboxfolder = recipientprofile.profilemetadata.mailboxfolders.Where(u => u.defaultfolder_id == (int)mailfoldertypeEnum.Inbox ).FirstOrDefault();
+                                     if (sendermailboxfolder != null && recipientmailboxfolder !=null)
                                     {
                                         //create the message and save it
                                         var newmailboxmessage = new mailboxmessage
@@ -545,25 +547,24 @@ namespace Anewluv.Services.Messaging
                                 {
                                     //create the message and save it
                                     var newmailboxfolder = new mailboxfolder
-                                    { displayname = model.mailboxfoldername, profile_id = model.profileid.Value, active = 1, creationdate = DateTime.Now, 
+                                    {
+                                        displayname = model.mailboxfoldername, profile_id = model.profileid.Value, active = 1, creationdate = DateTime.Now,  defaultfolder_id =  (int)mailfoldertypeEnum.Custom,
                                          maxsizeinbytes = 128000
 
                                     };
-                                    _unitOfWorkAsync.Repository<mailboxfolder>().Insert(newmailboxfolder);
-
-                                  
+                                    _unitOfWorkAsync.Repository<mailboxfolder>().Insert(newmailboxfolder);                                  
                                     AnewluvMessages.messages.Add("Folder was created Succesfully");
                                     var i = _unitOfWorkAsync.SaveChanges();
                                 }
                                 else
                                 {
-                                    AnewluvMessages.errormessages.Add("folder name already exists !");
+                                   
+                                    AnewluvMessages.errormessages.Add("only suscribers can create new folders !");
                                 }
                             }
                             else
                             {
-
-                                AnewluvMessages.errormessages.Add("only suscribers can create new folders !");
+                                 AnewluvMessages.errormessages.Add("folder name already exists !");
                             }
                             
 

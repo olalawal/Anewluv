@@ -28,9 +28,12 @@ namespace Anewluv.Domain.Data
         [Description("Drafts")]
         [EnumMember]
         Drafts=4,
+        [Description("Spam")]
+        [EnumMember]
+        Spam = 5,
         [Description("Custom")]
         [EnumMember]
-        Custom=5
+        Custom=6
     }
 
 

@@ -120,6 +120,26 @@ namespace Anewluv.DataExtentionMethods
                 .Include(i => i.profilemetadata.searchsettings.Select(s => s.details)).Select().FirstOrDefault();
                // .Include(z => z.profilemetadata.searchsettings).Select().FirstOrDefault();
         }
+
+        /// <summary>
+        /// added roles
+        /// </summary>
+        /// <param name="repo"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public static profile getprofilebyprofileidwithmailboxfolders(this IRepository<profile> repo, ProfileModel model)
+        {
+
+            return repo.Query(p => p.id == model.profileid.Value).Include(x => x.profiledata)
+
+                .Include(p => p.membersinroles.Select(z => z.lu_role))
+                    .Include(x => x.profiledata)
+                    .Include(i => i.profilemetadata.mailboxfolders.Select(s => s.mailboxmessagefolders)).
+                    
+                    
+                    Select().FirstOrDefault();
+            // .Include(z => z.profilemetadata.searchsettings).Select().FirstOrDefault();
+        }
         /// <summary>
         /// This extention returns even more metadata stuff
         /// </summary>
