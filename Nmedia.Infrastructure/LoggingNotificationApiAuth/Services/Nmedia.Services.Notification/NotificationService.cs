@@ -407,6 +407,7 @@ namespace Nmedia.Services.Notification
 
         }
 
+
             
        //Private reusable internal functions 
         //TO DO this should be handled as a separate send for each so we can update the susccess individually
@@ -416,7 +417,7 @@ namespace Nmedia.Services.Notification
         {
             bool isEmailSendSuccessfully = false;
 
-
+            //remove sendgrid junk
             try
             {
                 //SmtpClient oSmtpClient = new SmtpClient();
@@ -437,6 +438,7 @@ namespace Nmedia.Services.Notification
                     //using GO Daddy btw from address should be a godaddy address too
                     var smtp = new SmtpClient("relay-hosting.secureserver.net");
                    /// http://stackoverflow.com/questions/8554567/godaddy-send-email
+                    /// http://vandelayweb.com/sending-asp-net-emails-godaddy-gmail-godaddy-hosted/
                    /// 
                     smtp.Host = !string.IsNullOrEmpty(message.systemaddress.hostname) ? message.systemaddress.hostname : message.systemaddress.hostip;
                     //smtp.Credentials()
