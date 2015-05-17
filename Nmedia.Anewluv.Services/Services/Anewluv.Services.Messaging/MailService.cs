@@ -642,12 +642,12 @@ namespace Anewluv.Services.Messaging
                                     _unitOfWorkAsync.Repository<mailboxfolder>().Insert(newmailboxfolder);
 
 
-                                    AnewluvMessages.messages.Add("Folder was created Succesfully");
+                                    AnewluvMessages.messages.Add("Folder was deleted Succesfully");
                                     var i = _unitOfWorkAsync.SaveChanges();
                                 }
                                 else
                                 {
-                                    AnewluvMessages.errormessages.Add("only suscribers can create new folders !");
+                                    AnewluvMessages.errormessages.Add("only suscribers can add or delete folders !");
                                 }
                             }
                             else
