@@ -30,6 +30,7 @@ using Anewluv.DataExtentionMethods;
 using System.Threading.Tasks;
 using Anewluv.Domain.Data.Anewluv.ViewModels;
 using Repository.Pattern.UnitOfWork;
+using Repository.Pattern.Infrastructure;
 
 
 namespace Anewluv.Services.Members
@@ -271,6 +272,9 @@ namespace Anewluv.Services.Members
                       try
                       {
 
+                         bool mailboxfolderexist =  (_unitOfWorkAsync.Repository<mailboxfolder>().Queryable().Where(p => p.profile_id == model.profileid.Value).FirstOrDefault() != null);
+
+                         if (mailboxfolderexist) return;
 
                           var task = Task.Factory.StartNew(() =>
                           {
@@ -286,7 +290,8 @@ namespace Anewluv.Services.Members
                                   p.defaultfolder_id = i;
                                   p.displayname = _unitOfWorkAsync.Repository<lu_defaultmailboxfolder>().Queryable().Where(z=>z.id == i).FirstOrDefault().description;
                                   p.profile_id = model.profileid.Value;
-                                  //determin what the folder type is , we have inbox=1 , sent=2, Draft=3,Trash=4,Deleted=5
+                                  p.ObjectState = ObjectState.Added;
+                                  //determin what the folder type is , e have inbox=1 , sent=2, Draft=3,Trash=4,Deleted=5
                                   //switch (i)
                                   //{
                                   //    case 1:
@@ -356,6 +361,7 @@ namespace Anewluv.Services.Members
                                   // if( myProfile == null ) return null;
                                   //update the profile status to 2
                                   myProfile.status_id = (int)profilestatusEnum.Activated;
+                                  myProfile.ObjectState = ObjectState.Modified;
                                   //handele the update using EF
                                   //  _unitOfWorkAsync.Repository<Country_PostalCode_List>().profiles.AttachAsModified(myProfile, this.ChangeSet.GetOriginal(myProfile));
                                   _unitOfWorkAsync.Repository<profile>().Update(myProfile);

@@ -1233,10 +1233,10 @@ namespace Anewluv.Services.Media
 
                             var task = Task.Factory.StartNew(() =>
                             {
-                                var convertedprofileid = Convert.ToInt32(model.profileid);
+                                //var convertedprofileid = model.profileid.Value;
                                 IQueryable<photo> GalleryPhoto = default(IQueryable<photo>);
                                 //Dim ctx As New Entities()
-                                GalleryPhoto = _unitOfWorkAsync.Repository<photo>().Queryable().Where(p => p.profile_id == convertedprofileid);
+                                GalleryPhoto = _unitOfWorkAsync.Repository<photo>().Queryable().Where(p => p.profile_id == model.profileid.Value);
 
                                 if (GalleryPhoto.Count() > 0)
                                 {

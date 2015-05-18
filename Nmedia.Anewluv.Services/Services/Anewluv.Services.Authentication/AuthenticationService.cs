@@ -37,6 +37,7 @@ using Nmedia.Infrastructure.Domain.Data.Apikey;
 using Repository.Pattern.UnitOfWork;
 using Nmedia.Infrastructure.Domain.Data.Notification;
 using Nmedia.Infrastructure.Helpers;
+using Repository.Pattern.Infrastructure;
 
 
 
@@ -1579,14 +1580,14 @@ namespace Anewluv.Services.Authentication
         #region "Extra  methods custom to anewluv"
 
         //1-8-2013 olawal addedrobust method for activating profiles
-        public async Task<AnewluvResponse> activateprofile(activateprofilemodel model)
+        public async Task<AnewluvMessages> activateprofile(activateprofilemodel model)
         {
             AnewluvMessages messages = new AnewluvMessages();
            // messages.message = "";
             messages.errormessages = null;
             profile profile = new profile();
             AnewluvResponse response = new AnewluvResponse();
-            bool activationsuccesful = false;
+           
          
             {
 
@@ -1605,13 +1606,13 @@ namespace Anewluv.Services.Authentication
                                 //also create a members view model to store pertinent data i.e persist photos profile ID etc
                                 var membersmodel = new MembersViewModel();
                                 //get the macthcing member data using the profile ID/email entered
-                                if (model.emailaddress != "")
+                                if (!string.IsNullOrEmpty(model.emailaddress))
                                 {
                                     profile =  _unitOfWorkAsync.Repository<profile>().getprofilebyemailaddress(new ProfileModel { email = model.emailaddress });
                                 }
-                                else if (model.username != null && model.username != "")
+                                else if (!string.IsNullOrEmpty(model.username))
                                 {
-                                    profile =  _unitOfWorkAsync.Repository<profile>().getprofilebyusername(new ProfileModel { email = model.username });
+                                    profile =  _unitOfWorkAsync.Repository<profile>().getprofilebyusername(new ProfileModel { username = model.username });
                              
                                 }
                                 else { profile = null;
@@ -1623,9 +1624,10 @@ namespace Anewluv.Services.Authentication
 
                                 //verify that user entered correct email before doing anything
                                 //TO DO add these error messages to resource files
-                                if (profile == null |  _unitOfWorkAsync.Repository<profile>().checkifemailalreadyexists(new ProfileModel { email = profile.emailaddress }) == false)
+                                if (profile == null )
                                 {
-                                    messages.errormessages.Add("There is no registered account with the email address: " + model.emailaddress + " on AnewLuv.com, please either register for a new account or use the contact us link to get help");
+                                   // messages.errormessages.Add("There is no registered account with the email address: " + model.emailaddress + " on AnewLuv.com, please either register for a new account or use the contact us link to get help");
+                                    messages.errormessages.Add("invalid useraccount or Email");
                                     //hide the photo view in thsi case
                                     // model.photostatus = true;
                                     // return messages;
@@ -1640,19 +1642,20 @@ namespace Anewluv.Services.Authentication
                                 }
                                 else
                                 {
-                                    //11-1-2011
-                                    //store the valid profileID in appfarbic cache
-                                    // CachingFactory.MembersViewModelHelper.SaveProfileIDBySessionID( model.activateprofilemodel.profileid, this.HttpContext);
-                                    var returnedTaskTResult = checkforuploadedphotobyprofileidasync(profile.id).Result;
+
+                                    var UploadedPhoto = _unitOfWorkAsync.Repository<photo>().Queryable().Where(p => p.profile_id == profile.id ).FirstOrDefault();
+                                    if (UploadedPhoto == null) messages.errormessages.Add("Please upload at least one profile photo");
+
+                                    //var returnedTaskTResult = checkforuploadedphotobyprofileidasync(profile.id).Result;
                                     // bool result =
-                                    model.photostatus = returnedTaskTResult;
+                                   // model.photostatus = returnedTaskTResult;
                                     //}
 
                                     //5/3/2011 instantiace the photo upload model as well since its the next step if we were succesful    
                                     // photoeditmodel photoviewmodel = new photoeditmodel();
                                     //registermodel registerviewmodel = new registermodel();
-                                    model.emailaddress = profile.emailaddress;
-                                    model.activationcode = profile.activationcode; //model.activateprofilemodel.ActivationCode;
+                                   // model.emailaddress = profile.emailaddress;
+                                   // model.activationcode = profile.activationcode; //model.activateprofilemodel.ActivationCode;
 
                                     //5/11/2011
                                     //TO DO USE TASK for this
@@ -1671,36 +1674,40 @@ namespace Anewluv.Services.Authentication
                                     //get a value for photo status so we know weather to display uplodad phot dialog or not
                                     //if the photo status is TRUE then hide the upload photo div
 
-                                    if (model.photostatus == false)
-                                    {
-                                        messages.errormessages.Add("Please upload at least one profile photo using the browser below");
-                                        //return messages;
-                                    }
+                                    //we area still allowing activation with no photo but we will force user to re-direct to edit profile/photos
+                                   
+
                                     //activaate profile here as long as photo exists 
-                                    else
-                                    {
+                                   
                                         //TO DO convert to Asynch call
                                         // AnewluvContext = new AnewluvContext();
                                         // using (var tempdb = AnewluvContext)
                                         // {
                                         //       MemberService MemberService = new MemberService(tempdb);
-                                      var activateProfileResult= activateprofileasync(new ProfileModel { profileid = profile.id }).Result;
-                                      activationsuccesful = activateProfileResult;
+                                     // var activateProfileResult= activateprofileasync(new ProfileModel { profileid = profile.id }).Result;
+                                     // activationsuccesful = activateProfileResult;
                                         //  }
-                                    }
+
+                                      profile.status_id = (int)profilestatusEnum.Activated;
+                                      profile.ObjectState = ObjectState.Modified;
+                                    //handele the update using EF
+                                    //  _unitOfWorkAsync.Repository<Country_PostalCode_List>().profiles.AttachAsModified(myProfile, this.ChangeSet.GetOriginal(myProfile));
+                                     _unitOfWorkAsync.Repository<profile>().Update(profile);
+                                     var i = _unitOfWorkAsync.SaveChanges();
+
 
                                     //check if mailbox folders exist, if they dont create em , don't add any error status
 
-                                    var areamailboxfolderscreated = false;
+                                   // var areamailboxfolderscreated = false;
                                     //AnewluvContext = new AnewluvContext();
                                     //  using (var tempdb = AnewluvContext)
                                     //   {
                                     //     MemberService MemberService = new MemberService(tempdb);
-                                    areamailboxfolderscreated =  Api.AsyncCalls.checkifmailboxfoldersarecreatedasync(new ProfileModel { profileid = profile.id }).Result;
+                                  //  areamailboxfolderscreated =  Api.AsyncCalls.checkifmailboxfoldersarecreatedasync(new ProfileModel { profileid = profile.id }).Result;
                                     // }
 
-                                    if (!(areamailboxfolderscreated))                                    
-                                    {
+                                    //if (!(areamailboxfolderscreated))                                    
+                                   // {
                                         //    AnewluvContext = new AnewluvContext();
                                         //  using (var tempdb = AnewluvContext)
                                         //   {
@@ -1708,7 +1715,7 @@ namespace Anewluv.Services.Authentication
                                         Api.AsyncCalls.createmailboxfoldersasync(new ProfileModel { profileid = profile.id });
                                         //  }
                                         // MemberService.createmailboxfolders(new ProfileModel { profileid = profile.id });
-                                    }
+                                  //  }
 
                                     messages.messages.Add("Activation Sucssesful");
                                 }
@@ -1716,23 +1723,24 @@ namespace Anewluv.Services.Authentication
 
 
 
-                                if (messages.errormessages.Count() == 0)
-                                {
+                              //  if (messages.errormessages.Count() > 0 )
+                               // {
                                     //get the profile info to return
                                     //Shell.MVC2.Domain.Entities.Anewluv.profile profile = _memberservice.getpro(model.username);
                                     //  response.profileid1 = model.profileid.ToString();//profile.id.ToString();
-                                    response.email = model.emailaddress;//profile.emailaddress;
-                                    ResponseMessage currentmessages = new ResponseMessage("", messages.messages.FirstOrDefault(), "");
-                                    response.ResponseMessages.Add(currentmessages);
+                                  //  response.email = model.emailaddress;//profile.emailaddress;
+                                  ////  ResponseMessage currentmessages = new ResponseMessage("", messages.messages.FirstOrDefault(), "");
+                                  //  response.ResponseMessages.Add(currentmessages);
 
-                                }
-                                else
-                                {
-                                    ResponseMessage currentmessages = new ResponseMessage("", "There was a problem activating the profile, please try again later", messages.errormessages.First());
-                                    response.ResponseMessages.Add(reponsemessage);
-                                }
+                              //  }
+                              //  else
+                              //  {
+                                 
+                                   //  messages.errormessages.Add("There was a problem activating the profile, please try again later");
+                                 //   response.ResponseMessages.Add(reponsemessage);
+                              //  }
 
-                                return response;
+                                return messages;
 
                                 // return messages;
                             });
@@ -1773,7 +1781,7 @@ namespace Anewluv.Services.Authentication
 
         }
 
-        public async Task<AnewluvResponse> recoveractivationcode(activateprofilemodel model)
+        public async Task<AnewluvMessages> recoveractivationcode(activateprofilemodel model)
         {
 
             profile profile = new profile();
@@ -1788,13 +1796,13 @@ namespace Anewluv.Services.Authentication
                     try
                     {
 
-                               var task = Task.Factory.StartNew(() =>
+                     var task = Task.Factory.StartNew(() =>
                     {
 
                         AnewluvMessages messages = new AnewluvMessages();
                        // messages.messages = "";
                         messages.errormessages = null;
-
+                        var isprofileactivated = false;
 
                         //Clear any errors kinda redundant tho  
                         //also create a members view model to store pertinent data i.e persist photos profile ID etc
@@ -1805,56 +1813,75 @@ namespace Anewluv.Services.Authentication
 
                         //verify that user entered correct email before doing anything
                         //TO DO add these error messages to resource files
-                        if (profile == null |  _unitOfWorkAsync.Repository<profile>().checkifemailalreadyexists(new ProfileModel { email = profile.emailaddress }) == false)
+                        if (profile == null)
                         {
-                            messages.errormessages.Add("There is no registered account with the email address: " + model.emailaddress + " on AnewLuv.com, please either register for a new account or use the contact us link to get help");
+                            // messages.errormessages.Add("There is no registered account with the email address: " + model.emailaddress + " on AnewLuv.com, please either register for a new account or use the contact us link to get help");
+                            messages.errormessages.Add("invalid useraccount or Email");
                             //hide the photo view in thsi case
-                            model.photostatus = true;
-
-                        }
-                        else 
-                        {
-                            var isprofileactivated = false;
-                          //  AnewluvContext AnewluvContext  = new AnewluvContext();
-                          //  using (var tempdb = AnewluvContext)
-                          //  {
-                             //  MemberService MemberService = new MemberService(tempdb);
-                              isprofileactivated = ( _unitOfWorkAsync.Repository<profile>().checkifprofileisactivated(new ProfileModel { profileid = profile.id }) == true);
-                           // }
-
-                            if (isprofileactivated == true)                            
-                            messages.errormessages.Add("Your Profile has already been activated");
-                            //hide the photo view in thsi case
-                            //ViewData["ActivateProfileStatus"]=
-                            // return View("LogOn", _logonmodel);
-
-                        }
-
-                        if (messages.errormessages.Count() == 0)
-                        {
-                            //get the profile info to return
-                            //Shell.MVC2.Domain.Entities.Anewluv.profile profile = _memberservice.getpro(model.username);
-                            //  response.profileid1 = model.profileid.ToString();//profile.id.ToString();
-                            //oke send back theer activvation code
-                            messages.messages.Add("Your activiation code has been sent to the email address: " + model.emailaddress);
-
-                            response.email = model.emailaddress;//profile.emailaddress;
-                            ResponseMessage reponsemessage = new ResponseMessage("", messages.messages.FirstOrDefault(), "");
-                            response.ResponseMessages.Add(reponsemessage);
-                            //send the email vai service
 
                         }
                         else
                         {
-                            ResponseMessage reponsemessage = new ResponseMessage("", "There was a problem sending your activation code please try again later", messages.errormessages.First());
-                            response.ResponseMessages.Add(reponsemessage);
+
+                            isprofileactivated = (_unitOfWorkAsync.Repository<profile>().checkifprofileisactivated(new ProfileModel { profileid = profile.id }) == true);
+
+
+                            if (isprofileactivated == true)
+                            {
+                                messages.errormessages.Add("Your Profile has already been activated");
+                                //hide the photo view in thsi case
+                                //ViewData["ActivateProfileStatus"]=
+                                // return View("LogOn", _logonmodel);
+                            }
+                            else
+                            {
+
+                                var EmailModels = new List<EmailModel>();
+
+                                //memeber notification
+                                EmailModels.Add(new EmailModel
+                                {
+                                    templateid = (int)templateenum.MemberActivationCodeRecoveredMemberNotification,
+                                    messagetypeid = (int)messagetypeenum.UserUpdate,
+                                    addresstypeid = (int)addresstypeenum.SiteUser,
+                                    emailaddress = profile.emailaddress,
+                                    screenname = profile.screenname,
+                                    username = profile.username,
+                                 
+                                });
+
+                                //admin notificaiton
+                                EmailModels.Add(new EmailModel
+                                {
+                                    templateid = (int)templateenum.MemberActivationCodeRecoveredAdminNotification,
+                                    messagetypeid = (int)messagetypeenum.SysAdminUpdate,
+                                    addresstypeid = (int)addresstypeenum.SystemAdmin,
+                                });
+                                //this sends both admin and user emails  
+                                Api.AsyncCalls.sendmessagesbytemplate(EmailModels); 
+
+                                //get the profile info to return
+                                //Shell.MVC2.Domain.Entities.Anewluv.profile profile = _memberservice.getpro(model.username);
+                                //  response.profileid1 = model.profileid.ToString();//profile.id.ToString();
+                                //oke send back theer activvation code
+                                messages.messages.Add("Your activiation code has been sent to the email address: " + model.emailaddress);
+
+                                //Code to send message here 
+                             
+
+
+                           
+                            }
+
+
                         }
 
 
-                        return response;
 
-                    });
-                               return await task.ConfigureAwait(false);
+                        return messages;
+
+                        });
+                        return await task.ConfigureAwait(false);
                         //return messages;
                     }
                     catch (Exception ex)
