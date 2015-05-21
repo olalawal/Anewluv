@@ -808,10 +808,7 @@ namespace Anewluv.Services.Edit
 
                 var humorlist = CachingFactory.SharedObjectHelper.gethumorlist(_unitOfWorkAsync);
                 var dietlist = CachingFactory.SharedObjectHelper.getdietlist(_unitOfWorkAsync);
-
-                var hobbylist = CachingFactory.SharedObjectHelper.gethobbylist(_unitOfWorkAsync);
-                
-
+                var hobbylist = CachingFactory.SharedObjectHelper.gethobbylist(_unitOfWorkAsync);  
                 var drinklist = CachingFactory.SharedObjectHelper.getdrinkslist(_unitOfWorkAsync);
                 var exerciselist = CachingFactory.SharedObjectHelper.getexerciselist(_unitOfWorkAsync);
                 var smokeslist = CachingFactory.SharedObjectHelper.getsmokeslist(_unitOfWorkAsync);

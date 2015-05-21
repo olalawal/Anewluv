@@ -20,11 +20,11 @@ namespace Anewluv.Domain.Data.ViewModels
          [DataMember]
          public long? height { get; set; }
          [DataMember]
-         public lu_bodytype bodytype { get; set; }
+         public List<listitem> bodytypelist { get; set; }
          [DataMember]
-         public lu_haircolor haircolor { get; set; }
+         public List<listitem> haircolorlist { get; set; }
          [DataMember]
-         public lu_eyecolor eyecolor { get; set; }
+         public List<listitem> eyecolorlist { get; set; }
          [DataMember]
          public List<listitem> hotfeaturelist { get; set; }
          [DataMember]

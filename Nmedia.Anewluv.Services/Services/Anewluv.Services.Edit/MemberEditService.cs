@@ -178,8 +178,12 @@ namespace Anewluv.Services.Edit
                         AppearanceSettingsModel model = new AppearanceSettingsModel();
 
                         //12-26-2014 olawal added this to allow for multiple checkbox selections and checked etc
-                        var hotfeaturelist = CachingFactory.SharedObjectHelper.gethotfeaturelist(_unitOfWorkAsync);
                         var ethnicitylist = CachingFactory.SharedObjectHelper.getethnicitylist(_unitOfWorkAsync);
+                        var bodytypelist = CachingFactory.SharedObjectHelper.getbodytypelist(_unitOfWorkAsync);
+                        var eyecolorlist = CachingFactory.SharedObjectHelper.geteyecolorlist(_unitOfWorkAsync);
+                        var haircolorlist = CachingFactory.SharedObjectHelper.gethaircolorlist(_unitOfWorkAsync);
+                        var hotfeaturelist = CachingFactory.SharedObjectHelper.gethotfeaturelist(_unitOfWorkAsync);
+                        var metricheightlist = CachingFactory.SharedObjectHelper.getmetricheightlist();
 
                         model.height = p.profiledata.height == null ? null : p.profiledata.height;
                         model.bodytype = p.profiledata.lu_bodytype == null ? null : p.profiledata.lu_bodytype;
@@ -259,10 +263,20 @@ namespace Anewluv.Services.Edit
 
                     //   profile p = _unitOfWorkAsync.profiles.Where(z => z.id == editprofilemodel.intprofileid).FirstOrDefault();
                     CharacterSettingsModel model = new CharacterSettingsModel();
+                    var humorlist = CachingFactory.SharedObjectHelper.gethumorlist(_unitOfWorkAsync);
+                    var dietlist = CachingFactory.SharedObjectHelper.getdietlist(_unitOfWorkAsync);
+                    var hobbylist = CachingFactory.SharedObjectHelper.gethobbylist(_unitOfWorkAsync);
+                    var drinklist = CachingFactory.SharedObjectHelper.getdrinkslist(_unitOfWorkAsync);
+                    var exerciselist = CachingFactory.SharedObjectHelper.getexerciselist(_unitOfWorkAsync);
+                    var smokeslist = CachingFactory.SharedObjectHelper.getsmokeslist(_unitOfWorkAsync);
+                    var signlist = CachingFactory.SharedObjectHelper.getsignlist(_unitOfWorkAsync);
+                    var politicalviewlist = CachingFactory.SharedObjectHelper.getpoliticalviewlist(_unitOfWorkAsync);
+                    var religionlist = CachingFactory.SharedObjectHelper.getreligionlist(_unitOfWorkAsync);
+                    var religiousattendancelist = CachingFactory.SharedObjectHelper.getreligiousattendancelist(_unitOfWorkAsync);
+
 
                     model.diet = p.profiledata.lu_diet;
-                    model.humor = p.profiledata.lu_humor;
-                    var hobbylist = CachingFactory.SharedObjectHelper.gethobbylist(_unitOfWorkAsync);
+                    model.humor = p.profiledata.lu_humor;                  
                     model.hobbylist = hobbylist;
 
                     //update the list with the items that are selected.
@@ -324,10 +338,18 @@ namespace Anewluv.Services.Edit
                     var task = Task.Factory.StartNew(() =>
                     {
                     profile p = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = editprofilemodel.profileid});
-                        
-                    
 
+
+
+                    var educationlevellist = CachingFactory.SharedObjectHelper.geteducationlevellist(_unitOfWorkAsync);
                     var lookingforlist = CachingFactory.SharedObjectHelper.getlookingforlist(_unitOfWorkAsync);
+                    var employmentstatuslist = CachingFactory.SharedObjectHelper.getemploymentstatuslist(_unitOfWorkAsync);
+                    var havekidslist = CachingFactory.SharedObjectHelper.gethavekidslist(_unitOfWorkAsync);
+                    var incomelevellist = CachingFactory.SharedObjectHelper.getincomelevellist(_unitOfWorkAsync);
+                    var livingsituationlist = CachingFactory.SharedObjectHelper.getlivingsituationlist(_unitOfWorkAsync);
+                    var maritialstatuslist = CachingFactory.SharedObjectHelper.getmaritalstatuslist(_unitOfWorkAsync);
+                    var professionlist = CachingFactory.SharedObjectHelper.getprofessionlist(_unitOfWorkAsync);
+                    var wantkidslist = CachingFactory.SharedObjectHelper.getwantskidslist(_unitOfWorkAsync);
                     
                     LifeStyleSettingsModel model = new LifeStyleSettingsModel();
                     model.educationlevel = p.profiledata.lu_educationlevel;

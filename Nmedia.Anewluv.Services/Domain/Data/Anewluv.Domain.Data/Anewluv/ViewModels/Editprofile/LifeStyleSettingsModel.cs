@@ -11,23 +11,23 @@ namespace Anewluv.Domain.Data.ViewModels
     public class LifeStyleSettingsModel
     {
        [DataMember]
-       public lu_educationlevel educationlevel { get; set; }
+       public  List<listitem> educationlevellist { get; set; }
        [DataMember]
-       public lu_employmentstatus employmentstatus { get; set; }
+       public  List<listitem> employmentstatuslist{ get; set; }
        [DataMember]
-       public lu_incomelevel incomelevel { get; set; }
+       public List<listitem> incomelevellist { get; set; }
        [DataMember]
        public List<listitem> lookingforlist { get; set; }
        [DataMember]
-       public lu_wantskids wantskids { get; set; }
+       public List<listitem> wantskidslist { get; set; }
        [DataMember]
-       public lu_profession profession { get; set; }
+       public List<listitem> professionlist { get; set; }
        [DataMember]
-       public lu_maritalstatus maritalstatus { get; set; }
+       public List<listitem> maritalstatus { get; set; }
        [DataMember]
-       public lu_livingsituation livingsituation { get; set; }
+       public List<listitem> livingsituationlist { get; set; }
        [DataMember]
-       public lu_havekids havekids { get; set; }
+       public List<listitem> havekidslist { get; set; }
        
       
     }

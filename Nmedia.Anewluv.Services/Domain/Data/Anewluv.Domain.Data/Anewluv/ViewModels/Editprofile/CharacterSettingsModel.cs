@@ -11,23 +11,23 @@ namespace Anewluv.Domain.Data.ViewModels
     public class CharacterSettingsModel
     {
          [DataMember ]
-         public lu_diet diet { get; set; }
+        public List<listitem> dietlist { get; set; }
          [DataMember]
-         public lu_humor humor { get; set; }                 
+         public List<listitem> humorlist { get; set; }                 
          [DataMember]
-         public lu_drinks drinking { get; set; }
+         public List<listitem> drinkinglist { get; set; }
          [DataMember]
-         public lu_exercise excercise { get; set; }
+         public List<listitem> excerciselist { get; set; }
          [DataMember]
-         public lu_smokes smoking { get; set; }
+         public List<listitem> smokinglist { get; set; }
          [DataMember]
-         public lu_sign sign { get; set; }
+         public List<listitem> signlist { get; set; }
          [DataMember]
-         public lu_politicalview politicalview { get; set; }
+         public List<listitem> politicalviewlist { get; set; }
          [DataMember]
-         public lu_religion religion { get; set; }
+         public List<listitem> religionlist { get; set; }
          [DataMember]
-         public lu_religiousattendance religiousattendance { get; set; }
+         public List<listitem> religiousattendance { get; set; }
          [DataMember]
          public List<listitem> hobbylist { get; set; }
     }
