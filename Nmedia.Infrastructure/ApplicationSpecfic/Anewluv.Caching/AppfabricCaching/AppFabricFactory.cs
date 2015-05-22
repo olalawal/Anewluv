@@ -40,6 +40,10 @@ namespace Anewluv.Caching
 
     public static class CachingFactory
     {
+
+
+
+
         private static  Logging logger;
         // public  LoggingServiceClient  svcLoggingService;
         public static DataCacheFactory _cacheFactory;

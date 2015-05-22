@@ -7,6 +7,7 @@ using System.Runtime.Serialization;
 namespace Anewluv.Domain.Data
 {
      [DataContract]
+     [Serializable]
     public partial class lu_photoformat :Entity
     {
        
