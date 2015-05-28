@@ -17,7 +17,7 @@ namespace Anewluv.Domain.Data.ViewModels
         [DataMember ]
         public AppearanceSettingsModel appearancesettings { get; set; }
         [DataMember]
-        public AppearanceSearchSettingsModel  appearncesearchsettings { get; set; }
+        public AppearanceSearchSettingsModel appearancesearchsettings { get; set; }
 
       
          //[DataMember]

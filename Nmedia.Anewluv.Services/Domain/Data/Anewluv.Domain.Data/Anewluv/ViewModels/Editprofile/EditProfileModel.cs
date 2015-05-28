@@ -26,11 +26,17 @@ namespace Anewluv.Domain.Data.ViewModels
         [DataMember ]
         public  BasicSettingsModel basicsettings { get; set; }
         [DataMember]
-        public AppearanceSettingsModel appearancesettings { get; set; }
+        public BasicSearchSettingsModel basicseachsettings { get; set; }
+        [DataMember]
+        public AppearanceSearchSettingsModel appearancesearchsettings { get; set; }
         [DataMember]
         public LifeStyleSettingsModel lifestylesettings { get; set; }
         [DataMember]
+        public LifeStyleSearchSettingsModel lifestylesearchsettings { get; set; }
+        [DataMember]
         public CharacterSettingsModel charactersettings { get; set; }
+        [DataMember]
+        public CharacterSearchSettingsModel charactersearchsettings { get; set; }
         //index of what page we are looking at i.e we want to split up this model into diff partial views
         [DataMember]
         public int viewindex { get; set; }

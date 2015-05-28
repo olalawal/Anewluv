@@ -5,6 +5,7 @@ using System.Text;
 using System.ComponentModel.DataAnnotations;
 using Anewluv.Domain.Data;
 using System.Runtime.Serialization;
+using Nmedia.Infrastructure.DTOs;
 
 namespace Anewluv.Domain.Data.ViewModels
 
@@ -38,6 +39,7 @@ namespace Anewluv.Domain.Data.ViewModels
         public string catchyintroline { get; set; }   
         [DataMember]
         public string phonenumber { get; set; }
+
 
         ////Match settings i.e search
         //[DataMember]

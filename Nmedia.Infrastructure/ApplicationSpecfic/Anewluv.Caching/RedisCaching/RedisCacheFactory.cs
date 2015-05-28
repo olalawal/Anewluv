@@ -1,4 +1,6 @@
 ﻿using Anewluv.Domain.Data;
+using GeoData.Domain.Models;
+using GeoData.Domain.Models.ViewModels;
 using Nmedia.Infrastructure.DTOs;
 using Nmedia.Infrastructure.Helpers;
 using Repository.Pattern.UnitOfWork;
@@ -1962,31 +1964,31 @@ namespace Anewluv.Caching.RedisCaching
                 try
                 {
 
-                    dataCache.Remove("agelist");
-                    dataCache.Remove("genderlist");
-                    dataCache.Remove("countrieslist");
-                    dataCache.Remove("securityquestionslist");
-                    dataCache.Remove("bodytypeslist");
-                    dataCache.Remove("eyecolorlist");
-                    dataCache.Remove("haircolorlist");
-                    dataCache.Remove("metricheightlist");
-                    dataCache.Remove("dietlist");
-                    dataCache.Remove("drinkslist");
-                    dataCache.Remove("exerciselist");
-                    dataCache.Remove("hobbylist");
-                    dataCache.Remove("humorlist");
-                    dataCache.Remove("religionlist");
-                    dataCache.Remove("religiousattendancelist");
-                    dataCache.Remove("signlist");
-                    dataCache.Remove("smokeslist");
-                    dataCache.Remove("educationlevellist");
-                    dataCache.Remove("employmentstatuslist");
-                    dataCache.Remove("havekidstlist");
-                    dataCache.Remove("incomelevellist");
-                    dataCache.Remove("livingsituationlist");
-                    dataCache.Remove("maritalstatuslist");
-                    dataCache.Remove("professionlist");
-                    dataCache.Remove("lookingforlist");
+                    dataCache.KeyDelete("agelist");
+                    dataCache.KeyDelete("genderlist");
+                    dataCache.KeyDelete("countrieslist");
+                    dataCache.KeyDelete("securityquestionslist");
+                    dataCache.KeyDelete("bodytypeslist");
+                    dataCache.KeyDelete("eyecolorlist");
+                    dataCache.KeyDelete("haircolorlist");
+                    dataCache.KeyDelete("metricheightlist");
+                    dataCache.KeyDelete("dietlist");
+                    dataCache.KeyDelete("drinkslist");
+                    dataCache.KeyDelete("exerciselist");
+                    dataCache.KeyDelete("hobbylist");
+                    dataCache.KeyDelete("humorlist");
+                    dataCache.KeyDelete("religionlist");
+                    dataCache.KeyDelete("religiousattendancelist");
+                    dataCache.KeyDelete("signlist");
+                    dataCache.KeyDelete("smokeslist");
+                    dataCache.KeyDelete("educationlevellist");
+                    dataCache.KeyDelete("employmentstatuslist");
+                    dataCache.KeyDelete("havekidstlist");
+                    dataCache.KeyDelete("incomelevellist");
+                    dataCache.KeyDelete("livingsituationlist");
+                    dataCache.KeyDelete("maritalstatuslist");
+                    dataCache.KeyDelete("professionlist");
+                    dataCache.KeyDelete("lookingforlist");
                     //  dataCache.Remove("VisibilityMailSettingsList");
                     //  dataCache.Remove("VisibilityStealthSettingsList");
                 }

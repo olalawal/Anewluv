@@ -93,10 +93,9 @@ namespace Anewluv.Services.Edit
         #region "Methods to GET current edit profile settings for a user"
 
         // constructor
-        public async Task<BasicSettingsModel> getbasicsettingsmodel(EditProfileModel editprofilemodel)
+        public async Task<BasicSettingsViewModel> getbasicsettingsmodel(EditProfileModel editprofilemodel)
         {
-
-            
+           
       
          {
              try
@@ -105,7 +104,13 @@ namespace Anewluv.Services.Edit
                     {
                       
                          var p = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = editprofilemodel.profileid });
-                         BasicSettingsModel model = new BasicSettingsModel();
+                         BasicSettingsViewModel model = new BasicSettingsViewModel();
+
+
+                         var showmelist = CachingFactory.SharedObjectHelper.getshowmelist(_unitOfWorkAsync);
+                         var genderlist = CachingFactory.SharedObjectHelper.getgenderlist(_unitOfWorkAsync);
+                         var sortbylist = CachingFactory.SharedObjectHelper.getsortbytypelist(_unitOfWorkAsync);
+                         var agelist = CachingFactory.SharedObjectHelper.getagelist();
 
                          //populate values here ok ?
                          if (p != null)
@@ -120,16 +125,23 @@ namespace Anewluv.Services.Edit
                              // SharedRepository sharedrepository = new SharedRepository();
                              //Ages = sharedrepository.AgesSelectList;
 
-                          model.birthdate = p.profiledata.birthdate; //== null ? null :  p.profiledata.lu_birthdate;
-                         //  model.agemin = p.agemin == null ? 18 : p.agemin.GetValueOrDefault();
-                         model.gender = p.profiledata.lu_gender == null ? null : p.profiledata.lu_gender;
-                         model.countryid = p.profiledata.countryid == null ? null : p.profiledata.countryid;
-                         model.city = p.profiledata.city == null ? null : p.profiledata.city;
-                         model.postalcode = p.profiledata.postalcode == null ? null : p.profiledata.postalcode;
-                         model.aboutme = p.profiledata.aboutme == null ? null : p.profiledata.aboutme;
-                         model.phonenumber = p.profiledata.phone == null ? null : p.profiledata.phone;
-                         model.catchyintroline = p.profiledata.mycatchyintroLine;
-                         model.aboutme = p.profiledata.aboutme;
+                          model.basicsettings.birthdate = p.profiledata.birthdate; //== null ? null :  p.profiledata.lu_birthdate;
+                         //  model.basicsettings.agemin = p.agemin == null ? 18 : p.agemin.GetValueOrDefault();
+                         model.basicsettings.gender = p.profiledata.lu_gender == null ? null : p.profiledata.lu_gender;
+                         model.basicsettings.countryid = p.profiledata.countryid == null ? null : p.profiledata.countryid;
+                         model.basicsettings.city = p.profiledata.city == null ? null : p.profiledata.city;
+                         model.basicsettings.postalcode = p.profiledata.postalcode == null ? null : p.profiledata.postalcode;
+                         model.basicsettings.aboutme = p.profiledata.aboutme == null ? null : p.profiledata.aboutme;
+                         model.basicsettings.phonenumber = p.profiledata.phone == null ? null : p.profiledata.phone;
+                         model.basicsettings.catchyintroline = p.profiledata.mycatchyintroLine;
+                         model.basicsettings.aboutme = p.profiledata.aboutme;
+                   
+
+                         //get search settings
+                         //update the search settings 
+                         searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id   } );
+                         model.basicsearchsettings =  searchsettingsextentions.getbasicsearchsettings(s, _unitOfWorkAsync);
+                         
 
                          return model;
                     });
@@ -158,7 +170,7 @@ namespace Anewluv.Services.Edit
         }
         //Using a contstructor populate the current values I suppose
         //The actual values will bind to viewmodel I think
-         public async Task<AppearanceSettingsModel> getappearancesettingsmodel(EditProfileModel editprofilemodel)
+         public async Task<AppearanceSettingsViewModel> getappearancesettingsmodel(EditProfileModel editprofilemodel)
         {
 
 
@@ -175,7 +187,7 @@ namespace Anewluv.Services.Edit
 
                         //    .getprofilebyprofileid(new ProfileModel { profileid = editprofilemodel.profileid});
 
-                        AppearanceSettingsModel model = new AppearanceSettingsModel();
+                        AppearanceSettingsViewModel model = new AppearanceSettingsViewModel();
 
                         //12-26-2014 olawal added this to allow for multiple checkbox selections and checked etc
                         var ethnicitylist = CachingFactory.SharedObjectHelper.getethnicitylist(_unitOfWorkAsync);
@@ -185,12 +197,12 @@ namespace Anewluv.Services.Edit
                         var hotfeaturelist = CachingFactory.SharedObjectHelper.gethotfeaturelist(_unitOfWorkAsync);
                         var metricheightlist = CachingFactory.SharedObjectHelper.getmetricheightlist();
 
-                        model.height = p.profiledata.height == null ? null : p.profiledata.height;
-                        model.bodytype = p.profiledata.lu_bodytype == null ? null : p.profiledata.lu_bodytype;
-                        model.haircolor = p.profiledata.lu_haircolor == null ? null : p.profiledata.lu_haircolor;
-                        model.eyecolor = p.profiledata.lu_eyecolor == null ? null : p.profiledata.lu_eyecolor;
-                        model.ethnicitylist = ethnicitylist;
-                        model.hotfeaturelist = hotfeaturelist;
+                        model.appearancesettings.height = p.profiledata.height == null ? null : p.profiledata.height;
+                        model.appearancesettings.bodytype = p.profiledata.lu_bodytype == null ? null : p.profiledata.lu_bodytype;
+                        model.appearancesettings.haircolor = p.profiledata.lu_haircolor == null ? null : p.profiledata.lu_haircolor;
+                        model.appearancesettings.eyecolor = p.profiledata.lu_eyecolor == null ? null : p.profiledata.lu_eyecolor;
+                        model.appearancesettings.ethnicitylist = ethnicitylist;
+                        model.appearancesettings.hotfeaturelist = hotfeaturelist;
 
                         //pilot how to show the rest of the values 
                         //sample of doing string values
@@ -198,7 +210,7 @@ namespace Anewluv.Services.Edit
                         foreach (listitem ethnicity in ethnicitylist.Where(c => p.profilemetadata.profiledata_ethnicity.Any(f => f.ethnicty_id == c.id)))
                         {
                             //update the value as checked here on the list
-                            model.ethnicitylist.First(d => d.id == ethnicity.id).selected = true;
+                            model.appearancesettings.ethnicitylist.First(d => d.id == ethnicity.id).selected = true;
                         }
                        // model.hotfeaturelist = _unitOfWorkAsync.Repository<l>()
                         //foreach (var item in model.hotfeaturelist)
@@ -216,9 +228,11 @@ namespace Anewluv.Services.Edit
                         foreach (listitem hotfeature in hotfeaturelist.Where(c => p.profilemetadata.profiledata_hotfeature.Any(f => f.hotfeature_id == c.id)))
                         {
                             //update the value as checked here on the list
-                            model.hotfeaturelist.First(d => d.id == hotfeature.id).selected = true;
+                            model.appearancesettings.hotfeaturelist.First(d => d.id == hotfeature.id).selected = true;
                         }
 
+                        searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id });
+                        model.appearancesearchsettings = searchsettingsextentions.getappearancesearchsettings(s, _unitOfWorkAsync);
 
                         return model;
                     });
@@ -247,7 +261,7 @@ namespace Anewluv.Services.Edit
 
         //Using a contstructor populate the current values I suppose
         //The actual values will bind to viewmodel I think
-        public async Task<CharacterSettingsModel> getcharactersettingsmodel(EditProfileModel editprofilemodel)
+        public async Task<CharacterSettingsViewModel> getcharactersettingsmodel(EditProfileModel editprofilemodel)
         {
 
           
@@ -262,7 +276,8 @@ namespace Anewluv.Services.Edit
                     profile p = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = editprofilemodel.profileid});
 
                     //   profile p = _unitOfWorkAsync.profiles.Where(z => z.id == editprofilemodel.intprofileid).FirstOrDefault();
-                    CharacterSettingsModel model = new CharacterSettingsModel();
+                    CharacterSettingsViewModel model = new CharacterSettingsViewModel();
+
                     var humorlist = CachingFactory.SharedObjectHelper.gethumorlist(_unitOfWorkAsync);
                     var dietlist = CachingFactory.SharedObjectHelper.getdietlist(_unitOfWorkAsync);
                     var hobbylist = CachingFactory.SharedObjectHelper.gethobbylist(_unitOfWorkAsync);
@@ -275,31 +290,34 @@ namespace Anewluv.Services.Edit
                     var religiousattendancelist = CachingFactory.SharedObjectHelper.getreligiousattendancelist(_unitOfWorkAsync);
 
 
-                    model.diet = p.profiledata.lu_diet;
-                    model.humor = p.profiledata.lu_humor;                  
-                    model.hobbylist = hobbylist;
+                    model.charactersettings.dietlist = p.profiledata.lu_diet;
+                    model.charactersettings.humor = p.profiledata.lu_humor;                  
+                    model.charactersettings.hobbylist = hobbylist;
 
                     //update the list with the items that are selected.
                     foreach (listitem hobby in hobbylist.Where(c => p.profilemetadata.profiledata_hobby.Any(f => f.hobby_id == c.id)))
                     {
                         //update the value as checked here on the list
-                        model.hobbylist.First(d => d.id == hobby.id).selected = true;
+                        model.charactersettings.hobbylist.First(d => d.id == hobby.id).selected = true;
                     }
 
 
                     ////populiate the hobby list, remeber this comes from the metadata link so you have to drill down
                     ////var allhobbies = _unitOfWorkAsync.lu_hobby;
-                    //foreach (var item in model.hobbylist)
+                    //foreach (var item in model.charactersettings.hobbylist)
                     //{
-                    //    model.hobbylist.Add(item);
+                    //    model.charactersettings.hobbylist.Add(item);
                     //}
 
-                    model.drinking = p.profiledata.lu_drinks;
-                    model.excercise = p.profiledata.lu_exercise;
-                    model.smoking = p.profiledata.lu_smokes;
-                    model.sign = p.profiledata.lu_sign;
-                    model.politicalview = p.profiledata.lu_politicalview;
-                    model.religiousattendance = p.profiledata.lu_religiousattendance;
+                    model.charactersettings.drinking = p.profiledata.lu_drinks;
+                    model.charactersettings.excercise = p.profiledata.lu_exercise;
+                    model.charactersettings.smoking = p.profiledata.lu_smokes;
+                    model.charactersettings.sign = p.profiledata.lu_sign;
+                    model.charactersettings.politicalview = p.profiledata.lu_politicalview;
+                    model.charactersettings.religiousattendance = p.profiledata.lu_religiousattendance;
+
+                    searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id });
+                    model.charactersearchsettings = searchsettingsextentions.getappearancesearchsettings(s, _unitOfWorkAsync);
 
                     return model;
                     });
@@ -327,7 +345,7 @@ namespace Anewluv.Services.Edit
         }
 
         //populate the enities
-        public async Task<LifeStyleSettingsModel> getlifestylesettingsmodel(EditProfileModel editprofilemodel)
+        public async Task<LifeStyleSettingsViewModel> getlifestylesettingsmodel(EditProfileModel editprofilemodel)
         {
 
           
@@ -351,7 +369,7 @@ namespace Anewluv.Services.Edit
                     var professionlist = CachingFactory.SharedObjectHelper.getprofessionlist(_unitOfWorkAsync);
                     var wantkidslist = CachingFactory.SharedObjectHelper.getwantskidslist(_unitOfWorkAsync);
                     
-                    LifeStyleSettingsModel model = new LifeStyleSettingsModel();
+                    LifeStyleSettingsViewModel model = new LifeStyleSettingsViewModel();
                     model.educationlevel = p.profiledata.lu_educationlevel;
                     model.employmentstatus = p.profiledata.lu_employmentstatus;
                     model.incomelevel = p.profiledata.lu_incomelevel;
@@ -379,6 +397,9 @@ namespace Anewluv.Services.Edit
 
 
                     return model;
+
+                    searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id });
+                    model.charactersearchsettings = searchsettingsextentions.getappearancesearchsettings(s, _unitOfWorkAsync);
 
                       });
                     return await task.ConfigureAwait(false);
@@ -707,24 +728,27 @@ namespace Anewluv.Services.Edit
         #region "Private update methods that can be re-used"
 
         //TO DO add validation and pass back via messages , IE compare old settings to new i.e change nothing if nothing changed
-        private AnewluvMessages updatememberbasicsettings(BasicSettingsModel newmodel, profile p, AnewluvMessages messages)
+        private AnewluvMessages updatememberbasicsettings(BasicSettingsViewModel newmodel, profile p, AnewluvMessages messages)
         {
 
             try
             {
+                
+
+
                 //  profile p = _unitOfWorkAsync.profiles.Where(z => z.id == profileid).First();
 
                 //TO DO
                 //Up here we will check to see if the values have not changed 
-                var birthdate = newmodel.birthdate;
-                var AboutMe = newmodel.aboutme;
-                var MyCatchyIntroLine = newmodel.catchyintroline;
-                var city = newmodel.city;
-                var stateprovince = newmodel.stateprovince;
-                var countryid = newmodel.countryid;
-                var gender = newmodel.gender;
-                var postalcode = newmodel.postalcode;
-                var dd = newmodel.phonenumber;
+                var birthdate = newmodel.basicsettings.birthdate;
+                var AboutMe = newmodel.basicsettings.aboutme;
+                var MyCatchyIntroLine = newmodel.basicsettings.catchyintroline;
+                var city = newmodel.basicsettings.city;
+                var stateprovince = newmodel.basicsettings.stateprovince;
+                var countryid = newmodel.basicsettings.countryid;
+                var gender = newmodel.basicsettings.gender;
+                var postalcode = newmodel.basicsettings.postalcode;
+                var dd = newmodel.basicsettings.phonenumber;
                 //get current values from DB in case some values were not updated
 
                 //link the profiledata entities
@@ -735,7 +759,15 @@ namespace Anewluv.Services.Edit
                 p.profiledata.birthdate = birthdate;
                 p.profiledata.mycatchyintroLine = MyCatchyIntroLine;
 
-             _unitOfWorkAsync.Repository<profile>().Update(p);
+             
+                _unitOfWorkAsync.Repository<profile>().Update(p);
+                _unitOfWorkAsync.SaveChanges();
+
+                
+                //update the search settings 
+                searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id   } );
+                messages = searchsettingsextentions.updatebasicsearchsettings(newmodel.basicsearchsettings, s, messages, _unitOfWorkAsync);
+
 
 
                 //TOD DO
@@ -757,7 +789,7 @@ namespace Anewluv.Services.Edit
         //TO DO add validation and pass back via messages 
 
         //TO DO send back the messages on errors and when nothing is changed
-        private AnewluvMessages updatememberappearancesettings(AppearanceSettingsModel newmodel, profile p, AnewluvMessages messages)
+        private AnewluvMessages updatememberappearancesettings(AppearanceSettingsViewModel newmodel, profile p, AnewluvMessages messages)
         {
             bool nothingupdated = true;
 
@@ -797,8 +829,11 @@ namespace Anewluv.Services.Edit
 
 
                 //_unitOfWorkAsync.Entry(profiledata).State = EntityState.Modified;
-             _unitOfWorkAsync.Repository<profile>().Update(p);
+               _unitOfWorkAsync.Repository<profile>().Update(p);
                _unitOfWorkAsync.SaveChanges();
+
+               searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id });
+               messages = searchsettingsextentions.updatebasicsearchsettings(newmodel., s, messages, _unitOfWorkAsync);
 
                 //TOD DO
                 //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
@@ -823,7 +858,7 @@ namespace Anewluv.Services.Edit
         }
 
         //TO DO send back the messages on errors and when nothing is changed
-        private AnewluvMessages updatemembercharactersettings(CharacterSettingsModel newmodel, profile p, AnewluvMessages messages)
+        private AnewluvMessages updatemembercharactersettings(CharacterSettingsViewModel newmodel, profile p, AnewluvMessages messages)
         {
             bool nothingupdated = true;
 
@@ -895,7 +930,7 @@ namespace Anewluv.Services.Edit
 
 
         //TO DO send back the messages on errors and when nothing is changed
-        private AnewluvMessages updatememberlifestylesettings(LifeStyleSettingsModel newmodel, profile p, AnewluvMessages messages)
+        private AnewluvMessages updatememberlifestylesettings(LifeStyleSettingsViewModel newmodel, profile p, AnewluvMessages messages)
         {
             bool nothingupdated = true;
 
