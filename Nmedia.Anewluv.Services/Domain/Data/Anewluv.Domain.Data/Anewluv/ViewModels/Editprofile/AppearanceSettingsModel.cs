@@ -15,10 +15,24 @@ namespace Anewluv.Domain.Data.ViewModels
       [DataContract]
     public class AppearanceSettingsModel
     {
+          public AppearanceSettingsModel()
+          { 
+          
+            this.metricheightlist = new List<metricheight>();
+             this.ethnicitylist  = new List<listitem>();
+             this.bodytypelist = new List<listitem>();
+        this. eyecolorlist  = new List<listitem>();
+    this.haircolorlist  = new List<listitem>();
+    this.hotfeaturelist = new List<listitem>();
+          }
 
-    
+
+          [DataMember]
+          public int profileid { get; set; }
          [DataMember]
-         public long? height { get; set; }
+         public int? height { get; set; }
+         [DataMember]
+         public List<metricheight> metricheightlist { get; set; } // = new List<string>();
          [DataMember]
          public List<listitem> bodytypelist { get; set; }
          [DataMember]

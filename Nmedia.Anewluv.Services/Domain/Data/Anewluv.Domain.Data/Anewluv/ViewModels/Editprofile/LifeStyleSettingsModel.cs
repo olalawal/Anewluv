@@ -10,6 +10,22 @@ namespace Anewluv.Domain.Data.ViewModels
     [DataContract]
     public class LifeStyleSettingsModel
     {
+        public LifeStyleSettingsModel()
+          { 
+            
+            this. educationlevellist =new List<listitem>();      
+            this. lookingforlist =new List<listitem>();      
+           this. employmentstatuslist =new List<listitem>();      
+           this. havekidslist =new List<listitem>();      
+           this. incomelevellist =new List<listitem>();      
+           this. livingsituationlist =new List<listitem>();      
+           this. maritalstatuslist =new List<listitem>();      
+           this. professionlist =new List<listitem>();      
+           this. wantskidslist =new List<listitem>();
+          
+          }
+
+
        [DataMember]
        public  List<listitem> educationlevellist { get; set; }
        [DataMember]
@@ -23,7 +39,7 @@ namespace Anewluv.Domain.Data.ViewModels
        [DataMember]
        public List<listitem> professionlist { get; set; }
        [DataMember]
-       public List<listitem> maritalstatus { get; set; }
+       public List<listitem> maritalstatuslist { get; set; }
        [DataMember]
        public List<listitem> livingsituationlist { get; set; }
        [DataMember]

@@ -26,7 +26,9 @@ namespace Anewluv.Domain.Data.ViewModels
         [DataMember ]
         public  BasicSettingsModel basicsettings { get; set; }
         [DataMember]
-        public BasicSearchSettingsModel basicseachsettings { get; set; }
+        public BasicSearchSettingsModel basicsearchsettings { get; set; }
+        [DataMember]
+        public AppearanceSettingsModel appearancesettings { get; set; }
         [DataMember]
         public AppearanceSearchSettingsModel appearancesearchsettings { get; set; }
         [DataMember]

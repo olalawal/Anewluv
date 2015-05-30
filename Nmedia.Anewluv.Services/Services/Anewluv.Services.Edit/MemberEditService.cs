@@ -103,8 +103,13 @@ namespace Anewluv.Services.Edit
                    var task = Task.Factory.StartNew(() =>
                     {
                       
+
+
                          var p = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = editprofilemodel.profileid });
-                         BasicSettingsViewModel model = new BasicSettingsViewModel();
+
+                         BasicSettingsViewModel viewmodel = new BasicSettingsViewModel();
+
+                         BasicSettingsModel model = new BasicSettingsModel();
 
 
                          var showmelist = CachingFactory.SharedObjectHelper.getshowmelist(_unitOfWorkAsync);
@@ -116,34 +121,46 @@ namespace Anewluv.Services.Edit
                          if (p != null)
 
 
-                             // model. = p.searchname == null ? "Unamed Search" : p.searchname;
-                             //model.di = p.distancefromme == null ? 500 : p.distancefromme.GetValueOrDefault();
-                             // model.searchrank = p.searchrank == null ? 0 : p.searchrank.GetValueOrDefault();
+                        // model. = p.searchname == null ? "Unamed Search" : p.searchname;
+                        //model.di = p.distancefromme == null ? 500 : p.distancefromme.GetValueOrDefault();
+                        // model.searchrank = p.searchrank == null ? 0 : p.searchrank.GetValueOrDefault();
 
-                             //populate ages select list here I guess
-                             //TODO get from app fabric
-                             // SharedRepository sharedrepository = new SharedRepository();
-                             //Ages = sharedrepository.AgesSelectList;
+                        //populate ages select list here I guess
+                        //TODO get from app fabric
+                        // SharedRepository sharedrepository = new SharedRepository();
+                        //Ages = sharedrepository.AgesSelectList;
 
-                          model.basicsettings.birthdate = p.profiledata.birthdate; //== null ? null :  p.profiledata.lu_birthdate;
-                         //  model.basicsettings.agemin = p.agemin == null ? 18 : p.agemin.GetValueOrDefault();
-                         model.basicsettings.gender = p.profiledata.lu_gender == null ? null : p.profiledata.lu_gender;
-                         model.basicsettings.countryid = p.profiledata.countryid == null ? null : p.profiledata.countryid;
-                         model.basicsettings.city = p.profiledata.city == null ? null : p.profiledata.city;
-                         model.basicsettings.postalcode = p.profiledata.postalcode == null ? null : p.profiledata.postalcode;
-                         model.basicsettings.aboutme = p.profiledata.aboutme == null ? null : p.profiledata.aboutme;
-                         model.basicsettings.phonenumber = p.profiledata.phone == null ? null : p.profiledata.phone;
-                         model.basicsettings.catchyintroline = p.profiledata.mycatchyintroLine;
-                         model.basicsettings.aboutme = p.profiledata.aboutme;
-                   
+                          model.birthdate = p.profiledata.birthdate; //== null ? null :  p.profiledata.lu_birthdate;
+                         //  model.agemin = p.agemin == null ? 18 : p.agemin.GetValueOrDefault();
+                         model.gender = p.profiledata.lu_gender == null ? null : p.profiledata.lu_gender;
+                         model.countryid = p.profiledata.countryid == null ? null : p.profiledata.countryid;
+                         model.city = p.profiledata.city == null ? null : p.profiledata.city;
+                         model.postalcode = p.profiledata.postalcode == null ? null : p.profiledata.postalcode;
+                         model.aboutme = p.profiledata.aboutme == null ? null : p.profiledata.aboutme;
+                         model.phonenumber = p.profiledata.phone == null ? null : p.profiledata.phone;
+                         model.catchyintroline = p.profiledata.mycatchyintroLine;
+                         model.aboutme = p.profiledata.aboutme;
 
-                         //get search settings
-                         //update the search settings 
-                         searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id   } );
-                         model.basicsearchsettings =  searchsettingsextentions.getbasicsearchsettings(s, _unitOfWorkAsync);
-                         
+                         viewmodel.basicsettings = model;
 
-                         return model;
+
+                         //handle search settings if we are doing full edit
+                         if (editprofilemodel.isfullediting == true)
+                         {
+
+                             BasicSearchSettingsModel SearchViewModel = new BasicSearchSettingsModel();
+                             SearchViewModel.showmelist = showmelist;
+                             SearchViewModel.genderlist = genderlist;                           
+                             SearchViewModel.sortbylist = sortbylist;
+                             SearchViewModel.agelist = agelist;                            
+                             searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id });
+                             SearchViewModel = searchsettingsextentions.getbasicsearchsettings(SearchViewModel, s, _unitOfWorkAsync);
+                             //add the value to viewmodel
+                             viewmodel.basicsearchsettings = SearchViewModel;
+                         }
+                      
+
+                         return viewmodel;
                     });
                    return await task.ConfigureAwait(false);
 
@@ -171,11 +188,8 @@ namespace Anewluv.Services.Edit
         //Using a contstructor populate the current values I suppose
         //The actual values will bind to viewmodel I think
          public async Task<AppearanceSettingsViewModel> getappearancesettingsmodel(EditProfileModel editprofilemodel)
-        {
+         {
 
-
-          
-         
             {
                 try
                 {
@@ -185,9 +199,9 @@ namespace Anewluv.Services.Edit
 
                         profile p = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = editprofilemodel.profileid });
 
-                        //    .getprofilebyprofileid(new ProfileModel { profileid = editprofilemodel.profileid});
-
-                        AppearanceSettingsViewModel model = new AppearanceSettingsViewModel();
+                        AppearanceSettingsViewModel viewmodel = new AppearanceSettingsViewModel();
+                        //the model for bodytype profile edit
+                        AppearanceSettingsModel model = new AppearanceSettingsModel();
 
                         //12-26-2014 olawal added this to allow for multiple checkbox selections and checked etc
                         var ethnicitylist = CachingFactory.SharedObjectHelper.getethnicitylist(_unitOfWorkAsync);
@@ -197,44 +211,62 @@ namespace Anewluv.Services.Edit
                         var hotfeaturelist = CachingFactory.SharedObjectHelper.gethotfeaturelist(_unitOfWorkAsync);
                         var metricheightlist = CachingFactory.SharedObjectHelper.getmetricheightlist();
 
-                        model.appearancesettings.height = p.profiledata.height == null ? null : p.profiledata.height;
-                        model.appearancesettings.bodytype = p.profiledata.lu_bodytype == null ? null : p.profiledata.lu_bodytype;
-                        model.appearancesettings.haircolor = p.profiledata.lu_haircolor == null ? null : p.profiledata.lu_haircolor;
-                        model.appearancesettings.eyecolor = p.profiledata.lu_eyecolor == null ? null : p.profiledata.lu_eyecolor;
-                        model.appearancesettings.ethnicitylist = ethnicitylist;
-                        model.appearancesettings.hotfeaturelist = hotfeaturelist;
 
-                        //pilot how to show the rest of the values 
-                        //sample of doing string values
+                        model.height =  p.profiledata.height == null ? (int?)null : Convert.ToInt32(p.profiledata.height.Value);
+
+                        model.bodytypelist = bodytypelist;
+                        model.eyecolorlist = eyecolorlist;
+                        model.haircolorlist = haircolorlist;
+                        model.ethnicitylist = ethnicitylist;
+                        model.hotfeaturelist = hotfeaturelist;
+                        model.metricheightlist = metricheightlist;  //added list of metric heights so it can be used in the drop down
+
+                       //update the value as checked here on the list i.e select the body type in the list
+                        model.bodytypelist.First(d => d.id ==  p.profiledata.bodytype_id).selected = true;
+                       
+                        //update the value as checked here on the list
+                        model.haircolorlist.First(d => d.id == p.profiledata.haircolor_id).selected = true;                      
+
+                        //adds the single selected list of eyecolors i.e exculsive list                       
+                        //update the value as checked here on the list
+                        model.eyecolorlist.First(d => d.id == p.profiledata.eyecolor_id).selected = true;
+                       
 
                         foreach (listitem ethnicity in ethnicitylist.Where(c => p.profilemetadata.profiledata_ethnicity.Any(f => f.ethnicty_id == c.id)))
                         {
                             //update the value as checked here on the list
-                            model.appearancesettings.ethnicitylist.First(d => d.id == ethnicity.id).selected = true;
+                            model.ethnicitylist.First(d => d.id == ethnicity.id).selected = true;
                         }
-                       // model.hotfeaturelist = _unitOfWorkAsync.Repository<l>()
-                        //foreach (var item in model.hotfeaturelist)
-                        //{
-                        //    model.hotfeaturelist.Add(item);
-                        //}
-
-                        //foreach (var item in model.ethnicitylist)
-                        //{
-                        //    model.ethnicitylist.Add(item);
-                        //}
-
+                      
 
                         //update the list with the items that are selected.
                         foreach (listitem hotfeature in hotfeaturelist.Where(c => p.profilemetadata.profiledata_hotfeature.Any(f => f.hotfeature_id == c.id)))
                         {
                             //update the value as checked here on the list
-                            model.appearancesettings.hotfeaturelist.First(d => d.id == hotfeature.id).selected = true;
+                            model.hotfeaturelist.First(d => d.id == hotfeature.id).selected = true;
                         }
+                        //add the value to the viewmodel
+                        viewmodel.appearancesettings = model;
 
-                        searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id });
-                        model.appearancesearchsettings = searchsettingsextentions.getappearancesearchsettings(s, _unitOfWorkAsync);
-
-                        return model;
+                        //handle search settings if we are doing full edit
+                        if (editprofilemodel.isfullediting  == true)
+                        {
+                          
+                            AppearanceSearchSettingsModel SearchViewModel = new AppearanceSearchSettingsModel();
+                            SearchViewModel.ethnicitylist = ethnicitylist;
+                            SearchViewModel.bodytypelist = bodytypelist;
+                            SearchViewModel.eyecolorlist = eyecolorlist;
+                            SearchViewModel.haircolorlist = haircolorlist;
+                            SearchViewModel.hotfeaturelist = hotfeaturelist;
+                            SearchViewModel.metricheightlist = metricheightlist;
+                            searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id });
+                            SearchViewModel = searchsettingsextentions.getappearancesearchsettings(SearchViewModel, s, _unitOfWorkAsync);
+                            //add the value to viewmodel
+                            viewmodel.appearancesearchsettings = SearchViewModel;
+                        }
+                      
+                      
+                        return viewmodel;
                     });
                       return await task.ConfigureAwait(false);
 
@@ -263,63 +295,87 @@ namespace Anewluv.Services.Edit
         //The actual values will bind to viewmodel I think
         public async Task<CharacterSettingsViewModel> getcharactersettingsmodel(EditProfileModel editprofilemodel)
         {
-
-          
          
             {
                 try
                 {
-
                       var task = Task.Factory.StartNew(() =>
                     {
 
                     profile p = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = editprofilemodel.profileid});
 
-                    //   profile p = _unitOfWorkAsync.profiles.Where(z => z.id == editprofilemodel.intprofileid).FirstOrDefault();
-                    CharacterSettingsViewModel model = new CharacterSettingsViewModel();
+                    CharacterSettingsViewModel viewmodel = new CharacterSettingsViewModel();  //return model
+
+                    CharacterSettingsModel model = new CharacterSettingsModel();
 
                     var humorlist = CachingFactory.SharedObjectHelper.gethumorlist(_unitOfWorkAsync);
-                    var dietlist = CachingFactory.SharedObjectHelper.getdietlist(_unitOfWorkAsync);
-                    var hobbylist = CachingFactory.SharedObjectHelper.gethobbylist(_unitOfWorkAsync);
-                    var drinklist = CachingFactory.SharedObjectHelper.getdrinkslist(_unitOfWorkAsync);
+                    var dietlist = CachingFactory.SharedObjectHelper.getdietlist(_unitOfWorkAsync);                  
+                    var drinkslist = CachingFactory.SharedObjectHelper.getdrinkslist(_unitOfWorkAsync);
                     var exerciselist = CachingFactory.SharedObjectHelper.getexerciselist(_unitOfWorkAsync);
                     var smokeslist = CachingFactory.SharedObjectHelper.getsmokeslist(_unitOfWorkAsync);
                     var signlist = CachingFactory.SharedObjectHelper.getsignlist(_unitOfWorkAsync);
                     var politicalviewlist = CachingFactory.SharedObjectHelper.getpoliticalviewlist(_unitOfWorkAsync);
                     var religionlist = CachingFactory.SharedObjectHelper.getreligionlist(_unitOfWorkAsync);
                     var religiousattendancelist = CachingFactory.SharedObjectHelper.getreligiousattendancelist(_unitOfWorkAsync);
+                    //non exculsive
+                    var hobbylist = CachingFactory.SharedObjectHelper.gethobbylist(_unitOfWorkAsync);
 
+                    //set default values for edit profile                
+                    model.humorlist = humorlist;
+                    model. dietlist = dietlist;
+                    model. drinkslist = drinkslist;
+                    model. exerciselist =exerciselist;
+                    model. smokeslist = smokeslist;
+                    model. signlist =signlist;
+                    model. politicalviewlist = politicalviewlist;
+                    model. religionlist = religionlist;
+                    model. religiousattendancelist = religiousattendancelist;
+                    model. hobbylist =hobbylist;
 
-                    model.charactersettings.dietlist = p.profiledata.lu_diet;
-                    model.charactersettings.humor = p.profiledata.lu_humor;                  
-                    model.charactersettings.hobbylist = hobbylist;
+                     //setup exculsive lists first (i.e only one value is selected)
+                    model.humorlist.First(d => d.id == p.profiledata.humor_id).selected = true;
+                    model.dietlist.First(d => d.id == p.profiledata.diet_id).selected = true;
+                    model.drinkslist.First(d => d.id == p.profiledata.drinking_id).selected = true;
+                    model.exerciselist.First(d => d.id == p.profiledata.exercise_id).selected = true;
+                    model.smokeslist.First(d => d.id == p.profiledata.smoking_id).selected = true;
+                    model.signlist.First(d => d.id == p.profiledata.sign_id).selected = true;
+                    model.politicalviewlist.First(d => d.id == p.profiledata.politicalview_id).selected = true;
+                    model.religionlist.First(d => d.id == p.profiledata.religion_id).selected = true;
+                    model.religiousattendancelist.First(d => d.id == p.profiledata.religiousattendance_id).selected = true;
 
                     //update the list with the items that are selected.
                     foreach (listitem hobby in hobbylist.Where(c => p.profilemetadata.profiledata_hobby.Any(f => f.hobby_id == c.id)))
                     {
                         //update the value as checked here on the list
-                        model.charactersettings.hobbylist.First(d => d.id == hobby.id).selected = true;
+                        model.hobbylist.First(d => d.id == hobby.id).selected = true;
                     }
 
+                        //save va;ue
+                    viewmodel.charactersettings = model;
 
-                    ////populiate the hobby list, remeber this comes from the metadata link so you have to drill down
-                    ////var allhobbies = _unitOfWorkAsync.lu_hobby;
-                    //foreach (var item in model.charactersettings.hobbylist)
-                    //{
-                    //    model.charactersettings.hobbylist.Add(item);
-                    //}
 
-                    model.charactersettings.drinking = p.profiledata.lu_drinks;
-                    model.charactersettings.excercise = p.profiledata.lu_exercise;
-                    model.charactersettings.smoking = p.profiledata.lu_smokes;
-                    model.charactersettings.sign = p.profiledata.lu_sign;
-                    model.charactersettings.politicalview = p.profiledata.lu_politicalview;
-                    model.charactersettings.religiousattendance = p.profiledata.lu_religiousattendance;
+                    if (editprofilemodel.isfullediting == true)
+                    {
 
-                    searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id });
-                    model.charactersearchsettings = searchsettingsextentions.getappearancesearchsettings(s, _unitOfWorkAsync);
+                        CharacterSearchSettingsModel SearchViewModel = new CharacterSearchSettingsModel();
+                       //set default values for search settings
+                        SearchViewModel.humorlist = humorlist;
+                        SearchViewModel.dietlist = dietlist;
+                        SearchViewModel.drinkslist = drinkslist;
+                        SearchViewModel.exerciselist = exerciselist;
+                        SearchViewModel.smokeslist = smokeslist;
+                        SearchViewModel.signlist = signlist;
+                        SearchViewModel.politicalviewlist = politicalviewlist;
+                        SearchViewModel.religionlist = religionlist;
+                        SearchViewModel.religiousattendancelist = religiousattendancelist;
+                        searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id });
+                        SearchViewModel = searchsettingsextentions.getcharactersearchsettings(SearchViewModel, s, _unitOfWorkAsync);
+                        //add the value to viewmodel
+                        viewmodel.charactersearchsettings = SearchViewModel;
+                    }
 
-                    return model;
+                  
+                    return viewmodel;
                     });
                       return await task.ConfigureAwait(false);
                 }
@@ -355,25 +411,36 @@ namespace Anewluv.Services.Edit
                 {
                     var task = Task.Factory.StartNew(() =>
                     {
+
+                        LifeStyleSettingsModel model = new LifeStyleSettingsModel();
+
+                        LifeStyleSettingsViewModel viewmodel = new LifeStyleSettingsViewModel();
+
                     profile p = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = editprofilemodel.profileid});
 
 
 
-                    var educationlevellist = CachingFactory.SharedObjectHelper.geteducationlevellist(_unitOfWorkAsync);
-                    var lookingforlist = CachingFactory.SharedObjectHelper.getlookingforlist(_unitOfWorkAsync);
+                    var educationlevellist = CachingFactory.SharedObjectHelper.geteducationlevellist(_unitOfWorkAsync);                   
                     var employmentstatuslist = CachingFactory.SharedObjectHelper.getemploymentstatuslist(_unitOfWorkAsync);
                     var havekidslist = CachingFactory.SharedObjectHelper.gethavekidslist(_unitOfWorkAsync);
                     var incomelevellist = CachingFactory.SharedObjectHelper.getincomelevellist(_unitOfWorkAsync);
                     var livingsituationlist = CachingFactory.SharedObjectHelper.getlivingsituationlist(_unitOfWorkAsync);
-                    var maritialstatuslist = CachingFactory.SharedObjectHelper.getmaritalstatuslist(_unitOfWorkAsync);
+                    var maritalstatuslist = CachingFactory.SharedObjectHelper.getmaritalstatuslist(_unitOfWorkAsync);
                     var professionlist = CachingFactory.SharedObjectHelper.getprofessionlist(_unitOfWorkAsync);
-                    var wantkidslist = CachingFactory.SharedObjectHelper.getwantskidslist(_unitOfWorkAsync);
-                    
-                    LifeStyleSettingsViewModel model = new LifeStyleSettingsViewModel();
-                    model.educationlevel = p.profiledata.lu_educationlevel;
-                    model.employmentstatus = p.profiledata.lu_employmentstatus;
-                    model.incomelevel = p.profiledata.lu_incomelevel;
-                    model.lookingforlist = lookingforlist;
+                    var wantskidslist = CachingFactory.SharedObjectHelper.getwantskidslist(_unitOfWorkAsync);
+                        //multiple seclections allowed
+                    var lookingforlist = CachingFactory.SharedObjectHelper.getlookingforlist(_unitOfWorkAsync);
+
+                        //set default values
+                    model.educationlevellist = educationlevellist; model.educationlevellist.First(d => d.id == p.profiledata.educationlevel_id).selected = true;                   
+                    model.employmentstatuslist = employmentstatuslist; model.employmentstatuslist.First(d => d.id == p.profiledata.employmentstatus_id).selected = true;
+                    model.havekidslist = havekidslist; model.havekidslist.First(d => d.id == p.profiledata.kidstatus_id).selected = true;
+                    model.incomelevellist = incomelevellist; model.incomelevellist.First(d => d.id == p.profiledata.incomelevel_id).selected = true;
+                    model.livingsituationlist = livingsituationlist; model.livingsituationlist.First(d => d.id == p.profiledata.bodytype_id).selected = true;
+                    model.maritalstatuslist = maritalstatuslist; model.maritalstatuslist.First(d => d.id == p.profiledata.maritalstatus_id).selected = true;
+                    model.professionlist = professionlist; model.professionlist.First(d => d.id == p.profiledata.profession_id).selected = true;
+                    model.wantskidslist = wantskidslist; model.wantskidslist.First(d => d.id == p.profiledata.wantsKidstatus_id).selected = true;
+
 
                     //update the list with the items that are selected.
                     foreach (listitem lookingfor in lookingforlist.Where(c => p.profilemetadata.profiledata_lookingfor.Any(f => f.lookingfor_id == c.id)))
@@ -382,24 +449,30 @@ namespace Anewluv.Services.Edit
                         model.lookingforlist.First(d => d.id == lookingfor.id).selected = true;
                     }
 
-                    //foreach (var item in model.lookingforlist)
-                    //{
-                    //    model.lookingforlist.Add(item);
-                    //}
+
+                    viewmodel.lifestylesettings = model;
 
 
-                    model.wantskids = p.profiledata.lu_wantskids;
-                    model.profession = p.profiledata.lu_profession;
-                    model.maritalstatus = p.profiledata.lu_maritalstatus;
-                    model.livingsituation = p.profiledata.lu_livingsituation;
-                    model.havekids = p.profiledata.lu_havekids;
+                    if (editprofilemodel.isfullediting == true)
+                    {
 
-
-
-                    return model;
-
-                    searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id });
-                    model.charactersearchsettings = searchsettingsextentions.getappearancesearchsettings(s, _unitOfWorkAsync);
+                        LifeStyleSearchSettingsModel SearchViewModel = new LifeStyleSearchSettingsModel();
+                        //set default values for search settings
+                        SearchViewModel.educationlevellist = educationlevellist;
+                        SearchViewModel.employmentstatuslist = employmentstatuslist;
+                        SearchViewModel.havekidslist = havekidslist;
+                        SearchViewModel.incomelevellist = incomelevellist;
+                        SearchViewModel.livingsituationlist = livingsituationlist;
+                        SearchViewModel.maritalstatuslist = maritalstatuslist;
+                        SearchViewModel.professionlist = professionlist;
+                        SearchViewModel.wantskidslist = wantskidslist;
+                        
+                        searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id });
+                        SearchViewModel = searchsettingsextentions.getlifestylesearchsettings(SearchViewModel, s, _unitOfWorkAsync);
+                        //add the value to viewmodel
+                        viewmodel.lifestylesearchsettings = SearchViewModel;
+                     }
+                    return viewmodel;
 
                       });
                     return await task.ConfigureAwait(false);
@@ -456,10 +529,10 @@ namespace Anewluv.Services.Edit
                             //create a new messages object
                             AnewluvMessages messages = new AnewluvMessages();
 
-                            messages = updatememberbasicsettings(editprofilemodel.basicsettings, p, messages);
-                            messages = updatememberappearancesettings(editprofilemodel.appearancesettings, p, messages);
-                            messages = updatemembercharactersettings (editprofilemodel.charactersettings, p, messages);
-                            messages = updatememberlifestylesettings(editprofilemodel.lifestylesettings, p, messages);
+                            //messages = updatememberbasicsettings(editprofilemodel.basicsettings, p, messages);
+                            //messages = updatememberappearancesettings(editprofilemodel.appearancesettings, p, messages);
+                            //messages = updatemembercharactersettings (editprofilemodel.charactersettings, p, messages);
+                            //messages = updatememberlifestylesettings(editprofilemodel.lifestylesettings, p, messages);
 
                             if (messages.errormessages.Count > 0)
                             {
@@ -514,7 +587,7 @@ namespace Anewluv.Services.Edit
                         AnewluvMessages messages = new AnewluvMessages();
 
 
-                        messages = (updatememberbasicsettings(editprofilemodel.basicsettings, p, messages));
+                        messages = updatememberbasicsettings(editprofilemodel, p, messages);
                         //  messages=(membereditBasicSettingsPage2Update(newmodel,profileid ,messages));
 
 
@@ -568,7 +641,7 @@ namespace Anewluv.Services.Edit
                         //get the profile details :
                         profile p = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = editprofilemodel.profileid });
 
-                        messages = (updatememberappearancesettings(editprofilemodel.appearancesettings, p, messages));
+                        messages = (updatememberappearancesettings(editprofilemodel, p, messages));
                         // messages = (membereditAppearanceSettingsPage2Update(newmodel, profileid, messages));
                         // messages = (membereditAppearanceSettingsPage3Update(newmodel, profileid, messages));
                         //  messages = (membereditAppearanceSettingsPage4Update(newmodel, profileid, messages));
@@ -627,7 +700,7 @@ namespace Anewluv.Services.Edit
                         //get the profile details :
                         profile p = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = editprofilemodel.profileid });
 
-                        messages = (updatemembercharactersettings(editprofilemodel.charactersettings, p, messages));
+                        messages = (updatemembercharactersettings(editprofilemodel, p, messages));
                         // messages = (membereditcharacterSettingsPage2Update(newmodel, profileid, messages));
                         // messages = (membereditcharacterSettingsPage3Update(newmodel, profileid, messages));
                         //  messages = (membereditcharacterSettingsPage4Update(newmodel, profileid, messages));
@@ -685,7 +758,7 @@ namespace Anewluv.Services.Edit
                           
 
 
-                        messages = (updatememberlifestylesettings(editprofilemodel.lifestylesettings, p, messages));
+                        messages = (updatememberlifestylesettings(editprofilemodel, p, messages));
                         // messages = (membereditlifestyleSettingsPage2Update(newmodel, profileid, messages));
                         // messages = (membereditlifestyleSettingsPage3Update(newmodel, profileid, messages));
                         //  messages = (membereditlifestyleSettingsPage4Update(newmodel, profileid, messages));
@@ -728,7 +801,7 @@ namespace Anewluv.Services.Edit
         #region "Private update methods that can be re-used"
 
         //TO DO add validation and pass back via messages , IE compare old settings to new i.e change nothing if nothing changed
-        private AnewluvMessages updatememberbasicsettings(BasicSettingsViewModel newmodel, profile p, AnewluvMessages messages)
+        private AnewluvMessages updatememberbasicsettings(EditProfileModel newmodel, profile p, AnewluvMessages messages)
         {
 
             try
@@ -763,11 +836,12 @@ namespace Anewluv.Services.Edit
                 _unitOfWorkAsync.Repository<profile>().Update(p);
                 _unitOfWorkAsync.SaveChanges();
 
-                
-                //update the search settings 
-                searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id   } );
-                messages = searchsettingsextentions.updatebasicsearchsettings(newmodel.basicsearchsettings, s, messages, _unitOfWorkAsync);
-
+                if (newmodel.basicsearchsettings != null)
+                {
+                    //update the search settings 
+                    searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id });
+                    messages = searchsettingsextentions.updatebasicsearchsettings(newmodel.basicsearchsettings, s, messages, _unitOfWorkAsync);
+                }
 
 
                 //TOD DO
@@ -789,52 +863,65 @@ namespace Anewluv.Services.Edit
         //TO DO add validation and pass back via messages 
 
         //TO DO send back the messages on errors and when nothing is changed
-        private AnewluvMessages updatememberappearancesettings(AppearanceSettingsViewModel newmodel, profile p, AnewluvMessages messages)
+        private AnewluvMessages updatememberappearancesettings(EditProfileModel newmodel, profile p, AnewluvMessages messages)
         {
-            bool nothingupdated = true;
+            bool profileupdated = false ;
 
             try
             {
-                //profile p = _unitOfWorkAsync.profiles.Where(z => z.id == profileid).First();
-                //sample code for determining weather to edit an item or not or determin if a value changed'
-                //nothingupdated = (newmodel.height  == p.profiledata.lu_height) ? false : true;
-
-                //only update items that are not null
-                var height = (newmodel.height == p.profiledata.height) ? newmodel.height : null;
-                var bodytype = (newmodel.bodytype == p.profiledata.lu_bodytype) ? newmodel.bodytype : null;
-                var haircolor = (newmodel.haircolor == p.profiledata.lu_haircolor) ? newmodel.haircolor : null;
-                var eyecolor = (newmodel.eyecolor == p.profiledata.lu_eyecolor) ? newmodel.eyecolor : null;
-                //TO DO test if anything changed
-                var hotfeatures = newmodel.hotfeaturelist;
-                //TO DO test if anything changed
-                var ethicities = newmodel.ethnicitylist;
-
-
+              
 
                 //update my settings 
                 //this does nothing but we shoul verify that items changed before updating anything so have to test each input and list
 
-                if (height.HasValue == true) p.profiledata.height = height;
-                if (bodytype != null) p.profiledata.lu_bodytype = bodytype;
-                if (haircolor != null) p.profiledata.lu_haircolor = haircolor;
-                if (eyecolor != null) p.profiledata.lu_eyecolor = eyecolor;
-                if (hotfeatures.Count > 0) p.profiledata.height = height;
-                if (height.HasValue == true) p.profiledata.height = height;
+                var height = (newmodel.appearancesettings.height == p.profiledata.height) ? newmodel.appearancesettings.height : null;
+                if (height.HasValue == true)
+                {
+                    p.profiledata.height = height;
+                    profileupdated = true;
+                }
+                //these all pass back the list of all body vlaues with the selecteced being exculsive so we need to parse through
+                 //update the list with the items that are selected.
+                foreach (listitem selectedbodytype in  newmodel.appearancesettings.bodytypelist.Where(c => c.selected == true && c.id != p.profiledata.bodytype_id))
+                {
+                    //update the value as checked here on the list
+                    p.profiledata.bodytype_id = selectedbodytype.id;
+                  //  model.showmelist.First(d => d.id == showme.id).selected = true;
+                    //if (bodytype != null) p.profiledata.lu_bodytype = bodytype;
+                    profileupdated = true;
+                }
+                foreach (listitem selectedhaircolor in  newmodel.appearancesettings.haircolorlist.Where(c => c.selected == true && c.id != p.profiledata.haircolor_id))
+                {
+                    p.profiledata.haircolor_id = selectedhaircolor.id; profileupdated = true;
+                }
+               
+                foreach (listitem selectedeyecolor in  newmodel.appearancesettings.eyecolorlist.Where(c => c.selected == true && c.id != p.profiledata.eyecolor_id))
+                {
+                    p.profiledata.eyecolor_id = selectedeyecolor.id;
+                    profileupdated = true;
+                }
+                              
+            
                 //if (height.HasValue == true) p.profiledata.lu_height = height;
 
-                if (hotfeatures.Count > 0)
-                    updatemembermetatdatahotfeature(hotfeatures, p.profilemetadata);
-                if (ethicities.Count > 0)
-                    updatemembermetatdataethnicity(ethicities, p.profilemetadata);
+                if (newmodel.appearancesettings.hotfeaturelist.Count > 0)
+                    updatemembermetatdatahotfeatures(newmodel.appearancesettings.hotfeaturelist, p.profilemetadata);
+                if (newmodel.appearancesettings.ethnicitylist.Count > 0)
+                    updatemembermetatdataethnicity(newmodel.appearancesettings.ethnicitylist, p.profilemetadata);
 
 
                 //_unitOfWorkAsync.Entry(profiledata).State = EntityState.Modified;
-               _unitOfWorkAsync.Repository<profile>().Update(p);
-               _unitOfWorkAsync.SaveChanges();
-
-               searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id });
-               messages = searchsettingsextentions.updatebasicsearchsettings(newmodel., s, messages, _unitOfWorkAsync);
-
+                if (profileupdated)
+                {
+                    _unitOfWorkAsync.Repository<profile>().Update(p);
+                    _unitOfWorkAsync.SaveChanges();
+                }
+              
+                if (newmodel.appearancesearchsettings != null)
+                {
+                   searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id });
+                   messages = searchsettingsextentions.updateappearancesearchsettings(newmodel.appearancesearchsettings, s, messages, _unitOfWorkAsync);
+                }
                 //TOD DO
                 //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
                 //update session too just in case
@@ -858,9 +945,9 @@ namespace Anewluv.Services.Edit
         }
 
         //TO DO send back the messages on errors and when nothing is changed
-        private AnewluvMessages updatemembercharactersettings(CharacterSettingsViewModel newmodel, profile p, AnewluvMessages messages)
+        private AnewluvMessages updatemembercharactersettings(EditProfileModel newmodel, profile p, AnewluvMessages messages)
         {
-            bool nothingupdated = true;
+            bool profileupdated = true;
 
             try
             {
@@ -868,43 +955,111 @@ namespace Anewluv.Services.Edit
                 //sample code for determining weather to edit an item or not or determin if a value changed'
                 //nothingupdated = (newmodel.diet  == p.profiledata.lu_diet) ? false : true;
 
-                //only update items that are not null
-                var diet = (newmodel.diet == p.profiledata.lu_diet) ? newmodel.diet : null;
-                var humor = (newmodel.humor == p.profiledata.lu_humor) ? newmodel.humor : null;
-                var drinking = (newmodel.drinking == p.profiledata.lu_drinks) ? newmodel.drinking : null;
-                var excercise = (newmodel.excercise == p.profiledata.lu_exercise) ? newmodel.excercise : null;
-                var smoking = (newmodel.smoking == p.profiledata.lu_smokes) ? newmodel.smoking : null;
-                var sign = (newmodel.sign == p.profiledata.lu_sign) ? newmodel.sign : null;
-                var politicalview = (newmodel.politicalview == p.profiledata.lu_politicalview) ? newmodel.politicalview : null;
-                var religion = (newmodel.religion == p.profiledata.lu_religion) ? newmodel.religion : null;
-                var religiousattendance = (newmodel.religiousattendance == p.profiledata.lu_religiousattendance) ? newmodel.religiousattendance : null;
-                //TO DO test if anything changed
-                var hobylist = newmodel.hobbylist;
-
-
-
-
                 //update my settings 
                 //this does nothing but we shoul verify that items changed before updating anything so have to test each input and list
 
-                if (diet != null) p.profiledata.lu_diet = diet;
-                if (humor != null) p.profiledata.lu_humor = humor;
-                if (drinking != null) p.profiledata.lu_drinks = drinking;
-                if (excercise != null) p.profiledata.lu_exercise = excercise;
-                if (smoking != null) p.profiledata.lu_smokes = smoking;
-                if (sign != null) p.profiledata.lu_sign = sign;
-                if (politicalview != null) p.profiledata.lu_politicalview = politicalview;
-                if (religion != null) p.profiledata.lu_religion = religion;
-                if (religiousattendance != null) p.profiledata.lu_religiousattendance = religiousattendance;
-                if (hobylist.Count > 0)
-                    updatemembermetatdatahobby(hobylist, p.profilemetadata);
+             
+
+                foreach (listitem selecteddiet in newmodel.charactersettings.dietlist.Where(c => c.selected == true && c.id != p.profiledata.diet_id))
+                {
+                    //update the value as checked here on the list
+                    p.profiledata.diet_id = selecteddiet.id;
+                    //  model.showmelist.First(d => d.id == showme.id).selected = true;
+                    //if (diet != null) p.profiledata.lu_diet = diet;
+                    profileupdated = true;
+                }
+
+                foreach (listitem selectedhumor in newmodel.charactersettings.humorlist.Where(c => c.selected == true && c.id != p.profiledata.humor_id))
+                {
+                    //update the value as checked here on the list
+                    p.profiledata.humor_id = selectedhumor.id;
+                    //  model.showmelist.First(d => d.id == showme.id).selected = true;
+                    //if (humor != null) p.profiledata.lu_humor = humor;
+                    profileupdated = true;
+                }
+
+                foreach (listitem selecteddrinks in newmodel.charactersettings.drinkslist.Where(c => c.selected == true && c.id != p.profiledata.drinking_id))
+                {
+                    //update the value as checked here on the list
+                    p.profiledata.drinking_id = selecteddrinks.id;
+                    //  model.showmelist.First(d => d.id == showme.id).selected = true;
+                    //if (drinks != null) p.profiledata.lu_drinks = drinks;
+                    profileupdated = true;
+                }
+
+                foreach (listitem selectedexercise in newmodel.charactersettings.exerciselist.Where(c => c.selected == true && c.id != p.profiledata.exercise_id))
+                {
+                    //update the value as checked here on the list
+                    p.profiledata.exercise_id = selectedexercise.id;
+                    //  model.showmelist.First(d => d.id == showme.id).selected = true;
+                    //if (exercise != null) p.profiledata.lu_exercise = exercise;
+                    profileupdated = true;
+                }
+
+                foreach (listitem selectedsmokes in newmodel.charactersettings.smokeslist.Where(c => c.selected == true && c.id != p.profiledata.smoking_id))
+                {
+                    //update the value as checked here on the list
+                    p.profiledata.smoking_id = selectedsmokes.id;
+                    //  model.showmelist.First(d => d.id == showme.id).selected = true;
+                    //if (smokes != null) p.profiledata.lu_smokes = smokes;
+                    profileupdated = true;
+                }
+
+                foreach (listitem selectedsign in newmodel.charactersettings.signlist.Where(c => c.selected == true && c.id != p.profiledata.sign_id))
+                {
+                    //update the value as checked here on the list
+                    p.profiledata.sign_id = selectedsign.id;
+                    //  model.showmelist.First(d => d.id == showme.id).selected = true;
+                    //if (sign != null) p.profiledata.lu_sign = sign;
+                    profileupdated = true;
+                }
+
+                foreach (listitem selectedpoliticalview in newmodel.charactersettings.politicalviewlist.Where(c => c.selected == true && c.id != p.profiledata.politicalview_id))
+                {
+                    //update the value as checked here on the list
+                    p.profiledata.politicalview_id = selectedpoliticalview.id;
+                    //  model.showmelist.First(d => d.id == showme.id).selected = true;
+                    //if (politicalview != null) p.profiledata.lu_politicalview = politicalview;
+                    profileupdated = true;
+
+                }
+
+                foreach (listitem selectedreligion in newmodel.charactersettings.religionlist.Where(c => c.selected == true && c.id != p.profiledata.religion_id))
+                {
+                    //update the value as checked here on the list
+                    p.profiledata.religion_id = selectedreligion.id;
+                    //  model.showmelist.First(d => d.id == showme.id).selected = true;
+                    //if (religionlist != null) p.profiledata.lu_religionlist = religionlist;
+                    profileupdated = true;
+                }
+
+                foreach (listitem selectedreligiousattendance in newmodel.charactersettings.religiousattendancelist.Where(c => c.selected == true && c.id != p.profiledata.religiousattendance_id))
+                {
+                    //update the value as checked here on the list
+                    p.profiledata.religiousattendance_id = selectedreligiousattendance.id;
+                    //  model.showmelist.First(d => d.id == showme.id).selected = true;
+                    //if (religionlist != null) p.profiledata.lu_religionlist = religionlist;
+                    profileupdated = true;
+                }
+                 
+                if (newmodel.charactersettings.hobbylist.Count > 0)
+                    updatemembermetatdatahobby(newmodel.charactersettings.hobbylist, p.profilemetadata);
 
 
 
                 //_unitOfWorkAsync.Entry(profiledata).State = EntityState.Modified;
                 // int changes = _unitOfWorkAsync.SaveChanges();
-             _unitOfWorkAsync.Repository<profile>().Update(p);
+               _unitOfWorkAsync.Repository<profile>().Update(p);
                _unitOfWorkAsync.SaveChanges();
+
+
+               if (newmodel.charactersearchsettings != null)
+               {
+                   searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id });
+                   messages = searchsettingsextentions.updatecharactersearchsettings(newmodel.charactersearchsettings, s, messages, _unitOfWorkAsync);
+               }
+                
+                
                 //TOD DO
                 //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
                 //update session too just in case
@@ -930,9 +1085,9 @@ namespace Anewluv.Services.Edit
 
 
         //TO DO send back the messages on errors and when nothing is changed
-        private AnewluvMessages updatememberlifestylesettings(LifeStyleSettingsViewModel newmodel, profile p, AnewluvMessages messages)
+        private AnewluvMessages updatememberlifestylesettings(EditProfileModel newmodel, profile p, AnewluvMessages messages)
         {
-            bool nothingupdated = true;
+            bool profileupdated = true;
 
             try
             {
@@ -940,43 +1095,106 @@ namespace Anewluv.Services.Edit
                 //sample code for determining weather to edit an item or not or determin if a value changed'
                 //nothingupdated = (newmodel.educationlevel  == p.profiledata.lu_educationlevel) ? false : true;
 
-                //only update items that are not null
-                var educationlevel = (newmodel.educationlevel == p.profiledata.lu_educationlevel) ? newmodel.educationlevel : null;
-                var employmentstatus = (newmodel.employmentstatus == p.profiledata.lu_employmentstatus) ? newmodel.employmentstatus : null;
-                var incomelevel = (newmodel.incomelevel == p.profiledata.lu_incomelevel) ? newmodel.incomelevel : null;
-                var wantskids = (newmodel.wantskids == p.profiledata.lu_wantskids) ? newmodel.wantskids : null;
-                var profession = (newmodel.profession == p.profiledata.lu_profession) ? newmodel.profession : null;
-                var maritalstatus = (newmodel.maritalstatus == p.profiledata.lu_maritalstatus) ? newmodel.maritalstatus : null;
-                var livingsituation = (newmodel.livingsituation == p.profiledata.lu_livingsituation) ? newmodel.livingsituation : null;
-                var havekids = (newmodel.havekids == p.profiledata.lu_havekids) ? newmodel.havekids : null;
-                //TO DO test if anything changed
-                var lookingfors = newmodel.lookingforlist;
 
 
 
 
                 //update my settings 
                 //this does nothing but we shoul verify that items changed before updating anything so have to test each input and list
+                foreach (listitem selectededucationlevel in newmodel.lifestylesettings.educationlevellist.Where(c => c.selected == true && c.id != p.profiledata.educationlevel_id))
+                {
+                    //update the value as checked here on the list
+                    p.profiledata.educationlevel_id = selectededucationlevel.id;
+                    //  model.showmelist.First(d => d.id == showme.id).selected = true;
+                    //if (educationlevel != null) p.profiledata.lu_educationlevel = educationlevel;
+                    profileupdated = true;
+                }
 
-                if (educationlevel != null) p.profiledata.lu_educationlevel = educationlevel;
-                if (employmentstatus != null) p.profiledata.lu_employmentstatus = employmentstatus;
-                if (incomelevel != null) p.profiledata.lu_incomelevel = incomelevel;
-                if (wantskids != null) p.profiledata.lu_wantskids = wantskids;
-                if (profession != null) p.profiledata.lu_profession = profession;
-                if (maritalstatus != null) p.profiledata.lu_maritalstatus = maritalstatus;
-                if (livingsituation != null) p.profiledata.lu_livingsituation = livingsituation;
-                if (havekids != null) p.profiledata.lu_havekids = havekids;
+                foreach (listitem selectedemploymentstatus in newmodel.lifestylesettings.employmentstatuslist.Where(c => c.selected == true && c.id != p.profiledata.employmentstatus_id))
+                {
+                    //update the value as checked here on the list
+                    p.profiledata.employmentstatus_id = selectedemploymentstatus.id;
+                    //  model.showmelist.First(d => d.id == showme.id).selected = true;
+                    //if (employmentstatus != null) p.profiledata.lu_employmentstatus = employmentstatus;
+                    profileupdated = true;
+                }
+
+                foreach (listitem selectedhavekids in newmodel.lifestylesettings.havekidslist.Where(c => c.selected == true && c.id != p.profiledata.kidstatus_id))
+                {
+                    //update the value as checked here on the list
+                    p.profiledata.kidstatus_id = selectedhavekids.id;
+                    //  model.showmelist.First(d => d.id == showme.id).selected = true;
+                    //if (havekids != null) p.profiledata.lu_havekids = havekids;
+                    profileupdated = true;
+                }
+
+                foreach (listitem selectedincomelevel in newmodel.lifestylesettings.incomelevellist.Where(c => c.selected == true && c.id != p.profiledata.incomelevel_id))
+                {
+                    //update the value as checked here on the list
+                    p.profiledata.incomelevel_id = selectedincomelevel.id;
+                    //  model.showmelist.First(d => d.id == showme.id).selected = true;
+                    //if (incomelevel != null) p.profiledata.lu_incomelevel = incomelevel;
+                    profileupdated = true;
+                }
+
+                foreach (listitem selectedlivingsituation in newmodel.lifestylesettings.livingsituationlist.Where(c => c.selected == true && c.id != p.profiledata.livingsituation_id))
+                {
+                    //update the value as checked here on the list
+                    p.profiledata.livingsituation_id = selectedlivingsituation.id;
+                    //  model.showmelist.First(d => d.id == showme.id).selected = true;
+                    //if (livingsituation != null) p.profiledata.lu_livingsituation = livingsituation;
+                    profileupdated = true;
+                }
+
+                foreach (listitem selectedmaritalstatus in newmodel.lifestylesettings.maritalstatuslist.Where(c => c.selected == true && c.id != p.profiledata.maritalstatus_id))
+                {
+                    //update the value as checked here on the list
+                    p.profiledata.maritalstatus_id = selectedmaritalstatus.id;
+                    //  model.showmelist.First(d => d.id == showme.id).selected = true;
+                    //if (maritalstatus != null) p.profiledata.lu_maritalstatus = maritalstatus;
+                    profileupdated = true;
+                }
+
+                foreach (listitem selectedprofession in newmodel.lifestylesettings.professionlist.Where(c => c.selected == true && c.id != p.profiledata.profession_id))
+                {
+                    //update the value as checked here on the list
+                    p.profiledata.profession_id = selectedprofession.id;
+                    //  model.showmelist.First(d => d.id == showme.id).selected = true;
+                    //if (profession != null) p.profiledata.lu_profession = profession;
+                    profileupdated = true;
+                }
+
+                foreach (listitem selectedwantskids in newmodel.lifestylesettings.wantskidslist.Where(c => c.selected == true && c.id != p.profiledata.wantsKidstatus_id))
+                {
+                    //update the value as checked here on the list
+                    p.profiledata.wantsKidstatus_id = selectedwantskids.id;
+                    //  model.showmelist.First(d => d.id == showme.id).selected = true;
+                    //if (wantskids != null) p.profiledata.lu_wantskids = wantskids;
+                    profileupdated = true;
+                }
 
                 //checkbos item updates 
-                if (lookingfors.Count > 0)
-                    updatemembermetatdatalookingfor(lookingfors, p.profilemetadata);
-
+                if (newmodel.lifestylesearchsettings.lookingforlist.Count > 0)
+                {
+                   if ( updatemembermetatdatalookingfor(newmodel.lifestylesearchsettings.lookingforlist, p.profilemetadata))
+                   {
+                       profileupdated = true;
+                   }
+                }
 
 
                 //_unitOfWorkAsync.Entry(profiledata).State = EntityState.Modified;
                 // int changes = _unitOfWorkAsync.SaveChanges();
-             _unitOfWorkAsync.Repository<profile>().Update(p);
-               _unitOfWorkAsync.SaveChanges();
+                if (profileupdated)
+                {
+                    _unitOfWorkAsync.Repository<profile>().Update(p);
+                    _unitOfWorkAsync.SaveChanges();
+                }
+                else
+                {
+                    messages.errormessages.Add("Nothing to update!");
+
+                }
                 //TOD DO
                 //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
                 //update session too just in case
@@ -985,6 +1203,13 @@ namespace Anewluv.Services.Edit
                 //   CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID (_ProfileID,profiledata  );
                 //model.CurrentErrors.Clear();
                 // return model;
+               if (newmodel.lifestylesearchsettings != null)
+               {
+                   searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id });
+                   messages = searchsettingsextentions.updatelifestylesearchsettings(newmodel.lifestylesearchsettings, s, messages, _unitOfWorkAsync);
+               }
+
+
             }
             catch (Exception ex)
             {
@@ -1006,145 +1231,208 @@ namespace Anewluv.Services.Edit
 
 
         //profiledata ethnicity
-        private void updatemembermetatdataethnicity(List<listitem> slectedethnicities, profilemetadata currentprofilemetadata)
+        private bool updatemembermetatdataethnicity(List<listitem> ethnicitylist, profilemetadata currentprofilemetadata)
         {
-            if (slectedethnicities == null)
+            bool profileupdated = false;
+            //get the selected items  passed
+            //var selectedethnicity = ethnicitylist.Where(z => z.selected == true);
+
+            if (ethnicitylist != null && ethnicitylist.Count() == 0) return false;
+
+            try
             {
-                // profiledata.SearchSettings.FirstOrDefault().SearchSettings_showme  = new List<gender>(); 
-                return;
+                //get a list of the approved values here so wrong id's cannot be injected
+                var validethnicity = _unitOfWorkAsync.Repository<lu_ethnicity>().Queryable().ToList();
+
+                foreach (var item in ethnicitylist)
+                {
+                    //validate that this passed id matches what is in the database
+                    if (validethnicity.Any(z => z.id == item.id))
+                    {
+                        //new logic : if this item was selected and is not already add it
+                        if (!currentprofilemetadata.profiledata_ethnicity.Any(z => item.selected == true && z.ethnicty_id == item.id))
+                        {
+                            //SearchSettings_showme.showmeID = showme.showmeID;
+                            var temp = new profiledata_ethnicity();
+                            temp.id = item.id;
+                            temp.profile_id = currentprofilemetadata.profile_id;
+                            _unitOfWorkAsync.Repository<profiledata_ethnicity>().Insert(temp);
+                            profileupdated = true;
+
+                        }
+                        else
+                        {
+                            //new logic if any of the existing values match this id and it is not selected
+                            if (currentprofilemetadata.profiledata_ethnicity.Any(z => item.selected == false && z.ethnicty_id == item.id))
+                            {
+                                var temp = _unitOfWorkAsync.Repository<profiledata_ethnicity>().Queryable()
+                                          .Where(p => p.profile_id == currentprofilemetadata.profile_id && p.ethnicty_id == item.id).FirstOrDefault();
+                                _unitOfWorkAsync.Repository<profiledata_ethnicity>().Delete(temp);
+                                profileupdated = true;
+                            }
+                        }
+
+                    }
+                }
             }
-            //build the search settings gender object
-            // int SearchSettingsID = currentsearchsetting.id;//profiledata.searchsettings.FirstOrDefault().id;
-            //SearchSettings_showme CurrentSearchSettings_showme = _unitOfWorkAsync.SearchSettings_showme.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
-
-
-            foreach (var ethnicity in _unitOfWorkAsync.Repository<lu_ethnicity>().Queryable().ToList())
+            catch (Exception ex)
             {
-                //new logic : if this item was selected and is not already in the search settings gender values add it 
-                if ((!currentprofilemetadata.profiledata_ethnicity.Where(z => z.ethnicty_id == ethnicity.id).Any()))
-                {
-                    //SearchSettings_showme.showmeID = showme.showmeID;
-                    var temp = new profiledata_ethnicity();
-                    temp.id = ethnicity.id;
-                    temp.profile_id = currentprofilemetadata.profile_id;
-                    _unitOfWorkAsync.Repository<profiledata_ethnicity>().Insert(temp);
-
-                }
-                else
-                {
-                    //we have an existing value and we want to remove it in this case since selected was false for sure
-                    //we will be doing a remove either way
-                    var temp = _unitOfWorkAsync.Repository<profiledata_ethnicity>().Queryable().Where(p => p.profile_id == currentprofilemetadata.profile_id && p.ethnicty_id == ethnicity.id).FirstOrDefault(); 
-                    if (temp != null)
-                        _unitOfWorkAsync.Repository<profiledata_ethnicity>().Delete(temp);               
-                }
-
-
+                throw ex;
             }
-
-
-          
+            return profileupdated;
         }
         //profiledata hotfeature
-        private void updatemembermetatdatahotfeature(List<listitem> selectedhotfeature, profilemetadata currentprofilemetadata)
+        private bool updatemembermetatdatahotfeatures(List<listitem> hotfeatureslist, profilemetadata currentprofilemetadata)
         {
-            if (selectedhotfeature == null)
-            {
-                // profiledata.SearchSettings.FirstOrDefault().SearchSettings_showme  = new List<gender>(); 
-                return;
-            }
-          
-            foreach (var hotfeature in _unitOfWorkAsync.Repository<lu_hotfeature>().Queryable().ToList())
-            {
-                //new logic : if this item was selected and is not already in the search settings gender values add it 
-                if ((!currentprofilemetadata.profiledata_hotfeature.Where(z => z.hotfeature_id ==  hotfeature.id).Any()))
-                {
-                    //SearchSettings_showme.showmeID = showme.showmeID;
-                    var temp = new profiledata_hotfeature();
-                    temp.id = hotfeature.id;
-                    temp.profile_id = currentprofilemetadata.profile_id;
-                    _unitOfWorkAsync.Repository<profiledata_hotfeature>().Insert(temp);
+            bool profileupdated = false;
+            //get the selected items  passed
+            //var selectedhotfeatures = hotfeatureslist.Where(z => z.selected == true);
 
-                }
-                else
-                { //exists means we want to remove it
-                    if (currentprofilemetadata.profiledata_hotfeature.Any(p => p.id == hotfeature.id))
+            if (hotfeatureslist !=null && hotfeatureslist.Count() == 0) return false;
+
+            try
+            {
+                //get a list of the approved values here so wrong id's cannot be injected
+                var validhotfeatures = _unitOfWorkAsync.Repository<lu_hotfeature>().Queryable().ToList();
+
+                foreach (var item in hotfeatureslist)
+                {
+                    //validate that this passed id matches what is in the database
+                    if (validhotfeatures.Any(z => z.id == item.id))
                     {
-                        var temp = _unitOfWorkAsync.Repository<profiledata_hotfeature>().Queryable().Where(p => p.profile_id == currentprofilemetadata.profile_id && p.hotfeature_id == hotfeature.id).FirstOrDefault(); 
-                        _unitOfWorkAsync.Repository<profiledata_lookingfor>().Delete(temp);
+                        //new logic : if this item was selected and is not already add it
+                        if (!currentprofilemetadata.profiledata_hotfeature.Any(z => item.selected == true && z.hotfeature_id == item.id))
+                        {
+                            //SearchSettings_showme.showmeID = showme.showmeID;
+                            var temp = new profiledata_hotfeature();
+                            temp.id = item.id;
+                            temp.profile_id = currentprofilemetadata.profile_id;
+                            _unitOfWorkAsync.Repository<profiledata_hotfeature>().Insert(temp);
+                            profileupdated = true;
+
+                        }
+                        else
+                        {
+                            //new logic if any of the existing values match this id and it is not selected
+                            if (currentprofilemetadata.profiledata_hotfeature.Any(z => item.selected == false && z.hotfeature_id == item.id))
+                            {
+                                var temp = _unitOfWorkAsync.Repository<profiledata_hotfeature>().Queryable()
+                                    .Where(p => p.profile_id == currentprofilemetadata.profile_id && p.hotfeature_id == item.id).FirstOrDefault();
+                                _unitOfWorkAsync.Repository<profiledata_hotfeature>().Delete(temp);
+                                profileupdated = true;
+                            }
+                        }
 
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return profileupdated;
         }
         //profiledata hobby
-        private void updatemembermetatdatahobby(List<listitem> selectedhobby, profilemetadata currentprofilemetadata)
+        private bool updatemembermetatdatahobby(List<listitem> hobbylist, profilemetadata currentprofilemetadata)
         {
-            if (selectedhobby == null)
-            {
-                // profiledata.SearchSettings.FirstOrDefault().SearchSettings_showme  = new List<gender>(); 
-                return;
-            }
-        
-            foreach (var hobby in _unitOfWorkAsync.Repository<lu_hobby>().Queryable().ToList())
-            {
-                //new logic : if this item was selected and is not already in the search settings gender values add it 
-                if ((!currentprofilemetadata.profiledata_hobby.Where(z => z.hobby_id == hobby.id).Any()))
-                {
-                    //SearchSettings_showme.showmeID = showme.showmeID;
-                    var temp = new profiledata_hobby();
-                    temp.id = hobby.id;
-                    temp.profile_id = currentprofilemetadata.profile_id;
-                    _unitOfWorkAsync.Repository<profiledata_hobby>().Insert(temp);
+            bool profileupdated = false;
+            //get the selected items  passed
+            //var selectedhobby = hobbylist.Where(z => z.selected == true);
 
-                }
-                else
-                { //exists means we want to remove it
-                    if (currentprofilemetadata.profiledata_hobby.Any(p => p.id == hobby.id))
+            if (hobbylist != null && hobbylist.Count() == 0) return false;
+
+            try
+            {
+                //get a list of the approved values here so wrong id's cannot be injected
+                var validhobby = _unitOfWorkAsync.Repository<lu_hobby>().Queryable().ToList();
+
+                foreach (var item in hobbylist)
+                {
+                    //validate that this passed id matches what is in the database
+                    if (validhobby.Any(z => z.id == item.id))
                     {
-                        var temp =  _unitOfWorkAsync.Repository<profiledata_hobby>().Queryable().Where(p => p.profile_id == currentprofilemetadata.profile_id && p.hobby_id == hobby.id).FirstOrDefault(); 
-                        _unitOfWorkAsync.Repository<profiledata_hobby>().Delete(temp);
+                        //new logic : if this item was selected and is not already add it
+                        if (!currentprofilemetadata.profiledata_hobby.Any(z => item.selected == true && z.hobby_id == item.id))
+                        {
+                            //SearchSettings_showme.showmeID = showme.showmeID;
+                            var temp = new profiledata_hobby();
+                            temp.id = item.id;
+                            temp.profile_id = currentprofilemetadata.profile_id;
+                            _unitOfWorkAsync.Repository<profiledata_hobby>().Insert(temp);
+                            profileupdated = true;
+
+                        }
+                        else
+                        {
+                            //new logic if any of the existing values match this id and it is not selected
+                            if (currentprofilemetadata.profiledata_hobby.Any(z => item.selected == false && z.hobby_id == item.id))
+                            {
+                                var temp = _unitOfWorkAsync.Repository<profiledata_hobby>().Queryable()
+                                          .Where(p => p.profile_id == currentprofilemetadata.profile_id && p.hobby_id == item.id).FirstOrDefault();
+                                _unitOfWorkAsync.Repository<profiledata_hobby>().Delete(temp);
+                                profileupdated = true;
+                            }
+                        }
 
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return profileupdated;
         }
         //profiledata lookingfor
-        private void updatemembermetatdatalookingfor(List<listitem> selectedlookingfor, profilemetadata currentprofilemetadata)
+        private bool updatemembermetatdatalookingfor(List<listitem> lookingforlist, profilemetadata currentprofilemetadata)
         {
-            if (selectedlookingfor == null)
+            bool profileupdated = false;
+            //get the selected items  passed
+            //var selectedlookingfor = lookingforlist.Where(z => z.selected == true);
+
+            if (lookingforlist != null && lookingforlist.Count() == 0) return false;
+
+            try
             {
-                // profiledata.SearchSettings.FirstOrDefault().SearchSettings_showme  = new List<gender>(); 
-                return;
-            }
-          
-            foreach (var lookingfor in _unitOfWorkAsync.Repository<lu_lookingfor>().Queryable().ToList())
-            {
-               
-                    //does not exist so we will add it
-                if ((!currentprofilemetadata.profiledata_lookingfor.Where(z => z.lookingfor_id == lookingfor.id).Any()))
+                //get a list of the approved values here so wrong id's cannot be injected
+                var validlookingfor = _unitOfWorkAsync.Repository<lu_lookingfor>().Queryable().ToList();
+
+                foreach (var item in lookingforlist)
                 {
-
-                        //SearchSettings_showme.showmeID = showme.showmeID;
-                        var temp = new profiledata_lookingfor();
-                        temp.id = lookingfor.id;
-                        temp.profile_id = currentprofilemetadata.profile_id;
-                        _unitOfWorkAsync.Repository < profiledata_lookingfor>().Insert(temp);
-
-                    }
-                
-                else
-                { 
-                    //exists means we want to remove it
-
-                    if (currentprofilemetadata.profiledata_lookingfor.Any(p => p.id == lookingfor.id))
+                    //validate that this passed id matches what is in the database
+                    if (validlookingfor.Any(z => z.id == item.id))
                     {
-                        var temp = _unitOfWorkAsync.Repository<profiledata_lookingfor>().Queryable().Where(p => p.profile_id == currentprofilemetadata.profile_id && p.lookingfor_id == lookingfor.id).FirstOrDefault(); 
-                        _unitOfWorkAsync.Repository<profiledata_lookingfor>().Delete(temp);
+                        //new logic : if this item was selected and is not already add it
+                        if (!currentprofilemetadata.profiledata_lookingfor.Any(z => item.selected == true && z.lookingfor_id == item.id))
+                        {
+                            //SearchSettings_showme.showmeID = showme.showmeID;
+                            var temp = new profiledata_lookingfor();
+                            temp.id = item.id;
+                            temp.profile_id = currentprofilemetadata.profile_id;
+                            _unitOfWorkAsync.Repository<profiledata_lookingfor>().Insert(temp);
+                            profileupdated = true;
+
+                        }
+                        else
+                        {
+                            //new logic if any of the existing values match this id and it is not selected
+                            if (currentprofilemetadata.profiledata_lookingfor.Any(z => item.selected == false && z.lookingfor_id == item.id))
+                            {
+                                var temp = _unitOfWorkAsync.Repository<profiledata_lookingfor>().Queryable()
+                                          .Where(p => p.profile_id == currentprofilemetadata.profile_id && p.lookingfor_id == item.id).FirstOrDefault();
+                                _unitOfWorkAsync.Repository<profiledata_lookingfor>().Delete(temp);
+                                profileupdated = true;
+                            }
+                        }
 
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return profileupdated;
         }
 
         #endregion

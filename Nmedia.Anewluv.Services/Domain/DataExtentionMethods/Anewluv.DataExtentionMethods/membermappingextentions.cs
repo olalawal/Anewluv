@@ -516,7 +516,7 @@ namespace Anewluv.DataExtentionMethods
 
                         foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.bodytype))
                         {
-                            CriteriaModel.AppearanceSearchSettings.bodytypeslist.Add(CachingFactory.SharedObjectHelper.getbodytypelist(db).Where(p => p.id == item.value).FirstOrDefault());
+                            CriteriaModel.AppearanceSearchSettings.bodytypelist.Add(CachingFactory.SharedObjectHelper.getbodytypelist(db).Where(p => p.id == item.value).FirstOrDefault());
                         }
 
                         foreach (var item in PerfectMatchSettings.details.Where(p => p.searchsetting_id == PerfectMatchSettings.id && p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.eyecolor))

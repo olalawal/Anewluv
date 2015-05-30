@@ -95,7 +95,7 @@ namespace Anewluv.DataExtentionMethods
 
 
 
-       public static BasicSearchSettingsModel getbasicsearchsettings(searchsetting p, IUnitOfWorkAsync _unitOfWorkAsync)
+        public static BasicSearchSettingsModel getbasicsearchsettings(BasicSearchSettingsModel SearchViewModel,searchsetting p, IUnitOfWorkAsync _unitOfWorkAsync)
         {
             try
             {
@@ -116,11 +116,7 @@ namespace Anewluv.DataExtentionMethods
                 //Ages = sharedrepository.AgesSelectList;
 
 
-                //get all the showmes so we can deterimine which are checked and which are not
-                var showmelist = CachingFactory.SharedObjectHelper.getshowmelist(_unitOfWorkAsync);
-                var genderlist = CachingFactory.SharedObjectHelper.getgenderlist(_unitOfWorkAsync);
-                var sortbylist = CachingFactory.SharedObjectHelper.getsortbytypelist(_unitOfWorkAsync);
-                var agelist = CachingFactory.SharedObjectHelper.getagelist();
+              
 
                 model.agemin = p.agemin == null ? 18 : p.agemin.GetValueOrDefault();
                 model.mygenderid = p.profilemetadata != null ? p.profilemetadata.profile.profiledata.gender_id.Value : (int?)null;
@@ -133,20 +129,20 @@ namespace Anewluv.DataExtentionMethods
                 model.myperfectmatch = p.myperfectmatch == null ? true : p.myperfectmatch;
                 model.systemmatch = p.systemmatch == null ? false : p.systemmatch;
                 //test of map the list items to the generic listitem object in order to clean up the models so no iselected item on them
-                model.showmelist = showmelist;
-                model.genderlist = genderlist;
-                model.sortbylist = sortbylist;
-                model.agelist = agelist;  //TO do have it use desction and IC as well instead of age object
+                model.showmelist = SearchViewModel.showmelist;
+                model.genderlist = SearchViewModel.genderlist;
+                model.sortbylist = SearchViewModel.sortbylist;
+                model.agelist = SearchViewModel.agelist;  //TO do have it use desction and IC as well instead of age object
 
                 //update the list with the items that are selected.
-                foreach (listitem showme in showmelist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.showme).Any(f => f.value == c.id)))
+                foreach (listitem showme in SearchViewModel.showmelist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.showme).Any(f => f.value == c.id)))
                 {
                     //update the value as checked here on the list
                     model.showmelist.First(d => d.id == showme.id).selected = true;
                 }
 
                 //update the list with the items that are selected.
-                foreach (listitem gender in genderlist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.gender).Any(f => f.value == c.id)))
+                foreach (listitem gender in SearchViewModel.genderlist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.gender).Any(f => f.value == c.id)))
                 {
                     //update the value as checked here on the list
                     model.showmelist.First(d => d.id == gender.id).selected = true;
@@ -154,7 +150,7 @@ namespace Anewluv.DataExtentionMethods
 
 
                 //update the list with the items that are selected.
-                foreach (listitem sortbytype in sortbylist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.sortbytype).Any(f => f.value == c.id)))
+                foreach (listitem sortbytype in SearchViewModel.sortbylist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.sortbytype).Any(f => f.value == c.id)))
                 {
                     //update the value as checked here on the list
                     model.sortbylist.First(d => d.id == sortbytype.id).selected = true;
@@ -181,7 +177,7 @@ namespace Anewluv.DataExtentionMethods
             }
         }
 
-       public static AppearanceSearchSettingsModel getappearancesearchsettings(searchsetting p, IUnitOfWorkAsync _unitOfWorkAsync)
+       public static AppearanceSearchSettingsModel getappearancesearchsettings(AppearanceSearchSettingsModel SearchViewModel,searchsetting p, IUnitOfWorkAsync _unitOfWorkAsync)
         {
             try
             {
@@ -194,24 +190,19 @@ namespace Anewluv.DataExtentionMethods
 
 
                 //get all the showmes so we can deterimine which are checked and which are not
-                var ethnicitylist = CachingFactory.SharedObjectHelper.getethnicitylist(_unitOfWorkAsync);
-                var bodytypelist = CachingFactory.SharedObjectHelper.getbodytypelist(_unitOfWorkAsync);
-                var eyecolorlist = CachingFactory.SharedObjectHelper.geteyecolorlist(_unitOfWorkAsync);
-                var haircolorlist = CachingFactory.SharedObjectHelper.gethaircolorlist(_unitOfWorkAsync);
-                var hotfeaturelist = CachingFactory.SharedObjectHelper.gethotfeaturelist(_unitOfWorkAsync);
-                var metricheightlist = CachingFactory.SharedObjectHelper.getmetricheightlist();
+   
 
-                var showmelist = CachingFactory.SharedObjectHelper.getshowmelist(_unitOfWorkAsync);
+              
 
                 model.heightmax = p.heightmax == null ? 210 : p.heightmax;
                 model.heightmin = p.heightmin == null ? 100 : p.heightmin;
 
-                model.ethnicitylist = ethnicitylist;
-                model.bodytypeslist = bodytypelist;
-                model.eyecolorlist = eyecolorlist;
-                model.haircolorlist = haircolorlist;
-                model.hotfeaturelist = hotfeaturelist;
-                model.metricheightlist = metricheightlist;
+                model.ethnicitylist = SearchViewModel.ethnicitylist;
+                model.bodytypelist = SearchViewModel.bodytypelist;
+                model.eyecolorlist = SearchViewModel.eyecolorlist;
+                model.haircolorlist = SearchViewModel.haircolorlist;
+                model.hotfeaturelist = SearchViewModel.hotfeaturelist;
+                model.metricheightlist = SearchViewModel.metricheightlist;
 
 
                 //pilot how to show the rest of the values 
@@ -219,35 +210,35 @@ namespace Anewluv.DataExtentionMethods
                 // var allhotfeature = _unitOfWorkAsync.lu_hotfeature;
                 //model.hotfeaturelist =  p.profilemetadata.hotfeatures.ToList();
                 //update the list with the items that are selected.
-                foreach (listitem ethnicity in ethnicitylist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.ethnicity).Any(f => f.value == c.id)))
+                foreach (listitem ethnicity in SearchViewModel.ethnicitylist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.ethnicity).Any(f => f.value == c.id)))
                 {
                     //update the value as checked here on the list
                     model.ethnicitylist.First(d => d.id == ethnicity.id).selected = true;
                 }
 
                 //update the list with the items that are selected.
-                foreach (listitem bodytype in bodytypelist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.bodytype).Any(f => f.value == c.id)))
+                foreach (listitem bodytype in SearchViewModel.bodytypelist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.bodytype).Any(f => f.value == c.id)))
                 {
                     //update the value as checked here on the list
-                    model.bodytypeslist.First(d => d.id == bodytype.id).selected = true;
+                    model.bodytypelist.First(d => d.id == bodytype.id).selected = true;
                 }
 
                 //update the list with the items that are selected.
-                foreach (listitem eyecolor in eyecolorlist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.eyecolor).Any(f => f.value == c.id)))
+                foreach (listitem eyecolor in SearchViewModel.eyecolorlist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.eyecolor).Any(f => f.value == c.id)))
                 {
                     //update the value as checked here on the list
                     model.eyecolorlist.First(d => d.id == eyecolor.id).selected = true;
                 }
 
                 //update the list with the items that are selected.
-                foreach (listitem haircolor in haircolorlist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.haircolor).Any(f => f.value == c.id)))
+                foreach (listitem haircolor in SearchViewModel.haircolorlist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.haircolor).Any(f => f.value == c.id)))
                 {
                     //update the value as checked here on the list
                     model.haircolorlist.First(d => d.id == haircolor.id).selected = true;
                 }
 
                 //update the list with the items that are selected.
-                foreach (listitem hotfeature in hotfeaturelist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.hotfeature).Any(f => f.value == c.id)))
+                foreach (listitem hotfeature in SearchViewModel.hotfeaturelist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.hotfeature).Any(f => f.value == c.id)))
                 {
                     //update the value as checked here on the list
                     model.hotfeaturelist.First(d => d.id == hotfeature.id).selected = true;
@@ -263,7 +254,7 @@ namespace Anewluv.DataExtentionMethods
             }
         }
 
-       public static CharacterSearchSettingsModel getcharactersearchsettings(searchsetting p, IUnitOfWorkAsync _unitOfWorkAsync)
+       public static CharacterSearchSettingsModel getcharactersearchsettings(CharacterSearchSettingsModel SearchViewModel ,searchsetting p, IUnitOfWorkAsync _unitOfWorkAsync)
         {
             try
             {
@@ -274,28 +265,18 @@ namespace Anewluv.DataExtentionMethods
                 //populate values here ok ?
                 // if (p == null) return null;
 
-                var humorlist = CachingFactory.SharedObjectHelper.gethumorlist(_unitOfWorkAsync);
-                var dietlist = CachingFactory.SharedObjectHelper.getdietlist(_unitOfWorkAsync);
-                var hobbylist = CachingFactory.SharedObjectHelper.gethobbylist(_unitOfWorkAsync);
-                var drinklist = CachingFactory.SharedObjectHelper.getdrinkslist(_unitOfWorkAsync);
-                var exerciselist = CachingFactory.SharedObjectHelper.getexerciselist(_unitOfWorkAsync);
-                var smokeslist = CachingFactory.SharedObjectHelper.getsmokeslist(_unitOfWorkAsync);
-                var signlist = CachingFactory.SharedObjectHelper.getsignlist(_unitOfWorkAsync);
-                var politicalviewlist = CachingFactory.SharedObjectHelper.getpoliticalviewlist(_unitOfWorkAsync);
-                var religionlist = CachingFactory.SharedObjectHelper.getreligionlist(_unitOfWorkAsync);
-                var religiousattendancelist = CachingFactory.SharedObjectHelper.getreligiousattendancelist(_unitOfWorkAsync);
 
-                model.humorlist = humorlist;
-                model.dietlist = dietlist;
+                model.humorlist = SearchViewModel.humorlist;
+                model.dietlist = SearchViewModel.dietlist;
 
-                model.hobbylist = hobbylist;
-                model.drinkslist = drinklist;
-                model.exerciselist = exerciselist;
-                model.smokeslist = smokeslist;
-                model.signlist = signlist;
-                model.politicalviewlist = politicalviewlist;
-                model.religionlist = religionlist;
-                model.religiousattendancelist = religiousattendancelist;
+                model.hobbylist = SearchViewModel.hobbylist;
+                model.drinkslist = SearchViewModel.drinkslist;
+                model.exerciselist = SearchViewModel.exerciselist;
+                model.smokeslist = SearchViewModel.smokeslist;
+                model.signlist = SearchViewModel.signlist;
+                model.politicalviewlist = SearchViewModel.politicalviewlist;
+                model.religionlist = SearchViewModel.religionlist;
+                model.religiousattendancelist = SearchViewModel.religiousattendancelist;
 
 
                 //update the list with the items that are selected.
@@ -303,7 +284,7 @@ namespace Anewluv.DataExtentionMethods
 
                 //update the list with the items that are selected.
                 //special handling for hobby, there is no Any value so for search since any is allowed make sure its selected if none selected
-                foreach (listitem hobby in hobbylist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.hobby).Any(f => f.value == c.id)))
+                foreach (listitem hobby in SearchViewModel.hobbylist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.hobby).Any(f => f.value == c.id)))
                 {
                     //update the value as checked here on the list
                     model.hobbylist.First(d => d.id == hobby.id).selected = true;
@@ -314,7 +295,7 @@ namespace Anewluv.DataExtentionMethods
                     model.hobbylist.First(f => f.description == "Any").selected = true;
 
 
-                foreach (listitem humor in humorlist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.humor).Any(f => f.value == c.id)))
+                foreach (listitem humor in SearchViewModel.humorlist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.humor).Any(f => f.value == c.id)))
                 {
                     //update the value as checked here on the list
                     model.humorlist.First(d => d.id == humor.id).selected = true;
@@ -322,7 +303,7 @@ namespace Anewluv.DataExtentionMethods
 
 
                 //update the list with the items that are selected.
-                foreach (listitem diet in dietlist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.diet).Any(f => f.value == c.id)))
+                foreach (listitem diet in SearchViewModel.dietlist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.diet).Any(f => f.value == c.id)))
                 {
                     //update the value as checked here on the list
                     model.dietlist.First(d => d.id == diet.id).selected = true;
@@ -330,7 +311,7 @@ namespace Anewluv.DataExtentionMethods
 
 
                 //update the list with the items that are selected.
-                foreach (listitem drink in drinklist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.drink).Any(f => f.value == c.id)))
+                foreach (listitem drink in SearchViewModel.drinkslist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.drink).Any(f => f.value == c.id)))
                 {
                     //update the value as checked here on the list
                     model.drinkslist.First(d => d.id == drink.id).selected = true;
@@ -338,7 +319,7 @@ namespace Anewluv.DataExtentionMethods
 
 
                 //update the list with the items that are selected.
-                foreach (listitem exercise in exerciselist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.excercise).Any(f => f.value == c.id)))
+                foreach (listitem exercise in SearchViewModel.exerciselist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.excercise).Any(f => f.value == c.id)))
                 {
                     //update the value as checked here on the list
                     model.exerciselist.First(d => d.id == exercise.id).selected = true;
@@ -346,7 +327,7 @@ namespace Anewluv.DataExtentionMethods
 
 
                 //update the list with the items that are selected.
-                foreach (listitem smokes in smokeslist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.smokes).Any(f => f.value == c.id)))
+                foreach (listitem smokes in SearchViewModel.smokeslist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.smokes).Any(f => f.value == c.id)))
                 {
                     //update the value as checked here on the list
                     model.smokeslist.First(d => d.id == smokes.id).selected = true;
@@ -354,28 +335,28 @@ namespace Anewluv.DataExtentionMethods
 
 
                 //update the list with the items that are selected.
-                foreach (listitem sign in signlist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.sign).Any(f => f.value == c.id)))
+                foreach (listitem sign in SearchViewModel.signlist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.sign).Any(f => f.value == c.id)))
                 {
                     //update the value as checked here on the list
                     model.signlist.First(d => d.id == sign.id).selected = true;
                 }
 
                 //update the list with the items that are selected.
-                foreach (listitem politicalview in politicalviewlist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.politicalview).Any(f => f.value == c.id)))
+                foreach (listitem politicalview in SearchViewModel.politicalviewlist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.politicalview).Any(f => f.value == c.id)))
                 {
                     //update the value as checked here on the list
                     model.politicalviewlist.First(d => d.id == politicalview.id).selected = true;
                 }
 
                 //update the list with the items that are selected.
-                foreach (listitem religion in religionlist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.religion).Any(f => f.value == c.id)))
+                foreach (listitem religion in SearchViewModel.religionlist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.religion).Any(f => f.value == c.id)))
                 {
                     //update the value as checked here on the list
                     model.religionlist.First(d => d.id == religion.id).selected = true;
                 }
 
                 //update the list with the items that are selected.
-                foreach (listitem religiousattendance in religiousattendancelist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.religiousattendance).Any(f => f.value == c.id)))
+                foreach (listitem religiousattendance in SearchViewModel.religiousattendancelist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.religiousattendance).Any(f => f.value == c.id)))
                 {
                     //update the value as checked here on the list
                     model.religiousattendancelist.First(d => d.id == religiousattendance.id).selected = true;
@@ -392,90 +373,76 @@ namespace Anewluv.DataExtentionMethods
             }
         }
 
-       public static LifeStyleSearchSettingsModel getlifestylesearchsettings(searchsetting p, IUnitOfWorkAsync _unitOfWorkAsync)
+       public static LifeStyleSearchSettingsModel getlifestylesearchsettings(LifeStyleSearchSettingsModel SearchViewModel, searchsetting p, IUnitOfWorkAsync _unitOfWorkAsync)
         {
             try
             {
                 // searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().Queryable().Where(z => z.id == searchmodel.searchid || z.profile_id == searchmodel.profileid && (searchmodel.searchname == "" ? "Default" : searchmodel.searchname) == z.searchname).FirstOrDefault();
-
                 LifeStyleSearchSettingsModel model = new LifeStyleSearchSettingsModel();
 
-                //populate values here ok ?
-                // if (p == null) return null;
 
-                var educationlevellist = CachingFactory.SharedObjectHelper.geteducationlevellist(_unitOfWorkAsync);
-                var lookingforlist = CachingFactory.SharedObjectHelper.getlookingforlist(_unitOfWorkAsync);
-                var employmentstatuslist = CachingFactory.SharedObjectHelper.getemploymentstatuslist(_unitOfWorkAsync);
-                var havekidslist = CachingFactory.SharedObjectHelper.gethavekidslist(_unitOfWorkAsync);
-                var incomelevellist = CachingFactory.SharedObjectHelper.getincomelevellist(_unitOfWorkAsync);
-                var livingsituationlist = CachingFactory.SharedObjectHelper.getlivingsituationlist(_unitOfWorkAsync);
-                var maritialstatuslist = CachingFactory.SharedObjectHelper.getmaritalstatuslist(_unitOfWorkAsync);
-                var professionlist = CachingFactory.SharedObjectHelper.getprofessionlist(_unitOfWorkAsync);
-                var wantkidslist = CachingFactory.SharedObjectHelper.getwantskidslist(_unitOfWorkAsync);
-
-
-                model.educationlevellist = educationlevellist;
-                model.lookingforlist = lookingforlist;
-                model.employmentstatuslist = employmentstatuslist;
-                model.havekidslist = havekidslist;
-                model.incomelevellist = incomelevellist;
-                model.livingsituationlist = livingsituationlist;
-                model.maritalstatuslist = maritialstatuslist;
-                model.professionlist = professionlist;
-                model.wantskidslist = wantkidslist;
+                model.educationlevellist = SearchViewModel.educationlevellist;
+                model.lookingforlist = SearchViewModel.lookingforlist;
+                model.employmentstatuslist = SearchViewModel.employmentstatuslist;
+                model.havekidslist = SearchViewModel.havekidslist;
+                model.incomelevellist = SearchViewModel.incomelevellist;
+                model.livingsituationlist = SearchViewModel.livingsituationlist;
+                model.maritalstatuslist = SearchViewModel.maritalstatuslist;
+                model.professionlist = SearchViewModel.professionlist;
+                model.wantskidslist = SearchViewModel.wantskidslist;
 
 
                 //update the list with the items that are selected.
-                foreach (listitem educationlevel in educationlevellist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.educationlevel).Any(f => f.value == c.id)))
+                foreach (listitem educationlevel in SearchViewModel. educationlevellist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.educationlevel).Any(f => f.value == c.id)))
                 {
                     //update the value as checked here on the list
                     model.educationlevellist.First(d => d.id == educationlevel.id).selected = true;
                 }
 
                 //update the list with the items that are selected.
-                foreach (listitem lookingfor in lookingforlist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.lookingfor).Any(f => f.value == c.id)))
+                foreach (listitem lookingfor in SearchViewModel. lookingforlist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.lookingfor).Any(f => f.value == c.id)))
                 {
                     //update the value as checked here on the list
                     model.lookingforlist.First(d => d.id == lookingfor.id).selected = true;
                 }
 
                 //update the list with the items that are selected.
-                foreach (listitem employmentstatus in employmentstatuslist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.employmentstatus).Any(f => f.value == c.id)))
+                foreach (listitem employmentstatus in SearchViewModel. employmentstatuslist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.employmentstatus).Any(f => f.value == c.id)))
                 {
                     //update the value as checked here on the list
                     model.employmentstatuslist.First(d => d.id == employmentstatus.id).selected = true;
                 }
 
                 //update the list with the items that are selected.
-                foreach (listitem incomelevel in incomelevellist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.incomelevel).Any(f => f.value == c.id)))
+                foreach (listitem  imcomelevel in SearchViewModel.incomelevellist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.incomelevel).Any(f => f.value == c.id)))
                 {
                     //update the value as checked here on the list
-                    model.incomelevellist.First(d => d.id == incomelevel.id).selected = true;
+                    model.incomelevellist.First(d => d.id == imcomelevel.id).selected = true;
                 }
 
                 //update the list with the items that are selected.
-                foreach (listitem livingsituation in livingsituationlist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.livingsituation).Any(f => f.value == c.id)))
+                foreach (listitem livingsituation in SearchViewModel. livingsituationlist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.livingsituation).Any(f => f.value == c.id)))
                 {
                     //update the value as checked here on the list
                     model.livingsituationlist.First(d => d.id == livingsituation.id).selected = true;
                 }
 
                 //update the list with the items that are selected.
-                foreach (listitem maritialstatus in maritialstatuslist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.maritialstatus).Any(f => f.value == c.id)))
+                foreach (listitem maritialstatus in SearchViewModel.maritalstatuslist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.maritialstatus).Any(f => f.value == c.id)))
                 {
                     //update the value as checked here on the list
                     model.maritalstatuslist.First(d => d.id == maritialstatus.id).selected = true;
                 }
 
                 //update the list with the items that are selected.
-                foreach (listitem profession in professionlist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.profession).Any(f => f.value == c.id)))
+                foreach (listitem profession in SearchViewModel. professionlist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.profession).Any(f => f.value == c.id)))
                 {
                     //update the value as checked here on the list
                     model.professionlist.First(d => d.id == profession.id).selected = true;
                 }
 
                 //update the list with the items that are selected.
-                foreach (listitem wantkids in wantkidslist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.wantskids).Any(f => f.value == c.id)))
+                foreach (listitem wantkids in SearchViewModel.wantskidslist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.wantskids).Any(f => f.value == c.id)))
                 {
                     //update the value as checked here on the list
                     model.wantskidslist.First(d => d.id == wantkids.id).selected = true;
@@ -528,14 +495,12 @@ namespace Anewluv.DataExtentionMethods
                 if (model.genderlist.Count() > 0)
                     updatesearchsettingsdetail(model.genderlist, p, searchsettingdetailtypeEnum.gender, _unitOfWorkAsync);
                 if (model.sortbylist.Count() > 0)
-                    updatesearchsettingsdetail(model.sortbylist, p, searchsettingdetailtypeEnum.sortbytype, _unitOfWorkAsync);
-                if (model.sortbylist.Count() > 0)
+                    updatesearchsettingsdetail(model.sortbylist, p, searchsettingdetailtypeEnum.sortbytype, _unitOfWorkAsync);              
                 if (model.showmelist.Count > 0)
-                    updatesearchsettingsdetail(model.showmelist, p, searchsettingdetailtypeEnum.showme ,_unitOfWorkAsync);
-                if (model.sortbylist.Count() > 0)
+                    updatesearchsettingsdetail(model.showmelist, p, searchsettingdetailtypeEnum.showme ,_unitOfWorkAsync);              
                 if (model.locationlist.Count > 0)
                     updatesearchsettingslocation(model.locationlist, p ,_unitOfWorkAsync);
-                if (model.sortbylist.Count() > 0)
+             
 
 
                 _unitOfWorkAsync.Repository<searchsetting>().Update(p);
@@ -579,8 +544,8 @@ namespace Anewluv.DataExtentionMethods
                 //checkbos item updates 
                 if (model.ethnicitylist.Count > 0)
                     updatesearchsettingsdetail(model.ethnicitylist.ToList(), p, searchsettingdetailtypeEnum.ethnicity ,_unitOfWorkAsync);
-                if (model.bodytypeslist.Count > 0)
-                    updatesearchsettingsdetail(model.bodytypeslist.ToList(), p, searchsettingdetailtypeEnum.bodytype ,_unitOfWorkAsync);
+                if (model.bodytypelist.Count > 0)
+                    updatesearchsettingsdetail(model.bodytypelist.ToList(), p, searchsettingdetailtypeEnum.bodytype ,_unitOfWorkAsync);
                 if (model.eyecolorlist.Count > 0)
                     updatesearchsettingsdetail(model.eyecolorlist.ToList(), p, searchsettingdetailtypeEnum.eyecolor ,_unitOfWorkAsync);
                 if (model.haircolorlist.Count > 0)
@@ -747,39 +712,55 @@ namespace Anewluv.DataExtentionMethods
         //Basic Checkbox settings updates
         //APPEARANCE checkboxes start  /////////////////////////
         //profiledata gender
-       public static void updatesearchsettingsdetail(List<listitem> updateditems, searchsetting currentsearchsettings, searchsettingdetailtypeEnum searchsettingtype,IUnitOfWorkAsync _unitOfWorkAsync)
+       public static bool updatesearchsettingsdetail(List<listitem> searchitems, searchsetting currentsearchsettings, searchsettingdetailtypeEnum searchsettingtype,IUnitOfWorkAsync _unitOfWorkAsync)
         {
-            if (updateditems == null)
-            {
-                return;
-            }
 
-            //only get the selected values 
-            foreach (var item in updateditems.Where(z => z.selected == true))
+           bool profileupdated = false;
+           if (searchitems != null && searchitems.Count() == 0) return false;
+
+           //TODO add validation of the ids , need a method that returns the valid ids for the search setting type
+
+            try
             {
-                //new logic : if this item was selected and is not already in the search settings gender values add it 
-                if ((!currentsearchsettings.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingtype).Any(f => f.value == item.id)))
+
+                //only get the selected values 
+                foreach (var item in searchitems)
                 {
-                    //SearchSettings_showme.showmeID = showme.showmeID;
-                    var temp = new searchsettingdetail();
-                    temp.searchsetting_id = currentsearchsettings.id;
-                    temp.value = item.id; //add the current gender value since its new.
-                    temp.creationdate = DateTime.Now;
-                    temp.searchsettingdetailtype_id = (int)searchsettingtype;
-                    _unitOfWorkAsync.Repository<searchsettingdetail>().Insert(temp);
+                    //new logic : if this item was selected and is not already in the search settings gender values add it 
+                    if ((!currentsearchsettings.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingtype).Any(f => item.selected == true && f.value == item.id)))
+                    {
+                        //SearchSettings_showme.showmeID = showme.showmeID;
+                        var temp = new searchsettingdetail();
+                        temp.searchsetting_id = currentsearchsettings.id;
+                        temp.value = item.id; //add the current gender value since its new.
+                        temp.creationdate = DateTime.Now;
+                        temp.searchsettingdetailtype_id = (int)searchsettingtype;
+                        _unitOfWorkAsync.Repository<searchsettingdetail>().Insert(temp);
+                        profileupdated = true;
+                    }
+                    else
+                    {
+                        //we have an existing value and we want to remove it in this case since selected was false for sure
+                        //we will be doing a remove either way
+
+                        if ((currentsearchsettings.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingtype).Any(f => item.selected == false && f.value == item.id)))
+                        {
+                            var temp = _unitOfWorkAsync.Repository<searchsettingdetail>()
+                           .Queryable()
+                           .Where(p => p.searchsetting_id == currentsearchsettings.id && p.searchsettingdetailtype_id == (int)searchsettingtype && p.value == item.id).FirstOrDefault();
+                            _unitOfWorkAsync.Repository<searchsettingdetail>().Delete(temp);
+                            profileupdated = true;
+                        }
+                    }
+
 
                 }
-                else
-                {
-                    //we have an existing value and we want to remove it in this case since selected was false for sure
-                    //we will be doing a remove either way
-                    var temp = _unitOfWorkAsync.Repository<searchsettingdetail>().Queryable().Where(p => p.searchsetting_id == currentsearchsettings.id && p.searchsettingdetailtype_id == (int)searchsettingtype && p.value == item.id).FirstOrDefault();
-                    if (temp != null)
-                        _unitOfWorkAsync.Repository<searchsettingdetail>().Delete(temp);
-                }
-
-
-            }
+             }
+             catch (Exception ex)
+             {
+                 throw ex;
+             }
+            return profileupdated;
         }
 
         //profiledata location

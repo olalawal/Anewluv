@@ -15,7 +15,7 @@ namespace Anewluv.Domain.Data.ViewModels
           
         this.metricheightlist = new List<metricheight>();
       this.ethnicitylist  = new List<listitem>();
-       this.bodytypeslist  = new List<listitem>();
+       this.bodytypelist  = new List<listitem>();
        this. eyecolorlist  = new List<listitem>();
     this.haircolorlist  = new List<listitem>();
     this.hotfeaturelist = new List<listitem>();
@@ -43,7 +43,7 @@ namespace Anewluv.Domain.Data.ViewModels
        [DataMember]
         public List<listitem> ethnicitylist { get; set; } // = new List<string>();
        [DataMember]
-       public List<listitem> bodytypeslist { get; set; } // = new List<string>();
+       public List<listitem> bodytypelist { get; set; } // = new List<string>();
        [DataMember]
        public List<listitem> eyecolorlist { get; set; } // = new List<string>();
        [DataMember]

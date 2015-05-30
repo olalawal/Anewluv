@@ -154,10 +154,10 @@ namespace Anewluv.Services.Edit
                        
                         searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(searchmodel);
 
-                        searchmodel.basicsearchsettings = searchsettingsextentions.getbasicsearchsettings(p, _unitOfWorkAsync);
-                        searchmodel.lifestylesearchsettings = searchsettingsextentions.getlifestylesearchsettings(p, _unitOfWorkAsync);
-                        searchmodel.appearancesearchsettings = searchsettingsextentions.getappearancesearchsettings(p, _unitOfWorkAsync);
-                        searchmodel.charactersearchsettings = searchsettingsextentions.getcharactersearchsettings(p, _unitOfWorkAsync);
+                        //searchmodel.basicsearchsettings = searchsettingsextentions.getbasicsearchsettings(p, _unitOfWorkAsync);
+                        //searchmodel.lifestylesearchsettings = searchsettingsextentions.getlifestylesearchsettings(p, _unitOfWorkAsync);
+                        //searchmodel.appearancesearchsettings = searchsettingsextentions.getappearancesearchsettings(p, _unitOfWorkAsync);
+                        //searchmodel.charactersearchsettings = searchsettingsextentions.getcharactersearchsettings(p, _unitOfWorkAsync);
 
 
                         //TO DO add rest of searches.
@@ -196,12 +196,18 @@ namespace Anewluv.Services.Edit
                 {
                     var task = Task.Factory.StartNew(() =>
                     {
+                        BasicSearchSettingsModel model = new BasicSearchSettingsModel();
+                        //get all the showmes so we can deterimine which are checked and which are not
+                           model. showmelist = CachingFactory.SharedObjectHelper.getshowmelist(_unitOfWorkAsync);
+                           model. genderlist = CachingFactory.SharedObjectHelper.getgenderlist(_unitOfWorkAsync);
+                           model. sortbylist = CachingFactory.SharedObjectHelper.getsortbytypelist(_unitOfWorkAsync);
+                           model. agelist = CachingFactory.SharedObjectHelper.getagelist();
 
                         searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(searchmodel);
 
 
 
-                        return searchsettingsextentions.getbasicsearchsettings(p, _unitOfWorkAsync);
+                        return searchsettingsextentions.getbasicsearchsettings(model,p, _unitOfWorkAsync);
                        
                     });
                     return await task.ConfigureAwait(false);
@@ -224,18 +230,22 @@ namespace Anewluv.Services.Edit
 
         public async Task<AppearanceSearchSettingsModel> getappearancesearchsettings(SearchSettingsModel searchmodel)
         {
-           
-         
             {
-
-
                 try
                 {
-
                     var task = Task.Factory.StartNew(() =>
                     {
+                        AppearanceSearchSettingsModel model = new AppearanceSearchSettingsModel();
+                        model.ethnicitylist = CachingFactory.SharedObjectHelper.getethnicitylist(_unitOfWorkAsync);
+                        model.bodytypelist = CachingFactory.SharedObjectHelper.getbodytypelist(_unitOfWorkAsync);
+                        model.eyecolorlist = CachingFactory.SharedObjectHelper.geteyecolorlist(_unitOfWorkAsync);
+                        model.haircolorlist = CachingFactory.SharedObjectHelper.gethaircolorlist(_unitOfWorkAsync);
+                        model.hotfeaturelist = CachingFactory.SharedObjectHelper.gethotfeaturelist(_unitOfWorkAsync);
+                        model.metricheightlist = CachingFactory.SharedObjectHelper.getmetricheightlist();
+
+
                         searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(searchmodel);
-                        return searchsettingsextentions.getappearancesearchsettings(p, _unitOfWorkAsync);
+                        return searchsettingsextentions.getappearancesearchsettings(model, p, _unitOfWorkAsync);
 
                     });
                     return await task.ConfigureAwait(false);
@@ -268,8 +278,21 @@ namespace Anewluv.Services.Edit
 
                     var task = Task.Factory.StartNew(() =>
                     {
+
+                        CharacterSearchSettingsModel model = new CharacterSearchSettingsModel();
+                           model. humorlist = CachingFactory.SharedObjectHelper.gethumorlist(_unitOfWorkAsync);
+                           model. dietlist = CachingFactory.SharedObjectHelper.getdietlist(_unitOfWorkAsync);
+                           model. hobbylist = CachingFactory.SharedObjectHelper.gethobbylist(_unitOfWorkAsync);
+                           model.drinkslist = CachingFactory.SharedObjectHelper.getdrinkslist(_unitOfWorkAsync);
+                           model. exerciselist = CachingFactory.SharedObjectHelper.getexerciselist(_unitOfWorkAsync);
+                           model. smokeslist = CachingFactory.SharedObjectHelper.getsmokeslist(_unitOfWorkAsync);
+                           model. signlist = CachingFactory.SharedObjectHelper.getsignlist(_unitOfWorkAsync);
+                           model. politicalviewlist = CachingFactory.SharedObjectHelper.getpoliticalviewlist(_unitOfWorkAsync);
+                           model. religionlist = CachingFactory.SharedObjectHelper.getreligionlist(_unitOfWorkAsync);
+                           model. religiousattendancelist = CachingFactory.SharedObjectHelper.getreligiousattendancelist(_unitOfWorkAsync);
+
                         searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(searchmodel);
-                        return searchsettingsextentions.getcharactersearchsettings(p, _unitOfWorkAsync);
+                        return searchsettingsextentions.getcharactersearchsettings(model,p, _unitOfWorkAsync);
 
                     });
                     return await task.ConfigureAwait(false);
@@ -301,8 +324,25 @@ namespace Anewluv.Services.Edit
 
                     var task = Task.Factory.StartNew(() =>
                     {
+                        LifeStyleSearchSettingsModel model = new LifeStyleSearchSettingsModel();
+
+                        //populate values here ok ?
+                        // if (p == null) return null;
+
+                        model.educationlevellist = CachingFactory.SharedObjectHelper.geteducationlevellist(_unitOfWorkAsync);
+                           model. lookingforlist = CachingFactory.SharedObjectHelper.getlookingforlist(_unitOfWorkAsync);
+                           model. employmentstatuslist = CachingFactory.SharedObjectHelper.getemploymentstatuslist(_unitOfWorkAsync);
+                           model. havekidslist = CachingFactory.SharedObjectHelper.gethavekidslist(_unitOfWorkAsync);
+                           model. incomelevellist = CachingFactory.SharedObjectHelper.getincomelevellist(_unitOfWorkAsync);
+                           model. livingsituationlist = CachingFactory.SharedObjectHelper.getlivingsituationlist(_unitOfWorkAsync);
+                           model.maritalstatuslist = CachingFactory.SharedObjectHelper.getmaritalstatuslist(_unitOfWorkAsync);
+                           model. professionlist = CachingFactory.SharedObjectHelper.getprofessionlist(_unitOfWorkAsync);
+                           model.wantskidslist = CachingFactory.SharedObjectHelper.getwantskidslist(_unitOfWorkAsync);
+
+
+
                         searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(searchmodel);
-                        return searchsettingsextentions.getlifestylesearchsettings(p, _unitOfWorkAsync);
+                        return searchsettingsextentions.getlifestylesearchsettings(model,p, _unitOfWorkAsync);
 
                     });
                     return await task.ConfigureAwait(false);

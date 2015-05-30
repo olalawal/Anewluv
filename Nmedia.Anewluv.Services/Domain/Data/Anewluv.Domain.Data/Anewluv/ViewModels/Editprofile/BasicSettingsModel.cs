@@ -14,7 +14,11 @@ namespace Anewluv.Domain.Data.ViewModels
     public class BasicSettingsModel
     {
 
-       
+        public BasicSettingsModel()
+        {
+
+        }
+
         // [DataMember]
         //public string searchname { get; set; }
         // [DataMember]
@@ -40,6 +44,8 @@ namespace Anewluv.Domain.Data.ViewModels
         [DataMember]
         public string phonenumber { get; set; }
 
+
+      
 
         ////Match settings i.e search
         //[DataMember]
