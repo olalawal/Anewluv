@@ -18,17 +18,25 @@ namespace Anewluv.Caching.RedisCaching
 
     public class RedisCacheFactory
     {
-
+        private static ConnectionMultiplexer _connection;
         /// </summary>
         private static IDatabase GetCache()
         {
+            try
+            {
+                if (_connection == null ||_connection.IsConnected == false)
+                    _connection = ConnectionMultiplexer.Connect("olawaltest.redis.cache.windows.net,ssl=true,password=Cn86u9582SQqoMhZwQmwJutG+5Mptmp5x0b8drivILU=,ConnectTimeout=10000");
 
-            ConnectionMultiplexer connection = ConnectionMultiplexer.Connect("olawaltest.redis.cache.windows.net,ssl=true,password='UlZg9z7KFJEDsQZz+wkR3wR+fR0CZVQi60c0xKZ/ANM='");
+                IDatabase cache = _connection.GetDatabase();
 
-            IDatabase cache = connection.GetDatabase();
-
-            return cache;
-
+                return cache;
+            }
+            catch (Exception ex)
+            { 
+            //TO DO log
+                return null;
+            
+            }
         }
 
         
@@ -51,7 +59,7 @@ namespace Anewluv.Caching.RedisCaching
                     catch (Exception ex)
                     {
                         //put cleanup code here
-                        throw;
+                       // throw;
                     }
 
                     if (photoformat == null)
@@ -72,9 +80,10 @@ namespace Anewluv.Caching.RedisCaching
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                   // throw;
                 }
 
+                return photoformat;
             }
             public static List<listitem> getphotoapprovalstatuslist(IUnitOfWorkAsync context)
             {
@@ -91,7 +100,7 @@ namespace Anewluv.Caching.RedisCaching
                     catch (Exception ex)
                     {
                         //put cleanup code here
-                        throw;
+                       // throw;
                     }
 
                     if (photoapprovalstatus == null)
@@ -117,14 +126,16 @@ namespace Anewluv.Caching.RedisCaching
                 }
               catch (RedisCommandException ex)
                 {
-                    throw new InvalidOperationException();
+                   // throw new InvalidOperationException();
 
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                   // throw;
                 }
+
+                return photoapprovalstatus;
 
             }
             public static List<lu_photorejectionreason> getphotorejectionreasonlist(IUnitOfWorkAsync context)
@@ -141,7 +152,7 @@ namespace Anewluv.Caching.RedisCaching
                     catch (Exception ex)
                     {
                         //put cleanup code here
-                        throw;
+                       // throw;
                     }
 
                     if (photorejectionreason == null)
@@ -163,8 +174,10 @@ namespace Anewluv.Caching.RedisCaching
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                   // throw;
                 }
+
+                return photorejectionreason;
 
             }
             public static List<listitem> getphotostatuslist(IUnitOfWorkAsync context)
@@ -186,7 +199,7 @@ namespace Anewluv.Caching.RedisCaching
                     catch (Exception ex)
                     {
                         //put cleanup code here
-                        throw;
+                       // throw;
                     }
 
                     if (photostatus == null)
@@ -211,9 +224,9 @@ namespace Anewluv.Caching.RedisCaching
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                   // throw;
                 }
-
+                return photostatus;
             }
             public static List<listitem> getphotoimagetypelist(IUnitOfWorkAsync context)
             {
@@ -234,7 +247,7 @@ namespace Anewluv.Caching.RedisCaching
                     catch (Exception ex)
                     {
                         //put cleanup code here
-                        throw;
+                       // throw;
                     }
 
                     if (photoimagetype == null)
@@ -257,15 +270,15 @@ namespace Anewluv.Caching.RedisCaching
                 }
               catch (RedisCommandException ex)
                 {
-                    throw new InvalidOperationException();
+                   // throw new InvalidOperationException();
 
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                   // throw;
                 }
-
+                return photoimagetype;
             }
 
 
@@ -288,7 +301,7 @@ namespace Anewluv.Caching.RedisCaching
                     catch (Exception ex)
                     {
                         //put cleanup code here
-                        throw;
+                       // throw;
                     }
 
                     if (getphotosecurityleveltypelist == null)
@@ -311,15 +324,15 @@ namespace Anewluv.Caching.RedisCaching
                 }
               catch (RedisCommandException ex)
                 {
-                    throw new InvalidOperationException();
+                   // throw new InvalidOperationException();
 
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                   // throw;
                 }
-
+                return getphotosecurityleveltypelist;
             }
             //olawal 3-13-2013 other functions added after fact
             public static List<lu_photostatusdescription> getphotostatusdescriptionlist(IUnitOfWorkAsync context)
@@ -341,7 +354,7 @@ namespace Anewluv.Caching.RedisCaching
                     catch (Exception ex)
                     {
                         //put cleanup code here
-                        throw;
+                       // throw;
                     }
 
                     if (photostatusdescription == null)
@@ -357,19 +370,19 @@ namespace Anewluv.Caching.RedisCaching
                         if (dataCache != null)
                            dataCache.Set("photostatusdescriptionlist", photostatusdescription);
 
-                    } return photostatusdescription;
+                    } 
                 }
               catch (RedisCommandException ex)
                 {
-                    throw new InvalidOperationException();
+                   // throw new InvalidOperationException();
 
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                   // throw;
                 }
-
+                return photostatusdescription;
             }
             public static List<listitem> getabusetypelist(IUnitOfWorkAsync context)
             {
@@ -390,7 +403,7 @@ namespace Anewluv.Caching.RedisCaching
                     catch (Exception ex)
                     {
                         //put cleanup code here
-                        throw;
+                       // throw;
                     }
 
                     if (abusetype == null)
@@ -413,15 +426,15 @@ namespace Anewluv.Caching.RedisCaching
                 }
               catch (RedisCommandException ex)
                 {
-                    throw new InvalidOperationException();
+                   // throw new InvalidOperationException();
 
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                   // throw;
                 }
-
+                return abusetype;
             }
             public static List<listitem> getprofilestatuslist(IUnitOfWorkAsync context)
             {
@@ -442,7 +455,7 @@ namespace Anewluv.Caching.RedisCaching
                     catch (Exception ex)
                     {
                         //put cleanup code here
-                        throw;
+                       // throw;
                     }
 
                     if (profilestatus == null)
@@ -465,15 +478,15 @@ namespace Anewluv.Caching.RedisCaching
                 }
               catch (RedisCommandException ex)
                 {
-                    throw new InvalidOperationException();
+                   // throw new InvalidOperationException();
 
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                   // throw;
                 }
-
+                return profilestatus;
             }
             public static List<listitem> getphotoImagersizerformatlist(IUnitOfWorkAsync context)
             {
@@ -494,7 +507,7 @@ namespace Anewluv.Caching.RedisCaching
                     catch (Exception ex)
                     {
                         //put cleanup code here
-                        throw;
+                       // throw;
                     }
 
                     if (photoImagersizerformat == null)
@@ -517,15 +530,15 @@ namespace Anewluv.Caching.RedisCaching
                 }
               catch (RedisCommandException ex)
                 {
-                    throw new InvalidOperationException();
+                   // throw new InvalidOperationException();
 
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                   // throw;
                 }
-
+                return photoImagersizerformat;
             }
             public static List<lu_role> getrolelist(IUnitOfWorkAsync context)
             {
@@ -546,7 +559,7 @@ namespace Anewluv.Caching.RedisCaching
                     catch (Exception ex)
                     {
                         //put cleanup code here
-                        throw;
+                       // throw;
                     }
 
                     if (role == null)
@@ -566,15 +579,15 @@ namespace Anewluv.Caching.RedisCaching
                 }
               catch (RedisCommandException ex)
                 {
-                    throw new InvalidOperationException();
+                   // throw new InvalidOperationException();
 
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                   // throw;
                 }
-
+                return role;
             }
             public static List<listitem> getsecurityleveltypelist(IUnitOfWorkAsync context)
             {
@@ -595,7 +608,7 @@ namespace Anewluv.Caching.RedisCaching
                     catch (Exception ex)
                     {
                         //put cleanup code here
-                        throw;
+                       // throw;
                     }
 
                     if (securityleveltype == null)
@@ -618,15 +631,15 @@ namespace Anewluv.Caching.RedisCaching
                 }
               catch (RedisCommandException ex)
                 {
-                    throw new InvalidOperationException();
+                   // throw new InvalidOperationException();
 
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                   // throw;
                 }
-
+                return securityleveltype;
             }
             public static List<listitem> getshowmelist(IUnitOfWorkAsync context)
             {
@@ -639,7 +652,7 @@ namespace Anewluv.Caching.RedisCaching
                 {
 
                     try { if (dataCache != null) showme = dataCache.Get("showmelist") as List<listitem>; }
-                  catch (RedisCommandException ex)
+                    catch (RedisCommandException ex)
                     {
                         //TO DO LOG and NOTIFY HERE
                         //throw new InvalidOperationException();
@@ -647,7 +660,7 @@ namespace Anewluv.Caching.RedisCaching
                     catch (Exception ex)
                     {
                         //put cleanup code here
-                        throw;
+                       //// throw;
                     }
 
                     if (showme == null)
@@ -669,16 +682,17 @@ namespace Anewluv.Caching.RedisCaching
 
                     } return showme;
                 }
-              catch (RedisCommandException ex)
+                catch (RedisCommandException ex)
                 {
-                    throw new InvalidOperationException();
+                   //// throw new InvalidOperationException();
 
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                    //throw;
                 }
+                return showme;
 
             }
             public static List<listitem> getsortbytypelist(IUnitOfWorkAsync context)
@@ -700,7 +714,7 @@ namespace Anewluv.Caching.RedisCaching
                     catch (Exception ex)
                     {
                         //put cleanup code here
-                        throw;
+                       // throw;
                     }
 
                     if (sortbytype == null)
@@ -724,15 +738,15 @@ namespace Anewluv.Caching.RedisCaching
                 }
               catch (RedisCommandException ex)
                 {
-                    throw new InvalidOperationException();
+                   // throw new InvalidOperationException();
 
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                   // throw;
                 }
-
+                return sortbytype;
             }
             public static List<listitem> getsecurityquestionlist(IUnitOfWorkAsync context)
             {
@@ -753,7 +767,7 @@ namespace Anewluv.Caching.RedisCaching
                     catch (Exception ex)
                     {
                         //put cleanup code here
-                        throw;
+                       // throw;
                     }
 
                     if (securityquestion == null)
@@ -776,15 +790,15 @@ namespace Anewluv.Caching.RedisCaching
                 }
               catch (RedisCommandException ex)
                 {
-                    throw new InvalidOperationException();
+                   // throw new InvalidOperationException();
 
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                   // throw;
                 }
-
+                return securityquestion;
             }
             public static List<lu_flagyesno> getflagyesnolist(IUnitOfWorkAsync context)
             {
@@ -805,7 +819,7 @@ namespace Anewluv.Caching.RedisCaching
                     catch (Exception ex)
                     {
                         //put cleanup code here
-                        throw;
+                       // throw;
                     }
 
                     if (flagyesno == null)
@@ -825,15 +839,15 @@ namespace Anewluv.Caching.RedisCaching
                 }
               catch (RedisCommandException ex)
                 {
-                    throw new InvalidOperationException();
+                   // throw new InvalidOperationException();
 
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                   // throw;
                 }
-
+                return flagyesno;
             }
             public static List<listitem> getprofilefiltertypelist(IUnitOfWorkAsync context)
             {
@@ -846,7 +860,7 @@ namespace Anewluv.Caching.RedisCaching
                 {
 
                     try { if (dataCache != null) profilefiltertype = dataCache.Get("profilefiltertypelist") as List<listitem>; }
-                  catch (RedisCommandException ex)
+                    catch (RedisCommandException ex)
                     {
                         //TO DO LOG and NOTIFY HERE
                         //throw new InvalidOperationException();
@@ -854,7 +868,7 @@ namespace Anewluv.Caching.RedisCaching
                     catch (Exception ex)
                     {
                         //put cleanup code here
-                        throw;
+                       // throw;
                     }
 
                     if (profilefiltertype == null)
@@ -878,15 +892,15 @@ namespace Anewluv.Caching.RedisCaching
                 }
               catch (RedisCommandException ex)
                 {
-                    throw new InvalidOperationException();
+                   // throw new InvalidOperationException();
 
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                   // throw;
                 }
-
+                return profilefiltertype;
             }
 
 
@@ -898,34 +912,47 @@ namespace Anewluv.Caching.RedisCaching
                  dataCache = GetCache();  // dataCacheFactory.GetDefaultCache();
 
                 List<listitem> genders = null;
-                try { if (dataCache != null) genders = dataCache.Get("genderlist") as List<listitem>; }
-              catch (RedisCommandException ex)
+
+                try
                 {
-                    throw new InvalidOperationException();
+                    try { if (dataCache != null) genders = dataCache.Get("genderlist") as List<listitem>; }
+                    catch (RedisCommandException ex)
+                    {
+                        // throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        // throw;
+                    }
+                    if (genders == null)
+                    {
+                        // context context = new context();
+                        //remafill the Genders list from the repositry and exit
+                        genders = (from o in context.Repository<lu_gender>().Queryable().ToList()
+                                   select new listitem
+                                   {
+                                       id = o.id,
+                                       description = o.description,
+                                       selected = false
+                                   }).ToList();
+
+                        //if we still have no datacahe do tis
+                        if (dataCache != null)
+                            dataCache.Set("genderlist", genders);
+
+                    }
+                }
+                catch (RedisCommandException ex)
+                {
+                    // throw new InvalidOperationException();
+
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                    // throw;
                 }
-                if (genders == null)
-                {
-                    // context context = new context();
-                    //remafill the Genders list from the repositry and exit
-                    genders = (from o in context.Repository<lu_gender>().Queryable().ToList()
-                               select new listitem
-                               {
-                                   id = o.id,
-                                   description = o.description,
-                                   selected = false
-                               }).ToList();
-
-                    //if we still have no datacahe do tis
-                    if (dataCache != null)
-                       dataCache.Set("genderlist", genders);
-
-                }
-
                 return genders;
             }
             public static List<age> getagelist()
@@ -937,17 +964,17 @@ namespace Anewluv.Caching.RedisCaching
                 List<age> ageslist = null;
 
 
-
+                try {
                 //if we still have no datacahe do tis
                 try { if (dataCache != null) ageslist = dataCache.Get("agelist") as List<age>; }
               catch (RedisCommandException ex)
                 {
-                    throw new InvalidOperationException();
+                   // throw new InvalidOperationException();
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                   // throw;
                 }
                 if (ageslist == null)
                 {
@@ -956,7 +983,19 @@ namespace Anewluv.Caching.RedisCaching
                     if (dataCache != null)
                        dataCache.Set("agelist", ageslist);
 
-                } return ageslist;
+                }}
+                 catch (RedisCommandException ex)
+                {
+                   // throw new InvalidOperationException();
+
+                }
+                catch (Exception ex)
+                {
+                    //put cleanup code here
+                   // throw;
+                }
+                
+                return ageslist;
             }
             public static List<metricheight> getmetricheightlist()
             {
@@ -965,15 +1004,16 @@ namespace Anewluv.Caching.RedisCaching
                  dataCache = GetCache();  // dataCacheFactory.GetDefaultCache();
 
                 List<metricheight> heights = null;
+                try{
                 try { if (dataCache != null) heights = dataCache.Get("metricheightlist") as List<metricheight>; }
               catch (RedisCommandException ex)
                 {
-                    throw new InvalidOperationException();
+                   // throw new InvalidOperationException();
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                   // throw;
                 }
                 if (heights == null)
                 {
@@ -985,7 +1025,18 @@ namespace Anewluv.Caching.RedisCaching
                     if (dataCache != null)
                        dataCache.Set("metricheightlist", heights);
 
-                } return heights;
+                } }
+                 catch (RedisCommandException ex)
+                {
+                   // throw new InvalidOperationException();
+
+                }
+                catch (Exception ex)
+                {
+                    //put cleanup code here
+                   // throw;
+                }
+                return heights;
             }
 
 
@@ -997,34 +1048,48 @@ namespace Anewluv.Caching.RedisCaching
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
                  dataCache = GetCache();  // dataCacheFactory.GetDefaultCache();
                 List<listitem> bodytype = null;
-
-                try { if (dataCache != null) bodytype = dataCache.Get("bodytypelist") as List<listitem>; }
-              catch (RedisCommandException ex)
+                try
                 {
-                    throw new InvalidOperationException();
+                    try { if (dataCache != null) bodytype = dataCache.Get("bodytypelist") as List<listitem>; }
+                    catch (RedisCommandException ex)
+                    {
+                        // throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        // throw;
+                    }
+                    if (bodytype == null)
+                    {
+                        //context context = new context();
+                        //remafill the ages list from the repositry and exit
+                        bodytype = (from o in context.Repository<lu_bodytype>().Queryable().ToList()
+                                    select new listitem
+                                    {
+                                        id = o.id,
+                                        description = o.description,
+                                        selected = false
+                                    }).ToList();
+
+                        //put this into the cache since it was not in here already 
+                        if (dataCache != null)
+                            dataCache.Set("bodytypelist", bodytype);
+
+                    }
+                }
+                catch (RedisCommandException ex)
+                {
+                    // throw new InvalidOperationException();
+
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                    // throw;
                 }
-                if (bodytype == null)
-                {
-                    //context context = new context();
-                    //remafill the ages list from the repositry and exit
-                    bodytype = (from o in context.Repository<lu_bodytype>().Queryable().ToList()
-                                select new listitem
-                                {
-                                    id = o.id,
-                                    description = o.description,
-                                    selected = false
-                                }).ToList();
-
-                    //put this into the cache since it was not in here already 
-                    if (dataCache != null)
-                       dataCache.Set("bodytypelist", bodytype);
-
-                } return bodytype;
+                
+                return bodytype;
             }
             public static List<listitem> getethnicitylist(IUnitOfWorkAsync context)
             {
@@ -1033,32 +1098,47 @@ namespace Anewluv.Caching.RedisCaching
                  dataCache = GetCache();  // dataCacheFactory.GetDefaultCache();
 
                 List<listitem> ethnicity = null;
-                try { if (dataCache != null) ethnicity = dataCache.Get("ethnicitylist") as List<listitem>; }
-              catch (RedisCommandException ex)
+                try
                 {
-                    throw new InvalidOperationException();
+                    try { if (dataCache != null) ethnicity = dataCache.Get("ethnicitylist") as List<listitem>; }
+                    catch (RedisCommandException ex)
+                    {
+                        // throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        // throw;
+                    }
+                    if (ethnicity == null)
+                    {
+                        //context context = new context();
+                        //remafill the ages list from the repositry and exit
+                        ethnicity = (from o in context.Repository<lu_ethnicity>().Queryable().ToList()
+                                     select new listitem
+                                     {
+                                         id = o.id,
+                                         description = o.description,
+                                         selected = false
+                                     }).ToList();
+
+                        if (dataCache != null)
+                            dataCache.Set("ethnicitylist", ethnicity);
+
+                    }
+                }
+                catch (RedisCommandException ex)
+                {
+                    // throw new InvalidOperationException();
+
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                    // throw;
                 }
-                if (ethnicity == null)
-                {
-                    //context context = new context();
-                    //remafill the ages list from the repositry and exit
-                    ethnicity = (from o in context.Repository<lu_ethnicity>().Queryable().ToList()
-                                 select new listitem
-                                 {
-                                     id = o.id,
-                                     description = o.description,
-                                     selected = false
-                                 }).ToList();
-
-                    if (dataCache != null)
-                       dataCache.Set("ethnicitylist", ethnicity);
-
-                } return ethnicity;
+                
+                return ethnicity;
             }
             public static List<listitem> geteyecolorlist(IUnitOfWorkAsync context)
             {
@@ -1067,30 +1147,45 @@ namespace Anewluv.Caching.RedisCaching
                  dataCache = GetCache();  // dataCacheFactory.GetDefaultCache();
 
                 List<listitem> eyecolor = null;
-                try { if (dataCache != null) eyecolor = dataCache.Get("eyecolorlist") as List<listitem>; }
-              catch (RedisCommandException ex)
+                try
                 {
-                    throw new InvalidOperationException();
+                    try { if (dataCache != null) eyecolor = dataCache.Get("eyecolorlist") as List<listitem>; }
+                    catch (RedisCommandException ex)
+                    {
+                        // throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        // throw;
+                    }
+                    if (eyecolor == null)
+                    {
+                        //context context = new context();
+                        //remafill the ages list from the repositry and exit
+                        eyecolor = (from o in context.Repository<lu_eyecolor>().Queryable().ToList()
+                                    select new listitem
+                                    {
+                                        id = o.id,
+                                        description = o.description,
+                                        selected = false
+                                    }).ToList();
+                        if (dataCache != null) dataCache.Set("eyecolorlist", eyecolor);
+
+                    }
+                }
+                catch (RedisCommandException ex)
+                {
+                    // throw new InvalidOperationException();
+
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                    // throw;
                 }
-                if (eyecolor == null)
-                {
-                    //context context = new context();
-                    //remafill the ages list from the repositry and exit
-                    eyecolor = (from o in context.Repository<lu_eyecolor>().Queryable().ToList()
-                                select new listitem
-                                {
-                                    id = o.id,
-                                    description = o.description,
-                                    selected = false
-                                }).ToList();
-                    if (dataCache != null)dataCache.Set("eyecolorlist", eyecolor);
-
-                } return eyecolor;
+                
+                return eyecolor;
             }
             public static List<listitem> gethaircolorlist(IUnitOfWorkAsync context)
             {
@@ -1099,31 +1194,45 @@ namespace Anewluv.Caching.RedisCaching
                  dataCache = GetCache();  // dataCacheFactory.GetDefaultCache();
 
                 List<listitem> haircolor = null;
-                try { if (dataCache != null)haircolor = dataCache.Get("haircolorlist") as List<listitem>; }
-              catch (RedisCommandException ex)
+                try
                 {
-                    throw new InvalidOperationException();
+                    try { if (dataCache != null)haircolor = dataCache.Get("haircolorlist") as List<listitem>; }
+                    catch (RedisCommandException ex)
+                    {
+                        // throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        // throw;
+                    }
+                    if (haircolor == null)
+                    {
+                        //context context = new context();
+                        //remafill the ages list from the repositry and exit
+                        haircolor = (from o in context.Repository<lu_haircolor>().Queryable().ToList()
+                                     select new listitem
+                                     {
+                                         id = o.id,
+                                         description = o.description,
+                                         selected = false
+                                     }).ToList();
+
+                        if (dataCache != null) dataCache.Set("haircolorlist", haircolor);
+
+                    }
+                }
+                catch (RedisCommandException ex)
+                {
+                    // throw new InvalidOperationException();
+
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                    // throw;
                 }
-                if (haircolor == null)
-                {
-                    //context context = new context();
-                    //remafill the ages list from the repositry and exit
-                    haircolor = (from o in context.Repository<lu_haircolor>().Queryable().ToList()
-                                 select new listitem
-                                 {
-                                     id = o.id,
-                                     description = o.description,
-                                     selected = false
-                                 }).ToList();
-
-                    if (dataCache != null)dataCache.Set("haircolorlist", haircolor);
-
-                } return haircolor;
+                return haircolor;
             }
             public static List<listitem> gethotfeaturelist(IUnitOfWorkAsync context)
             {
@@ -1132,31 +1241,45 @@ namespace Anewluv.Caching.RedisCaching
                  dataCache = GetCache();  // dataCacheFactory.GetDefaultCache();
 
                 List<listitem> hotfeature = null;
-                try { if (dataCache != null)hotfeature = dataCache.Get("hotfeaturelist") as List<listitem>; }
-              catch (RedisCommandException ex)
+                try
                 {
-                    throw new InvalidOperationException();
+                    try { if (dataCache != null)hotfeature = dataCache.Get("hotfeaturelist") as List<listitem>; }
+                    catch (RedisCommandException ex)
+                    {
+                        // throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        // throw;
+                    }
+                    if (hotfeature == null)
+                    {
+                        //context context = new context();
+                        //remafill the ages list from the repositry and exit
+                        hotfeature = (from o in context.Repository<lu_hotfeature>().Queryable().ToList()
+                                      select new listitem
+                                      {
+                                          id = o.id,
+                                          description = o.description,
+                                          selected = false
+                                      }).ToList();
+
+                        if (dataCache != null) dataCache.Set("hotfeaturelist", hotfeature);
+
+                    }
+                }
+                catch (RedisCommandException ex)
+                {
+                    // throw new InvalidOperationException();
+
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                    // throw;
                 }
-                if (hotfeature == null)
-                {
-                    //context context = new context();
-                    //remafill the ages list from the repositry and exit
-                    hotfeature = (from o in context.Repository<lu_hotfeature>().Queryable().ToList()
-                                  select new listitem
-                                  {
-                                      id = o.id,
-                                      description = o.description,
-                                      selected = false
-                                  }).ToList();
-
-                    if (dataCache != null)dataCache.Set("hotfeaturelist", hotfeature);
-
-                } return hotfeature;
+                return hotfeature;
             }
 
             #endregion
@@ -1169,33 +1292,47 @@ namespace Anewluv.Caching.RedisCaching
                  dataCache = GetCache();  // dataCacheFactory.GetDefaultCache();
 
                 List<listitem> diet = null;
-                try { if (dataCache != null) diet = dataCache.Get("dietlist") as List<listitem>; }
-              catch (RedisCommandException ex)
+                try
                 {
-                    throw new InvalidOperationException();
+                    try { if (dataCache != null) diet = dataCache.Get("dietlist") as List<listitem>; }
+                    catch (RedisCommandException ex)
+                    {
+                        // throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        // throw;
+                    }
+                    if (diet == null)
+                    {
+                        //context context = new context();
+                        //remafill the ages list from the repositry and exit
+                        diet = (from o in context.Repository<lu_diet>().Queryable().ToList()
+                                select new listitem
+                                {
+                                    id = o.id,
+                                    description = o.description,
+                                    selected = false
+                                }).ToList();
+
+
+
+                        if (dataCache != null) dataCache.Set("dietlist", diet);
+
+                    }
+                }
+                catch (RedisCommandException ex)
+                {
+                    // throw new InvalidOperationException();
+
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                    // throw;
                 }
-                if (diet == null)
-                {
-                    //context context = new context();
-                    //remafill the ages list from the repositry and exit
-                    diet = (from o in context.Repository<lu_diet>().Queryable().ToList()
-                            select new listitem
-                            {
-                                id = o.id,
-                                description = o.description,
-                                selected = false
-                            }).ToList();
-
-
-
-                    if (dataCache != null)dataCache.Set("dietlist", diet);
-
-                } return diet;
+                return diet;
             }
             public static List<listitem> getdrinkslist(IUnitOfWorkAsync context)
             {
@@ -1204,31 +1341,46 @@ namespace Anewluv.Caching.RedisCaching
                  dataCache = GetCache();  // dataCacheFactory.GetDefaultCache();
 
                 List<listitem> drinks = null;
-                try { if (dataCache != null) drinks = dataCache.Get("drinkslist") as List<listitem>; }
-              catch (RedisCommandException ex)
+                try
                 {
-                    throw new InvalidOperationException();
+                    try { if (dataCache != null) drinks = dataCache.Get("drinkslist") as List<listitem>; }
+                    catch (RedisCommandException ex)
+                    {
+                        // throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        // throw;
+                    }
+                    if (drinks == null)
+                    {
+                        //context context = new context();
+                        //remafill the ages list from the repositry and exit
+                        drinks = (from o in context.Repository<lu_drinks>().Queryable().ToList()
+                                  select new listitem
+                                  {
+                                      id = o.id,
+                                      description = o.description,
+                                      selected = false
+                                  }).ToList();
+
+                        if (dataCache != null) dataCache.Set("drinkslist", drinks);
+
+                    }
+                }
+                catch (RedisCommandException ex)
+                {
+                    // throw new InvalidOperationException();
+
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                    // throw;
                 }
-                if (drinks == null)
-                {
-                    //context context = new context();
-                    //remafill the ages list from the repositry and exit
-                    drinks = (from o in context.Repository<lu_drinks>().Queryable().ToList()
-                              select new listitem
-                              {
-                                  id = o.id,
-                                  description = o.description,
-                                  selected = false
-                              }).ToList();
-
-                    if (dataCache != null)dataCache.Set("drinkslist", drinks);
-
-                } return drinks;
+                
+                return drinks;
             }
             public static List<listitem> getexerciselist(IUnitOfWorkAsync context)
             {
@@ -1237,31 +1389,46 @@ namespace Anewluv.Caching.RedisCaching
                  dataCache = GetCache();  // dataCacheFactory.GetDefaultCache();
 
                 List<listitem> exercise = null;
-                try { if (dataCache != null) exercise = dataCache.Get("exerciselist") as List<listitem>; }
-              catch (RedisCommandException ex)
+                try
                 {
-                    throw new InvalidOperationException();
+                    try { if (dataCache != null) exercise = dataCache.Get("exerciselist") as List<listitem>; }
+                    catch (RedisCommandException ex)
+                    {
+                        // throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        // throw;
+                    }
+                    if (exercise == null)
+                    {
+                        //context context = new context();
+                        //remafill the ages list from the repositry and exit
+                        exercise = (from o in context.Repository<lu_exercise>().Queryable().ToList()
+                                    select new listitem
+                                    {
+                                        id = o.id,
+                                        description = o.description,
+                                        selected = false
+                                    }).ToList();
+
+                        if (dataCache != null) dataCache.Set("exerciselist", exercise);
+
+                    }
+                }
+                catch (RedisCommandException ex)
+                {
+                    // throw new InvalidOperationException();
+
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                    // throw;
                 }
-                if (exercise == null)
-                {
-                    //context context = new context();
-                    //remafill the ages list from the repositry and exit
-                    exercise = (from o in context.Repository<lu_exercise>().Queryable().ToList()
-                                select new listitem
-                                {
-                                    id = o.id,
-                                    description = o.description,
-                                    selected = false
-                                }).ToList();
-
-                    if (dataCache != null)dataCache.Set("exerciselist", exercise);
-
-                } return exercise;
+                
+                return exercise;
             }
             public static List<listitem> gethobbylist(IUnitOfWorkAsync context)
             {
@@ -1270,38 +1437,53 @@ namespace Anewluv.Caching.RedisCaching
                  dataCache = GetCache();  // dataCacheFactory.GetDefaultCache();
 
                 List<listitem> hobby = null;
-                try { if (dataCache != null) hobby = dataCache.Get("hobbylist") as List<listitem>; }
-              catch (RedisCommandException ex)
+                try
                 {
-                    throw new InvalidOperationException();
+                    try { if (dataCache != null) hobby = dataCache.Get("hobbylist") as List<listitem>; }
+                    catch (RedisCommandException ex)
+                    {
+                        // throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        // throw;
+                    }
+                    if (hobby == null)
+                    {
+                        //context context = new context();
+                        //remafill the ages list from the repositry and exit
+                        hobby = (from o in context.Repository<lu_hobby>().Queryable().ToList()
+                                 select new listitem
+                                 {
+                                     id = o.id,
+                                     description = o.description,
+                                     selected = false
+                                 }).ToList();//.OrderBy(p=>p.id);
+
+                        //insert value for ANY
+                        var anytime = new listitem { id = 0, description = "Any", selected = false };
+
+                        //put it at top
+                        hobby.Insert(0, anytime);
+
+
+                        if (dataCache != null) dataCache.Set("hobbylist", hobby);
+
+                    }
+                }
+                catch (RedisCommandException ex)
+                {
+                    // throw new InvalidOperationException();
+
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                    // throw;
                 }
-                if (hobby == null)
-                {
-                    //context context = new context();
-                    //remafill the ages list from the repositry and exit
-                    hobby = (from o in context.Repository<lu_hobby>().Queryable().ToList()
-                             select new listitem
-                             {
-                                 id = o.id,
-                                 description = o.description,
-                                 selected = false
-                             }).ToList();//.OrderBy(p=>p.id);
-
-                    //insert value for ANY
-                    var anytime = new listitem { id = 0, description = "Any", selected = false };
-
-                    //put it at top
-                    hobby.Insert(0, anytime);
-
-
-                    if (dataCache != null)dataCache.Set("hobbylist", hobby);
-
-                } return hobby;
+                
+                return hobby;
             }
             public static List<listitem> gethumorlist(IUnitOfWorkAsync context)
             {
@@ -1310,31 +1492,45 @@ namespace Anewluv.Caching.RedisCaching
                  dataCache = GetCache();  // dataCacheFactory.GetDefaultCache();
 
                 List<listitem> humor = null;
-                try { if (dataCache != null) humor = dataCache.Get("humorlist") as List<listitem>; }
-              catch (RedisCommandException ex)
+                try
                 {
-                    throw new InvalidOperationException();
+                    try { if (dataCache != null) humor = dataCache.Get("humorlist") as List<listitem>; }
+                    catch (RedisCommandException ex)
+                    {
+                        // throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        // throw;
+                    }
+                    if (humor == null)
+                    {
+                        //context context = new context();
+                        //remafill the ages list from the repositry and exit
+                        humor = (from o in context.Repository<lu_humor>().Queryable().ToList()
+                                 select new listitem
+                                 {
+                                     id = o.id,
+                                     description = o.description,
+                                     selected = false
+                                 }).ToList();
+
+                        if (dataCache != null) dataCache.Set("humorlist", humor);
+
+                    }
+                }
+                catch (RedisCommandException ex)
+                {
+                    // throw new InvalidOperationException();
+
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                    // throw;
                 }
-                if (humor == null)
-                {
-                    //context context = new context();
-                    //remafill the ages list from the repositry and exit
-                    humor = (from o in context.Repository<lu_humor>().Queryable().ToList()
-                             select new listitem
-                             {
-                                 id = o.id,
-                                 description = o.description,
-                                 selected = false
-                             }).ToList();
-
-                    if (dataCache != null)dataCache.Set("humorlist", humor);
-
-                } return humor;
+                return humor;
             }
             public static List<listitem> getpoliticalviewlist(IUnitOfWorkAsync context)
             {
@@ -1343,32 +1539,46 @@ namespace Anewluv.Caching.RedisCaching
                  dataCache = GetCache();  // dataCacheFactory.GetDefaultCache();
 
                 List<listitem> politicalview = null;
-                try { if (dataCache != null) politicalview = dataCache.Get("politicalviewlist") as List<listitem>; }
-              catch (RedisCommandException ex)
+                try
                 {
-                    throw new InvalidOperationException();
+                    try { if (dataCache != null) politicalview = dataCache.Get("politicalviewlist") as List<listitem>; }
+                    catch (RedisCommandException ex)
+                    {
+                        // throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        // throw;
+                    }
+                    if (politicalview == null)
+                    {
+                        //context context = new context();
+                        //remafill the ages list from the repositry and exit
+                        politicalview = (from o in context.Repository<lu_politicalview>().Queryable().ToList()
+                                         select new listitem
+                                         {
+                                             id = o.id,
+                                             description = o.description,
+                                             selected = false
+                                         }).ToList();
+
+
+                        if (dataCache != null) dataCache.Set("politicalviewlist", politicalview);
+
+                    }
+                }
+                catch (RedisCommandException ex)
+                {
+                    // throw new InvalidOperationException();
+
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                    // throw;
                 }
-                if (politicalview == null)
-                {
-                    //context context = new context();
-                    //remafill the ages list from the repositry and exit
-                    politicalview = (from o in context.Repository<lu_politicalview>().Queryable().ToList()
-                                     select new listitem
-                                     {
-                                         id = o.id,
-                                         description = o.description,
-                                         selected = false
-                                     }).ToList();
-
-
-                    if (dataCache != null)dataCache.Set("politicalviewlist", politicalview);
-
-                } return politicalview;
+                return politicalview;
             }
             public static List<listitem> getreligionlist(IUnitOfWorkAsync context)
             {
@@ -1377,32 +1587,46 @@ namespace Anewluv.Caching.RedisCaching
                  dataCache = GetCache();  // dataCacheFactory.GetDefaultCache();
 
                 List<listitem> religion = null;
-                try { if (dataCache != null)  religion = dataCache.Get("religionlist") as List<listitem>; }
-              catch (RedisCommandException ex)
+                try
                 {
-                    throw new InvalidOperationException();
+                    try { if (dataCache != null)  religion = dataCache.Get("religionlist") as List<listitem>; }
+                    catch (RedisCommandException ex)
+                    {
+                        // throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        // throw;
+                    }
+                    if (religion == null)
+                    {
+                        //context context = new context();
+                        //remafill the ages list from the repositry and exit
+                        religion = (from o in context.Repository<lu_religion>().Queryable().ToList()
+                                    select new listitem
+                                    {
+                                        id = o.id,
+                                        description = o.description,
+                                        selected = false
+                                    }).ToList();
+
+
+                        if (dataCache != null) dataCache.Set("religionlist", religion);
+
+                    }
+                }
+                catch (RedisCommandException ex)
+                {
+                    // throw new InvalidOperationException();
+
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                    // throw;
                 }
-                if (religion == null)
-                {
-                    //context context = new context();
-                    //remafill the ages list from the repositry and exit
-                    religion = (from o in context.Repository<lu_religion>().Queryable().ToList()
-                                select new listitem
-                                {
-                                    id = o.id,
-                                    description = o.description,
-                                    selected = false
-                                }).ToList();
-
-
-                    if (dataCache != null)dataCache.Set("religionlist", religion);
-
-                } return religion;
+                return religion;
             }
             public static List<listitem> getreligiousattendancelist(IUnitOfWorkAsync context)
             {
@@ -1411,32 +1635,46 @@ namespace Anewluv.Caching.RedisCaching
                  dataCache = GetCache();  // dataCacheFactory.GetDefaultCache();
 
                 List<listitem> religiousattendance = null;
-                try { if (dataCache != null) religiousattendance = dataCache.Get("religiousattendancelist") as List<listitem>; }
-              catch (RedisCommandException ex)
+                try
                 {
-                    throw new InvalidOperationException();
+                    try { if (dataCache != null) religiousattendance = dataCache.Get("religiousattendancelist") as List<listitem>; }
+                    catch (RedisCommandException ex)
+                    {
+                        // throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        // throw;
+                    }
+                    if (religiousattendance == null)
+                    {
+                        //context context = new context();
+                        //remafill the ages list from the repositry and exit
+                        religiousattendance = (from o in context.Repository<lu_religiousattendance>().Queryable().ToList()
+                                               select new listitem
+                                               {
+                                                   id = o.id,
+                                                   description = o.description,
+                                                   selected = false
+                                               }).ToList();
+
+
+                        if (dataCache != null) dataCache.Set("religiousattendancelist", religiousattendance);
+
+                    }
+                }
+                catch (RedisCommandException ex)
+                {
+                    // throw new InvalidOperationException();
+
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                    // throw;
                 }
-                if (religiousattendance == null)
-                {
-                    //context context = new context();
-                    //remafill the ages list from the repositry and exit
-                    religiousattendance = (from o in context.Repository<lu_religiousattendance>().Queryable().ToList()
-                                           select new listitem
-                                           {
-                                               id = o.id,
-                                               description = o.description,
-                                               selected = false
-                                           }).ToList();
-
-
-                    if (dataCache != null)dataCache.Set("religiousattendancelist", religiousattendance);
-
-                } return religiousattendance;
+                return religiousattendance;
             }
             public static List<listitem> getsignlist(IUnitOfWorkAsync context)
             {
@@ -1445,31 +1683,45 @@ namespace Anewluv.Caching.RedisCaching
                  dataCache = GetCache();  // dataCacheFactory.GetDefaultCache();
 
                 List<listitem> sign = null;
-                try { if (dataCache != null) sign = dataCache.Get("signlist") as List<listitem>; }
-              catch (RedisCommandException ex)
+                try
                 {
-                    throw new InvalidOperationException();
+                    try { if (dataCache != null) sign = dataCache.Get("signlist") as List<listitem>; }
+                    catch (RedisCommandException ex)
+                    {
+                        // throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        // throw;
+                    }
+                    if (sign == null)
+                    {
+                        //context context = new context();
+                        //remafill the ages list from the repositry and exit
+                        sign = (from o in context.Repository<lu_sign>().Queryable().ToList()
+                                select new listitem
+                                {
+                                    id = o.id,
+                                    description = o.description,
+                                    selected = false
+                                }).ToList();
+
+                        if (dataCache != null) dataCache.Set("signlist", sign);
+
+                    }
+                }
+                catch (RedisCommandException ex)
+                {
+                    // throw new InvalidOperationException();
+
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                    // throw;
                 }
-                if (sign == null)
-                {
-                    //context context = new context();
-                    //remafill the ages list from the repositry and exit
-                    sign = (from o in context.Repository<lu_sign>().Queryable().ToList()
-                            select new listitem
-                            {
-                                id = o.id,
-                                description = o.description,
-                                selected = false
-                            }).ToList();
-
-                    if (dataCache != null)dataCache.Set("signlist", sign);
-
-                } return sign;
+                return sign;
             }
             public static List<listitem> getsmokeslist(IUnitOfWorkAsync context)
             {
@@ -1478,31 +1730,45 @@ namespace Anewluv.Caching.RedisCaching
                  dataCache = GetCache();  // dataCacheFactory.GetDefaultCache();
 
                 List<listitem> smokes = null;
-                try { if (dataCache != null)  smokes = dataCache.Get("smokeslist") as List<listitem>; }
-              catch (RedisCommandException ex)
+                try
                 {
-                    throw new InvalidOperationException();
+                    try { if (dataCache != null)  smokes = dataCache.Get("smokeslist") as List<listitem>; }
+                    catch (RedisCommandException ex)
+                    {
+                        // throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        // throw;
+                    }
+                    if (smokes == null)
+                    {
+                        //context context = new context();
+                        //remafill the ages list from the repositry and exit
+                        smokes = (from o in context.Repository<lu_smokes>().Queryable().ToList()
+                                  select new listitem
+                                  {
+                                      id = o.id,
+                                      description = o.description,
+                                      selected = false
+                                  }).ToList();
+
+                        if (dataCache != null) dataCache.Set("smokeslist", smokes);
+
+                    }
+                }
+                catch (RedisCommandException ex)
+                {
+                    // throw new InvalidOperationException();
+
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                    // throw;
                 }
-                if (smokes == null)
-                {
-                    //context context = new context();
-                    //remafill the ages list from the repositry and exit
-                    smokes = (from o in context.Repository<lu_smokes>().Queryable().ToList()
-                              select new listitem
-                              {
-                                  id = o.id,
-                                  description = o.description,
-                                  selected = false
-                              }).ToList();
-
-                    if (dataCache != null)dataCache.Set("smokeslist", smokes);
-
-                } return smokes;
+                return smokes;
             }
 
             #endregion
@@ -1516,31 +1782,45 @@ namespace Anewluv.Caching.RedisCaching
                  dataCache = GetCache();  // dataCacheFactory.GetDefaultCache();
 
                 List<listitem> educationlevel = null;
-                try { if (dataCache != null) educationlevel = dataCache.Get("educationlevellist") as List<listitem>; }
-              catch (RedisCommandException ex)
+                try
                 {
-                    throw new InvalidOperationException();
+                    try { if (dataCache != null) educationlevel = dataCache.Get("educationlevellist") as List<listitem>; }
+                    catch (RedisCommandException ex)
+                    {
+                        // throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        // throw;
+                    }
+                    if (educationlevel == null)
+                    {
+                        //context context = new context();
+                        //remafill the ages list from the repositry and exit
+                        educationlevel = (from o in context.Repository<lu_educationlevel>().Queryable().ToList()
+                                          select new listitem
+                                          {
+                                              id = o.id,
+                                              description = o.description,
+                                              selected = false
+                                          }).ToList();
+
+                        if (dataCache != null) dataCache.Set("educationlevellist", educationlevel);
+
+                    }
+                }
+                catch (RedisCommandException ex)
+                {
+                    // throw new InvalidOperationException();
+
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                    // throw;
                 }
-                if (educationlevel == null)
-                {
-                    //context context = new context();
-                    //remafill the ages list from the repositry and exit
-                    educationlevel = (from o in context.Repository<lu_educationlevel>().Queryable().ToList()
-                                      select new listitem
-                                      {
-                                          id = o.id,
-                                          description = o.description,
-                                          selected = false
-                                      }).ToList();
-
-                    if (dataCache != null)dataCache.Set("educationlevellist", educationlevel);
-
-                } return educationlevel;
+                return educationlevel;
             }
             public static List<listitem> getemploymentstatuslist(IUnitOfWorkAsync context)
             {
@@ -1549,31 +1829,46 @@ namespace Anewluv.Caching.RedisCaching
                  dataCache = GetCache();  // dataCacheFactory.GetDefaultCache();
 
                 List<listitem> employmentstatus = null;
-                try { if (dataCache != null) employmentstatus = dataCache.Get("employmentstatuslist") as List<listitem>; }
-              catch (RedisCommandException ex)
+                try
                 {
-                    throw new InvalidOperationException();
+                    try { if (dataCache != null) employmentstatus = dataCache.Get("employmentstatuslist") as List<listitem>; }
+                    catch (RedisCommandException ex)
+                    {
+                        // throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        // throw;
+                    }
+                    if (employmentstatus == null)
+                    {
+                        //context context = new context();
+                        //remafill the ages list from the repositry and exit
+                        employmentstatus = (from o in context.Repository<lu_employmentstatus>().Queryable().ToList()
+                                            select new listitem
+                                            {
+                                                id = o.id,
+                                                description = o.description,
+                                                selected = false
+                                            }).ToList();
+
+                        if (dataCache != null) dataCache.Set("employmentstatuslist", employmentstatus);
+
+                    }
+                }
+                catch (RedisCommandException ex)
+                {
+                    // throw new InvalidOperationException();
+
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                    // throw;
                 }
-                if (employmentstatus == null)
-                {
-                    //context context = new context();
-                    //remafill the ages list from the repositry and exit
-                    employmentstatus = (from o in context.Repository<lu_employmentstatus>().Queryable().ToList()
-                                        select new listitem
-                                        {
-                                            id = o.id,
-                                            description = o.description,
-                                            selected = false
-                                        }).ToList();
-
-                    if (dataCache != null)dataCache.Set("employmentstatuslist", employmentstatus);
-
-                } return employmentstatus;
+                
+                return employmentstatus;
             }
             public static List<listitem> gethavekidslist(IUnitOfWorkAsync context)
             {
@@ -1582,32 +1877,46 @@ namespace Anewluv.Caching.RedisCaching
                  dataCache = GetCache();  // dataCacheFactory.GetDefaultCache();
 
                 List<listitem> havekids = null;
-                try { if (dataCache != null) havekids = dataCache.Get("havekidslist") as List<listitem>; }
-              catch (RedisCommandException ex)
+                try
                 {
-                    throw new InvalidOperationException();
+                    try { if (dataCache != null) havekids = dataCache.Get("havekidslist") as List<listitem>; }
+                    catch (RedisCommandException ex)
+                    {
+                        // throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        // throw;
+                    }
+                    if (havekids == null)
+                    {
+                        //context context = new context();
+                        //remafill the ages list from the repositry and exit
+                        havekids =
+                            (from o in context.Repository<lu_havekids>().Queryable().ToList()
+                             select new listitem
+                             {
+                                 id = o.id,
+                                 description = o.description,
+                                 selected = false
+                             }).ToList();
+
+                        if (dataCache != null) dataCache.Set("havekidslist", havekids);
+
+                    }
+                }
+                catch (RedisCommandException ex)
+                {
+                    // throw new InvalidOperationException();
+
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                    // throw;
                 }
-                if (havekids == null)
-                {
-                    //context context = new context();
-                    //remafill the ages list from the repositry and exit
-                    havekids =
-                        (from o in context.Repository<lu_havekids>().Queryable().ToList()
-                         select new listitem
-                         {
-                             id = o.id,
-                             description = o.description,
-                             selected = false
-                         }).ToList();
-
-                    if (dataCache != null)dataCache.Set("havekidslist", havekids);
-
-                } return havekids;
+                return havekids;
             }
             public static List<listitem> getincomelevellist(IUnitOfWorkAsync context)
             {
@@ -1616,31 +1925,45 @@ namespace Anewluv.Caching.RedisCaching
                  dataCache = GetCache();  // dataCacheFactory.GetDefaultCache();
 
                 List<listitem> incomelevel = null;
-                try { if (dataCache != null) incomelevel = dataCache.Get("incomelevellist") as List<listitem>; }
-              catch (RedisCommandException ex)
+                try
                 {
-                    throw new InvalidOperationException();
+                    try { if (dataCache != null) incomelevel = dataCache.Get("incomelevellist") as List<listitem>; }
+                    catch (RedisCommandException ex)
+                    {
+                        // throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        // throw;
+                    }
+                    if (incomelevel == null)
+                    {
+                        //context context = new context();
+                        //remafill the ages list from the repositry and exit
+                        incomelevel = (from o in context.Repository<lu_incomelevel>().Queryable().ToList()
+                                       select new listitem
+                                       {
+                                           id = o.id,
+                                           description = o.description,
+                                           selected = false
+                                       }).ToList();
+
+                        if (dataCache != null) dataCache.Set("incomelevellist", incomelevel);
+
+                    }
+                }
+                catch (RedisCommandException ex)
+                {
+                    // throw new InvalidOperationException();
+
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                    // throw;
                 }
-                if (incomelevel == null)
-                {
-                    //context context = new context();
-                    //remafill the ages list from the repositry and exit
-                    incomelevel = (from o in context.Repository<lu_incomelevel>().Queryable().ToList()
-                                   select new listitem
-                                   {
-                                       id = o.id,
-                                       description = o.description,
-                                       selected = false
-                                   }).ToList();
-
-                    if (dataCache != null)dataCache.Set("incomelevellist", incomelevel);
-
-                } return incomelevel;
+                return incomelevel;
             }
             public static List<listitem> getlivingsituationlist(IUnitOfWorkAsync context)
             {
@@ -1649,31 +1972,45 @@ namespace Anewluv.Caching.RedisCaching
                  dataCache = GetCache();  // dataCacheFactory.GetDefaultCache();
 
                 List<listitem> livingsituation = null;
-                try { if (dataCache != null) livingsituation = dataCache.Get("livingsituationlist") as List<listitem>; }
-              catch (RedisCommandException ex)
+                try
                 {
-                    throw new InvalidOperationException();
+                    try { if (dataCache != null) livingsituation = dataCache.Get("livingsituationlist") as List<listitem>; }
+                    catch (RedisCommandException ex)
+                    {
+                        // throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        // throw;
+                    }
+                    if (livingsituation == null)
+                    {
+                        //context context = new context();
+                        //remafill the ages list from the repositry and exit
+                        livingsituation = (from o in context.Repository<lu_livingsituation>().Queryable().ToList()
+                                           select new listitem
+                                           {
+                                               id = o.id,
+                                               description = o.description,
+                                               selected = false
+                                           }).ToList();
+
+                        if (dataCache != null) dataCache.Set("livingsituationlist", livingsituation);
+
+                    }
+                }
+                catch (RedisCommandException ex)
+                {
+                    // throw new InvalidOperationException();
+
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                    // throw;
                 }
-                if (livingsituation == null)
-                {
-                    //context context = new context();
-                    //remafill the ages list from the repositry and exit
-                    livingsituation = (from o in context.Repository<lu_livingsituation>().Queryable().ToList()
-                                       select new listitem
-                                       {
-                                           id = o.id,
-                                           description = o.description,
-                                           selected = false
-                                       }).ToList();
-
-                    if (dataCache != null)dataCache.Set("livingsituationlist", livingsituation);
-
-                } return livingsituation;
+                return livingsituation;
             }
             public static List<listitem> getlookingforlist(IUnitOfWorkAsync context)
             {
@@ -1682,32 +2019,46 @@ namespace Anewluv.Caching.RedisCaching
                  dataCache = GetCache();  // dataCacheFactory.GetDefaultCache();
 
                 List<listitem> lookingfor = null;
-                try { if (dataCache != null) lookingfor = dataCache.Get("lookingforlist") as List<listitem>; }
-              catch (RedisCommandException ex)
+                try
                 {
-                    throw new InvalidOperationException();
+                    try { if (dataCache != null) lookingfor = dataCache.Get("lookingforlist") as List<listitem>; }
+                    catch (RedisCommandException ex)
+                    {
+                        // throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        // throw;
+                    }
+                    if (lookingfor == null)
+                    {
+                        //context context = new context();
+                        //remafill the ages list from the repositry and exit
+                        lookingfor = (from o in context.Repository<lu_lookingfor>().Queryable().ToList()
+                                      select new listitem
+                                      {
+                                          id = o.id,
+                                          description = o.description,
+                                          selected = false
+                                      }).ToList();
+
+
+                        if (dataCache != null) dataCache.Set("lookingforlist", lookingfor);
+
+                    }
+                }
+                catch (RedisCommandException ex)
+                {
+                    // throw new InvalidOperationException();
+
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                    // throw;
                 }
-                if (lookingfor == null)
-                {
-                    //context context = new context();
-                    //remafill the ages list from the repositry and exit
-                    lookingfor = (from o in context.Repository<lu_lookingfor>().Queryable().ToList()
-                                  select new listitem
-                                  {
-                                      id = o.id,
-                                      description = o.description,
-                                      selected = false
-                                  }).ToList();
-
-
-                    if (dataCache != null)dataCache.Set("lookingforlist", lookingfor);
-
-                } return lookingfor;
+                return lookingfor;
             }
             public static List<listitem> getmaritalstatuslist(IUnitOfWorkAsync context)
             {
@@ -1716,32 +2067,46 @@ namespace Anewluv.Caching.RedisCaching
                  dataCache = GetCache();  // dataCacheFactory.GetDefaultCache();
 
                 List<listitem> maritalstatus = null;
-                try { if (dataCache != null) maritalstatus = dataCache.Get("maritalstatuslist") as List<listitem>; }
-              catch (RedisCommandException ex)
+                try
                 {
-                    throw new InvalidOperationException();
+                    try { if (dataCache != null) maritalstatus = dataCache.Get("maritalstatuslist") as List<listitem>; }
+                    catch (RedisCommandException ex)
+                    {
+                        // throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        // throw;
+                    }
+                    if (maritalstatus == null)
+                    {
+                        //context context = new context();
+                        //remafill the ages list from the repositry and exit
+                        maritalstatus = (from o in context.Repository<lu_maritalstatus>().Queryable().ToList()
+                                         select new listitem
+                                         {
+                                             id = o.id,
+                                             description = o.description,
+                                             selected = false
+                                         }).ToList();
+
+
+                        if (dataCache != null) dataCache.Set("maritalstatuslist", maritalstatus);
+
+                    }
+                }
+                catch (RedisCommandException ex)
+                {
+                    // throw new InvalidOperationException();
+
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                    // throw;
                 }
-                if (maritalstatus == null)
-                {
-                    //context context = new context();
-                    //remafill the ages list from the repositry and exit
-                    maritalstatus = (from o in context.Repository<lu_maritalstatus>().Queryable().ToList()
-                                     select new listitem
-                                     {
-                                         id = o.id,
-                                         description = o.description,
-                                         selected = false
-                                     }).ToList();
-
-
-                    if (dataCache != null)dataCache.Set("maritalstatuslist", maritalstatus);
-
-                } return maritalstatus;
+                return maritalstatus;
             }
             public static List<listitem> getprofessionlist(IUnitOfWorkAsync context)
             {
@@ -1750,31 +2115,45 @@ namespace Anewluv.Caching.RedisCaching
                  dataCache = GetCache();  // dataCacheFactory.GetDefaultCache();
 
                 List<listitem> profession = null;
-                try { if (dataCache != null) profession = dataCache.Get("professionlist") as List<listitem>; }
-              catch (RedisCommandException ex)
+                try
                 {
-                    throw new InvalidOperationException();
+                    try { if (dataCache != null) profession = dataCache.Get("professionlist") as List<listitem>; }
+                    catch (RedisCommandException ex)
+                    {
+                        // throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        // throw;
+                    }
+                    if (profession == null)
+                    {
+                        //context context = new context();
+                        //remafill the ages list from the repositry and exit
+                        profession = (from o in context.Repository<lu_profession>().Queryable().ToList()
+                                      select new listitem
+                                      {
+                                          id = o.id,
+                                          description = o.description,
+                                          selected = false
+                                      }).ToList();
+
+                        if (dataCache != null) dataCache.Set("professionlist", profession);
+
+                    }
+                }
+                catch (RedisCommandException ex)
+                {
+                    // throw new InvalidOperationException();
+
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                    // throw;
                 }
-                if (profession == null)
-                {
-                    //context context = new context();
-                    //remafill the ages list from the repositry and exit
-                    profession = (from o in context.Repository<lu_profession>().Queryable().ToList()
-                                  select new listitem
-                                  {
-                                      id = o.id,
-                                      description = o.description,
-                                      selected = false
-                                  }).ToList();
-
-                    if (dataCache != null)dataCache.Set("professionlist", profession);
-
-                } return profession;
+                return profession;
             }
             public static List<listitem> getwantskidslist(IUnitOfWorkAsync context)
             {
@@ -1783,30 +2162,44 @@ namespace Anewluv.Caching.RedisCaching
                  dataCache = GetCache();  // dataCacheFactory.GetDefaultCache();
 
                 List<listitem> wantskids = null;
-                try { if (dataCache != null) wantskids = dataCache.Get("wantskidslist") as List<listitem>; }
-              catch (RedisCommandException ex)
+                try
                 {
-                    throw new InvalidOperationException();
+                    try { if (dataCache != null) wantskids = dataCache.Get("wantskidslist") as List<listitem>; }
+                    catch (RedisCommandException ex)
+                    {
+                        // throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        // throw;
+                    }
+                    if (wantskids == null)
+                    {
+                        //context context = new context();
+                        //remafill the ages list from the repositry and exit
+                        wantskids = (from o in context.Repository<lu_wantskids>().Queryable().ToList()
+                                     select new listitem
+                                     {
+                                         id = o.id,
+                                         description = o.description,
+                                         selected = false
+                                     }).ToList();
+
+
+                    }
+                }
+                catch (RedisCommandException ex)
+                {
+                    // throw new InvalidOperationException();
+
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                    // throw;
                 }
-                if (wantskids == null)
-                {
-                    //context context = new context();
-                    //remafill the ages list from the repositry and exit
-                    wantskids = (from o in context.Repository<lu_wantskids>().Queryable().ToList()
-                                 select new listitem
-                                 {
-                                     id = o.id,
-                                     description = o.description,
-                                     selected = false
-                                 }).ToList();
-
-
-                } return wantskids;
+                return wantskids;
             }
 
             #endregion
@@ -1830,12 +2223,12 @@ namespace Anewluv.Caching.RedisCaching
                     try { if (dataCache != null) countrys = dataCache.Get("countrieslist") as List<country>; }
                   catch (RedisCommandException ex)
                     {
-                        throw new InvalidOperationException();
+                       // throw new InvalidOperationException();
                     }
                     catch (Exception ex)
                     {
                         //put cleanup code here
-                        throw;
+                       // throw;
                     }
                     if (countrys.Count() == 0)
                     {
@@ -1869,18 +2262,19 @@ namespace Anewluv.Caching.RedisCaching
                         if (dataCache != null)
                            dataCache.Set("countrieslist", countrys);
 
-                    } return countrys;
+                    } 
                 }
               catch (RedisCommandException ex)
                 {
-                    throw new InvalidOperationException();
+                   // throw new InvalidOperationException();
 
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                   // throw;
                 }
+                return countrys;
             }
 
             public static List<countrypostalcode> getcountryandpostalcodestatuslist(IGeoDataStoredProcedures _storedProcedures)
@@ -1897,12 +2291,12 @@ namespace Anewluv.Caching.RedisCaching
                     try { if (dataCache != null) countryandpostalcodes = dataCache.Get("countryandpostalcodestatuslist") as List<countrypostalcode>; }
                   catch (RedisCommandException ex)
                     {
-                        throw new InvalidOperationException();
+                       // throw new InvalidOperationException();
                     }
                     catch (Exception ex)
                     {
                         //put cleanup code here
-                        throw;
+                       // throw;
                     }
                     if (countryandpostalcodes == null)
                     {
@@ -1937,18 +2331,20 @@ namespace Anewluv.Caching.RedisCaching
                         if (dataCache != null)
                            dataCache.Set("countryandpostalcodestatuslist", countryandpostalcodes);
 
-                    } return countryandpostalcodes;
+                    } ;
                 }
               catch (RedisCommandException ex)
                 {
-                    throw new InvalidOperationException();
+                   // throw new InvalidOperationException();
 
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw;
+                   // throw;
                 }
+
+                return countryandpostalcodes;
             }
 
             #endregion
@@ -1996,7 +2392,7 @@ namespace Anewluv.Caching.RedisCaching
               catch (RedisCommandException ex)
                 {
                     return false;
-                    throw new InvalidOperationException();
+                   // throw new InvalidOperationException();
 
                 }
 
@@ -2019,7 +2415,7 @@ namespace Anewluv.Caching.RedisCaching
             //    try { if (dataCache != null) visibilitymailsettings = dataCache.Get("visibilitymailsettingslist") as List<visiblitysetting>; }
             // catch (RedisCommandException ex)
             //    {
-            //        throw new InvalidOperationException();
+            //       // throw new InvalidOperationException();
             //    }
             //    if (visibilitymailsettings == null)
             //    {
@@ -2043,7 +2439,7 @@ namespace Anewluv.Caching.RedisCaching
             //    try { if (dataCache != null) VisibilityStealthSettings = dataCache.Get("VisibilityStealthSettingsList") as List<SelectListItem>; }
             // catch (RedisCommandException ex)
             //    {
-            //        throw new InvalidOperationException();
+            //       // throw new InvalidOperationException();
             //    }
             //    if (VisibilityStealthSettings == null)
             //    {

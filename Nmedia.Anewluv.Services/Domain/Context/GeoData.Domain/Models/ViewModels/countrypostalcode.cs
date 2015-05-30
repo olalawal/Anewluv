@@ -7,6 +7,7 @@ using System.Runtime.Serialization;
 namespace GeoData.Domain.Models.ViewModels
 {
     [DataContract]
+    [Serializable]
     public class countrypostalcode
     {
 

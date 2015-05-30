@@ -18,6 +18,7 @@ using Repository.Pattern.UnitOfWork;
 using GeoData.Domain.Models;
 using Nmedia.Infrastructure.DependencyInjection;
 using Nmedia.Infrastructure.DTOs;
+using Anewluv.Caching.RedisCaching;
 
 namespace Anewluv.Services.Common
 {
@@ -85,7 +86,7 @@ namespace Anewluv.Services.Common
                                     return photoformatlist;
                 
                     #else
-                      return CachingFactory.SharedObjectHelper.getphotoformatlist(_unitOfWorkAsync);
+                      return RedisCacheFactory.SharedObjectHelper.getphotoformatlist(_unitOfWorkAsync);
                 // return temp;
                    #endif
                    }               
@@ -125,7 +126,7 @@ namespace Anewluv.Services.Common
                 return photoapprovalstatuslist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getphotoapprovalstatuslist(_unitOfWorkAsync);
+                    return RedisCacheFactory.SharedObjectHelper.getphotoapprovalstatuslist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -170,7 +171,7 @@ namespace Anewluv.Services.Common
                 return photorejectionreasonlist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getphotorejectionreasonlist(_unitOfWorkAsync);
+                    return RedisCacheFactory.SharedObjectHelper.getphotorejectionreasonlist(_unitOfWorkAsync);
                     // return temp;
 #endif
 
@@ -216,7 +217,7 @@ namespace Anewluv.Services.Common
                 return photostatuslist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getphotostatuslist(_unitOfWorkAsync);
+                    return RedisCacheFactory.SharedObjectHelper.getphotostatuslist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -258,7 +259,7 @@ namespace Anewluv.Services.Common
                 return photoimagetypelist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getphotoimagetypelist(_unitOfWorkAsync);
+                    return RedisCacheFactory.SharedObjectHelper.getphotoimagetypelist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -300,7 +301,7 @@ namespace Anewluv.Services.Common
                 return photoimagetypelist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getphotosecurityleveltypelist(_unitOfWorkAsync);
+                    return RedisCacheFactory.SharedObjectHelper.getphotosecurityleveltypelist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -346,7 +347,7 @@ namespace Anewluv.Services.Common
                 return photostatusdescriptionlist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getphotostatusdescriptionlist(_unitOfWorkAsync);
+                    return RedisCacheFactory.SharedObjectHelper.getphotostatusdescriptionlist(_unitOfWorkAsync);
                     // return temp;
 #endif
 
@@ -393,7 +394,7 @@ namespace Anewluv.Services.Common
                 return abusetypelist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getabusetypelist(_unitOfWorkAsync);
+                    return RedisCacheFactory.SharedObjectHelper.getabusetypelist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -437,7 +438,7 @@ namespace Anewluv.Services.Common
                 return getphotoImagersizerformatlist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getphotoImagersizerformatlist(_unitOfWorkAsync);
+                    return RedisCacheFactory.SharedObjectHelper.getphotoImagersizerformatlist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -482,7 +483,7 @@ namespace Anewluv.Services.Common
                 return photoimagetypelist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getprofilestatuslist(_unitOfWorkAsync);
+                    return RedisCacheFactory.SharedObjectHelper.getprofilestatuslist(_unitOfWorkAsync);
                     // return temp;
 #endif
 
@@ -530,7 +531,7 @@ namespace Anewluv.Services.Common
                 return photoimagetypelist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getrolelist(_unitOfWorkAsync);
+                    return RedisCacheFactory.SharedObjectHelper.getrolelist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -577,7 +578,7 @@ namespace Anewluv.Services.Common
                 return photoimagetypelist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getsecurityleveltypelist(_unitOfWorkAsync);
+                    return RedisCacheFactory.SharedObjectHelper.getsecurityleveltypelist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -623,7 +624,7 @@ namespace Anewluv.Services.Common
                 return photoimagetypelist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getshowmelist(_unitOfWorkAsync);
+                    return RedisCacheFactory.SharedObjectHelper.getshowmelist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -668,7 +669,7 @@ namespace Anewluv.Services.Common
                 return photoimagetypelist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getsortbytypelist(_unitOfWorkAsync);
+                    return RedisCacheFactory.SharedObjectHelper.getsortbytypelist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -713,7 +714,7 @@ namespace Anewluv.Services.Common
                 return photoimagetypelist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getsecurityquestionlist(_unitOfWorkAsync);
+                    return RedisCacheFactory.SharedObjectHelper.getsecurityquestionlist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -759,7 +760,7 @@ namespace Anewluv.Services.Common
                 return photoimagetypelist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getflagyesnolist(_unitOfWorkAsync);
+                    return RedisCacheFactory.SharedObjectHelper.getflagyesnolist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -805,7 +806,7 @@ namespace Anewluv.Services.Common
                 return photoimagetypelist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getprofilefiltertypelist(_unitOfWorkAsync);
+                    return RedisCacheFactory.SharedObjectHelper.getprofilefiltertypelist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -946,7 +947,7 @@ namespace Anewluv.Services.Common
                 genderlist.Add(new lu_gender { description = "Female", id = 2, selected = false });
                 return genderlist;                
 #else
-                    return CachingFactory.SharedObjectHelper.getgenderlist(_unitOfWorkAsync);
+                    return RedisCacheFactory.SharedObjectHelper.getgenderlist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -986,7 +987,7 @@ namespace Anewluv.Services.Common
 
                 try
                 {
-                    return CachingFactory.SharedObjectHelper.getagelist();
+                    return RedisCacheFactory.SharedObjectHelper.getagelist();
 
 
                 }
@@ -1025,7 +1026,7 @@ namespace Anewluv.Services.Common
                 try
                 {
 
-                    return CachingFactory.SharedObjectHelper.getmetricheightlist();
+                    return RedisCacheFactory.SharedObjectHelper.getmetricheightlist();
 
                 }
                 catch (Exception ex)
@@ -1076,7 +1077,7 @@ namespace Anewluv.Services.Common
                 return bodytypelist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getbodytypelist(_unitOfWorkAsync);
+                    return RedisCacheFactory.SharedObjectHelper.getbodytypelist(_unitOfWorkAsync);
                     // return temp;
 #endif
 
@@ -1123,7 +1124,7 @@ namespace Anewluv.Services.Common
             return ethnicitylist;
 
 #else
-                    return CachingFactory.SharedObjectHelper.getethnicitylist(_unitOfWorkAsync);
+                    return RedisCacheFactory.SharedObjectHelper.getethnicitylist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -1169,7 +1170,7 @@ namespace Anewluv.Services.Common
                 return eyecolorlist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.geteyecolorlist(_unitOfWorkAsync);
+                    return RedisCacheFactory.SharedObjectHelper.geteyecolorlist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -1215,7 +1216,7 @@ namespace Anewluv.Services.Common
                 return haircolorlist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.gethaircolorlist(_unitOfWorkAsync);
+                    return RedisCacheFactory.SharedObjectHelper.gethaircolorlist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -1260,7 +1261,7 @@ namespace Anewluv.Services.Common
                 return hotfeaturelist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.gethotfeaturelist(_unitOfWorkAsync);
+                    return RedisCacheFactory.SharedObjectHelper.gethotfeaturelist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -1309,7 +1310,7 @@ namespace Anewluv.Services.Common
                 return dietlist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getdietlist(_unitOfWorkAsync);
+                    return RedisCacheFactory.SharedObjectHelper.getdietlist(_unitOfWorkAsync);
                     //  return _unitOfWorkAsync.lu_diet.OrderBy(x => x.description).ToList();
 
 
@@ -1358,7 +1359,7 @@ namespace Anewluv.Services.Common
                 return drinkslist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getdrinkslist(_unitOfWorkAsync);
+                    return RedisCacheFactory.SharedObjectHelper.getdrinkslist(_unitOfWorkAsync);
 
 
 
@@ -1405,7 +1406,7 @@ namespace Anewluv.Services.Common
                 return exerciselist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getexerciselist(_unitOfWorkAsync);
+                    return RedisCacheFactory.SharedObjectHelper.getexerciselist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -1451,7 +1452,7 @@ namespace Anewluv.Services.Common
                 
 #else
 
-                    return CachingFactory.SharedObjectHelper.gethobbylist(_unitOfWorkAsync);
+                    return RedisCacheFactory.SharedObjectHelper.gethobbylist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -1498,7 +1499,7 @@ namespace Anewluv.Services.Common
                 
 #else
 
-                    return CachingFactory.SharedObjectHelper.gethumorlist(_unitOfWorkAsync); ;
+                    return RedisCacheFactory.SharedObjectHelper.gethumorlist(_unitOfWorkAsync); ;
 
                     // return temp;
 #endif
@@ -1544,7 +1545,7 @@ namespace Anewluv.Services.Common
                 return politicalviewlist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getpoliticalviewlist(_unitOfWorkAsync);
+                    return RedisCacheFactory.SharedObjectHelper.getpoliticalviewlist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -1590,7 +1591,7 @@ namespace Anewluv.Services.Common
                 return religionlist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getreligionlist(_unitOfWorkAsync);
+                    return RedisCacheFactory.SharedObjectHelper.getreligionlist(_unitOfWorkAsync);
 
                     // return temp;
 #endif
@@ -1635,7 +1636,7 @@ namespace Anewluv.Services.Common
                 return religiousattendancelist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getreligiousattendancelist(_unitOfWorkAsync);
+                    return RedisCacheFactory.SharedObjectHelper.getreligiousattendancelist(_unitOfWorkAsync);
                     // return temp;
 #endif
 
@@ -1681,7 +1682,7 @@ namespace Anewluv.Services.Common
                 return signlist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getsignlist(_unitOfWorkAsync);
+                    return RedisCacheFactory.SharedObjectHelper.getsignlist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -1727,7 +1728,7 @@ namespace Anewluv.Services.Common
                 return smokeslist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getsmokeslist(_unitOfWorkAsync);
+                    return RedisCacheFactory.SharedObjectHelper.getsmokeslist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -1776,7 +1777,7 @@ namespace Anewluv.Services.Common
                 return educationlevellist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.geteducationlevellist(_unitOfWorkAsync);
+                    return RedisCacheFactory.SharedObjectHelper.geteducationlevellist(_unitOfWorkAsync);
                     // return temp;
 #endif
 
@@ -1823,7 +1824,7 @@ namespace Anewluv.Services.Common
                 return employmentstatuslist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getemploymentstatuslist(_unitOfWorkAsync);
+                    return RedisCacheFactory.SharedObjectHelper.getemploymentstatuslist(_unitOfWorkAsync);
 
 #endif
                 }
@@ -1869,7 +1870,7 @@ namespace Anewluv.Services.Common
                 return havekidslist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.gethavekidslist(_unitOfWorkAsync);
+                    return RedisCacheFactory.SharedObjectHelper.gethavekidslist(_unitOfWorkAsync);
 #endif
                 }
                 catch (Exception ex)
@@ -1915,7 +1916,7 @@ namespace Anewluv.Services.Common
                 
 #else
 
-                    return CachingFactory.SharedObjectHelper.getincomelevellist(_unitOfWorkAsync);
+                    return RedisCacheFactory.SharedObjectHelper.getincomelevellist(_unitOfWorkAsync);
 #endif
 
                 }
@@ -1961,7 +1962,7 @@ namespace Anewluv.Services.Common
                 return livingsituationlist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getlivingsituationlist(_unitOfWorkAsync);
+                    return RedisCacheFactory.SharedObjectHelper.getlivingsituationlist(_unitOfWorkAsync);
 #endif
                 }
                 catch (Exception ex)
@@ -2005,7 +2006,7 @@ namespace Anewluv.Services.Common
                 return lookingforlist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getlookingforlist(_unitOfWorkAsync);
+                    return RedisCacheFactory.SharedObjectHelper.getlookingforlist(_unitOfWorkAsync);
 #endif
 
                 }
@@ -2052,7 +2053,7 @@ namespace Anewluv.Services.Common
                 return maritalstatuslist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getmaritalstatuslist(_unitOfWorkAsync);
+                    return RedisCacheFactory.SharedObjectHelper.getmaritalstatuslist(_unitOfWorkAsync);
 
 #endif
                 }
@@ -2098,7 +2099,7 @@ namespace Anewluv.Services.Common
                 return professionlist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getprofessionlist(_unitOfWorkAsync);
+                    return RedisCacheFactory.SharedObjectHelper.getprofessionlist(_unitOfWorkAsync);
 #endif
 
                 }
@@ -2144,7 +2145,7 @@ namespace Anewluv.Services.Common
                 
 #else
 
-                    return CachingFactory.SharedObjectHelper.getwantskidslist(_unitOfWorkAsync);
+                    return RedisCacheFactory.SharedObjectHelper.getwantskidslist(_unitOfWorkAsync);
 
 #endif
 

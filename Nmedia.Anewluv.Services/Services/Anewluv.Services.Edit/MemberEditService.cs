@@ -27,6 +27,7 @@ using Repository.Pattern.UnitOfWork;
 using Anewluv.DataExtentionMethods;
 using Nmedia.Infrastructure.DependencyInjection;
 using Nmedia.Infrastructure.DTOs;
+using Anewluv.Caching.RedisCaching;
 
 
 namespace Anewluv.Services.Edit
@@ -112,10 +113,10 @@ namespace Anewluv.Services.Edit
                          BasicSettingsModel model = new BasicSettingsModel();
 
 
-                         var showmelist = CachingFactory.SharedObjectHelper.getshowmelist(_unitOfWorkAsync);
+                         var showmelist = RedisCacheFactory.SharedObjectHelper.getshowmelist(_unitOfWorkAsync);
                          var genderlist = CachingFactory.SharedObjectHelper.getgenderlist(_unitOfWorkAsync);
-                         var sortbylist = CachingFactory.SharedObjectHelper.getsortbytypelist(_unitOfWorkAsync);
-                         var agelist = CachingFactory.SharedObjectHelper.getagelist();
+                         var sortbylist = RedisCacheFactory.SharedObjectHelper.getsortbytypelist(_unitOfWorkAsync);
+                         var agelist = RedisCacheFactory.SharedObjectHelper.getagelist();
 
                          //populate values here ok ?
                          if (p != null)
@@ -204,12 +205,12 @@ namespace Anewluv.Services.Edit
                         AppearanceSettingsModel model = new AppearanceSettingsModel();
 
                         //12-26-2014 olawal added this to allow for multiple checkbox selections and checked etc
-                        var ethnicitylist = CachingFactory.SharedObjectHelper.getethnicitylist(_unitOfWorkAsync);
-                        var bodytypelist = CachingFactory.SharedObjectHelper.getbodytypelist(_unitOfWorkAsync);
-                        var eyecolorlist = CachingFactory.SharedObjectHelper.geteyecolorlist(_unitOfWorkAsync);
-                        var haircolorlist = CachingFactory.SharedObjectHelper.gethaircolorlist(_unitOfWorkAsync);
-                        var hotfeaturelist = CachingFactory.SharedObjectHelper.gethotfeaturelist(_unitOfWorkAsync);
-                        var metricheightlist = CachingFactory.SharedObjectHelper.getmetricheightlist();
+                        var ethnicitylist = RedisCacheFactory.SharedObjectHelper.getethnicitylist(_unitOfWorkAsync);
+                        var bodytypelist = RedisCacheFactory.SharedObjectHelper.getbodytypelist(_unitOfWorkAsync);
+                        var eyecolorlist = RedisCacheFactory.SharedObjectHelper.geteyecolorlist(_unitOfWorkAsync);
+                        var haircolorlist = RedisCacheFactory.SharedObjectHelper.gethaircolorlist(_unitOfWorkAsync);
+                        var hotfeaturelist = RedisCacheFactory.SharedObjectHelper.gethotfeaturelist(_unitOfWorkAsync);
+                        var metricheightlist = RedisCacheFactory.SharedObjectHelper.getmetricheightlist();
 
 
                         model.height =  p.profiledata.height == null ? (int?)null : Convert.ToInt32(p.profiledata.height.Value);
@@ -308,17 +309,17 @@ namespace Anewluv.Services.Edit
 
                     CharacterSettingsModel model = new CharacterSettingsModel();
 
-                    var humorlist = CachingFactory.SharedObjectHelper.gethumorlist(_unitOfWorkAsync);
-                    var dietlist = CachingFactory.SharedObjectHelper.getdietlist(_unitOfWorkAsync);                  
-                    var drinkslist = CachingFactory.SharedObjectHelper.getdrinkslist(_unitOfWorkAsync);
-                    var exerciselist = CachingFactory.SharedObjectHelper.getexerciselist(_unitOfWorkAsync);
-                    var smokeslist = CachingFactory.SharedObjectHelper.getsmokeslist(_unitOfWorkAsync);
-                    var signlist = CachingFactory.SharedObjectHelper.getsignlist(_unitOfWorkAsync);
-                    var politicalviewlist = CachingFactory.SharedObjectHelper.getpoliticalviewlist(_unitOfWorkAsync);
-                    var religionlist = CachingFactory.SharedObjectHelper.getreligionlist(_unitOfWorkAsync);
-                    var religiousattendancelist = CachingFactory.SharedObjectHelper.getreligiousattendancelist(_unitOfWorkAsync);
+                    var humorlist = RedisCacheFactory.SharedObjectHelper.gethumorlist(_unitOfWorkAsync);
+                    var dietlist = RedisCacheFactory.SharedObjectHelper.getdietlist(_unitOfWorkAsync);                  
+                    var drinkslist = RedisCacheFactory.SharedObjectHelper.getdrinkslist(_unitOfWorkAsync);
+                    var exerciselist = RedisCacheFactory.SharedObjectHelper.getexerciselist(_unitOfWorkAsync);
+                    var smokeslist = RedisCacheFactory.SharedObjectHelper.getsmokeslist(_unitOfWorkAsync);
+                    var signlist = RedisCacheFactory.SharedObjectHelper.getsignlist(_unitOfWorkAsync);
+                    var politicalviewlist = RedisCacheFactory.SharedObjectHelper.getpoliticalviewlist(_unitOfWorkAsync);
+                    var religionlist = RedisCacheFactory.SharedObjectHelper.getreligionlist(_unitOfWorkAsync);
+                    var religiousattendancelist = RedisCacheFactory.SharedObjectHelper.getreligiousattendancelist(_unitOfWorkAsync);
                     //non exculsive
-                    var hobbylist = CachingFactory.SharedObjectHelper.gethobbylist(_unitOfWorkAsync);
+                    var hobbylist = RedisCacheFactory.SharedObjectHelper.gethobbylist(_unitOfWorkAsync);
 
                     //set default values for edit profile                
                     model.humorlist = humorlist;
@@ -420,16 +421,16 @@ namespace Anewluv.Services.Edit
 
 
 
-                    var educationlevellist = CachingFactory.SharedObjectHelper.geteducationlevellist(_unitOfWorkAsync);                   
-                    var employmentstatuslist = CachingFactory.SharedObjectHelper.getemploymentstatuslist(_unitOfWorkAsync);
-                    var havekidslist = CachingFactory.SharedObjectHelper.gethavekidslist(_unitOfWorkAsync);
-                    var incomelevellist = CachingFactory.SharedObjectHelper.getincomelevellist(_unitOfWorkAsync);
-                    var livingsituationlist = CachingFactory.SharedObjectHelper.getlivingsituationlist(_unitOfWorkAsync);
-                    var maritalstatuslist = CachingFactory.SharedObjectHelper.getmaritalstatuslist(_unitOfWorkAsync);
-                    var professionlist = CachingFactory.SharedObjectHelper.getprofessionlist(_unitOfWorkAsync);
-                    var wantskidslist = CachingFactory.SharedObjectHelper.getwantskidslist(_unitOfWorkAsync);
+                    var educationlevellist = RedisCacheFactory.SharedObjectHelper.geteducationlevellist(_unitOfWorkAsync);                   
+                    var employmentstatuslist = RedisCacheFactory.SharedObjectHelper.getemploymentstatuslist(_unitOfWorkAsync);
+                    var havekidslist = RedisCacheFactory.SharedObjectHelper.gethavekidslist(_unitOfWorkAsync);
+                    var incomelevellist = RedisCacheFactory.SharedObjectHelper.getincomelevellist(_unitOfWorkAsync);
+                    var livingsituationlist = RedisCacheFactory.SharedObjectHelper.getlivingsituationlist(_unitOfWorkAsync);
+                    var maritalstatuslist = RedisCacheFactory.SharedObjectHelper.getmaritalstatuslist(_unitOfWorkAsync);
+                    var professionlist = RedisCacheFactory.SharedObjectHelper.getprofessionlist(_unitOfWorkAsync);
+                    var wantskidslist = RedisCacheFactory.SharedObjectHelper.getwantskidslist(_unitOfWorkAsync);
                         //multiple seclections allowed
-                    var lookingforlist = CachingFactory.SharedObjectHelper.getlookingforlist(_unitOfWorkAsync);
+                    var lookingforlist = RedisCacheFactory.SharedObjectHelper.getlookingforlist(_unitOfWorkAsync);
 
                         //set default values
                     model.educationlevellist = educationlevellist; model.educationlevellist.First(d => d.id == p.profiledata.educationlevel_id).selected = true;                   

@@ -25,6 +25,7 @@ using Nmedia.Infrastructure.DTOs;
 using Repository.Pattern.UnitOfWork;
 using Anewluv.DataExtentionMethods;
 using Nmedia.Infrastructure.DependencyInjection;
+using Anewluv.Caching.RedisCaching;
 
 
 namespace Anewluv.Services.Edit
@@ -198,10 +199,10 @@ namespace Anewluv.Services.Edit
                     {
                         BasicSearchSettingsModel model = new BasicSearchSettingsModel();
                         //get all the showmes so we can deterimine which are checked and which are not
-                           model. showmelist = CachingFactory.SharedObjectHelper.getshowmelist(_unitOfWorkAsync);
-                           model. genderlist = CachingFactory.SharedObjectHelper.getgenderlist(_unitOfWorkAsync);
-                           model. sortbylist = CachingFactory.SharedObjectHelper.getsortbytypelist(_unitOfWorkAsync);
-                           model. agelist = CachingFactory.SharedObjectHelper.getagelist();
+                           model. showmelist = RedisCacheFactory.SharedObjectHelper.getshowmelist(_unitOfWorkAsync);
+                           model. genderlist = RedisCacheFactory.SharedObjectHelper.getgenderlist(_unitOfWorkAsync);
+                           model. sortbylist = RedisCacheFactory.SharedObjectHelper.getsortbytypelist(_unitOfWorkAsync);
+                           model. agelist = RedisCacheFactory.SharedObjectHelper.getagelist();
 
                         searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(searchmodel);
 
@@ -236,12 +237,12 @@ namespace Anewluv.Services.Edit
                     var task = Task.Factory.StartNew(() =>
                     {
                         AppearanceSearchSettingsModel model = new AppearanceSearchSettingsModel();
-                        model.ethnicitylist = CachingFactory.SharedObjectHelper.getethnicitylist(_unitOfWorkAsync);
-                        model.bodytypelist = CachingFactory.SharedObjectHelper.getbodytypelist(_unitOfWorkAsync);
-                        model.eyecolorlist = CachingFactory.SharedObjectHelper.geteyecolorlist(_unitOfWorkAsync);
-                        model.haircolorlist = CachingFactory.SharedObjectHelper.gethaircolorlist(_unitOfWorkAsync);
-                        model.hotfeaturelist = CachingFactory.SharedObjectHelper.gethotfeaturelist(_unitOfWorkAsync);
-                        model.metricheightlist = CachingFactory.SharedObjectHelper.getmetricheightlist();
+                        model.ethnicitylist = RedisCacheFactory.SharedObjectHelper.getethnicitylist(_unitOfWorkAsync);
+                        model.bodytypelist = RedisCacheFactory.SharedObjectHelper.getbodytypelist(_unitOfWorkAsync);
+                        model.eyecolorlist = RedisCacheFactory.SharedObjectHelper.geteyecolorlist(_unitOfWorkAsync);
+                        model.haircolorlist = RedisCacheFactory.SharedObjectHelper.gethaircolorlist(_unitOfWorkAsync);
+                        model.hotfeaturelist = RedisCacheFactory.SharedObjectHelper.gethotfeaturelist(_unitOfWorkAsync);
+                        model.metricheightlist = RedisCacheFactory.SharedObjectHelper.getmetricheightlist();
 
 
                         searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(searchmodel);
@@ -280,16 +281,16 @@ namespace Anewluv.Services.Edit
                     {
 
                         CharacterSearchSettingsModel model = new CharacterSearchSettingsModel();
-                           model. humorlist = CachingFactory.SharedObjectHelper.gethumorlist(_unitOfWorkAsync);
-                           model. dietlist = CachingFactory.SharedObjectHelper.getdietlist(_unitOfWorkAsync);
-                           model. hobbylist = CachingFactory.SharedObjectHelper.gethobbylist(_unitOfWorkAsync);
-                           model.drinkslist = CachingFactory.SharedObjectHelper.getdrinkslist(_unitOfWorkAsync);
-                           model. exerciselist = CachingFactory.SharedObjectHelper.getexerciselist(_unitOfWorkAsync);
-                           model. smokeslist = CachingFactory.SharedObjectHelper.getsmokeslist(_unitOfWorkAsync);
-                           model. signlist = CachingFactory.SharedObjectHelper.getsignlist(_unitOfWorkAsync);
-                           model. politicalviewlist = CachingFactory.SharedObjectHelper.getpoliticalviewlist(_unitOfWorkAsync);
-                           model. religionlist = CachingFactory.SharedObjectHelper.getreligionlist(_unitOfWorkAsync);
-                           model. religiousattendancelist = CachingFactory.SharedObjectHelper.getreligiousattendancelist(_unitOfWorkAsync);
+                           model. humorlist = RedisCacheFactory.SharedObjectHelper.gethumorlist(_unitOfWorkAsync);
+                           model. dietlist = RedisCacheFactory.SharedObjectHelper.getdietlist(_unitOfWorkAsync);
+                           model. hobbylist = RedisCacheFactory.SharedObjectHelper.gethobbylist(_unitOfWorkAsync);
+                           model.drinkslist = RedisCacheFactory.SharedObjectHelper.getdrinkslist(_unitOfWorkAsync);
+                           model. exerciselist = RedisCacheFactory.SharedObjectHelper.getexerciselist(_unitOfWorkAsync);
+                           model. smokeslist = RedisCacheFactory.SharedObjectHelper.getsmokeslist(_unitOfWorkAsync);
+                           model. signlist = RedisCacheFactory.SharedObjectHelper.getsignlist(_unitOfWorkAsync);
+                           model. politicalviewlist = RedisCacheFactory.SharedObjectHelper.getpoliticalviewlist(_unitOfWorkAsync);
+                           model. religionlist = RedisCacheFactory.SharedObjectHelper.getreligionlist(_unitOfWorkAsync);
+                           model. religiousattendancelist = RedisCacheFactory.SharedObjectHelper.getreligiousattendancelist(_unitOfWorkAsync);
 
                         searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(searchmodel);
                         return searchsettingsextentions.getcharactersearchsettings(model,p, _unitOfWorkAsync);
@@ -329,15 +330,15 @@ namespace Anewluv.Services.Edit
                         //populate values here ok ?
                         // if (p == null) return null;
 
-                        model.educationlevellist = CachingFactory.SharedObjectHelper.geteducationlevellist(_unitOfWorkAsync);
-                           model. lookingforlist = CachingFactory.SharedObjectHelper.getlookingforlist(_unitOfWorkAsync);
-                           model. employmentstatuslist = CachingFactory.SharedObjectHelper.getemploymentstatuslist(_unitOfWorkAsync);
-                           model. havekidslist = CachingFactory.SharedObjectHelper.gethavekidslist(_unitOfWorkAsync);
-                           model. incomelevellist = CachingFactory.SharedObjectHelper.getincomelevellist(_unitOfWorkAsync);
-                           model. livingsituationlist = CachingFactory.SharedObjectHelper.getlivingsituationlist(_unitOfWorkAsync);
-                           model.maritalstatuslist = CachingFactory.SharedObjectHelper.getmaritalstatuslist(_unitOfWorkAsync);
-                           model. professionlist = CachingFactory.SharedObjectHelper.getprofessionlist(_unitOfWorkAsync);
-                           model.wantskidslist = CachingFactory.SharedObjectHelper.getwantskidslist(_unitOfWorkAsync);
+                        model.educationlevellist = RedisCacheFactory.SharedObjectHelper.geteducationlevellist(_unitOfWorkAsync);
+                           model. lookingforlist = RedisCacheFactory.SharedObjectHelper.getlookingforlist(_unitOfWorkAsync);
+                           model. employmentstatuslist = RedisCacheFactory.SharedObjectHelper.getemploymentstatuslist(_unitOfWorkAsync);
+                           model. havekidslist = RedisCacheFactory.SharedObjectHelper.gethavekidslist(_unitOfWorkAsync);
+                           model. incomelevellist = RedisCacheFactory.SharedObjectHelper.getincomelevellist(_unitOfWorkAsync);
+                           model. livingsituationlist = RedisCacheFactory.SharedObjectHelper.getlivingsituationlist(_unitOfWorkAsync);
+                           model.maritalstatuslist = RedisCacheFactory.SharedObjectHelper.getmaritalstatuslist(_unitOfWorkAsync);
+                           model. professionlist = RedisCacheFactory.SharedObjectHelper.getprofessionlist(_unitOfWorkAsync);
+                           model.wantskidslist = RedisCacheFactory.SharedObjectHelper.getwantskidslist(_unitOfWorkAsync);
 
 
 

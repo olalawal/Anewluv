@@ -6,6 +6,7 @@ using System.Runtime.Serialization;
 
 namespace Anewluv.Domain.Data
 {
+    [Serializable]
     public partial class lu_photoapprovalstatus :Entity
     {
         public lu_photoapprovalstatus()

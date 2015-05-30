@@ -211,7 +211,7 @@ namespace Anewluv.Services.Spatial
                     try
                     {
                         //TO DO put back in cache
-                        //return CachingFactory.SharedObjectHelper.getcountryandpostalcodestatuslist(_postalcontext);
+                        //return RedisCacheFactory.SharedObjectHelper.getcountryandpostalcodestatuslist(_postalcontext);
 
                         var task = Task.Factory.StartNew(() =>
                         {
@@ -277,7 +277,7 @@ namespace Anewluv.Services.Spatial
 
                              #else
                              
-                             //  return CachingFactory.SharedObjectHelper.getcountrylist(_postalcontext);
+                             //  return RedisCacheFactory.SharedObjectHelper.getcountrylist(_postalcontext);
                             //TO do move to caches server 
 
                             countries.Add(new country { id = "0", name = "Any" });
