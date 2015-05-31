@@ -33,6 +33,7 @@ namespace Anewluv.Domain.Data
 
     //ComplexTypes
     [DataContract]
+    [Serializable]
     public class age
     {
         [DataMember]public string agevalue { get; set; }
@@ -43,6 +44,7 @@ namespace Anewluv.Domain.Data
     }
 
     [DataContract]
+    [Serializable]
     public class metricheight
     {
         [DataMember]

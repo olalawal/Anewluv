@@ -16,7 +16,7 @@ namespace Anewluv.Domain.Data.ViewModels
 
         public BasicSettingsModel()
         {
-
+            this.genderlist = new List<listitem>();
         }
 
         // [DataMember]
@@ -43,6 +43,8 @@ namespace Anewluv.Domain.Data.ViewModels
         public string catchyintroline { get; set; }   
         [DataMember]
         public string phonenumber { get; set; }
+        [DataMember]
+        public List<listitem> genderlist { get; set; }
 
 
       

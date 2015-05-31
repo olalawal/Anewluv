@@ -86,11 +86,6 @@ namespace Anewluv.DataExtentionMethods
 
         //all the search extentions for updates and gets here since the profile edit pages also have the search settings i.e the YOU part
 
-
-
-
-
-
         #region "private get methods for reuses"
 
 
@@ -99,8 +94,6 @@ namespace Anewluv.DataExtentionMethods
         {
             try
             {
-
-
 
                 BasicSearchSettingsModel model = new BasicSearchSettingsModel();
 
@@ -114,9 +107,6 @@ namespace Anewluv.DataExtentionMethods
                 //TODO get from app fabric
                 // SharedRepository sharedrepository = new SharedRepository();
                 //Ages = sharedrepository.AgesSelectList;
-
-
-              
 
                 model.agemin = p.agemin == null ? 18 : p.agemin.GetValueOrDefault();
                 model.mygenderid = p.profilemetadata != null ? p.profilemetadata.profile.profiledata.gender_id.Value : (int?)null;
@@ -143,11 +133,17 @@ namespace Anewluv.DataExtentionMethods
 
                 //update the list with the items that are selected.
                 foreach (listitem gender in SearchViewModel.genderlist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.gender).Any(f => f.value == c.id)))
-                {
+                {  
                     //update the value as checked here on the list
-                    model.showmelist.First(d => d.id == gender.id).selected = true;
+                    model.genderlist.First(d => d.id == gender.id).selected = true;
                 }
-
+                //finess genders to at least have a default
+                if (model.genderlist.All(z => z.selected == false))
+                { 
+                  //none are selected so select opposite
+                    int defaultgenderid = model.mygenderid != null && model.mygenderid == 2 ? 1 : 2;
+                    model.genderlist.First(d => d.id == defaultgenderid).selected = true;
+                }
 
                 //update the list with the items that are selected.
                 foreach (listitem sortbytype in SearchViewModel.sortbylist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.sortbytype).Any(f => f.value == c.id)))

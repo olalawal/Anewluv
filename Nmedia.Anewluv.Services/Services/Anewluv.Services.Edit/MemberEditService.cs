@@ -114,7 +114,7 @@ namespace Anewluv.Services.Edit
 
 
                          var showmelist = RedisCacheFactory.SharedObjectHelper.getshowmelist(_unitOfWorkAsync);
-                         var genderlist = CachingFactory.SharedObjectHelper.getgenderlist(_unitOfWorkAsync);
+                         var genderlist = RedisCacheFactory.SharedObjectHelper.getgenderlist(_unitOfWorkAsync);
                          var sortbylist = RedisCacheFactory.SharedObjectHelper.getsortbytypelist(_unitOfWorkAsync);
                          var agelist = RedisCacheFactory.SharedObjectHelper.getagelist();
 
@@ -133,7 +133,7 @@ namespace Anewluv.Services.Edit
 
                           model.birthdate = p.profiledata.birthdate; //== null ? null :  p.profiledata.lu_birthdate;
                          //  model.agemin = p.agemin == null ? 18 : p.agemin.GetValueOrDefault();
-                         model.gender = p.profiledata.lu_gender == null ? null : p.profiledata.lu_gender;
+                        
                          model.countryid = p.profiledata.countryid == null ? null : p.profiledata.countryid;
                          model.city = p.profiledata.city == null ? null : p.profiledata.city;
                          model.postalcode = p.profiledata.postalcode == null ? null : p.profiledata.postalcode;
@@ -141,6 +141,14 @@ namespace Anewluv.Services.Edit
                          model.phonenumber = p.profiledata.phone == null ? null : p.profiledata.phone;
                          model.catchyintroline = p.profiledata.mycatchyintroLine;
                          model.aboutme = p.profiledata.aboutme;
+                        //set default values
+                         model.genderlist = new List<listitem>(genderlist);
+                    
+
+                    
+
+                         //update the value as checked here on the list i.e select the body type in the list
+                         model.genderlist.First(d => d.id == p.profiledata.gender_id).selected = true;
 
                          viewmodel.basicsettings = model;
 
@@ -151,7 +159,7 @@ namespace Anewluv.Services.Edit
 
                              BasicSearchSettingsModel SearchViewModel = new BasicSearchSettingsModel();
                              SearchViewModel.showmelist = showmelist;
-                             SearchViewModel.genderlist = genderlist;                           
+                             SearchViewModel.genderlist = new List<listitem>(genderlist);                        
                              SearchViewModel.sortbylist = sortbylist;
                              SearchViewModel.agelist = agelist;                            
                              searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id });
@@ -215,12 +223,12 @@ namespace Anewluv.Services.Edit
 
                         model.height =  p.profiledata.height == null ? (int?)null : Convert.ToInt32(p.profiledata.height.Value);
 
-                        model.bodytypelist = bodytypelist;
-                        model.eyecolorlist = eyecolorlist;
-                        model.haircolorlist = haircolorlist;
-                        model.ethnicitylist = ethnicitylist;
-                        model.hotfeaturelist = hotfeaturelist;
-                        model.metricheightlist = metricheightlist;  //added list of metric heights so it can be used in the drop down
+                        model.bodytypelist = new List<listitem>(bodytypelist); 
+                        model.eyecolorlist = new List<listitem>(eyecolorlist); 
+                        model.haircolorlist = new List<listitem>(haircolorlist); 
+                        model.ethnicitylist = new List<listitem>(ethnicitylist); 
+                        model.hotfeaturelist = new List<listitem>(hotfeaturelist);
+                        model.metricheightlist = new List<metricheight>(metricheightlist);  //added list of metric heights so it can be used in the drop down
 
                        //update the value as checked here on the list i.e select the body type in the list
                         model.bodytypelist.First(d => d.id ==  p.profiledata.bodytype_id).selected = true;
@@ -254,12 +262,12 @@ namespace Anewluv.Services.Edit
                         {
                           
                             AppearanceSearchSettingsModel SearchViewModel = new AppearanceSearchSettingsModel();
-                            SearchViewModel.ethnicitylist = ethnicitylist;
-                            SearchViewModel.bodytypelist = bodytypelist;
-                            SearchViewModel.eyecolorlist = eyecolorlist;
-                            SearchViewModel.haircolorlist = haircolorlist;
-                            SearchViewModel.hotfeaturelist = hotfeaturelist;
-                            SearchViewModel.metricheightlist = metricheightlist;
+                            SearchViewModel.bodytypelist = new List<listitem>(bodytypelist);
+                            SearchViewModel.eyecolorlist = new List<listitem>(eyecolorlist);
+                            SearchViewModel.haircolorlist = new List<listitem>(haircolorlist);
+                            SearchViewModel.ethnicitylist = new List<listitem>(ethnicitylist);
+                            SearchViewModel.hotfeaturelist = new List<listitem>(hotfeaturelist);
+                            SearchViewModel.metricheightlist = new List<metricheight>(metricheightlist); 
                             searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id });
                             SearchViewModel = searchsettingsextentions.getappearancesearchsettings(SearchViewModel, s, _unitOfWorkAsync);
                             //add the value to viewmodel
@@ -322,16 +330,16 @@ namespace Anewluv.Services.Edit
                     var hobbylist = RedisCacheFactory.SharedObjectHelper.gethobbylist(_unitOfWorkAsync);
 
                     //set default values for edit profile                
-                    model.humorlist = humorlist;
-                    model. dietlist = dietlist;
-                    model. drinkslist = drinkslist;
-                    model. exerciselist =exerciselist;
-                    model. smokeslist = smokeslist;
-                    model. signlist =signlist;
-                    model. politicalviewlist = politicalviewlist;
-                    model. religionlist = religionlist;
-                    model. religiousattendancelist = religiousattendancelist;
-                    model. hobbylist =hobbylist;
+                    model.humorlist = new List<listitem>(humorlist); ;
+                    model.dietlist = new List<listitem>(dietlist); ;
+                    model.drinkslist = new List<listitem>(drinkslist); ;
+                    model.exerciselist = new List<listitem>(exerciselist); ;
+                    model.smokeslist = new List<listitem>(smokeslist); ;
+                    model.signlist = new List<listitem>(signlist); ;
+                    model.politicalviewlist = new List<listitem>(politicalviewlist); ;
+                    model.religionlist = new List<listitem>(religionlist); ;
+                    model.religiousattendancelist = new List<listitem>(religiousattendancelist); ;
+                    model.hobbylist = new List<listitem>(hobbylist); ;
 
                      //setup exculsive lists first (i.e only one value is selected)
                     model.humorlist.First(d => d.id == p.profiledata.humor_id).selected = true;
@@ -360,15 +368,18 @@ namespace Anewluv.Services.Edit
 
                         CharacterSearchSettingsModel SearchViewModel = new CharacterSearchSettingsModel();
                        //set default values for search settings
-                        SearchViewModel.humorlist = humorlist;
-                        SearchViewModel.dietlist = dietlist;
-                        SearchViewModel.drinkslist = drinkslist;
-                        SearchViewModel.exerciselist = exerciselist;
-                        SearchViewModel.smokeslist = smokeslist;
-                        SearchViewModel.signlist = signlist;
-                        SearchViewModel.politicalviewlist = politicalviewlist;
-                        SearchViewModel.religionlist = religionlist;
-                        SearchViewModel.religiousattendancelist = religiousattendancelist;
+                        //set default values for edit profile                
+                        SearchViewModel.humorlist = new List<listitem>(humorlist); ;
+                        SearchViewModel.dietlist = new List<listitem>(dietlist); ;
+                        SearchViewModel.drinkslist = new List<listitem>(drinkslist); ;
+                        SearchViewModel.exerciselist = new List<listitem>(exerciselist); ;
+                        SearchViewModel.smokeslist = new List<listitem>(smokeslist); ;
+                        SearchViewModel.signlist = new List<listitem>(signlist); ;
+                        SearchViewModel.politicalviewlist = new List<listitem>(politicalviewlist); ;
+                        SearchViewModel.religionlist = new List<listitem>(religionlist); ;
+                        SearchViewModel.religiousattendancelist = new List<listitem>(religiousattendancelist); ;
+                        SearchViewModel.hobbylist = new List<listitem>(hobbylist); ;
+
                         searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id });
                         SearchViewModel = searchsettingsextentions.getcharactersearchsettings(SearchViewModel, s, _unitOfWorkAsync);
                         //add the value to viewmodel
@@ -405,8 +416,6 @@ namespace Anewluv.Services.Edit
         public async Task<LifeStyleSettingsViewModel> getlifestylesettingsmodel(EditProfileModel editprofilemodel)
         {
 
-          
-         
             {
                 try
                 {
@@ -419,8 +428,6 @@ namespace Anewluv.Services.Edit
 
                     profile p = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = editprofilemodel.profileid});
 
-
-
                     var educationlevellist = RedisCacheFactory.SharedObjectHelper.geteducationlevellist(_unitOfWorkAsync);                   
                     var employmentstatuslist = RedisCacheFactory.SharedObjectHelper.getemploymentstatuslist(_unitOfWorkAsync);
                     var havekidslist = RedisCacheFactory.SharedObjectHelper.gethavekidslist(_unitOfWorkAsync);
@@ -432,15 +439,25 @@ namespace Anewluv.Services.Edit
                         //multiple seclections allowed
                     var lookingforlist = RedisCacheFactory.SharedObjectHelper.getlookingforlist(_unitOfWorkAsync);
 
-                        //set default values
-                    model.educationlevellist = educationlevellist; model.educationlevellist.First(d => d.id == p.profiledata.educationlevel_id).selected = true;                   
-                    model.employmentstatuslist = employmentstatuslist; model.employmentstatuslist.First(d => d.id == p.profiledata.employmentstatus_id).selected = true;
-                    model.havekidslist = havekidslist; model.havekidslist.First(d => d.id == p.profiledata.kidstatus_id).selected = true;
-                    model.incomelevellist = incomelevellist; model.incomelevellist.First(d => d.id == p.profiledata.incomelevel_id).selected = true;
-                    model.livingsituationlist = livingsituationlist; model.livingsituationlist.First(d => d.id == p.profiledata.bodytype_id).selected = true;
-                    model.maritalstatuslist = maritalstatuslist; model.maritalstatuslist.First(d => d.id == p.profiledata.maritalstatus_id).selected = true;
-                    model.professionlist = professionlist; model.professionlist.First(d => d.id == p.profiledata.profession_id).selected = true;
-                    model.wantskidslist = wantskidslist; model.wantskidslist.First(d => d.id == p.profiledata.wantsKidstatus_id).selected = true;
+                        //set emply list values
+                    model.educationlevellist = new List<listitem>(educationlevellist); 
+                    model.employmentstatuslist = new List<listitem>(employmentstatuslist); 
+                    model.havekidslist = new List<listitem>(havekidslist); 
+                    model.incomelevellist = new List<listitem>(incomelevellist); 
+                    model.livingsituationlist = new List<listitem>(livingsituationlist); 
+                    model.maritalstatuslist = new List<listitem>(maritalstatuslist); 
+                    model.professionlist = new List<listitem>(professionlist); 
+                    model.wantskidslist = new List<listitem>(wantskidslist); 
+                        
+                        //set the true values
+                    model.educationlevellist.First(d => d.id == p.profiledata.educationlevel_id).selected = true; 
+                    model.employmentstatuslist.First(d => d.id == p.profiledata.employmentstatus_id).selected = true;
+                    model.havekidslist.First(d => d.id == p.profiledata.kidstatus_id).selected = true;
+                     model.incomelevellist.First(d => d.id == p.profiledata.incomelevel_id).selected = true;
+                    model.livingsituationlist.First(d => d.id == p.profiledata.bodytype_id).selected = true;
+                    model.maritalstatuslist.First(d => d.id == p.profiledata.maritalstatus_id).selected = true;
+                    model.professionlist.First(d => d.id == p.profiledata.profession_id).selected = true;
+                    model.wantskidslist.First(d => d.id == p.profiledata.wantsKidstatus_id).selected = true;
 
 
                     //update the list with the items that are selected.
@@ -449,24 +466,22 @@ namespace Anewluv.Services.Edit
                         //update the value as checked here on the list
                         model.lookingforlist.First(d => d.id == lookingfor.id).selected = true;
                     }
-
-
+                        //store the updated values
                     viewmodel.lifestylesettings = model;
-
-
+                        
                     if (editprofilemodel.isfullediting == true)
                     {
 
                         LifeStyleSearchSettingsModel SearchViewModel = new LifeStyleSearchSettingsModel();
                         //set default values for search settings
-                        SearchViewModel.educationlevellist = educationlevellist;
-                        SearchViewModel.employmentstatuslist = employmentstatuslist;
-                        SearchViewModel.havekidslist = havekidslist;
-                        SearchViewModel.incomelevellist = incomelevellist;
-                        SearchViewModel.livingsituationlist = livingsituationlist;
-                        SearchViewModel.maritalstatuslist = maritalstatuslist;
-                        SearchViewModel.professionlist = professionlist;
-                        SearchViewModel.wantskidslist = wantskidslist;
+                        SearchViewModel.educationlevellist = new List<listitem>(educationlevellist);
+                        SearchViewModel.employmentstatuslist = new List<listitem>(employmentstatuslist);
+                        SearchViewModel.havekidslist = new List<listitem>(havekidslist);
+                        SearchViewModel.incomelevellist = new List<listitem>(incomelevellist);
+                        SearchViewModel.livingsituationlist = new List<listitem>(livingsituationlist);
+                        SearchViewModel.maritalstatuslist = new List<listitem>(maritalstatuslist);
+                        SearchViewModel.professionlist = new List<listitem>(professionlist);
+                        SearchViewModel.wantskidslist = new List<listitem>(wantskidslist); 
                         
                         searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id });
                         SearchViewModel = searchsettingsextentions.getlifestylesearchsettings(SearchViewModel, s, _unitOfWorkAsync);

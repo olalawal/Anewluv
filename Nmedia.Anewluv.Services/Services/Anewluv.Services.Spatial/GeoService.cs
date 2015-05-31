@@ -24,6 +24,7 @@ using Nmedia.Infrastructure.Domain.Data;
 using System.Threading.Tasks;
 using Anewluv.Services.Contracts.ServiceResponse;
 using Repository.Pattern.UnitOfWork;
+using Anewluv.Caching.RedisCaching;
 
 
 
@@ -215,19 +216,8 @@ namespace Anewluv.Services.Spatial
 
                         var task = Task.Factory.StartNew(() =>
                         {
-
-                            var Query = _unitOfWorkAsync.Repository<Country_PostalCode_List>().Query(p => p.CountryName != "").Select().ToList().OrderBy(p => p.CountryName);
-
-                            return (from s in Query
-                                    select new countrypostalcode
-                                    {
-                                        name = s.CountryName,
-                                        id = s.CountryID.ToString(),
-                                        code = s.Country_Code,
-                                        customregionid = s.CountryCustomRegionID,
-                                        region = s.Country_Region,
-                                        haspostalcode = Convert.ToBoolean(s.PostalCodes)
-                                    }).ToList();
+                           return RedisCacheFactory.SharedObjectHelper.getcountryandpostalcodestatuslist(_storedProcedures);
+                          
                         });
                         return await task.ConfigureAwait(false);
 
@@ -277,17 +267,10 @@ namespace Anewluv.Services.Spatial
 
                              #else
                              
-                             //  return RedisCacheFactory.SharedObjectHelper.getcountrylist(_postalcontext);
+                             return RedisCacheFactory.SharedObjectHelper.getcountrylist(_unitOfWorkAsync);
                             //TO do move to caches server 
 
-                            countries.Add(new country { id = "0", name = "Any" });
-                            foreach (Country_PostalCode_List item in  _unitOfWorkAsync.Repository<Country_PostalCode_List>().Query().Select().OrderBy(p => p.CountryName))
-                            {
-                                var currentcountry = new country { id = item.CountryID.ToString(), name = item.CountryName };
-                                countries.Add(currentcountry);
-                            }
-
-                            return countries;
+                          
                             #endif
                         });
                          return await task.ConfigureAwait(false);

@@ -2214,13 +2214,13 @@ namespace Anewluv.Caching.RedisCaching
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
                  dataCache = GetCache();  // dataCacheFactory.GetDefaultCache();
 
-                List<country> countrys = new List<country>();
+                 List<country> countries = new List<country>();
 
                 try
                 {
 
 
-                    try { if (dataCache != null) countrys = dataCache.Get("countrieslist") as List<country>; }
+                    try { if (dataCache != null) countries = dataCache.Get("countrieslist") as List<country>; }
                   catch (RedisCommandException ex)
                     {
                        // throw new InvalidOperationException();
@@ -2230,7 +2230,7 @@ namespace Anewluv.Caching.RedisCaching
                         //put cleanup code here
                        // throw;
                     }
-                    if (countrys.Count() == 0)
+                    if (countries.Count() == 0)
                     {
                         // context context = new context();
                         //remafill the Countrys list from the repositry and exit
@@ -2238,14 +2238,24 @@ namespace Anewluv.Caching.RedisCaching
                         //    List<country> tmplist = new List<country>();
                         // Loop over the int List and modify it.
                         //insert the first one as ANY
-                        countrys.Add(new country { id = "0", name = "Any" });
+                       // countrys.Add(new country { id = "0", name = "Any" });
 
 
-                        foreach (countrypostalcode item in Api.AsyncCalls.getcountryandpostalcodestatuslistasync().Result)
+                        countries.Add(new country { id = "0", name = "Any" });
+                        foreach (Country_PostalCode_List item in context.Repository<Country_PostalCode_List>().Query().Select().OrderBy(p => p.CountryName))
                         {
-                            var currentcountry = new country { id = item.id.ToString(), name = item.name };
-                            countrys.Add(currentcountry);
+                            var currentcountry = new country { id = item.CountryID.ToString(), name = item.CountryName };
+                            countries.Add(currentcountry);
                         }
+
+                        //return countries;
+
+
+                        //foreach (countrypostalcode item in Api.AsyncCalls.getcountryandpostalcodestatuslistasync().Result)
+                        //{
+                        //    var currentcountry = new country { id = item.id.ToString(), name = item.name };
+                        //    countrys.Add(currentcountry);
+                        //}
 
 
                         //foreach (Country_PostalCode_List item in _postal context.Repository<GetCountry_PostalCode_List().ToList().OrderBy(p => p.CountryName))
@@ -2260,7 +2270,7 @@ namespace Anewluv.Caching.RedisCaching
                         // Datings context = new modelContext();
                         // model =  context.Repository<models.Single(c => c.Id == id);
                         if (dataCache != null)
-                           dataCache.Set("countrieslist", countrys);
+                            dataCache.Set("countrieslist", countries);
 
                     } 
                 }
@@ -2274,7 +2284,7 @@ namespace Anewluv.Caching.RedisCaching
                     //put cleanup code here
                    // throw;
                 }
-                return countrys;
+                return countries;
             }
 
             public static List<countrypostalcode> getcountryandpostalcodestatuslist(IGeoDataStoredProcedures _storedProcedures)
@@ -2289,31 +2299,33 @@ namespace Anewluv.Caching.RedisCaching
                 {
 
                     try { if (dataCache != null) countryandpostalcodes = dataCache.Get("countryandpostalcodestatuslist") as List<countrypostalcode>; }
-                  catch (RedisCommandException ex)
+                    catch (RedisCommandException ex)
                     {
-                       // throw new InvalidOperationException();
+                        // throw new InvalidOperationException();
                     }
                     catch (Exception ex)
                     {
                         //put cleanup code here
-                       // throw;
+                        // throw;
                     }
                     if (countryandpostalcodes == null)
                     {
-                        // context context = new context();
-                        //remafill the Countrys list from the repositry and exit
+                        var Query = _storedProcedures.GetCountryPostalCodeList();
+                       // var Query = _unitOfWorkAsync.Repository<Country_PostalCode_List>().Query(p => p.CountryName != "").Select().ToList().OrderBy(p => p.CountryName);
+
+                        countryandpostalcodes =(from s in Query
+                                select new countrypostalcode
+                                {
+                                    name = s.CountryName,
+                                    id = s.CountryID.ToString(),
+                                    code = s.Country_Code,
+                                    customregionid = s.CountryCustomRegionID,
+                                    region = s.Country_Region,
+                                    haspostalcode = Convert.ToBoolean(s.PostalCodes)
+                                }).ToList();
 
 
-                        // List<Country_PostalCode_List> myQuery = default(List<Country_PostalCode_List>);
-                        // myQuery = _postal context.Repository<GetCountry_PostalCode_List().ToList().Where(p => p.CountryName != "").OrderBy(p => p.CountryName).ToList();
-
-                        // PostalData2Context PostalDataContext = new PostalData2Context();
-                        // using (var tempdb = PostalDataContext)
-                        //  {
-                        //  GeoService GeoService = new GeoService(tempdb);
-
-                        // return  spatialextentions.getcountryandpostalcodestatuslist(_storedProcedures);
-                        return null;
+                    }
 
 
 
@@ -2331,7 +2343,7 @@ namespace Anewluv.Caching.RedisCaching
                         if (dataCache != null)
                            dataCache.Set("countryandpostalcodestatuslist", countryandpostalcodes);
 
-                    } ;
+                    
                 }
               catch (RedisCommandException ex)
                 {
