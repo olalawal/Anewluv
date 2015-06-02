@@ -28,6 +28,7 @@ using Anewluv.DataExtentionMethods;
 using Nmedia.Infrastructure.DependencyInjection;
 using Nmedia.Infrastructure.DTOs;
 using Anewluv.Caching.RedisCaching;
+using Nmedia.Infrastructure;
 
 
 namespace Anewluv.Services.Edit
@@ -142,10 +143,10 @@ namespace Anewluv.Services.Edit
                          model.catchyintroline = p.profiledata.mycatchyintroLine;
                          model.aboutme = p.profiledata.aboutme;
                         //set default values
-                         model.genderlist = new List<listitem>(genderlist);
+                        // model.genderlist. (genderlist); 
+                        //new List<listitem>(genderlist);
                     
-
-                    
+                         model.genderlist = Extensions.getDeepCopy<List<listitem>>(genderlist);                    
 
                          //update the value as checked here on the list i.e select the body type in the list
                          model.genderlist.First(d => d.id == p.profiledata.gender_id).selected = true;
@@ -159,7 +160,7 @@ namespace Anewluv.Services.Edit
 
                              BasicSearchSettingsModel SearchViewModel = new BasicSearchSettingsModel();
                              SearchViewModel.showmelist = showmelist;
-                             SearchViewModel.genderlist = new List<listitem>(genderlist);                        
+                             SearchViewModel.genderlist = genderlist;                        
                              SearchViewModel.sortbylist = sortbylist;
                              SearchViewModel.agelist = agelist;                            
                              searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id });
@@ -223,12 +224,12 @@ namespace Anewluv.Services.Edit
 
                         model.height =  p.profiledata.height == null ? (int?)null : Convert.ToInt32(p.profiledata.height.Value);
 
-                        model.bodytypelist = new List<listitem>(bodytypelist); 
-                        model.eyecolorlist = new List<listitem>(eyecolorlist); 
-                        model.haircolorlist = new List<listitem>(haircolorlist); 
-                        model.ethnicitylist = new List<listitem>(ethnicitylist); 
-                        model.hotfeaturelist = new List<listitem>(hotfeaturelist);
-                        model.metricheightlist = new List<metricheight>(metricheightlist);  //added list of metric heights so it can be used in the drop down
+                        model.bodytypelist = Extensions.getDeepCopy<List<listitem>>(bodytypelist); 
+                        model.eyecolorlist = Extensions.getDeepCopy<List<listitem>>(eyecolorlist); 
+                        model.haircolorlist = Extensions.getDeepCopy<List<listitem>>(haircolorlist); 
+                        model.ethnicitylist = Extensions.getDeepCopy<List<listitem>>(ethnicitylist); 
+                        model.hotfeaturelist = Extensions.getDeepCopy<List<listitem>>(hotfeaturelist);
+                        model.metricheightlist = Extensions.getDeepCopy<List<metricheight>>(metricheightlist);  //added list of metric heights so it can be used in the drop down
 
                        //update the value as checked here on the list i.e select the body type in the list
                         model.bodytypelist.First(d => d.id ==  p.profiledata.bodytype_id).selected = true;
@@ -262,12 +263,12 @@ namespace Anewluv.Services.Edit
                         {
                           
                             AppearanceSearchSettingsModel SearchViewModel = new AppearanceSearchSettingsModel();
-                            SearchViewModel.bodytypelist = new List<listitem>(bodytypelist);
-                            SearchViewModel.eyecolorlist = new List<listitem>(eyecolorlist);
-                            SearchViewModel.haircolorlist = new List<listitem>(haircolorlist);
-                            SearchViewModel.ethnicitylist = new List<listitem>(ethnicitylist);
-                            SearchViewModel.hotfeaturelist = new List<listitem>(hotfeaturelist);
-                            SearchViewModel.metricheightlist = new List<metricheight>(metricheightlist); 
+                            SearchViewModel.bodytypelist = (bodytypelist);
+                            SearchViewModel.eyecolorlist = (eyecolorlist);
+                            SearchViewModel.haircolorlist = (haircolorlist);
+                            SearchViewModel.ethnicitylist = (ethnicitylist);
+                            SearchViewModel.hotfeaturelist = (hotfeaturelist);
+                            SearchViewModel.metricheightlist =(metricheightlist); 
                             searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id });
                             SearchViewModel = searchsettingsextentions.getappearancesearchsettings(SearchViewModel, s, _unitOfWorkAsync);
                             //add the value to viewmodel
@@ -330,16 +331,16 @@ namespace Anewluv.Services.Edit
                     var hobbylist = RedisCacheFactory.SharedObjectHelper.gethobbylist(_unitOfWorkAsync);
 
                     //set default values for edit profile                
-                    model.humorlist = new List<listitem>(humorlist); ;
-                    model.dietlist = new List<listitem>(dietlist); ;
-                    model.drinkslist = new List<listitem>(drinkslist); ;
-                    model.exerciselist = new List<listitem>(exerciselist); ;
-                    model.smokeslist = new List<listitem>(smokeslist); ;
-                    model.signlist = new List<listitem>(signlist); ;
-                    model.politicalviewlist = new List<listitem>(politicalviewlist); ;
-                    model.religionlist = new List<listitem>(religionlist); ;
-                    model.religiousattendancelist = new List<listitem>(religiousattendancelist); ;
-                    model.hobbylist = new List<listitem>(hobbylist); ;
+                    model.humorlist =  Extensions.getDeepCopy<List<listitem>>(humorlist); ;
+                    model.dietlist =  Extensions.getDeepCopy<List<listitem>>(dietlist); ;
+                    model.drinkslist =  Extensions.getDeepCopy<List<listitem>>(drinkslist); ;
+                    model.exerciselist =  Extensions.getDeepCopy<List<listitem>>(exerciselist); ;
+                    model.smokeslist =  Extensions.getDeepCopy<List<listitem>>(smokeslist); ;
+                    model.signlist =  Extensions.getDeepCopy<List<listitem>>(signlist); ;
+                    model.politicalviewlist =  Extensions.getDeepCopy<List<listitem>>(politicalviewlist); ;
+                    model.religionlist =  Extensions.getDeepCopy<List<listitem>>(religionlist); ;
+                    model.religiousattendancelist =  Extensions.getDeepCopy<List<listitem>>(religiousattendancelist); ;
+                    model.hobbylist =  Extensions.getDeepCopy<List<listitem>>(hobbylist); ;
 
                      //setup exculsive lists first (i.e only one value is selected)
                     model.humorlist.First(d => d.id == p.profiledata.humor_id).selected = true;
@@ -369,16 +370,16 @@ namespace Anewluv.Services.Edit
                         CharacterSearchSettingsModel SearchViewModel = new CharacterSearchSettingsModel();
                        //set default values for search settings
                         //set default values for edit profile                
-                        SearchViewModel.humorlist = new List<listitem>(humorlist); ;
-                        SearchViewModel.dietlist = new List<listitem>(dietlist); ;
-                        SearchViewModel.drinkslist = new List<listitem>(drinkslist); ;
-                        SearchViewModel.exerciselist = new List<listitem>(exerciselist); ;
-                        SearchViewModel.smokeslist = new List<listitem>(smokeslist); ;
-                        SearchViewModel.signlist = new List<listitem>(signlist); ;
-                        SearchViewModel.politicalviewlist = new List<listitem>(politicalviewlist); ;
-                        SearchViewModel.religionlist = new List<listitem>(religionlist); ;
-                        SearchViewModel.religiousattendancelist = new List<listitem>(religiousattendancelist); ;
-                        SearchViewModel.hobbylist = new List<listitem>(hobbylist); ;
+                        SearchViewModel.humorlist = (humorlist); ;
+                        SearchViewModel.dietlist = (dietlist); ;
+                        SearchViewModel.drinkslist = (drinkslist); ;
+                        SearchViewModel.exerciselist = (exerciselist); ;
+                        SearchViewModel.smokeslist = (smokeslist); ;
+                        SearchViewModel.signlist = (signlist); ;
+                        SearchViewModel.politicalviewlist = (politicalviewlist); ;
+                        SearchViewModel.religionlist = (religionlist); ;
+                        SearchViewModel.religiousattendancelist = (religiousattendancelist); ;
+                        SearchViewModel.hobbylist = (hobbylist); ;
 
                         searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id });
                         SearchViewModel = searchsettingsextentions.getcharactersearchsettings(SearchViewModel, s, _unitOfWorkAsync);
@@ -440,14 +441,14 @@ namespace Anewluv.Services.Edit
                     var lookingforlist = RedisCacheFactory.SharedObjectHelper.getlookingforlist(_unitOfWorkAsync);
 
                         //set emply list values
-                    model.educationlevellist = new List<listitem>(educationlevellist); 
-                    model.employmentstatuslist = new List<listitem>(employmentstatuslist); 
-                    model.havekidslist = new List<listitem>(havekidslist); 
-                    model.incomelevellist = new List<listitem>(incomelevellist); 
-                    model.livingsituationlist = new List<listitem>(livingsituationlist); 
-                    model.maritalstatuslist = new List<listitem>(maritalstatuslist); 
-                    model.professionlist = new List<listitem>(professionlist); 
-                    model.wantskidslist = new List<listitem>(wantskidslist); 
+                    model.educationlevellist =  Extensions.getDeepCopy<List<listitem>>(educationlevellist); 
+                    model.employmentstatuslist =  Extensions.getDeepCopy<List<listitem>>(employmentstatuslist); 
+                    model.havekidslist =  Extensions.getDeepCopy<List<listitem>>(havekidslist); 
+                    model.incomelevellist =  Extensions.getDeepCopy<List<listitem>>(incomelevellist); 
+                    model.livingsituationlist =  Extensions.getDeepCopy<List<listitem>>(livingsituationlist); 
+                    model.maritalstatuslist =  Extensions.getDeepCopy<List<listitem>>(maritalstatuslist); 
+                    model.professionlist =  Extensions.getDeepCopy<List<listitem>>(professionlist); 
+                    model.wantskidslist =  Extensions.getDeepCopy<List<listitem>>(wantskidslist); 
                         
                         //set the true values
                     model.educationlevellist.First(d => d.id == p.profiledata.educationlevel_id).selected = true; 
@@ -474,14 +475,14 @@ namespace Anewluv.Services.Edit
 
                         LifeStyleSearchSettingsModel SearchViewModel = new LifeStyleSearchSettingsModel();
                         //set default values for search settings
-                        SearchViewModel.educationlevellist = new List<listitem>(educationlevellist);
-                        SearchViewModel.employmentstatuslist = new List<listitem>(employmentstatuslist);
-                        SearchViewModel.havekidslist = new List<listitem>(havekidslist);
-                        SearchViewModel.incomelevellist = new List<listitem>(incomelevellist);
-                        SearchViewModel.livingsituationlist = new List<listitem>(livingsituationlist);
-                        SearchViewModel.maritalstatuslist = new List<listitem>(maritalstatuslist);
-                        SearchViewModel.professionlist = new List<listitem>(professionlist);
-                        SearchViewModel.wantskidslist = new List<listitem>(wantskidslist); 
+                        SearchViewModel.educationlevellist =  (educationlevellist);
+                        SearchViewModel.employmentstatuslist = (employmentstatuslist);
+                        SearchViewModel.havekidslist =  (havekidslist);
+                        SearchViewModel.incomelevellist = (incomelevellist);
+                        SearchViewModel.livingsituationlist =  (livingsituationlist);
+                        SearchViewModel.maritalstatuslist = (maritalstatuslist);
+                        SearchViewModel.professionlist = (professionlist);
+                        SearchViewModel.wantskidslist =  (wantskidslist); 
                         
                         searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id });
                         SearchViewModel = searchsettingsextentions.getlifestylesearchsettings(SearchViewModel, s, _unitOfWorkAsync);
