@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 
 #endregion
 
@@ -30,7 +31,21 @@ namespace Nmedia.Infrastructure.Domain
 
     }
 
+    public async Task UpdateApiKeyActivity(string keyvalue)
+    {
 
+        try
+        {
+            var lastaccesstime = DateTime.Now;
+            await Database.ExecuteSqlCommandAsync("UPDATE Apikeys SET lastaccesstime = {0} WHERE  keyvalue = {1} ", lastaccesstime, keyvalue);        
+        }
+        catch (Exception ex)
+        { 
+        //TODO log
+        
+        }
+    
+    }
 
 
 

@@ -112,6 +112,7 @@ namespace Anewluv.Apikey
                 nonauthenticatedURLS.Add("Nmedia.Infrastructure.Web.Services.Logging");
                 nonauthenticatedURLS.Add("Nmedia.Infrastructure.Web.Services.Notification");
                 nonauthenticatedURLS.Add("Nmedia.Infrastructure.Web.Services.Authorization");
+                nonauthenticatedURLS.Add("membersservice.svc/rest/updateuserlogintimebyprofileid");
 
                 //for testing non auth on this
                // nonauthenticatedURLS.Add("Anewluv.Web.Services.Members");
@@ -176,7 +177,7 @@ namespace Anewluv.Apikey
 
                 //check if we are looking at the URLS or specific methods that allow Anonymoys access
                 //seecon part checks the end of the URL i.e updateuserlogintimebyprofileidandsessionid since it could be called from somehwere else
-                if (nonauthenticatedURLS.Contains(urisegments[1].ToString().Replace("/", ""))) return true;
+                if (nonauthenticatedURLS.Contains(urisegments[1].ToLower().ToString().Replace("/", ""))) return true;
                 
                 //flag the API key only auth URLS
                 if ((apikeyonlyURLS.Contains(urisegments[1].ToString().ToLower().Replace("/", "")) || apikeyonlyURLS.Contains(path.ToLower()))) apikeyauthonly = true; ;
@@ -185,7 +186,7 @@ namespace Anewluv.Apikey
                 //allows service to be discovereable with no api key
                 if (OperationContext.Current.IncomingMessageHeaders.To.Segments.Last().Replace("/", "") != "$metadata")
                 {
-                    Guid? key = WCFContextParser.GetAPIKey(operationContext);   
+                     Guid? key = WCFContextParser.GetAPIKey(operationContext);   
               
                    // ProfileModel ProfileModel = new ProfileModel(); 
                     //if there is no API key nothing happens
@@ -228,7 +229,7 @@ namespace Anewluv.Apikey
                                validrequest = false; 
                            }
 
-
+                           if (!validrequest)  CreateAccsessExiredReply(operationContext, key.Value.ToString());
 
                        }
                        else
@@ -236,14 +237,17 @@ namespace Anewluv.Apikey
                            //just validate the api key
                           // var dd = Api.ApiKeyService.IsValidAPIKey(new apikey { key = apiKey }).Result;
                            validrequest = Api.AsyncCalls.isvalidapikeyasync(new apikey { keyvalue = key.Value, application_id = (int)applicationenum.anewluv }).Result;//; Utilities.ValidateApiKey(key).Result;
+                           
                        }
+                        //create well formatted reply for UI
+                       if (!validrequest) CreateApiKeyErrorReply(operationContext, key.Value.ToString());
                         //Api.DisposeApiKeyService();
                         //   return validrequest;                        
                     }
                     else
                     {
                         // Send back an HTML reply
-                        CreateApiKeyErrorReply(operationContext, key.Value.ToString());
+                        CreateNoApikeyReply(operationContext);
                         validrequest = false;
                     }  
                
@@ -261,7 +265,7 @@ namespace Anewluv.Apikey
                 //log error mesasge
                 //handle logging here
                 var message2 = ex.Message;
-                throw;
+                throw ex;  //TO DO send a generic error message for falures here
 
             }
             finally
@@ -292,6 +296,45 @@ namespace Anewluv.Apikey
                 }
             }
         }
+
+
+
+        private static void CreateNoApikeyReply(OperationContext operationContext)
+        {
+            // The error message is padded so that IE shows the response by default
+            using (var sr = new StringReader("<?xml version=\"1.0\" encoding=\"utf-8\"?>" + APIErrorHTML))
+            {
+                XElement response = XElement.Load(sr);
+                using (Message reply = Message.CreateMessage(MessageVersion.None, null, response))
+                {
+                    HttpResponseMessageProperty responseProp = new HttpResponseMessageProperty() { StatusCode = HttpStatusCode.Unauthorized, StatusDescription = "No valid Token/Key !" };
+                    responseProp.Headers[HttpResponseHeader.ContentType] = "text/html";
+                    reply.Properties[HttpResponseMessageProperty.Name] = responseProp;
+                    operationContext.RequestContext.Reply(reply);
+                    // set the request context to null to terminate processing of this request
+                    operationContext.RequestContext = null;
+                }
+            }
+        }
+
+        private static void CreateAccsessExiredReply(OperationContext operationContext, string key)
+        {
+            // The error message is padded so that IE shows the response by default
+            using (var sr = new StringReader("<?xml version=\"1.0\" encoding=\"utf-8\"?>" + APIErrorHTML))
+            {
+                XElement response = XElement.Load(sr);
+                using (Message reply = Message.CreateMessage(MessageVersion.None, null, response))
+                {
+                    HttpResponseMessageProperty responseProp = new HttpResponseMessageProperty() { StatusCode = HttpStatusCode.Unauthorized, StatusDescription = "Token has Expired or is Invaid!" };
+                    responseProp.Headers[HttpResponseHeader.ContentType] = "text/html";
+                    reply.Properties[HttpResponseMessageProperty.Name] = responseProp;
+                    operationContext.RequestContext.Reply(reply);
+                    // set the request context to null to terminate processing of this request
+                    operationContext.RequestContext = null;
+                }
+            }
+        }
+
 
         private static void CreateUserNamePasswordErrorReply(OperationContext operationContext)
         {

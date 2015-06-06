@@ -30,6 +30,25 @@ using Nmedia.Infrastructure.ExceptionHandling;
 
 namespace Nmedia.Services.Authorization
 {
+
+    [DataContract]
+    public class AnewluvMessages
+    {
+        [DataMember]
+        public List<string> messages { get; set; }
+        [DataMember]
+        public List<string> errormessages { get; set; }
+        //TO DO allow for objects to comeback
+
+
+        public AnewluvMessages()
+        {
+            this.messages = new List<string>();
+            this.errormessages = new List<string>();
+        }
+
+
+    }
     //TO do with this new patter either find a way to make extention methods use the generic repo dict in EFUnitOfWork or 
     //MOve the remaining ext method methods into this service layer that uses the EF unit of work
     //TO do also make a single Update method generic and implement that for the rest of the Repo saves.
@@ -38,6 +57,8 @@ namespace Nmedia.Services.Authorization
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, ConcurrencyMode = ConcurrencyMode.Multiple)]
     public class ApikeyService : IApikeyService
     {
+
+
         //if our repo was generic it would be IPromotionRepository<T>  etc IPromotionRepository<reviews> 
         //private IPromotionRepository  promotionrepository;
 
@@ -126,16 +147,17 @@ namespace Nmedia.Services.Authorization
 
         /// <summary>
         /// Make sure the profileID matches the API key (user identifer and also the API key is active as well)
+        /// TO DO check last activity period if less than 30 mins 
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
         public async Task<bool> IsValidAPIKeyAndUser(apikey model)
         {
-            //Boolean result = false;
+            Boolean isvalid = false;
             try
             {
-                var task = Task.Factory.StartNew(() =>
-                {             
+              //  var task = Task.Factory.StartNew(() =>
+              //  {             
                   //    using (var db = _unitOfWork)
                     //var apikeys = _unitOfWorkAsync.Repository<apikey>().Queryable();
                     //var users = _unitOfWorkAsync.Repository<user>().Queryable();
@@ -152,17 +174,37 @@ namespace Nmedia.Services.Authorization
                     //                user = o
                                   
                     //            }).FirstOrDefault();
-
+                
                    
-                        var result = _unitOfWorkAsync.Repository<apikey>().Query(p => p.keyvalue == model.keyvalue && p.application_id == model.application_id & p.active == true).Include(x=>x.user).Select().FirstOrDefault();
-                        if (result != null &&  result.user !=null && result.user.useridentifier == model.user.useridentifier )
+                        var result =  await _unitOfWorkAsync.RepositoryAsync<apikey>()
+                        .Query(p => p.keyvalue == model.keyvalue && p.application_id == model.application_id & p.active == true).Include(x=>x.user).SelectAsync();
+                        apikey  keydata = result.FirstOrDefault();
+                     
+
+                        if (keydata != null && keydata.user != null && keydata.user.useridentifier == model.user.useridentifier)
                         {
-                            return true;
+                             var currenttime = DateTime.Now;
+                             //default expiration is 90 mins so if the current time is greater than 90 mins from last access time the token is invalid
+                             var apikeyexpirationtime = keydata.lastaccesstime.GetValueOrDefault().AddMinutes(90);                         
+                             //var dif = (apikeyexpirationtime - currenttime).TotalMinutes;
+                             //var test 
+                            //check the time diff
+                             int value = DateTime.Compare(currenttime, apikeyexpirationtime);
+
+                             if (value > 0) isvalid = false;
+                             else
+                             {
+                                 isvalid = true;
+                             }
+                             //update the last accessed key
+                             await UpdateApiKeyActivity(model.keyvalue, _unitOfWorkAsync);
+                             return isvalid;
+                            
                         }                        
                     
-                        return false;
-                });
-                return await task.ConfigureAwait(false);
+                        return isvalid;
+              //  });
+              //  return await task.ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -273,7 +315,45 @@ namespace Nmedia.Services.Authorization
             }
 
 
+        }
+
+        private async Task UpdateApiKeyActivity(Guid keyvalue, IUnitOfWorkAsync db)
+        {
+
+            try
+            {
+
+                //Convert the string into a Guid and validate it
+                // not validating against a list anymore
+
+
+
+                //   var task = Task.Factory.StartNew(() =>
+                //  {      
+               await _storedProcedures.UpdateApiKeyActivity(keyvalue.ToString());
+                //return result.key;
+
+                //  });
+                // await task.ConfigureAwait(false);
+            }
+
+
+
+            catch (Exception ex)
+            {
+
+                //instantiate logger here so it does not break anything else.
+                logger = new Logging(applicationEnum.MemberService);
+                //int profileid = Convert.ToInt32(viewerprofileid);
+                logger.WriteSingleEntry(logseverityEnum.Warning, globals.getenviroment, ex, null);
+
+                //throw convertedexcption;
+                //log the error and do nothing for for now
+            }
+
+
         }        
+
 
         public async Task<Guid> GenerateAPIkey(ApiKeyValidationModel model)
         {

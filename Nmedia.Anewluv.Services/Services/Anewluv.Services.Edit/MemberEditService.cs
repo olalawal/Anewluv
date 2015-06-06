@@ -231,6 +231,10 @@ namespace Anewluv.Services.Edit
                         model.hotfeaturelist = Extensions.getDeepCopy<List<listitem>>(hotfeaturelist);
                         model.metricheightlist = Extensions.getDeepCopy<List<metricheight>>(metricheightlist);  //added list of metric heights so it can be used in the drop down
 
+
+
+                        model.metricheightlist.First(d => d.heightindex == model.height.ToString()).selected = true;
+
                        //update the value as checked here on the list i.e select the body type in the list
                         model.bodytypelist.First(d => d.id ==  p.profiledata.bodytype_id).selected = true;
                        

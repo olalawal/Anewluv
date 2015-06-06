@@ -155,6 +155,8 @@ namespace Anewluv.Services.Authentication
             //return null;
         }
 
+
+       
         public AnewLuvMembershipUser createusercustom(MembershipUserViewModel model)
         {
             MembershipCreateStatus status;
