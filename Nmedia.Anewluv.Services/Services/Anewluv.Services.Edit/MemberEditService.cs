@@ -347,15 +347,15 @@ namespace Anewluv.Services.Edit
                     model.hobbylist =  Extensions.getDeepCopy<List<listitem>>(hobbylist); ;
 
                      //setup exculsive lists first (i.e only one value is selected)
-                    model.humorlist.First(d => d.id == p.profiledata.humor_id).selected = true;
-                    model.dietlist.First(d => d.id == p.profiledata.diet_id).selected = true;
-                    model.drinkslist.First(d => d.id == p.profiledata.drinking_id).selected = true;
-                    model.exerciselist.First(d => d.id == p.profiledata.exercise_id).selected = true;
-                    model.smokeslist.First(d => d.id == p.profiledata.smoking_id).selected = true;
-                    model.signlist.First(d => d.id == p.profiledata.sign_id).selected = true;
-                    model.politicalviewlist.First(d => d.id == p.profiledata.politicalview_id).selected = true;
-                    model.religionlist.First(d => d.id == p.profiledata.religion_id).selected = true;
-                    model.religiousattendancelist.First(d => d.id == p.profiledata.religiousattendance_id).selected = true;
+                   if (p.profiledata.humor_id !=null)  model.humorlist.First(d => d.id == p.profiledata.humor_id).selected = true;
+                   if (p.profiledata.diet_id != null) model.dietlist.First(d => d.id == p.profiledata.diet_id).selected = true;
+                   if (p.profiledata.drinking_id != null) model.drinkslist.First(d => d.id == p.profiledata.drinking_id).selected = true;
+                   if (p.profiledata.exercise_id != null) model.exerciselist.First(d => d.id == p.profiledata.exercise_id).selected = true;
+                   if (p.profiledata.smoking_id != null) model.smokeslist.First(d => d.id == p.profiledata.smoking_id).selected = true;
+                   if (p.profiledata.sign_id != null) model.signlist.First(d => d.id == p.profiledata.sign_id).selected = true;
+                   if (p.profiledata.politicalview_id != null) model.politicalviewlist.First(d => d.id == p.profiledata.politicalview_id).selected = true;
+                   if (p.profiledata.religion_id != null) model.religionlist.First(d => d.id == p.profiledata.religion_id).selected = true;
+                   if (p.profiledata.religiousattendance_id != null) model.religiousattendancelist.First(d => d.id == p.profiledata.religiousattendance_id).selected = true;
 
                     //update the list with the items that are selected.
                     foreach (listitem hobby in hobbylist.Where(c => p.profilemetadata.profiledata_hobby.Any(f => f.hobby_id == c.id)))
@@ -452,17 +452,18 @@ namespace Anewluv.Services.Edit
                     model.livingsituationlist =  Extensions.getDeepCopy<List<listitem>>(livingsituationlist); 
                     model.maritalstatuslist =  Extensions.getDeepCopy<List<listitem>>(maritalstatuslist); 
                     model.professionlist =  Extensions.getDeepCopy<List<listitem>>(professionlist); 
-                    model.wantskidslist =  Extensions.getDeepCopy<List<listitem>>(wantskidslist); 
+                    model.wantskidslist =  Extensions.getDeepCopy<List<listitem>>(wantskidslist);
+                    model.lookingforlist = Extensions.getDeepCopy<List<listitem>>(lookingforlist);
                         
                         //set the true values
-                    model.educationlevellist.First(d => d.id == p.profiledata.educationlevel_id).selected = true; 
-                    model.employmentstatuslist.First(d => d.id == p.profiledata.employmentstatus_id).selected = true;
-                    model.havekidslist.First(d => d.id == p.profiledata.kidstatus_id).selected = true;
-                     model.incomelevellist.First(d => d.id == p.profiledata.incomelevel_id).selected = true;
-                    model.livingsituationlist.First(d => d.id == p.profiledata.bodytype_id).selected = true;
-                    model.maritalstatuslist.First(d => d.id == p.profiledata.maritalstatus_id).selected = true;
-                    model.professionlist.First(d => d.id == p.profiledata.profession_id).selected = true;
-                    model.wantskidslist.First(d => d.id == p.profiledata.wantsKidstatus_id).selected = true;
+                    if (p.profiledata.educationlevel_id != null )model.educationlevellist.First(d => d.id == p.profiledata.educationlevel_id).selected = true;
+                    if (p.profiledata.employmentstatus_id != null) model.employmentstatuslist.First(d => d.id == p.profiledata.employmentstatus_id.GetValueOrDefault()).selected = true;
+                    if (p.profiledata.kidstatus_id != null) model.havekidslist.First(d => d.id == p.profiledata.kidstatus_id.GetValueOrDefault()).selected = true;
+                    if (p.profiledata.incomelevel_id != null) model.incomelevellist.First(d => d.id == p.profiledata.incomelevel_id).selected = true;
+                    if (p.profiledata.livingsituation_id != null) model.livingsituationlist.First(d => d.id == p.profiledata.livingsituation_id.GetValueOrDefault()).selected = true;
+                    if (p.profiledata.maritalstatus_id != null) model.maritalstatuslist.First(d => d.id == p.profiledata.maritalstatus_id.GetValueOrDefault()).selected = true;
+                    if (p.profiledata.profession_id != null) model.professionlist.First(d => d.id == p.profiledata.profession_id.GetValueOrDefault()).selected = true;
+                    if (p.profiledata.wantsKidstatus_id != null) model.wantskidslist.First(d => d.id == p.profiledata.wantsKidstatus_id.GetValueOrDefault()).selected = true;
 
 
                     //update the list with the items that are selected.
@@ -479,6 +480,7 @@ namespace Anewluv.Services.Edit
 
                         LifeStyleSearchSettingsModel SearchViewModel = new LifeStyleSearchSettingsModel();
                         //set default values for search settings
+                        SearchViewModel.lookingforlist = (lookingforlist);
                         SearchViewModel.educationlevellist =  (educationlevellist);
                         SearchViewModel.employmentstatuslist = (employmentstatuslist);
                         SearchViewModel.havekidslist =  (havekidslist);
