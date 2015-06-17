@@ -37,7 +37,7 @@ namespace Nmedia.Infrastructure.Domain.Data.Apikey
             [DataMember]
             public string externalapplicationname { get; set; }
             [DataMember]
-            public int? user_id { get; set; }
+            public int? user_id { get; set; }         
             [DataMember]
             public virtual user user { get; set; }
             [DataMember]

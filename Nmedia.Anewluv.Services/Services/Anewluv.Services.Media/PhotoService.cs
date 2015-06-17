@@ -29,6 +29,8 @@ using Anewluv.Domain;
 using Repository.Pattern.UnitOfWork;
 using Nmedia.Infrastructure;
 using Nmedia.Infrastructure.Domain.Data.Notification;
+using Nmedia.Infrastructure.Domain.Data.Apikey;
+using Nmedia.Infrastructure.Domain.Data.Apikey.DTOs;
 
 namespace Anewluv.Services.Media
 {
@@ -211,8 +213,8 @@ namespace Anewluv.Services.Media
         }    
         //****TO DO pass apikey/token and make sure the token matches the profileid whose photos are being acccess and the token is active as well
        //get the api key from the wcf session tho
-        //when accessing private photos or photo albums
-       //This should be the only method used to get photos
+       //when accessing private photos or photo albums
+       //This should be the only method used to get photos for the user who ownes the account
        public async Task<PhotoSearchResultsViewModel> getfilteredphotospaged(PhotoModel model)
        {
            {
@@ -220,12 +222,19 @@ namespace Anewluv.Services.Media
                {
                    var task = Task.Factory.StartNew(() =>
                    {
-                       var repo = _unitOfWorkAsync.Repository<photoconversion>();
-                       var dd = mediaextentionmethods.getfilteredphotospaged
-                           (repo,model);
+                       //check the api key matches the profile id pased 
+                       var profileidmatchesapikey = Api.AsyncCalls.validateapikeybyuseridentifierasync(new
+                                       ApiKeyValidationModel { application_id = (int)applicationenum.anewluv, keyvalue = model.apikey.Value, useridentifier = model.profileid.Value }).Result;
 
-                       return dd;
- 
+                       if (profileidmatchesapikey)
+                       {
+                           var repo = _unitOfWorkAsync.Repository<photoconversion>();
+                           var dd = mediaextentionmethods.getfilteredphotospaged
+                               (repo, model);
+
+                           return dd;
+                       }
+                       return null;
 
                    });
                    return await task.ConfigureAwait(false);
@@ -259,6 +268,7 @@ namespace Anewluv.Services.Media
                {
                    var task = Task.Factory.StartNew(() =>
                    {
+                    
 
                        var repo = _unitOfWorkAsync.Repository<photoconversion>();
                        var dd = mediaextentionmethods.getothersfilteredphotospaged
@@ -297,13 +307,20 @@ namespace Anewluv.Services.Media
                {
                    var task = Task.Factory.StartNew(() =>
                    {
-                       var repo = _unitOfWorkAsync.Repository<photoconversion>();
-                       var dd = mediaextentionmethods.getfilteredphoto
-                           (repo,model);
 
-                       return dd;
+                       //check the api key matches the profile id pased 
+                       var profileidmatchesapikey = Api.AsyncCalls.validateapikeybyuseridentifierasync(new
+                                       ApiKeyValidationModel { application_id = (int)applicationenum.anewluv, keyvalue = model.apikey.Value,useridentifier = model.profileid.Value }).Result;
+                       if (profileidmatchesapikey)
+                       {
+                           var repo = _unitOfWorkAsync.Repository<photoconversion>();
+                           var dd = mediaextentionmethods.getfilteredphoto
+                               (repo, model);
 
+                           return dd;
 
+                       }
+                       return null;
                    });
                    return await task.ConfigureAwait(false);
 

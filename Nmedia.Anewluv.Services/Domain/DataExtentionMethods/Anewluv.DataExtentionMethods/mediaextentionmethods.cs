@@ -44,7 +44,7 @@ namespace Anewluv.DataExtentionMethods
                 //not reviewed
                 returnmodel.NotApprovedPhotoCount = photomodel.Where(a => a.photostatus_id == (int)photoapprovalstatusEnum.NotReviewed && a.photo_securitylevel.Count() == 0).Count();
                 //rejected
-                returnmodel.RejectedPhotoCount = photomodel.Where(a => a.photostatus_id == (int)photoapprovalstatusEnum.NotReviewed && a.photo_securitylevel.Count() == 0).Count();
+                returnmodel.RejectedPhotoCount = photomodel.Where(a => a.photostatus_id == (int)photoapprovalstatusEnum.Rejected && a.photo_securitylevel.Count() == 0).Count();
                 //interests only view
                 returnmodel.InterestsOnlyPhotoCount = photomodel.Where(a => a.photo_securitylevel.Count() > 0 && a.photo_securitylevel.Any(d => d.securityleveltype_id == (int)securityleveltypeEnum.Intrests)).Count();
                 //likes only view
@@ -131,24 +131,21 @@ namespace Anewluv.DataExtentionMethods
 
 
 
-        //TO DO maybe we need to do something with viewer profile id i.e so we can determine what photos the viewer has access to
-        //i.e if view profile ID is populated we check if the user has access to Interest,Likes or Friends Photos after the list
-        //of photos is gathters.
+        
 
-        //TO DO need to grab the actions of the current user to the photo profileid (i.e viewer profileid) 
-        //if user is in correect relation ship to the photo profileid then allow the photo to be downloaded.
+       
 
         //TO DO Premuim roles get all
         //TO DO needs code to check roles to see how many photos can be viewd etc
         public static IQueryable<photoconversion> filterphotos(this IRepository<photoconversion> repo, PhotoModel model)
         {
-
             try
             {
+
                 //added roles
                 //filterer out photos that are not approved
                 IQueryable<photoconversion> photomodel = repo.Query(z => z.photo.profile_id == model.profileid.Value &
-                    (z.photo.approvalstatus_id != (int)photoapprovalstatusEnum.Rejected) &  //filter not approved
+                   // (z.photo.approvalstatus_id != (int)photoapprovalstatusEnum.Rejected) &  //filter not approved
                     (z.photo.photostatus_id != (int)photostatusEnum.deletedbyadmin | z.photo.photostatus_id != (int)photostatusEnum.deletedbyuser))  //filter deleted 
                      .Include(p => p.lu_photoformat)
                     .Include(p => p.photo.profilemetadata)
@@ -156,26 +153,23 @@ namespace Anewluv.DataExtentionMethods
                     .Include(p => p.photo.profilemetadata.profile.membersinroles.Select(z => z.lu_role))
                     .Select().AsQueryable();
 
-
               
                 //to do roles ? allowing what photos they can view i.e the high rez stuff or more than 2 -3 etc
 
                 //photo id
                 if (model.photoid != null)
                     photomodel = photomodel.Where(a => a.photo_id == model.photoid).AsQueryable();
-
-                //security level
-                if (model.photosecuritylevelid != null)    //if phop
-                    photomodel = photomodel.Where(a => a.photo.photo_securitylevel.Count() > 0 && a.photo.photo_securitylevel.Any(d => d.securityleveltype_id ==model.photosecuritylevelid));
+                               
+                //also assumes the viewer is the same as the profile ID
+                //only allow the user who owns them get photos by security level   
+                if (model.photosecuritylevelid != null)
+                    photomodel = photomodel.Where(a => a.photo.photo_securitylevel.Count() > 0 && a.photo.photo_securitylevel.Any(d => d.securityleveltype_id == model.photosecuritylevelid));               
                 if (model.photosecuritylevelid == null) //only grab photos with no status 
-                    photomodel = photomodel.Where(a => a.photo.photo_securitylevel.Count() == 0).AsQueryable();
-
-             
+                    photomodel = photomodel.Where(a => a.photo.photo_securitylevel.Count() == 0).AsQueryable();             
                
                 //status
                 if (model.phototstatusid != null)
-                    photomodel = photomodel.Where(a => a.photo.photostatus_id == model.phototstatusid);
-                
+                    photomodel = photomodel.Where(a => a.photo.photostatus_id == model.phototstatusid);                
                
 
                 //format
@@ -184,11 +178,14 @@ namespace Anewluv.DataExtentionMethods
                 if (model.photoformatid == null) //default is medium quality
                     photomodel = photomodel.Where(a => a.formattype_id ==  (int)photoformatEnum.Medium);
 
-                //filter out unaproved photos that were just uploaded
-                 if(model.phototapprovalstatusid !=null)
-                     photomodel = photomodel.Where(z => z.photo.approvalstatus_id == model.phototapprovalstatusid.Value);
-                 if (model.phototapprovalstatusid == null)
-                     photomodel = photomodel.Where(z => z.photo.approvalstatus_id != (int)photoapprovalstatusEnum.NotReviewed);
+                //only allow admins or the user to view un reviewed photos 
+                if (model.phototapprovalstatusid != null )
+                     photomodel = photomodel.Where(z => z.photo.approvalstatus_id == model.phototapprovalstatusid.Value);     
+                //if no status is requested just show all that are reviewed and approved
+                if (model.phototapprovalstatusid == null)
+                    photomodel = photomodel.Where(z => z.photo.approvalstatus_id != (int)photoapprovalstatusEnum.NotReviewed |
+                        z.photo.approvalstatus_id != (int)photoapprovalstatusEnum.Rejected |
+                        z.photo.approvalstatus_id != (int)photoapprovalstatusEnum.RequiresFurtherInformation);
              
 
                
@@ -208,6 +205,10 @@ namespace Anewluv.DataExtentionMethods
             return null;
         }
 
+
+        //THis function is for list other users photos
+        //TO DO in another function for viewer others photos we will need to grab the actions of the current user to the photo profileid (i.e viewer profileid) 
+        //if user is in correect relation ship to the photo profileid then allow the photo to be downloaded.
         //TO DO Premuim roles get all
         //TO DO needs code to check roles to see how many photos can be viewd etc
         public static IQueryable<photoconversion> filterothersphotos(this IRepository<photoconversion> repo, PhotoModel model)
@@ -326,10 +327,8 @@ namespace Anewluv.DataExtentionMethods
 
             try
             {
-                
 
-
-                var results = filterphotos(repo,model).Select(p => new PhotoViewModel
+                var results = filterphotos(repo, model).Select(p => new PhotoViewModel
                 {
                     photoid = p.photo.id,
                     profileid = p.photo.profile_id,

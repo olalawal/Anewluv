@@ -21,6 +21,8 @@ namespace Anewluv.Domain.Data.ViewModels
         [DataMember]
         public int? profileid { get; set; }
         [DataMember]
+        public Guid? apikey { get; set; }
+        [DataMember]
         public string screenname { get; set; }
         //**********/
         [DataMember]

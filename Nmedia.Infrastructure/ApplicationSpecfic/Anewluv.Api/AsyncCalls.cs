@@ -41,6 +41,7 @@ namespace Anewluv.Api
 
 
         }
+
         public static async Task<bool> isvalidapikeyanduserasync(apikey model)
         {
 
@@ -58,6 +59,19 @@ namespace Anewluv.Api
 
             Task<Guid> returnedTaskTResult = Api.ApiKeyService.ValidateOrGenerateNewApiKey(model);
             Guid result = await returnedTaskTResult;
+
+            return result;
+
+            // IsApiKeyValid = await 
+
+
+        }
+
+        public static async Task<bool> validateapikeybyuseridentifierasync(ApiKeyValidationModel model)
+        {
+
+            Task<bool> returnedTaskTResult = Api.ApiKeyService.ValidateApiKeyByUseridentifier(model);
+            bool result = await returnedTaskTResult;
 
             return result;
 

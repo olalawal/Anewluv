@@ -225,6 +225,50 @@ namespace Nmedia.Services.Authorization
 
         }
 
+
+
+        /// <summary>
+        /// make sure 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<bool> ValidateApiKeyByUseridentifier(ApiKeyValidationModel  model)
+        {
+            Boolean isvalid = false;
+            try
+            {
+               
+
+
+                var result = await _unitOfWorkAsync.RepositoryAsync<apikey>()
+                .Query(p => p.keyvalue == model.keyvalue && p.application_id == model.application_id & p.active == true).Include(x => x.user).SelectAsync();
+                apikey keydata = result.FirstOrDefault();
+
+
+                if (keydata != null && keydata.user != null && keydata.user.useridentifier == model.useridentifier) isvalid = true;
+                
+               
+            }
+            catch (Exception ex)
+            {
+
+                //instantiate logger here so it does not break anything else.
+                logger = new Logging(applicationEnum.MemberService);
+                //int profileid = Convert.ToInt32(viewerprofileid);
+                logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member Apikey service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw ex;
+
+                //throw convertedexcption;
+            }
+            return isvalid;
+
+
+        }
+
         public async Task<Guid> ValidateOrGenerateNewApiKey(ApiKeyValidationModel model)
         {
 
