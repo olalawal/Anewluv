@@ -29,6 +29,8 @@ using Nmedia.Infrastructure.DependencyInjection;
 using Nmedia.Infrastructure.DTOs;
 using Anewluv.Caching.RedisCaching;
 using Nmedia.Infrastructure;
+using Repository.Pattern.Infrastructure;
+
 
 
 namespace Anewluv.Services.Edit
@@ -829,35 +831,35 @@ namespace Anewluv.Services.Edit
 
             try
             {
-                
 
 
-                //  profile p = _unitOfWorkAsync.profiles.Where(z => z.id == profileid).First();
+               bool updated = false;
+               var convertedbirthdate = (DateTime?)newmodel.basicsettings.birthdate.Value.Date;
 
                 //TO DO
                 //Up here we will check to see if the values have not changed 
-                var birthdate = newmodel.basicsettings.birthdate;
-                var AboutMe = newmodel.basicsettings.aboutme;
-                var MyCatchyIntroLine = newmodel.basicsettings.catchyintroline;
-                var city = newmodel.basicsettings.city;
-                var stateprovince = newmodel.basicsettings.stateprovince;
-                var countryid = newmodel.basicsettings.countryid;
-                var gender = newmodel.basicsettings.gender;
-                var postalcode = newmodel.basicsettings.postalcode;
-                var dd = newmodel.basicsettings.phonenumber;
-                //get current values from DB in case some values were not updated
-
-                //link the profiledata entities
-                p.modificationdate = DateTime.Now;
-                //manually update model i think
-                //set properties in the about me
-                p.profiledata.aboutme = AboutMe;
-                p.profiledata.birthdate = birthdate;
-                p.profiledata.mycatchyintroLine = MyCatchyIntroLine;
-
+                if (  p.profiledata.birthdate.Value.Date != convertedbirthdate ) { p.profiledata.birthdate = convertedbirthdate  ; updated =true; };
+                if (p.profiledata.aboutme != newmodel.basicsettings.aboutme) { p.profiledata.aboutme = newmodel.basicsettings.aboutme; updated = true; };                
+                if (  p.profiledata.mycatchyintroLine !=newmodel.basicsettings.catchyintroline ) { p.profiledata.mycatchyintroLine = newmodel.basicsettings.catchyintroline  ; updated =true; };
+                if (p.profiledata.city != newmodel.basicsettings.city) { p.profiledata.city = newmodel.basicsettings.city; updated = true; };                
+                if ( (newmodel.basicsettings.stateprovince != null ) && p.profiledata.stateprovince != newmodel.basicsettings.stateprovince ) { p.profiledata.stateprovince = newmodel.basicsettings.stateprovince  ; updated =true; };              
+                if (newmodel.basicsettings.countryid != null &&  p.profiledata.countryid != newmodel.basicsettings.countryid) { p.profiledata.countryid = newmodel.basicsettings.countryid  ; updated =true; };
+                if (  newmodel.basicsettings.gender.id !=0 &&  p.profiledata.gender_id != newmodel.basicsettings.gender.id ) { p.profiledata.gender_id = newmodel.basicsettings.gender.id  ; updated =true; };
+                if (  (p.profiledata.postalcode !=null |  p.profiledata.postalcode !="" )&&  p.profiledata.postalcode != newmodel.basicsettings.postalcode ) { p.profiledata.postalcode = newmodel.basicsettings.postalcode  ; updated =true; };
+                if ((newmodel.basicsettings.phonenumber  != "" | newmodel.basicsettings.phonenumber  != "NA") &&  p.profiledata.phone!= newmodel.basicsettings.phonenumber ) { p.profiledata.phone = newmodel.basicsettings.phonenumber  ; updated =true; };
              
-                _unitOfWorkAsync.Repository<profile>().Update(p);
-                _unitOfWorkAsync.SaveChanges();
+
+              
+                //TO DO log actvity ?
+                if (updated)
+                {
+                    p.modificationdate = DateTime.Now;                   
+                    _unitOfWorkAsync.Repository<profile>().InsertOrUpdateGraph(p);
+                    _unitOfWorkAsync.SaveChanges();
+                    Api.AnewLuvLogging.LogProfileActivity(new ProfileModel { profileid = p.id }, (int)activitytypeEnum.updateprofile, OperationContext.Current);
+                }
+
+                  // LogProfileActivity(ProfileModel ProfileModel, int activitytypeid,OperationContext context)
 
                 if (newmodel.basicsearchsettings != null)
                 {
@@ -889,6 +891,7 @@ namespace Anewluv.Services.Edit
         private AnewluvMessages updatememberappearancesettings(EditProfileModel newmodel, profile p, AnewluvMessages messages)
         {
             bool profileupdated = false ;
+            bool profilelistsupdated  = false;
 
             try
             {
@@ -928,16 +931,28 @@ namespace Anewluv.Services.Edit
                 //if (height.HasValue == true) p.profiledata.lu_height = height;
 
                 if (newmodel.appearancesettings.hotfeaturelist.Count > 0)
-                    updatemembermetatdatahotfeatures(newmodel.appearancesettings.hotfeaturelist, p.profilemetadata);
+                    profilelistsupdated = updatemembermetatdatahotfeatures(newmodel.appearancesettings.hotfeaturelist, p.profilemetadata, profilelistsupdated);
                 if (newmodel.appearancesettings.ethnicitylist.Count > 0)
-                    updatemembermetatdataethnicity(newmodel.appearancesettings.ethnicitylist, p.profilemetadata);
+                    profilelistsupdated = updatemembermetatdataethnicity(newmodel.appearancesettings.ethnicitylist, p.profilemetadata, profilelistsupdated);
 
 
                 //_unitOfWorkAsync.Entry(profiledata).State = EntityState.Modified;
+                // int changes = _unitOfWorkAsync.SaveChanges();
                 if (profileupdated)
                 {
+                    p.ObjectState = ObjectState.Modified;
                     _unitOfWorkAsync.Repository<profile>().Update(p);
+
+                }
+
+
+                if (profilelistsupdated | profileupdated)
+                {
                     _unitOfWorkAsync.SaveChanges();
+                    messages.messages.Add("Appearance settings have been updated !");
+                }
+                {
+                    messages.errormessages.Add("Nothing to update!");
                 }
               
                 if (newmodel.appearancesearchsettings != null)
@@ -970,7 +985,8 @@ namespace Anewluv.Services.Edit
         //TO DO send back the messages on errors and when nothing is changed
         private AnewluvMessages updatemembercharactersettings(EditProfileModel newmodel, profile p, AnewluvMessages messages)
         {
-            bool profileupdated = true;
+            bool profileupdated = false;
+            bool profilelistsupdated = false;
 
             try
             {
@@ -1065,16 +1081,27 @@ namespace Anewluv.Services.Edit
                     profileupdated = true;
                 }
                  
+
                 if (newmodel.charactersettings.hobbylist.Count > 0)
-                    updatemembermetatdatahobby(newmodel.charactersettings.hobbylist, p.profilemetadata);
+                  profilelistsupdated =    updatemembermetatdatahobby(newmodel.charactersettings.hobbylist, p.profilemetadata,profilelistsupdated);
 
 
+                if (profileupdated)
+                {
+                    p.ObjectState = ObjectState.Modified;
+                    _unitOfWorkAsync.Repository<profile>().Update(p);
 
-                //_unitOfWorkAsync.Entry(profiledata).State = EntityState.Modified;
-                // int changes = _unitOfWorkAsync.SaveChanges();
-               _unitOfWorkAsync.Repository<profile>().Update(p);
-               _unitOfWorkAsync.SaveChanges();
+                }
 
+                if (profilelistsupdated | profileupdated)
+                {
+                    _unitOfWorkAsync.SaveChanges();
+                    messages.messages.Add("Character settings have been updated !");
+                }
+                {
+                    messages.errormessages.Add("Nothing to update!");
+                }
+              
 
                if (newmodel.charactersearchsettings != null)
                {
@@ -1110,7 +1137,8 @@ namespace Anewluv.Services.Edit
         //TO DO send back the messages on errors and when nothing is changed
         private AnewluvMessages updatememberlifestylesettings(EditProfileModel newmodel, profile p, AnewluvMessages messages)
         {
-            bool profileupdated = true;
+            bool profileupdated = false;
+            bool profilelistsupdated = false;
 
             try
             {
@@ -1199,10 +1227,8 @@ namespace Anewluv.Services.Edit
                 //checkbos item updates 
                 if (newmodel.lifestylesearchsettings.lookingforlist.Count > 0)
                 {
-                   if ( updatemembermetatdatalookingfor(newmodel.lifestylesearchsettings.lookingforlist, p.profilemetadata))
-                   {
-                       profileupdated = true;
-                   }
+                    profilelistsupdated = updatemembermetatdatalookingfor(newmodel.lifestylesearchsettings.lookingforlist, p.profilemetadata, profilelistsupdated);
+                   
                 }
 
 
@@ -1210,14 +1236,21 @@ namespace Anewluv.Services.Edit
                 // int changes = _unitOfWorkAsync.SaveChanges();
                 if (profileupdated)
                 {
+                    p.ObjectState = ObjectState.Modified;
                     _unitOfWorkAsync.Repository<profile>().Update(p);
-                    _unitOfWorkAsync.SaveChanges();
+                   
                 }
-                else
+
+
+                if (profilelistsupdated | profileupdated)
+                {
+                    _unitOfWorkAsync.SaveChanges();
+                    messages.messages.Add("Character settings have been updated !");
+                }
                 {
                     messages.errormessages.Add("Nothing to update!");
-
                 }
+              
                 //TOD DO
                 //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
                 //update session too just in case
@@ -1254,9 +1287,9 @@ namespace Anewluv.Services.Edit
 
 
         //profiledata ethnicity
-        private bool updatemembermetatdataethnicity(List<listitem> ethnicitylist, profilemetadata currentprofilemetadata)
+        private bool updatemembermetatdataethnicity(List<listitem> ethnicitylist, profilemetadata currentprofilemetadata,bool updated)
         {
-            bool profileupdated = false;
+            
             //get the selected items  passed
             //var selectedethnicity = ethnicitylist.Where(z => z.selected == true);
 
@@ -1269,29 +1302,35 @@ namespace Anewluv.Services.Edit
 
                 foreach (var item in ethnicitylist)
                 {
+                   
                     //validate that this passed id matches what is in the database
                     if (validethnicity.Any(z => z.id == item.id))
                     {
+                        var itemalreadyexists = currentprofilemetadata.profiledata_ethnicity.Where(m => m.ethnicty_id == item.id).Count() > 0;  
+
+
                         //new logic : if this item was selected and is not already add it
-                        if (!currentprofilemetadata.profiledata_ethnicity.Any(z => item.selected == true && z.ethnicty_id == item.id))
+                        if (!itemalreadyexists && item.selected == true)
                         {
                             //SearchSettings_showme.showmeID = showme.showmeID;
                             var temp = new profiledata_ethnicity();
                             temp.id = item.id;
                             temp.profile_id = currentprofilemetadata.profile_id;
+                            temp.ObjectState = ObjectState.Added;
                             _unitOfWorkAsync.Repository<profiledata_ethnicity>().Insert(temp);
-                            profileupdated = true;
+                            updated = true;
 
                         }
                         else
                         {
                             //new logic if any of the existing values match this id and it is not selected
-                            if (currentprofilemetadata.profiledata_ethnicity.Any(z => item.selected == false && z.ethnicty_id == item.id))
+                            if (itemalreadyexists && item.selected == false)
                             {
                                 var temp = _unitOfWorkAsync.Repository<profiledata_ethnicity>().Queryable()
                                           .Where(p => p.profile_id == currentprofilemetadata.profile_id && p.ethnicty_id == item.id).FirstOrDefault();
+                                temp.ObjectState = ObjectState.Deleted;
                                 _unitOfWorkAsync.Repository<profiledata_ethnicity>().Delete(temp);
-                                profileupdated = true;
+                                updated = true;
                             }
                         }
 
@@ -1302,16 +1341,16 @@ namespace Anewluv.Services.Edit
             {
                 throw ex;
             }
-            return profileupdated;
+            return updated;
         }
         //profiledata hotfeature
-        private bool updatemembermetatdatahotfeatures(List<listitem> hotfeatureslist, profilemetadata currentprofilemetadata)
+        private bool updatemembermetatdatahotfeatures(List<listitem> hotfeatureslist, profilemetadata currentprofilemetadata,bool updated)
         {
-            bool profileupdated = false;
+
             //get the selected items  passed
             //var selectedhotfeatures = hotfeatureslist.Where(z => z.selected == true);
 
-            if (hotfeatureslist !=null && hotfeatureslist.Count() == 0) return false;
+            if (hotfeatureslist != null && hotfeatureslist.Count() == 0) return false;
 
             try
             {
@@ -1320,29 +1359,35 @@ namespace Anewluv.Services.Edit
 
                 foreach (var item in hotfeatureslist)
                 {
+
                     //validate that this passed id matches what is in the database
                     if (validhotfeatures.Any(z => z.id == item.id))
                     {
+                        var itemalreadyexists = currentprofilemetadata.profiledata_hotfeature.Where(m => m.hotfeature_id == item.id).Count() > 0;
+
+
                         //new logic : if this item was selected and is not already add it
-                        if (!currentprofilemetadata.profiledata_hotfeature.Any(z => item.selected == true && z.hotfeature_id == item.id))
+                        if (!itemalreadyexists && item.selected == true)
                         {
                             //SearchSettings_showme.showmeID = showme.showmeID;
                             var temp = new profiledata_hotfeature();
                             temp.id = item.id;
                             temp.profile_id = currentprofilemetadata.profile_id;
+                            temp.ObjectState = ObjectState.Added;
                             _unitOfWorkAsync.Repository<profiledata_hotfeature>().Insert(temp);
-                            profileupdated = true;
+                            updated = true;
 
                         }
                         else
                         {
                             //new logic if any of the existing values match this id and it is not selected
-                            if (currentprofilemetadata.profiledata_hotfeature.Any(z => item.selected == false && z.hotfeature_id == item.id))
+                            if (itemalreadyexists && item.selected == false)
                             {
                                 var temp = _unitOfWorkAsync.Repository<profiledata_hotfeature>().Queryable()
-                                    .Where(p => p.profile_id == currentprofilemetadata.profile_id && p.hotfeature_id == item.id).FirstOrDefault();
+                                          .Where(p => p.profile_id == currentprofilemetadata.profile_id && p.hotfeature_id == item.id).FirstOrDefault();
+                                temp.ObjectState = ObjectState.Deleted;
                                 _unitOfWorkAsync.Repository<profiledata_hotfeature>().Delete(temp);
-                                profileupdated = true;
+                                updated = true;
                             }
                         }
 
@@ -1353,12 +1398,12 @@ namespace Anewluv.Services.Edit
             {
                 throw ex;
             }
-            return profileupdated;
+            return updated;
         }
         //profiledata hobby
-        private bool updatemembermetatdatahobby(List<listitem> hobbylist, profilemetadata currentprofilemetadata)
+        private bool updatemembermetatdatahobby(List<listitem> hobbylist, profilemetadata currentprofilemetadata,bool updated)
         {
-            bool profileupdated = false;
+
             //get the selected items  passed
             //var selectedhobby = hobbylist.Where(z => z.selected == true);
 
@@ -1371,29 +1416,35 @@ namespace Anewluv.Services.Edit
 
                 foreach (var item in hobbylist)
                 {
+
                     //validate that this passed id matches what is in the database
                     if (validhobby.Any(z => z.id == item.id))
                     {
+                        var itemalreadyexists = currentprofilemetadata.profiledata_hobby.Where(m => m.hobby_id == item.id).Count() > 0;
+
+
                         //new logic : if this item was selected and is not already add it
-                        if (!currentprofilemetadata.profiledata_hobby.Any(z => item.selected == true && z.hobby_id == item.id))
+                        if (!itemalreadyexists && item.selected == true)
                         {
                             //SearchSettings_showme.showmeID = showme.showmeID;
                             var temp = new profiledata_hobby();
                             temp.id = item.id;
                             temp.profile_id = currentprofilemetadata.profile_id;
+                            temp.ObjectState = ObjectState.Added;
                             _unitOfWorkAsync.Repository<profiledata_hobby>().Insert(temp);
-                            profileupdated = true;
+                            updated = true;
 
                         }
                         else
                         {
                             //new logic if any of the existing values match this id and it is not selected
-                            if (currentprofilemetadata.profiledata_hobby.Any(z => item.selected == false && z.hobby_id == item.id))
+                            if (itemalreadyexists && item.selected == false)
                             {
                                 var temp = _unitOfWorkAsync.Repository<profiledata_hobby>().Queryable()
                                           .Where(p => p.profile_id == currentprofilemetadata.profile_id && p.hobby_id == item.id).FirstOrDefault();
+                                temp.ObjectState = ObjectState.Deleted;
                                 _unitOfWorkAsync.Repository<profiledata_hobby>().Delete(temp);
-                                profileupdated = true;
+                                updated = true;
                             }
                         }
 
@@ -1404,12 +1455,12 @@ namespace Anewluv.Services.Edit
             {
                 throw ex;
             }
-            return profileupdated;
+            return updated;
         }
         //profiledata lookingfor
-        private bool updatemembermetatdatalookingfor(List<listitem> lookingforlist, profilemetadata currentprofilemetadata)
+        private bool updatemembermetatdatalookingfor(List<listitem> lookingforlist, profilemetadata currentprofilemetadata,bool updated)
         {
-            bool profileupdated = false;
+
             //get the selected items  passed
             //var selectedlookingfor = lookingforlist.Where(z => z.selected == true);
 
@@ -1422,29 +1473,35 @@ namespace Anewluv.Services.Edit
 
                 foreach (var item in lookingforlist)
                 {
+
                     //validate that this passed id matches what is in the database
                     if (validlookingfor.Any(z => z.id == item.id))
                     {
+                        var itemalreadyexists = currentprofilemetadata.profiledata_lookingfor.Where(m => m.lookingfor_id == item.id).Count() > 0;
+
+
                         //new logic : if this item was selected and is not already add it
-                        if (!currentprofilemetadata.profiledata_lookingfor.Any(z => item.selected == true && z.lookingfor_id == item.id))
+                        if (!itemalreadyexists && item.selected == true)
                         {
                             //SearchSettings_showme.showmeID = showme.showmeID;
                             var temp = new profiledata_lookingfor();
                             temp.id = item.id;
                             temp.profile_id = currentprofilemetadata.profile_id;
+                            temp.ObjectState = ObjectState.Added;
                             _unitOfWorkAsync.Repository<profiledata_lookingfor>().Insert(temp);
-                            profileupdated = true;
+                            updated = true;
 
                         }
                         else
                         {
                             //new logic if any of the existing values match this id and it is not selected
-                            if (currentprofilemetadata.profiledata_lookingfor.Any(z => item.selected == false && z.lookingfor_id == item.id))
+                            if (itemalreadyexists && item.selected == false)
                             {
                                 var temp = _unitOfWorkAsync.Repository<profiledata_lookingfor>().Queryable()
                                           .Where(p => p.profile_id == currentprofilemetadata.profile_id && p.lookingfor_id == item.id).FirstOrDefault();
+                                temp.ObjectState = ObjectState.Deleted;
                                 _unitOfWorkAsync.Repository<profiledata_lookingfor>().Delete(temp);
-                                profileupdated = true;
+                                updated = true;
                             }
                         }
 
@@ -1455,7 +1512,7 @@ namespace Anewluv.Services.Edit
             {
                 throw ex;
             }
-            return profileupdated;
+            return updated;
         }
 
         #endregion

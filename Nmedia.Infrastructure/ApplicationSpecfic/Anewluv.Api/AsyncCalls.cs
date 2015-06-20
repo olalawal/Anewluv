@@ -161,14 +161,14 @@ namespace Anewluv.Api
                     return result;
 
         }
-        public static void addprofileactvity(ActivityModel activitymodel)
+        public static async Task addprofileactvity(ActivityModel activitymodel)
         {
            // Api.MemberService.addprofileactvity(activity);
            //  result = await returnedTaskTResult;
            // IsApiKeyValid = await 
           //  return result;
 
-            Task.Run(() => Api.MemberService.addprofileactvity(activitymodel));
+           await Api.MemberService.addprofileactvity(activitymodel);
         }
         public static void updateuserlogintimeasync(ProfileModel model)
         {

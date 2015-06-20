@@ -74,6 +74,10 @@
       <Project>{d0fa8aa1-5a17-4c42-a92f-f1266cd01d7c}</Project>
       <Name>Nmedia.Infrastructure</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Nmedia.Infrastructure\ApplicationSpecfic\Anewluv.Api\Anewluv.Api.csproj">
+      <Project>{1e78fd8f-5a46-4894-b7e9-9e572d558562}</Project>
+      <Name>Anewluv.Api</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Nmedia.Infrastructure\ApplicationSpecfic\Anewluv.Caching\Anewluv.Caching.csproj">
       <Project>{3b7bbc00-62a6-4892-9eed-2312f9714ca0}</Project>
       <Name>Anewluv.Caching</Name>

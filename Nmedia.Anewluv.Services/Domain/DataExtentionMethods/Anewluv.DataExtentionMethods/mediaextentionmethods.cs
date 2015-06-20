@@ -147,6 +147,7 @@ namespace Anewluv.DataExtentionMethods
                 IQueryable<photoconversion> photomodel = repo.Query(z => z.photo.profile_id == model.profileid.Value &
                    // (z.photo.approvalstatus_id != (int)photoapprovalstatusEnum.Rejected) &  //filter not approved
                     (z.photo.photostatus_id != (int)photostatusEnum.deletedbyadmin | z.photo.photostatus_id != (int)photostatusEnum.deletedbyuser))  //filter deleted 
+                     .Include(p=>p.photo)
                      .Include(p => p.lu_photoformat)
                     .Include(p => p.photo.profilemetadata)
                     .Include(p => p.photo.photo_securitylevel.Select(z => z.lu_securityleveltype))
