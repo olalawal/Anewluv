@@ -31,7 +31,7 @@ using Anewluv.Caching.RedisCaching;
 using Nmedia.Infrastructure;
 using Repository.Pattern.Infrastructure;
 
-
+//TO DO cache all the gets in redis and update when items are saved to keep it in sync
 
 namespace Anewluv.Services.Edit
 {
@@ -165,7 +165,7 @@ namespace Anewluv.Services.Edit
                              SearchViewModel.genderlist = genderlist;                        
                              SearchViewModel.sortbylist = sortbylist;
                              SearchViewModel.agelist = agelist;                            
-                             searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id });
+                             searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id ,searchname="myperfectmatch"}, _unitOfWorkAsync);
                              SearchViewModel = searchsettingsextentions.getbasicsearchsettings(SearchViewModel, s, _unitOfWorkAsync);
                              //add the value to viewmodel
                              viewmodel.basicsearchsettings = SearchViewModel;
@@ -275,7 +275,7 @@ namespace Anewluv.Services.Edit
                             SearchViewModel.ethnicitylist = (ethnicitylist);
                             SearchViewModel.hotfeaturelist = (hotfeaturelist);
                             SearchViewModel.metricheightlist =(metricheightlist); 
-                            searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id });
+                            searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id, searchname = "MyPerfectMatch" }, _unitOfWorkAsync);
                             SearchViewModel = searchsettingsextentions.getappearancesearchsettings(SearchViewModel, s, _unitOfWorkAsync);
                             //add the value to viewmodel
                             viewmodel.appearancesearchsettings = SearchViewModel;
@@ -387,7 +387,7 @@ namespace Anewluv.Services.Edit
                         SearchViewModel.religiousattendancelist = (religiousattendancelist); ;
                         SearchViewModel.hobbylist = (hobbylist); ;
 
-                        searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id });
+                        searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id, searchname = "MyPerfectMatch" }, _unitOfWorkAsync);
                         SearchViewModel = searchsettingsextentions.getcharactersearchsettings(SearchViewModel, s, _unitOfWorkAsync);
                         //add the value to viewmodel
                         viewmodel.charactersearchsettings = SearchViewModel;
@@ -492,7 +492,7 @@ namespace Anewluv.Services.Edit
                         SearchViewModel.professionlist = (professionlist);
                         SearchViewModel.wantskidslist =  (wantskidslist); 
                         
-                        searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id });
+                        searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id, searchname = "MyPerfectMatch" }, _unitOfWorkAsync);
                         SearchViewModel = searchsettingsextentions.getlifestylesearchsettings(SearchViewModel, s, _unitOfWorkAsync);
                         //add the value to viewmodel
                         viewmodel.lifestylesearchsettings = SearchViewModel;
@@ -864,7 +864,7 @@ namespace Anewluv.Services.Edit
                 if (newmodel.basicsearchsettings != null)
                 {
                     //update the search settings 
-                    searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id });
+                    searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id,searchname = "MyPerfectMatch" },_unitOfWorkAsync);
                     messages = searchsettingsextentions.updatebasicsearchsettings(newmodel.basicsearchsettings, s, messages, _unitOfWorkAsync);
                 }
 
@@ -957,7 +957,7 @@ namespace Anewluv.Services.Edit
               
                 if (newmodel.appearancesearchsettings != null)
                 {
-                   searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id });
+                    searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id, searchname = "MyPerfectMatch" }, _unitOfWorkAsync);
                    messages = searchsettingsextentions.updateappearancesearchsettings(newmodel.appearancesearchsettings, s, messages, _unitOfWorkAsync);
                 }
                 //TOD DO
@@ -1105,7 +1105,7 @@ namespace Anewluv.Services.Edit
 
                if (newmodel.charactersearchsettings != null)
                {
-                   searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id });
+                   searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id, searchname = "MyPerfectMatch" }, _unitOfWorkAsync);
                    messages = searchsettingsextentions.updatecharactersearchsettings(newmodel.charactersearchsettings, s, messages, _unitOfWorkAsync);
                }
                 
@@ -1261,7 +1261,7 @@ namespace Anewluv.Services.Edit
                 // return model;
                if (newmodel.lifestylesearchsettings != null)
                {
-                   searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id });
+                   searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id, searchname = "MyPerfectMatch" }, _unitOfWorkAsync);
                    messages = searchsettingsextentions.updatelifestylesearchsettings(newmodel.lifestylesearchsettings, s, messages, _unitOfWorkAsync);
                }
 

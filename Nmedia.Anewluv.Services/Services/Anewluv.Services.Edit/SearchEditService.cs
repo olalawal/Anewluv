@@ -153,7 +153,7 @@ namespace Anewluv.Services.Edit
 
 
                        
-                        searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(searchmodel);
+                        searchsetting p =_unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(searchmodel,_unitOfWorkAsync);
 
                         //searchmodel.basicsearchsettings = searchsettingsextentions.getbasicsearchsettings(p, _unitOfWorkAsync);
                         //searchmodel.lifestylesearchsettings = searchsettingsextentions.getlifestylesearchsettings(p, _unitOfWorkAsync);
@@ -204,7 +204,7 @@ namespace Anewluv.Services.Edit
                            model. sortbylist = RedisCacheFactory.SharedObjectHelper.getsortbytypelist(_unitOfWorkAsync);
                            model. agelist = RedisCacheFactory.SharedObjectHelper.getagelist();
 
-                        searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(searchmodel);
+                        searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(searchmodel,_unitOfWorkAsync);
 
 
 
@@ -245,7 +245,7 @@ namespace Anewluv.Services.Edit
                         model.metricheightlist = RedisCacheFactory.SharedObjectHelper.getmetricheightlist();
 
 
-                        searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(searchmodel);
+                        searchsetting p =_unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(searchmodel,_unitOfWorkAsync);
                         return searchsettingsextentions.getappearancesearchsettings(model, p, _unitOfWorkAsync);
 
                     });
@@ -292,7 +292,7 @@ namespace Anewluv.Services.Edit
                            model. religionlist = RedisCacheFactory.SharedObjectHelper.getreligionlist(_unitOfWorkAsync);
                            model. religiousattendancelist = RedisCacheFactory.SharedObjectHelper.getreligiousattendancelist(_unitOfWorkAsync);
 
-                        searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(searchmodel);
+                        searchsetting p =_unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(searchmodel,_unitOfWorkAsync);
                         return searchsettingsextentions.getcharactersearchsettings(model,p, _unitOfWorkAsync);
 
                     });
@@ -342,7 +342,7 @@ namespace Anewluv.Services.Edit
 
 
 
-                        searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(searchmodel);
+                        searchsetting p =_unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(searchmodel,_unitOfWorkAsync);
                         return searchsettingsextentions.getlifestylesearchsettings(model,p, _unitOfWorkAsync);
 
                     });
@@ -368,7 +368,7 @@ namespace Anewluv.Services.Edit
         #region "search update methods exposed"
 
         //global search upddate
-        public async Task<AnewluvMessages> searcheditallsettings(SearchSettingsModel model)
+        public async Task<AnewluvMessages> searcheditallsettings(SearchSettingsModel searchmodel)
         {
 
          
@@ -389,11 +389,11 @@ namespace Anewluv.Services.Edit
 
                             //get the profile details :
                             //AnewluvMessages messages = new AnewluvMessages();
-                            searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(model);
-                            messages = (searchsettingsextentions.updatebasicsearchsettings(model.basicsearchsettings, p, messages,_unitOfWorkAsync));
-                            messages = (searchsettingsextentions.updateappearancesearchsettings(model.appearancesearchsettings, p, messages,_unitOfWorkAsync));
-                            messages = (searchsettingsextentions.updatecharactersearchsettings(model.charactersearchsettings, p, messages,_unitOfWorkAsync));
-                            messages = (searchsettingsextentions.updatelifestylesearchsettings(model.lifestylesearchsettings, p, messages,_unitOfWorkAsync));
+                            searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(searchmodel,_unitOfWorkAsync);
+                            messages = (searchsettingsextentions.updatebasicsearchsettings(searchmodel.basicsearchsettings, p, messages, _unitOfWorkAsync));
+                            messages = (searchsettingsextentions.updateappearancesearchsettings(searchmodel.appearancesearchsettings, p, messages, _unitOfWorkAsync));
+                            messages = (searchsettingsextentions.updatecharactersearchsettings(searchmodel.charactersearchsettings, p, messages, _unitOfWorkAsync));
+                            messages = (searchsettingsextentions.updatelifestylesearchsettings(searchmodel.lifestylesearchsettings, p, messages, _unitOfWorkAsync));
                            
 
                             if (messages.errormessages.Count > 0)
@@ -412,7 +412,7 @@ namespace Anewluv.Services.Edit
                        // transaction.Rollback();
                         using (var logger = new Logging(applicationEnum.EditSearchService))
                         {
-                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(searchmodel.profileid));
                         }
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in searchsettings actions service");
@@ -429,7 +429,7 @@ namespace Anewluv.Services.Edit
 
         }
 
-        public async Task<AnewluvMessages> searcheditbasicsettings(SearchSettingsModel model)
+        public async Task<AnewluvMessages> searcheditbasicsettings(SearchSettingsModel searchmodel)
         {
 
          
@@ -447,8 +447,8 @@ namespace Anewluv.Services.Edit
                             AnewluvMessages messages = new AnewluvMessages();
 
 
-                            searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(model);
-                            messages = (searchsettingsextentions.updatebasicsearchsettings(model.basicsearchsettings, p, messages,_unitOfWorkAsync));
+                            searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(searchmodel,_unitOfWorkAsync);
+                            messages = (searchsettingsextentions.updatebasicsearchsettings(searchmodel.basicsearchsettings, p, messages, _unitOfWorkAsync));
                            
 
                             if (messages.errormessages.Count > 0)
@@ -467,7 +467,7 @@ namespace Anewluv.Services.Edit
                        // transaction.Rollback();
                         using (var logger = new Logging(applicationEnum.EditSearchService))
                         {
-                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(searchmodel.profileid));
                         }
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in searchsettings actions service");
@@ -484,7 +484,7 @@ namespace Anewluv.Services.Edit
 
         }
 
-        public async Task<AnewluvMessages> searcheditappearancesettings(SearchSettingsModel model)
+        public async Task<AnewluvMessages> searcheditappearancesettings(SearchSettingsModel searchmodel)
         {
 
          
@@ -500,8 +500,8 @@ namespace Anewluv.Services.Edit
                             //create a new messages object
                             AnewluvMessages messages = new AnewluvMessages();
 
-                            searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(model);
-                            messages = (searchsettingsextentions.updateappearancesearchsettings(model.appearancesearchsettings, p, messages,_unitOfWorkAsync));                          
+                            searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(searchmodel,_unitOfWorkAsync);
+                            messages = (searchsettingsextentions.updateappearancesearchsettings(searchmodel.appearancesearchsettings, p, messages, _unitOfWorkAsync));    
 
                             if (messages.errormessages.Count > 0)
                             {
@@ -520,7 +520,7 @@ namespace Anewluv.Services.Edit
                        // transaction.Rollback();
                         using (var logger = new Logging(applicationEnum.SearchService))
                         {
-                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(searchmodel.profileid));
                         }
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in search actions service");
@@ -536,7 +536,7 @@ namespace Anewluv.Services.Edit
 
         }
 
-        public async Task<AnewluvMessages> searcheditcharactersettings(SearchSettingsModel model)
+        public async Task<AnewluvMessages> searcheditcharactersettings(SearchSettingsModel searchmodel)
         {
 
          
@@ -553,8 +553,8 @@ namespace Anewluv.Services.Edit
                             //create a new messages object
                             AnewluvMessages messages = new AnewluvMessages();
 
-                            searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(model);
-                            messages = (searchsettingsextentions.updatecharactersearchsettings(model.charactersearchsettings, p, messages,_unitOfWorkAsync));
+                            searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(searchmodel,_unitOfWorkAsync);
+                            messages = (searchsettingsextentions.updatecharactersearchsettings(searchmodel.charactersearchsettings, p, messages, _unitOfWorkAsync));
                           
 
                             if (messages.errormessages.Count > 0)
@@ -573,7 +573,7 @@ namespace Anewluv.Services.Edit
                        // transaction.Rollback();
                         using (var logger = new Logging(applicationEnum.EditMemberService))
                         {
-                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(searchmodel.profileid));
                         }
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in searchsettings actions service");
@@ -588,9 +588,9 @@ namespace Anewluv.Services.Edit
 
 
 
-        }      
+        }
 
-        public async Task<AnewluvMessages> searcheditlifestylesettings(SearchSettingsModel model)
+        public async Task<AnewluvMessages> searcheditlifestylesettings(SearchSettingsModel searchmodel)
         {
            
          
@@ -606,8 +606,8 @@ namespace Anewluv.Services.Edit
                             //create a new messages object
                             AnewluvMessages messages = new AnewluvMessages();
                             //get the profile details :
-                            searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(model);
-                            messages = (searchsettingsextentions.updatelifestylesearchsettings(model.lifestylesearchsettings, p, messages,_unitOfWorkAsync));
+                            searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(searchmodel,_unitOfWorkAsync);
+                            messages = (searchsettingsextentions.updatelifestylesearchsettings(searchmodel.lifestylesearchsettings, p, messages, _unitOfWorkAsync));
 
                             if (messages.errormessages.Count > 0)
                             {
@@ -624,7 +624,7 @@ namespace Anewluv.Services.Edit
                        // transaction.Rollback();
                         using (var logger = new Logging(applicationEnum.EditMemberService))
                         {
-                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(searchmodel.profileid));
                         }
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in search actions service");

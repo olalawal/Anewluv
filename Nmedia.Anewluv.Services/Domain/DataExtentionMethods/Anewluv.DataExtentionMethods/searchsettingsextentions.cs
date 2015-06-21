@@ -16,8 +16,11 @@ namespace Anewluv.DataExtentionMethods
     public static class searchsettingsextentions
     {
 
+
+
+        //TO DO cache this in REdis
         //generic filtering function we can reuse, filters all search settings using profileid,searchname and other data
-        public static searchsetting filtersearchsettings(this IRepository<searchsetting> repo, SearchSettingsModel searchmodel)
+        public static searchsetting filtersearchsettings(this IRepository<searchsetting> repo, SearchSettingsModel searchmodel,IUnitOfWorkAsync db)
         {
 
             try
@@ -37,19 +40,24 @@ namespace Anewluv.DataExtentionMethods
                   .Include(x => x.profilemetadata.profile.profiledata)   
                 .Include(y => y.details  )             
                 .Include(y => y.locations)
-                
-               
-
                 .Select().ToList();
 
+                ////check for perfect match first in case its a profile edit , redunded with the search below
+                //if (allsearchsettings.Count() > 0 & searchmodel.searchname.ToUpper() == "MyPerfectMatch".ToUpper())
+                //{
+                //    p = allsearchsettings.Where(z => z.searchname.ToUpper() == searchmodel.searchname.ToUpper()).FirstOrDefault();
+                //}
                 if (allsearchsettings.Count() > 0 & searchmodel.searchname != null)//|searchmodel.searchname != ""  )
                 {
-                    p = allsearchsettings.Where(z => z.searchname == searchmodel.searchname).FirstOrDefault();
+                    p = allsearchsettings.Where(z => z.searchname.ToUpper() == searchmodel.searchname.ToUpper()).FirstOrDefault();                    
                 }
                 else if (allsearchsettings.Count() > 0)
                 {
                     p = allsearchsettings.OrderByDescending(z => z.creationdate).FirstOrDefault();  //get the first one thats probbaly the default.
                 }
+
+                //if none is found create a new perfect match setting for this user since they dont have one
+                if (p == null) return profileextentionmethods.createmyperfectmatchsearchsettingsbyprofileid(new ProfileModel { profileid = searchmodel.profileid }, db);
 
                 return p;
             }
@@ -479,18 +487,17 @@ namespace Anewluv.DataExtentionMethods
                     return messages;
                 }
 
-                p.agemin = model.agemin;
-                p.agemax = model.agemax;
-
-                p.distancefromme = model.distancefromme;
-                p.lastupdatedate = model.lastupdatedate;
-                p.searchname = model.searchname;
-                p.searchrank = model.searchrank;
-                p.myperfectmatch = model.myperfectmatch;
+                if (model.agemin != null && p.agemin!= model.agemin) { p.agemin = model.agemin; updated = true; }           
+                if (model.agemax!= null && p.agemax != model.agemax) { p.agemax = model.agemax; updated = true; }              
+                if (model.distancefromme != null && p.distancefromme != model.distancefromme) { p.distancefromme =model.distancefromme; updated = true; }   
+                if (!string.IsNullOrEmpty(model.searchname) && p.searchname != model.searchname) { p.searchname = model.searchname; updated = true; }                
+                if (model.searchrank != null && p.searchrank != model.searchrank) { p.searchrank = model.searchrank; updated = true; }
+                if (model.myperfectmatch != null && p.myperfectmatch != model.myperfectmatch) { p.myperfectmatch = model.myperfectmatch; updated = true; }
 
                 updated = true;  //temp for now to force update
                 if (updated)
                 {
+                    p.lastupdatedate = DateTime.Now;
                     p.ObjectState = ObjectState.Modified; _unitOfWorkAsync.Repository<searchsetting>().Update(p);
                 }
                 //checkbos item updates 
@@ -508,10 +515,14 @@ namespace Anewluv.DataExtentionMethods
 
                 //savechanges if anythuing is updated
                 if (updated)
-                {                    
-                    var i =  _unitOfWorkAsync.SaveChanges();
+                {
+                    var i = _unitOfWorkAsync.SaveChanges();
+                    messages.messages.Add("Basic Search Settings Upated");
                 }
-
+                else
+                {
+                    messages.messages.Add("No changes to update");
+                }
 
                 // return messages;
 
@@ -566,9 +577,13 @@ namespace Anewluv.DataExtentionMethods
                 if (updated)
                 {
                     var i = _unitOfWorkAsync.SaveChanges();
+                    messages.messages.Add("Appearance Search Settings Upated");
                 }
-
-                //  return messages;
+                else
+                {
+                    messages.messages.Add("No changes to update");
+                }
+                
             }
             catch (Exception ex)
             {
@@ -600,34 +615,34 @@ namespace Anewluv.DataExtentionMethods
 
                 //checkbos item updates 
                 if (model.dietlist != null && model.dietlist.Count > 0)
-                    updatesearchsettingsdetail(model.dietlist.ToList(), p, searchsettingdetailtypeEnum.diet , _unitOfWorkAsync , updated);
+                    updated = updatesearchsettingsdetail(model.dietlist.ToList(), p, searchsettingdetailtypeEnum.diet, _unitOfWorkAsync, updated);
 
                 if (model.humorlist != null && model.humorlist.Count > 0)
-                    updatesearchsettingsdetail(model.humorlist.ToList(), p, searchsettingdetailtypeEnum.humor , _unitOfWorkAsync , updated);
+                    updated = updatesearchsettingsdetail(model.humorlist.ToList(), p, searchsettingdetailtypeEnum.humor, _unitOfWorkAsync, updated);
 
                 if (model.hobbylist != null && model.hobbylist.Count > 0)
-                    updatesearchsettingsdetail(model.hobbylist.ToList(), p, searchsettingdetailtypeEnum.hobby , _unitOfWorkAsync , updated);
+                    updated = updatesearchsettingsdetail(model.hobbylist.ToList(), p, searchsettingdetailtypeEnum.hobby, _unitOfWorkAsync, updated);
 
                 if (model.drinkslist != null && model.drinkslist.Count > 0)
-                    updatesearchsettingsdetail(model.drinkslist.ToList(), p, searchsettingdetailtypeEnum.drink , _unitOfWorkAsync , updated);
+                    updated = updatesearchsettingsdetail(model.drinkslist.ToList(), p, searchsettingdetailtypeEnum.drink, _unitOfWorkAsync, updated);
 
                 if (model.exerciselist != null && model.exerciselist.Count > 0)
-                    updatesearchsettingsdetail(model.exerciselist.ToList(), p, searchsettingdetailtypeEnum.excercise , _unitOfWorkAsync , updated);
+                    updated = updatesearchsettingsdetail(model.exerciselist.ToList(), p, searchsettingdetailtypeEnum.excercise, _unitOfWorkAsync, updated);
 
                 if (model.smokeslist != null && model.smokeslist.Count > 0)
-                    updatesearchsettingsdetail(model.smokeslist.ToList(), p, searchsettingdetailtypeEnum.smokes , _unitOfWorkAsync , updated);
+                    updated = updatesearchsettingsdetail(model.smokeslist.ToList(), p, searchsettingdetailtypeEnum.smokes, _unitOfWorkAsync, updated);
 
                 if (model.signlist != null && model.signlist.Count > 0)
-                    updatesearchsettingsdetail(model.signlist.ToList(), p, searchsettingdetailtypeEnum.sign , _unitOfWorkAsync , updated);
+                    updated = updatesearchsettingsdetail(model.signlist.ToList(), p, searchsettingdetailtypeEnum.sign, _unitOfWorkAsync, updated);
 
                 if (model.politicalviewlist != null && model.politicalviewlist.Count > 0)
-                    updatesearchsettingsdetail(model.politicalviewlist.ToList(), p, searchsettingdetailtypeEnum.politicalview , _unitOfWorkAsync , updated);
+                    updated = updatesearchsettingsdetail(model.politicalviewlist.ToList(), p, searchsettingdetailtypeEnum.politicalview, _unitOfWorkAsync, updated);
 
                 if (model.religionlist != null && model.religionlist.Count > 0)
-                    updatesearchsettingsdetail(model.religionlist.ToList(), p, searchsettingdetailtypeEnum.religion , _unitOfWorkAsync , updated);
+                    updated = updatesearchsettingsdetail(model.religionlist.ToList(), p, searchsettingdetailtypeEnum.religion, _unitOfWorkAsync, updated);
 
                 if (model.religiousattendancelist != null && model.religiousattendancelist.Count > 0)
-                    updatesearchsettingsdetail(model.religiousattendancelist.ToList(), p, searchsettingdetailtypeEnum.religiousattendance , _unitOfWorkAsync , updated);
+                   updated= updatesearchsettingsdetail(model.religiousattendancelist.ToList(), p, searchsettingdetailtypeEnum.religiousattendance , _unitOfWorkAsync , updated);
 
 
 
@@ -635,8 +650,12 @@ namespace Anewluv.DataExtentionMethods
                 if (updated)
                 {
                     var i = _unitOfWorkAsync.SaveChanges();
+                    messages.messages.Add("Character Search Settings Upated");
                 }
-
+                else
+                {
+                    messages.messages.Add("No changes to update");
+                }
 
 
 
@@ -674,38 +693,42 @@ namespace Anewluv.DataExtentionMethods
 
                 //checkbos item updates 
                 if (model.educationlevellist != null && model.educationlevellist.Count > 0)
-                    updatesearchsettingsdetail(model.educationlevellist, p, searchsettingdetailtypeEnum.educationlevel , _unitOfWorkAsync , updated);
+                  updated=  updatesearchsettingsdetail(model.educationlevellist, p, searchsettingdetailtypeEnum.educationlevel , _unitOfWorkAsync , updated);
 
                 if (model.lookingforlist != null && model.lookingforlist.Count > 0)
-                    updatesearchsettingsdetail(model.lookingforlist.ToList(), p, searchsettingdetailtypeEnum.lookingfor , _unitOfWorkAsync , updated);
+                    updated = updatesearchsettingsdetail(model.lookingforlist.ToList(), p, searchsettingdetailtypeEnum.lookingfor, _unitOfWorkAsync, updated);
 
                 if (model.employmentstatuslist != null && model.employmentstatuslist.Count > 0)
-                    updatesearchsettingsdetail(model.employmentstatuslist.ToList(), p, searchsettingdetailtypeEnum.employmentstatus , _unitOfWorkAsync , updated);
+                    updated = updatesearchsettingsdetail(model.employmentstatuslist.ToList(), p, searchsettingdetailtypeEnum.employmentstatus, _unitOfWorkAsync, updated);
 
                 if (model.havekidslist != null && model.havekidslist.Count > 0)
-                    updatesearchsettingsdetail(model.havekidslist.ToList(), p, searchsettingdetailtypeEnum.havekids , _unitOfWorkAsync , updated);
+                    updated = updatesearchsettingsdetail(model.havekidslist.ToList(), p, searchsettingdetailtypeEnum.havekids, _unitOfWorkAsync, updated);
 
                 if (model.incomelevellist != null && model.incomelevellist.Count > 0)
-                    updatesearchsettingsdetail(model.incomelevellist.ToList(), p, searchsettingdetailtypeEnum.incomelevel , _unitOfWorkAsync , updated);
+                    updated = updatesearchsettingsdetail(model.incomelevellist.ToList(), p, searchsettingdetailtypeEnum.incomelevel, _unitOfWorkAsync, updated);
 
                 if (model.livingsituationlist != null && model.livingsituationlist.Count > 0)
-                    updatesearchsettingsdetail(model.livingsituationlist.ToList(), p, searchsettingdetailtypeEnum.livingsituation , _unitOfWorkAsync , updated);
+                    updated = updatesearchsettingsdetail(model.livingsituationlist.ToList(), p, searchsettingdetailtypeEnum.livingsituation, _unitOfWorkAsync, updated);
 
                 if (model.maritalstatuslist != null && model.maritalstatuslist.Count > 0)
-                    updatesearchsettingsdetail(model.maritalstatuslist.ToList(), p, searchsettingdetailtypeEnum.maritialstatus , _unitOfWorkAsync , updated);
+                    updated = updatesearchsettingsdetail(model.maritalstatuslist.ToList(), p, searchsettingdetailtypeEnum.maritialstatus, _unitOfWorkAsync, updated);
 
                 if (model.professionlist != null && model.professionlist.Count > 0)
-                    updatesearchsettingsdetail(model.professionlist.ToList(), p, searchsettingdetailtypeEnum.profession , _unitOfWorkAsync , updated);
+                    updated = updatesearchsettingsdetail(model.professionlist.ToList(), p, searchsettingdetailtypeEnum.profession, _unitOfWorkAsync, updated);
 
                 if (model.wantskidslist != null && model.wantskidslist.Count > 0)
-                    updatesearchsettingsdetail(model.wantskidslist.ToList(), p, searchsettingdetailtypeEnum.wantskids , _unitOfWorkAsync , updated);
+                    updated = updatesearchsettingsdetail(model.wantskidslist.ToList(), p, searchsettingdetailtypeEnum.wantskids, _unitOfWorkAsync, updated);
 
 
                 if (updated)
                 {
                     var i = _unitOfWorkAsync.SaveChanges();
+                    messages.messages.Add("Lifestyle Search Settings Upated");
                 }
-
+                else
+                {
+                    messages.messages.Add("No changes to update");
+                }
 
 
 

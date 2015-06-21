@@ -1087,7 +1087,7 @@ namespace Anewluv.Services.Mapping
 
                         MembersViewModel model = membermappingextentions.mapmember(Model, db, geodb);
 
-                        searchsetting perfectmatchsearchsettings = model.profile.profilemetadata.searchsettings.FirstOrDefault();
+                        searchsetting perfectmatchsearchsettings = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = model.profile_id, searchname = "MyPerfectMatch" }, _unitOfWorkAsync);
 
                         //TO do handle empty perfect match settings here
                         if (perfectmatchsearchsettings == null )
@@ -1300,11 +1300,11 @@ namespace Anewluv.Services.Mapping
                         MembersViewModel model = membermappingextentions.mapmember(new ProfileModel { profileid = profile.id }, db, geodb);
 
 
-
-
                        // model.profile = profile;
                         //get search sttings from DB
-                        searchsetting perfectmatchsearchsettings = model.profile.profilemetadata.searchsettings.FirstOrDefault();
+                        searchsetting perfectmatchsearchsettings = 
+                       _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = model.profile_id, searchname = "MyPerfectMatch" }, _unitOfWorkAsync);
+
 
                         //TO do handle empty perfect match settings here
                         if (perfectmatchsearchsettings == null)

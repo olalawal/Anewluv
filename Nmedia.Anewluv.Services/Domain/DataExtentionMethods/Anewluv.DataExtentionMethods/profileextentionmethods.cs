@@ -441,10 +441,13 @@ namespace Anewluv.DataExtentionMethods
                         Newsearchsettings = new searchsetting();
                         Newsearchsettings.profile_id = model.profileid.Value; //.GetValueOrDefault();
                         Newsearchsettings.myperfectmatch = true;
-                        Newsearchsettings.searchname = "myperfectmatch";
+                        Newsearchsettings.searchrank =1;
+                        Newsearchsettings.creationdate = DateTime.Now;
+                        Newsearchsettings.searchname = "Myperfectmatch";
+
                         //Newsearchsettings.profiledata = this.GetProfileDataByProfileID(profileid);
-                        db.Repository<searchsetting>().Insert(Newsearchsettings);
-                        db.Commit();  
+                        db.Repository<searchsetting>().InsertOrUpdateGraph(Newsearchsettings);
+                        db.SaveChanges();
                        // transaction.Commit();
 
                         return Newsearchsettings;
