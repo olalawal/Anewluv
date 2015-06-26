@@ -70,10 +70,6 @@
       <Project>{efc502ae-dd76-4278-8738-dd0b1f55a724}</Project>
       <Name>Anewluv.Services.Contracts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Common\NET\Shared\Nmedia.Infrastructure.Mvc\Nmedia.Infrastructure.Mvc.csproj">
-      <Project>{9b837d01-53fa-4af3-a6c3-fc854a75c6db}</Project>
-      <Name>Nmedia.Infrastructure.Mvc</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\Common\NET\Shared\Nmedia.Infrastructure\Nmedia.Infrastructure.csproj">
       <Project>{d0fa8aa1-5a17-4c42-a92f-f1266cd01d7c}</Project>
       <Name>Nmedia.Infrastructure</Name>
@@ -94,10 +90,6 @@
       <Project>{88d4508e-7ced-49cc-b43a-e3af99470d35}</Project>
       <Name>Nmedia.WCFHelpers</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Domain\Context\Anewluv.Domain\Anewluv.Domain.csproj">
-      <Project>{a0b04284-784b-4322-a213-db178716efc1}</Project>
-      <Name>Anewluv.Domain</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Domain\Context\GeoData.Domain\GeoData.Domain.csproj">
       <Project>{01a79dcc-39ca-447e-a668-dd4206a8e5aa}</Project>
       <Name>GeoData.Domain</Name>
@@ -107,12 +99,8 @@
       <Name>Anewluv.DataExtentionMethods</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Domain\Data\Anewluv.Domain.Data\Anewluv.Domain.Data.csproj">
-      <Project>{8e3079e3-2244-47b1-ab1f-ee171398666e}</Project>
+      <Project>{364cd516-0638-4e03-b1dc-9414617820e9}</Project>
       <Name>Anewluv.Domain.Data</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Domain\Data\GeoData.Domain.Data\GeoData.Domain.Data.csproj">
-      <Project>{a7d35636-9574-4344-a761-138c3ff171bc}</Project>
-      <Name>GeoData.Domain.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Frameworks\GenericUnitOfWork\Repository.Pattern.Ef6\Repository.Pattern.Ef6.csproj">
       <Project>{f68a1d19-93fb-47c1-a22b-42bea3e4fd8c}</Project>

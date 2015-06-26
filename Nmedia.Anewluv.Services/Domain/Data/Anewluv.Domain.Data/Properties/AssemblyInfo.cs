@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Anewluv.Domain.Data")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Wells Fargo N.A.")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Anewluv.Domain.Data")]
-[assembly: AssemblyCopyright("Copyright © Wells Fargo N.A. 2013")]
+[assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("22b8286a-0a9c-48ca-8b79-763b2207a683")]
+[assembly: Guid("5ae7434f-4b4b-4cac-85f3-12c8d427a3f4")]
 
 // Version information for an assembly consists of the following four values:
 //

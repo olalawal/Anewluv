@@ -1,0 +1,248 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A0B04284-784B-4322-A213-DB178716EFC1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Anewluv.Domain</RootNamespace>
+    <AssemblyName>Anewluv.Domain</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Anewluv.Chat\Context\Chat.Context.cs" />
+    <Compile Include="Anewluv.Chat\Context\Chat.Context.Lookups.cs" />
+    <Compile Include="Anewluv.Chat\Context\ChatModelbuilder.cs" />
+    <Compile Include="Anewluv.Chat\Context\SeedingConversions.cs" />
+    <Compile Include="Anewluv.Chat\Context\SeedMethods.cs" />
+    <Compile Include="Anewluv\Context\Anewluv.Context.cs" />
+    <Compile Include="Anewluv\Mapping\actionMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_searchsettingdetailtypeMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_actiontypeMap.cs" />
+    <Compile Include="Anewluv\Mapping\photophotoalbumMap.cs" />
+    <Compile Include="Anewluv\Mapping\searchsettingMap.cs" />
+    <Compile Include="Anewluv\ModelConfigurations\SeedingConversions.cs" />
+    <Compile Include="Anewluv\ModelConfigurations\SeedMethods.cs" />
+    <Compile Include="Anewluv\ModelConfigurations\Anewluv.Context.Modelbuilder.cs" />
+    <Compile Include="Migrations\201503260904285_first.cs" />
+    <Compile Include="Migrations\201503260904285_first.Designer.cs">
+      <DependentUpon>201503260904285_first.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504020641040_profilemetatdataclean.cs" />
+    <Compile Include="Migrations\201504020641040_profilemetatdataclean.Designer.cs">
+      <DependentUpon>201504020641040_profilemetatdataclean.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504030047562_profiledata_profileidremoveal.cs" />
+    <Compile Include="Migrations\201504030047562_profiledata_profileidremoveal.Designer.cs">
+      <DependentUpon>201504030047562_profiledata_profileidremoveal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504240549286_addedpasswordtoken.cs" />
+    <Compile Include="Migrations\201504240549286_addedpasswordtoken.Designer.cs">
+      <DependentUpon>201504240549286_addedpasswordtoken.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\AnewluvMigrations\201503080503290_first.cs" />
+    <Compile Include="Migrations\AnewluvMigrations\201503080503290_first.Designer.cs">
+      <DependentUpon>201503080503290_first.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\AnewluvMigrations\201503170312568_new.cs" />
+    <Compile Include="Migrations\AnewluvMigrations\201503170312568_new.Designer.cs">
+      <DependentUpon>201503170312568_new.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\AnewluvMigrations\Configuration.cs" />
+    <Compile Include="Anewluv\Mapping\noteMap.cs" />
+    <Compile Include="Anewluv\Mapping\applicationiconconversionMap.cs" />
+    <Compile Include="Anewluv\Mapping\applicationMap.cs" />
+    <Compile Include="Anewluv\Mapping\applicationroleMap.cs" />
+    <Compile Include="Anewluv\Mapping\communicationquotaMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_abusetypeMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_activitytypeMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_applicationpaymenttypeMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_applicationitemtransfertypeMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_applicationtypeMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_bodytypeMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_defaultmailboxfolderMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_dietMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_drinksMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_educationlevelMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_employmentstatusMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_ethnicityMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_exerciseMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_eyecolorMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_flagyesnoMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_genderMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_haircolorMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_havekidsMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_heightMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_hobbyMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_hotfeatureMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_humorMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_iconformatMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_iconImagersizerformatMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_incomelevelMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_livingsituationMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_lookingforMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_maritalstatusMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_notetypeMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_openidproviderMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_photoapprovalstatusMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_photoformatMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_photoImagersizerformatMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_photoimagetypeMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_photorejectionreasonMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_photostatusdescriptionMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_photostatusMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_politicalviewMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_professionMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_profilefiltertypeMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_profilestatusMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_religionMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_religiousattendanceMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_roleMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_securityleveltypeMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_securityquestionMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_showmeMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_signMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_smokesMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_sortbytypeMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_wantskidsMap.cs" />
+    <Compile Include="Anewluv\Mapping\mailboxfolderMap.cs" />
+    <Compile Include="Anewluv\Mapping\mailboxmessagefolderMap.cs" />
+    <Compile Include="Anewluv\Mapping\mailboxmessageMap.cs" />
+    <Compile Include="Anewluv\Mapping\mailupdatefreqencyMap.cs" />
+    <Compile Include="Anewluv\Mapping\membersinroleMap.cs" />
+    <Compile Include="Anewluv\Mapping\openidMap.cs" />
+    <Compile Include="Anewluv\Mapping\photoalbumMap.cs" />
+    <Compile Include="Anewluv\Mapping\photoalbum_securitylevelMap.cs" />
+    <Compile Include="Anewluv\Mapping\photoconversionMap.cs" />
+    <Compile Include="Anewluv\Mapping\photoMap.cs" />
+    <Compile Include="Anewluv\Mapping\photoreviewMap.cs" />
+    <Compile Include="Anewluv\Mapping\photo_securitylevelMap.cs" />
+    <Compile Include="Anewluv\Mapping\profileactivitygeodataMap.cs" />
+    <Compile Include="Anewluv\Mapping\profileactivityMap.cs" />
+    <Compile Include="Anewluv\Mapping\profiledataMap.cs" />
+    <Compile Include="Anewluv\Mapping\profiledata_ethnicityMap.cs" />
+    <Compile Include="Anewluv\Mapping\profiledata_hobbyMap.cs" />
+    <Compile Include="Anewluv\Mapping\profiledata_hotfeatureMap.cs" />
+    <Compile Include="Anewluv\Mapping\profiledata_lookingforMap.cs" />
+    <Compile Include="Anewluv\Mapping\profileMap.cs" />
+    <Compile Include="Anewluv\Mapping\profilemetadataMap.cs" />
+    <Compile Include="Anewluv\Mapping\ratingMap.cs" />
+    <Compile Include="Anewluv\Mapping\ratingvalueMap.cs" />
+    <Compile Include="Anewluv\Mapping\searchsettingdetailMap.cs" />
+    <Compile Include="Anewluv\Mapping\searchsetting_locationMap.cs" />
+    <Compile Include="Anewluv\Mapping\systempagesettingMap.cs" />
+    <Compile Include="Anewluv\Mapping\userlogtimeMap.cs" />
+    <Compile Include="Anewluv\Mapping\visiblitysettingMap.cs" />
+    <Compile Include="Anewluv\Mapping\visiblitysettings_countryMap.cs" />
+    <Compile Include="Anewluv\Mapping\visiblitysettings_genderMap.cs" />
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\DebugUtils.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Documentation\Migration Instructions.txt" />
+    <Content Include="Migrations\Documentation\Migration Instructions.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Common\NET\Shared\Nmedia.Infrastructure\Nmedia.Infrastructure.csproj">
+      <Project>{d0fa8aa1-5a17-4c42-a92f-f1266cd01d7c}</Project>
+      <Name>Nmedia.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Frameworks\GenericUnitOfWork\Repository.Pattern.Ef6\Repository.Pattern.Ef6.csproj">
+      <Project>{f68a1d19-93fb-47c1-a22b-42bea3e4fd8c}</Project>
+      <Name>Repository.Pattern.Ef6</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Frameworks\GenericUnitOfWork\Repository.Pattern\Repository.Pattern.csproj">
+      <Project>{6e682a14-c872-4813-b620-76e108dea683}</Project>
+      <Name>Repository.Pattern</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Data\Anewluv.Domain.Data\Anewluv.Domain.Data.csproj">
+      <Project>{364cd516-0638-4e03-b1dc-9414617820e9}</Project>
+      <Name>Anewluv.Domain.Data</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Anewluv.Chat\Interfaces\" />
+    <Folder Include="Anewluv.Chat\Modelbuilder\" />
+    <Folder Include="Anewluv.Chat\ModelConfigurations\" />
+    <Folder Include="Anewluv\Interfaces\" />
+    <Folder Include="Anewluv\Modelbuilder\" />
+    <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201503260904285_first.resx">
+      <DependentUpon>201503260904285_first.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504020641040_profilemetatdataclean.resx">
+      <DependentUpon>201504020641040_profilemetatdataclean.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504030047562_profiledata_profileidremoveal.resx">
+      <DependentUpon>201504030047562_profiledata_profileidremoveal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504240549286_addedpasswordtoken.resx">
+      <DependentUpon>201504240549286_addedpasswordtoken.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\AnewluvMigrations\201503080503290_first.resx">
+      <DependentUpon>201503080503290_first.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\AnewluvMigrations\201503170312568_new.resx">
+      <DependentUpon>201503170312568_new.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

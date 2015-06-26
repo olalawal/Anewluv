@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Ninject.Modules;
-using Anewluv.Domain.Chat;
+//using Anewluv.Domain.Chat;
 using Ninject.Web.Common;
 
 using Ninject.Activation;

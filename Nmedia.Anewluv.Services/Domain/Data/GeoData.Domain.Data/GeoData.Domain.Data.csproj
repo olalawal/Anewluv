@@ -1,18 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{A7D35636-9574-4344-A761-138C3FF171BC}</ProjectGuid>
+    <ProjectGuid>{0E34E4F5-100B-46C6-A74E-E101E6E71646}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GeoData.Domain.Data</RootNamespace>
     <AssemblyName>GeoData.Domain.Data</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -22,7 +20,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,7 +28,6 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -43,6 +39,140 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Afghanistan.cs" />
+    <Compile Include="Models\AmericanSamoa.cs" />
+    <Compile Include="Models\Andorra.cs" />
+    <Compile Include="Models\Angola.cs" />
+    <Compile Include="Models\AntiguaandBarbuda.cs" />
+    <Compile Include="Models\Argentina.cs" />
+    <Compile Include="Models\Australia.cs" />
+    <Compile Include="Models\Austria.cs" />
+    <Compile Include="Models\Azerbaijan.cs" />
+    <Compile Include="Models\Bahama.cs" />
+    <Compile Include="Models\Bahrain.cs" />
+    <Compile Include="Models\Bangladesh.cs" />
+    <Compile Include="Models\Barbado.cs" />
+    <Compile Include="Models\Belgium.cs" />
+    <Compile Include="Models\Belize.cs" />
+    <Compile Include="Models\Bermuda.cs" />
+    <Compile Include="Models\Brazil.cs" />
+    <Compile Include="Models\BritishVirginIsland.cs" />
+    <Compile Include="Models\Bulgaria.cs" />
+    <Compile Include="Models\Canada.cs" />
+    <Compile Include="Models\CapeVerde.cs" />
+    <Compile Include="Models\CaymanIsland.cs" />
+    <Compile Include="Models\Chile.cs" />
+    <Compile Include="Models\China.cs" />
+    <Compile Include="Models\Colombia.cs" />
+    <Compile Include="Models\Costa_Rica.cs" />
+    <Compile Include="Models\CountryCode.cs" />
+    <Compile Include="Models\Country_PostalCode_List.cs" />
+    <Compile Include="Models\Country_PostalCode_Region.cs" />
+    <Compile Include="Models\Croatia.cs" />
+    <Compile Include="Models\Cuba.cs" />
+    <Compile Include="Models\CustomRegion.cs" />
+    <Compile Include="Models\Cypru.cs" />
+    <Compile Include="Models\CzechRepublic.cs" />
+    <Compile Include="Models\Denmark.cs" />
+    <Compile Include="Models\DominicanRepublic.cs" />
+    <Compile Include="Models\Egypt.cs" />
+    <Compile Include="Models\Eritrea.cs" />
+    <Compile Include="Models\FalklandIsland.cs" />
+    <Compile Include="Models\Fiji.cs" />
+    <Compile Include="Models\Finland.cs" />
+    <Compile Include="Models\France.cs" />
+    <Compile Include="Models\FrenchGuiana.cs" />
+    <Compile Include="Models\FrenchPolynesia.cs" />
+    <Compile Include="Models\Germany.cs" />
+    <Compile Include="Models\Ghana.cs" />
+    <Compile Include="Models\Gibraltar.cs" />
+    <Compile Include="Models\Greenland.cs" />
+    <Compile Include="Models\Guam.cs" />
+    <Compile Include="Models\Guatemala.cs" />
+    <Compile Include="Models\Guernsey.cs" />
+    <Compile Include="Models\Guyana.cs" />
+    <Compile Include="Models\Haiti.cs" />
+    <Compile Include="Models\Hondura.cs" />
+    <Compile Include="Models\HongKong.cs" />
+    <Compile Include="Models\Hungary.cs" />
+    <Compile Include="Models\Iceland.cs" />
+    <Compile Include="Models\India.cs" />
+    <Compile Include="Models\Indonesia.cs" />
+    <Compile Include="Models\Iraq.cs" />
+    <Compile Include="Models\Ireland.cs" />
+    <Compile Include="Models\IsleOfMan.cs" />
+    <Compile Include="Models\Israel.cs" />
+    <Compile Include="Models\Italy.cs" />
+    <Compile Include="Models\IvoryCoast.cs" />
+    <Compile Include="Models\Jamaica.cs" />
+    <Compile Include="Models\Japan.cs" />
+    <Compile Include="Models\Jersey.cs" />
+    <Compile Include="Models\Jordan.cs" />
+    <Compile Include="Models\Kenya.cs" />
+    <Compile Include="Models\Kiribati.cs" />
+    <Compile Include="Models\Lebanon.cs" />
+    <Compile Include="Models\Liberia.cs" />
+    <Compile Include="Models\Liechtenstein.cs" />
+    <Compile Include="Models\Luxembourg.cs" />
+    <Compile Include="Models\Macedonia.cs" />
+    <Compile Include="Models\Madagascar.cs" />
+    <Compile Include="Models\Malaysia.cs" />
+    <Compile Include="Models\Malta.cs" />
+    <Compile Include="Models\MarshallIsland.cs" />
+    <Compile Include="Models\Martinique.cs" />
+    <Compile Include="Models\Mayotte.cs" />
+    <Compile Include="Models\Mexico.cs" />
+    <Compile Include="Models\Moldova.cs" />
+    <Compile Include="Models\Monaco.cs" />
+    <Compile Include="Models\Morocco.cs" />
+    <Compile Include="Models\Nepal.cs" />
+    <Compile Include="Models\Netherland.cs" />
+    <Compile Include="Models\NetherlandsAntille.cs" />
+    <Compile Include="Models\NewZealand.cs" />
+    <Compile Include="Models\Nigeria.cs" />
+    <Compile Include="Models\NorthernMarianaIsland.cs" />
+    <Compile Include="Models\Norway.cs" />
+    <Compile Include="Models\Pakistan.cs" />
+    <Compile Include="Models\PapuaNewGuinea.cs" />
+    <Compile Include="Models\Peru.cs" />
+    <Compile Include="Models\Philippine.cs" />
+    <Compile Include="Models\Poland.cs" />
+    <Compile Include="Models\Portugal.cs" />
+    <Compile Include="Models\PuertoRico.cs" />
+    <Compile Include="Models\Qatar.cs" />
+    <Compile Include="Models\Reunion.cs" />
+    <Compile Include="Models\Russia.cs" />
+    <Compile Include="Models\SaintPierreandMiquelon.cs" />
+    <Compile Include="Models\SaintVincentandtheGrenadine.cs" />
+    <Compile Include="Models\Samoa.cs" />
+    <Compile Include="Models\SaudiArabia.cs" />
+    <Compile Include="Models\Senegal.cs" />
+    <Compile Include="Models\Slovakia.cs" />
+    <Compile Include="Models\Slovenia.cs" />
+    <Compile Include="Models\SolomonIsland.cs" />
+    <Compile Include="Models\SouthAfrica.cs" />
+    <Compile Include="Models\Spain.cs" />
+    <Compile Include="Models\SriLanka.cs" />
+    <Compile Include="Models\Sweden.cs" />
+    <Compile Include="Models\Switzerland.cs" />
+    <Compile Include="Models\Syria.cs" />
+    <Compile Include="Models\sysdiagram.cs" />
+    <Compile Include="Models\Taiwan.cs" />
+    <Compile Include="Models\Tanzania.cs" />
+    <Compile Include="Models\Thailand.cs" />
+    <Compile Include="Models\TrinidadandTobago.cs" />
+    <Compile Include="Models\Turkey.cs" />
+    <Compile Include="Models\Uganda.cs" />
+    <Compile Include="Models\Ukraine.cs" />
+    <Compile Include="Models\UnitedArabEmirate.cs" />
+    <Compile Include="Models\UnitedKingdom.cs" />
+    <Compile Include="Models\UnitedState.cs" />
+    <Compile Include="Models\USVirginIsland.cs" />
+    <Compile Include="Models\Venezuela.cs" />
+    <Compile Include="Models\Vietnam.cs" />
+    <Compile Include="Models\ViewModels\CityList.cs" />
+    <Compile Include="Models\ViewModels\GpsData.cs" />
+    <Compile Include="Models\Yeman.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

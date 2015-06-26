@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("GeoData.Domain.Data")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Wells Fargo N.A.")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("GeoData.Domain.Data")]
-[assembly: AssemblyCopyright("Copyright © Wells Fargo N.A. 2013")]
+[assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("3d4841df-55b6-4331-8c9d-da2c7cd2b32f")]
+[assembly: Guid("65ab1efc-6597-49fd-a02e-30bd56ce1c98")]
 
 // Version information for an assembly consists of the following four values:
 //

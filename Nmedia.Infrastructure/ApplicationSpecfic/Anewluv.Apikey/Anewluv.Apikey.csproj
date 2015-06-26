@@ -57,7 +57,7 @@
       <Name>Nmedia.Infrastructure</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Nmedia.Anewluv.Services\Domain\Data\Anewluv.Domain.Data\Anewluv.Domain.Data.csproj">
-      <Project>{8e3079e3-2244-47b1-ab1f-ee171398666e}</Project>
+      <Project>{364cd516-0638-4e03-b1dc-9414617820e9}</Project>
       <Name>Anewluv.Domain.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Nmedia.Anewluv.Services\Frameworks\GenericUnitOfWork\Repository.Pattern.Ef6\Repository.Pattern.Ef6.csproj">

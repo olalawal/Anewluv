@@ -19,12 +19,13 @@ namespace Anewluv.Domain.Data.Mapping
             this.Property(t => t.creationdate).HasColumnName("creationdate");
             this.Property(t => t.deleteddate).HasColumnName("deleteddate");
             this.Property(t => t.maxsize).HasColumnName("maxsize");
-            this.Property(t => t.defaultfolder_id).HasColumnName("defaultfolder_id");
+          //  this.Property(t => t.defaultfolder).HasColumnName("defaultfolder_id");
 
+                                
             // Relationships
-            this.HasOptional(t => t.lu_defaultmailboxfolder)
-                .WithMany(t => t.mailboxfoldertypes)
-                .HasForeignKey(d => d.defaultfolder_id);
+            this.HasOptional(t => t.defaultfolder);
+               // .WithMany(t => t.mailboxfolders)
+                //.HasForeignKey(d => d.defaultfolder_id);
 
         }
     }

@@ -1,0 +1,23 @@
+using Repository.Pattern.Ef6;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.Serialization;
+
+namespace Anewluv.Domain.Data
+{
+    public partial class lu_photostatus : Entity
+    {
+        public lu_photostatus()
+        {
+            this.lu_photostatusdescription = new List<lu_photostatusdescription>();
+            this.photos = new List<photo>();
+        }
+
+        public int id { get; set; }
+        [NotMapped, DataMember] public bool selected { get; set; }
+        public string description { get; set; }
+        public virtual ICollection<lu_photostatusdescription> lu_photostatusdescription { get; set; }
+        public virtual ICollection<photo> photos { get; set; }
+    }
+}

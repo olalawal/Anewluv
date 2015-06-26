@@ -37,7 +37,7 @@ namespace Nmedia.Infrastructure.DependencyResolution.Ninject.Modules
            // this.Bind<IDataContextAsync>().To<AnewluvContext>().WhenTargetHas<IAnewluvEntitesScope>().InRequestScope();
            // this.Bind<IDataContextAsync>().To<PostalData2Context>().WhenTargetHas<InSpatialEntitesScope>().InRequestScope();
             this.Bind<IUnitOfWorkAsync>().To<UnitOfWork>().WhenTargetHas<IAnewluvEntitesScope>().InRequestScope();
-            this.Bind<IUnitOfWorkAsync>().To<UnitOfWork>().WhenTargetHas<ISpatialEntitesScope>().InRequestScope();;
+            this.Bind<IUnitOfWorkAsync>().To<UnitOfWork>().WhenTargetHas<INotificationEntitiesScope>().InRequestScope();
 
 
         }
