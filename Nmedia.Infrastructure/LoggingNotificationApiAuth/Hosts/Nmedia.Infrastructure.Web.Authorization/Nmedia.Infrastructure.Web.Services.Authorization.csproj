@@ -105,6 +105,10 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Nmedia.Anewluv.Services\Domain\Data\Anewluv.Domain.Data\Anewluv.Domain.Data.csproj">
+      <Project>{364cd516-0638-4e03-b1dc-9414617820e9}</Project>
+      <Name>Anewluv.Domain.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\WCF\Nmedia.WCFHelpers\Nmedia.WCFHelpers.csproj">
       <Project>{88d4508e-7ced-49cc-b43a-e3af99470d35}</Project>
       <Name>Nmedia.WCFHelpers</Name>

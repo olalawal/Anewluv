@@ -72,6 +72,8 @@ namespace Anewluv.DataExtentionMethods
                       .Include(x => x.profile.profiledata.lu_sign)
                       .Include(x => x.profile.profiledata.lu_smokes)
                        .Include(x => x.profile.profiledata.lu_wantskids)
+
+                   
                     
                        //searchsettings
                        .Include(x => x.searchsettings.Select(s => s.details))
@@ -115,6 +117,10 @@ namespace Anewluv.DataExtentionMethods
                       .Include(x => x.profiledata.lu_sign)
                       .Include(x => x.profiledata.lu_smokes)
                        .Include(x => x.profiledata.lu_wantskids)
+                       .Include(x => x.profilemetadata.profiledata_ethnicity)
+                        .Include(x => x.profilemetadata.profiledata_hobby)
+                       .Include(x => x.profilemetadata.profiledata_hotfeature)
+                       .Include(x => x.profilemetadata.profiledata_lookingfor)
 
 
                 .Include(i => i.profilemetadata.searchsettings.Select(s => s.details)).Select().FirstOrDefault();
@@ -471,6 +477,7 @@ namespace Anewluv.DataExtentionMethods
 
         
     
+
     
     
     }

@@ -7,7 +7,7 @@ namespace Anewluv.Domain.Data
     {
         public int id { get; set; }
         public int profile_id { get; set; }
-        public Nullable<int> ethnicty_id { get; set; }
+        public int? ethnicty_id { get; set; }
         public virtual lu_ethnicity lu_ethnicity { get; set; }
         public virtual profilemetadata profilemetadata { get; set; }
     }

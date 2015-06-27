@@ -84,6 +84,10 @@
       <Project>{d0fa8aa1-5a17-4c42-a92f-f1266cd01d7c}</Project>
       <Name>Nmedia.Infrastructure</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Nmedia.Anewluv.Services\Domain\Data\Anewluv.Domain.Data\Anewluv.Domain.Data.csproj">
+      <Project>{364cd516-0638-4e03-b1dc-9414617820e9}</Project>
+      <Name>Anewluv.Domain.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\Nmedia.Anewluv.Services\Frameworks\GenericUnitOfWork\Repository.Pattern.Ef6\Repository.Pattern.Ef6.csproj">
       <Project>{f68a1d19-93fb-47c1-a22b-42bea3e4fd8c}</Project>
       <Name>Repository.Pattern.Ef6</Name>

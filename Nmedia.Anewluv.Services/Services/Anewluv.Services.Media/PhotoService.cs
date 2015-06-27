@@ -31,7 +31,7 @@ using Nmedia.Infrastructure;
 using Nmedia.Infrastructure.Domain.Data.Notification;
 using Nmedia.Infrastructure.Domain.Data.Apikey;
 using Nmedia.Infrastructure.Domain.Data.Apikey.DTOs;
-
+using Repository.Pattern.Infrastructure;
 namespace Anewluv.Services.Media
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in both code and config file together.
@@ -405,6 +405,7 @@ namespace Anewluv.Services.Media
             {
                 //do not audit on adds
                 AnewluvMessages AnewluvMessages = new AnewluvMessages();
+                bool updated = false;
                 
                 //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
                 {
@@ -413,36 +414,76 @@ namespace Anewluv.Services.Media
                     {
 
 
-                        var task = Task.Factory.StartNew(() =>
-                        {
-                                                         
+                      
+
+                            //check the api key matches the profile id pased 
+                            var profileidmatchesapikey = Api.AsyncCalls.validateapikeybyuseridentifierasync(new
+                                            ApiKeyValidationModel { application_id = (int)applicationenum.anewluv, keyvalue = model.apikey.Value, useridentifier = model.profileid.Value }).Result;
+
+                            if (profileidmatchesapikey)
+                            {
 
                                 // Retrieve single value from photos table
-                                photo PhotoModify = _unitOfWorkAsync.Repository<photo>().Queryable().Where(u => u.id == model.photoid && u.profile_id == model.profileid).FirstOrDefault();
+                                IEnumerable<photo> result = await _unitOfWorkAsync.RepositoryAsync<photo>().Query(u => u.id == model.photoid && u.profile_id == model.profileid).SelectAsync();
+                            
+                                var PhotoModify = result.FirstOrDefault();
 
                                 //remove all secruity otptions if its public
-                                if (model.photocaption != null & model.photocaption != PhotoModify.imagecaption)
+                                if (model.photocaption != null  && model.photocaption != PhotoModify.imagecaption)
                                 {
 
                                     PhotoModify.imagecaption = model.photocaption;
+                                    PhotoModify.ObjectState = ObjectState.Modified;
                                     //TO DO add modify date
-                                    _unitOfWorkAsync.Repository<photo>().Update(PhotoModify);
-                                    var i = _unitOfWorkAsync.SaveChanges();
+                                    _unitOfWorkAsync.Repository<photo>().Update(PhotoModify);                                   
                                     AnewluvMessages.messages.Add("Photo caption changed!");
+                                    updated = true;
+
+                                }
+                                else if (model.phototstatusid != null && model.phototstatusid == (int)photostatusEnum.Gallery)
+                                {
+                                    //first check if this photo status is not aleary gallery 
+                                    if (PhotoModify.photostatus_id != (int)photostatusEnum.Gallery)
+                                    {
+                                        //first check grab the exisitng gallery and nuke it 
+                                         // Retrieve single value from photos table
+                                           IEnumerable<photo> existingallery = await _unitOfWorkAsync.RepositoryAsync<photo>().Query(u => u.id == model.photoid && u.profile_id == model.profileid).SelectAsync();                            
+                                           if (existingallery.FirstOrDefault() !=null)
+                                           {
+                                               var PhotoModifyGallery = existingallery.FirstOrDefault();
+                                               PhotoModifyGallery.ObjectState = ObjectState.Modified;
+                                               PhotoModifyGallery.photostatus_id = (int)photostatusEnum.Nostatus;
+                                               AnewluvMessages.messages.Add("the photo : " + PhotoModifyGallery.imagecaption + " has been removed from primary");
+                                           }
+
+                                        PhotoModify.ObjectState = ObjectState.Modified;
+                                        PhotoModify.photostatus_id = (int)photostatusEnum.Gallery;
+                                        updated = true;
+                                        AnewluvMessages.messages.Add("the photo : " + PhotoModify.imagecaption + " has been made primary");
+                                    }
+                                    else
+                                    {
+
+                                    }
                                 }
                                 else
                                 {
                                     // transaction.Commit();
-                                    AnewluvMessages.errormessages.Add("Only the caption of a photo can be changed please select a new caption");                                
+                                    AnewluvMessages.errormessages.Add("you can either make a photo your primary photo or change its caption !");
                                 }
-                           
-                              
 
 
-                            
-                            return AnewluvMessages;
-                        });
-                        return await task.ConfigureAwait(false);
+                            }
+                            else
+                            {
+                                AnewluvMessages.errormessages.Add("invalid token for this profile id! please log in to perform this action");
+                                //TO DO log this 
+                            }
+
+                            if (updated) await _unitOfWorkAsync.SaveChangesAsync();                       
+                          
+                           return AnewluvMessages;
+                  
 
 
                     }
@@ -465,20 +506,25 @@ namespace Anewluv.Services.Media
             }
 
         }       
-       public async Task<AnewluvMessages> deleteuserphotos(PhotoModel model)
+        public async Task<AnewluvMessages> deleteuserphotos(PhotoModel model)
         {
             {
                 //do not audit on adds
                 AnewluvMessages AnewluvMessages = new AnewluvMessages();
+                bool updated = false;
                 //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
                 {
 
                     try
                     {
 
+                        //check the api key matches the profile id pased 
+                        var profileidmatchesapikey = Api.AsyncCalls.validateapikeybyuseridentifierasync(new
+                                        ApiKeyValidationModel { application_id = (int)applicationenum.anewluv, keyvalue = model.apikey.Value, useridentifier = model.profileid.Value }).Result;
 
-                        var task = Task.Factory.StartNew(() =>
+                        if (profileidmatchesapikey)
                         {
+
                             foreach (Guid photoid in model.photoids)
                             {
                                 // var  model.photoformat = model. model.photoformat);
@@ -487,20 +533,38 @@ namespace Anewluv.Services.Media
                                 // var convertedstatus =  model.photostatus);
 
                                 // Retrieve single value from photos table
-                                photo PhotoModify = _unitOfWorkAsync.Repository<photo>().Queryable().Where(u => u.id == model.photoid && u.profile_id == model.profileid).FirstOrDefault();
-                                PhotoModify.photostatus_id = (int)photostatusEnum.deletedbyuser;
-                                _unitOfWorkAsync.Repository<photo>().Update(PhotoModify);
-                                // Update database
-                                // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
-                                var i = _unitOfWorkAsync.SaveChanges();
-                                // transaction.Commit();
-                                AnewluvMessages.messages.Add("photo deleted successfully");
-                               
-                            
+                                IEnumerable<photo> result = await _unitOfWorkAsync.RepositoryAsync<photo>().Query(u => u.id == photoid && u.profile_id == model.profileid).SelectAsync();
+
+
+                                if (result.FirstOrDefault() != null)
+                                {
+                                    photo PhotoModify = result.FirstOrDefault();
+                                    PhotoModify.photostatus_id = (int)photostatusEnum.deletedbyuser;
+                                    PhotoModify.ObjectState = ObjectState.Modified;
+                                    _unitOfWorkAsync.Repository<photo>().Update(PhotoModify);
+                                    // Update database
+                                    // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
+                                    updated = true;
+                                    // transaction.Commit();
+                                    AnewluvMessages.messages.Add("photo deleted successfully");
+                                }
+
                             }
+
+
+                            if (updated) await _unitOfWorkAsync.SaveChangesAsync();
+                        }
+                        else
+                        {
+                            AnewluvMessages.errormessages.Add("invalid token for this profile id! please log in to perform this action");
+                            //TO DO log this 
+                        }
+
+
+                     
+
                             return AnewluvMessages;
-                        });
-                        return await task.ConfigureAwait(false);
+                       
 
 
                     }
@@ -527,36 +591,70 @@ namespace Anewluv.Services.Media
         {
 
 
-            {
+            
                 //do not audit on adds
                 AnewluvMessages AnewluvMessages = new AnewluvMessages();
+                bool updated = false;
                 //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
                 {
-
 
                     try
                     {
 
+                        //check the api key matches the profile id pased 
+                        var profileidmatchesapikey = Api.AsyncCalls.validateapikeybyuseridentifierasync(new
+                                        ApiKeyValidationModel { application_id = (int)applicationenum.anewluv, keyvalue = model.apikey.Value, useridentifier = model.profileid.Value }).Result;
 
-                        var task = Task.Factory.StartNew(() =>
+                        if (profileidmatchesapikey)
                         {
-                            // var  model.photoformat = model. model.photoformat);
-                            //var photoid = model.photoid;
-                            //var convertedprofileid = Convert.ToInt32(model.profileid);
-                            // var convertedstatus =  model.photostatus);
 
-                            // Retrieve single value from photos table
-                            photo PhotoModify = _unitOfWorkAsync.Repository<photo>().Queryable().Where(u => u.id == model.photoid).FirstOrDefault();
-                            PhotoModify.photostatus_id = (int)photostatusEnum.deletedbyuser;
-                            _unitOfWorkAsync.Repository<photo>().Update(PhotoModify);
-                            // Update database
-                            // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
-                            var i = _unitOfWorkAsync.SaveChanges();
-                            // transaction.Commit();
-                            AnewluvMessages.messages.Add("photo deleted successfully");
-                            return AnewluvMessages;
-                        });
-                        return await task.ConfigureAwait(false);
+                              // var  model.photoformat = model. model.photoformat);
+                                //var photoid = model.photoid;
+                                //var convertedprofileid = Convert.ToInt32(model.profileid);
+                                // var convertedstatus =  model.photostatus);
+
+                                // Retrieve single value from photos table
+                                IEnumerable<photo> result = await _unitOfWorkAsync.RepositoryAsync<photo>().Query(u => u.id == model.photoid && u.profile_id == model.profileid).SelectAsync();
+
+
+                                if (result.FirstOrDefault() != null)
+                                {
+                                    photo PhotoModify = result.FirstOrDefault();
+                                    PhotoModify.photostatus_id = (int)photostatusEnum.deletedbyuser;
+                                    PhotoModify.ObjectState = ObjectState.Modified;
+                                    _unitOfWorkAsync.Repository<photo>().Update(PhotoModify);
+                                    // Update database
+                                    // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
+                                    updated = true;
+                                    // transaction.Commit();
+                                    AnewluvMessages.messages.Add("photo deleted successfully");
+                                }
+
+
+
+
+                                if (updated)
+                                {
+                                    _unitOfWorkAsync.SaveChangesAsync().Start();
+                                }
+                                else
+                                {
+                                    AnewluvMessages.errormessages.Add("invalid data no changes made!");
+                                }
+                        }
+                        else
+                        {
+                            AnewluvMessages.errormessages.Add("invalid token for this profile id! please log in to perform this action");
+                            //TO DO log this 
+                        }
+
+
+
+
+                        return AnewluvMessages;
+                       
+
+
 
 
                     }
@@ -579,11 +677,229 @@ namespace Anewluv.Services.Media
 
 
 
+                
+            }
+
+        }              
+        public async Task<AnewluvMessages> addphotossecuritylevel(PhotoModel model)
+        {
+
+            {
+                //do not audit on adds
+                AnewluvMessages AnewluvMessages = new AnewluvMessages();
+                bool updated = false;
+                //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
+                {
+
+                    try
+                    {
+
+                        //check the api key matches the profile id pased 
+                        var profileidmatchesapikey = Api.AsyncCalls.validateapikeybyuseridentifierasync(new
+                                        ApiKeyValidationModel { application_id = (int)applicationenum.anewluv, keyvalue = model.apikey.Value, useridentifier = model.profileid.Value }).Result;
+
+
+                        if (profileidmatchesapikey)
+                        {
+                            if (model.photosecuritylevelid != null | model.photoids == null)
+                            {
+                                foreach (Guid photoid in model.photoids)
+                                {
+                                    // Retrieve single value from photos table
+                                    IEnumerable<photo> result = await _unitOfWorkAsync.RepositoryAsync<photo>().Query(u => u.id == photoid && u.profile_id == model.profileid)
+                                        .Include(z => z.photo_securitylevel.Select(f => f.lu_securityleveltype)).SelectAsync();
+
+
+                                    if (result.FirstOrDefault() != null)
+                                    {
+                                        var PhotoModify = result.FirstOrDefault();
+
+                                            var existingsecuritylevel = PhotoModify.photo_securitylevel.Where(z => z.securityleveltype_id == model.photosecuritylevelid).FirstOrDefault();
+
+                                            if (existingsecuritylevel == null)
+                                            {
+                                                //add since we dont have this current security level type
+                                                
+                                                var newsecuritylevel = new photo_securitylevel
+                                                {
+                                                    photo_id = PhotoModify.id,                                                   
+                                                    securityleveltype_id  = model.photosecuritylevelid, ObjectState = ObjectState.Added  
+
+                                                };
+                                                                                               
+                                                _unitOfWorkAsync.RepositoryAsync<photo_securitylevel>().Insert(newsecuritylevel);
+                                                AnewluvMessages.messages.Add("photo scurity added for the photo :" + PhotoModify.imagecaption);
+                                                updated = true;
+                                            }
+                                            else
+                                            {
+                                                AnewluvMessages.errormessages.Add("the photo: " + PhotoModify.imagecaption + " already has the security setting : " + ((securityleveltypeEnum)model.photosecuritylevelid.Value).ToDescription());
+                                         
+                                            }
+                                    }
+                                    else
+                                    {
+                                        AnewluvMessages.errormessages.Add("the photoid : " + photoid + " is invalid for this profile , cannot modify security level");
+                                    }
+                                }
+                            }
+
+                            else
+                            {
+                                AnewluvMessages.errormessages.Add("no photoids or  photosecuritylevelid passed, cannot modify security level");
+                            }
+
+
+                            if (updated)
+                            {
+                                _unitOfWorkAsync.SaveChangesAsync().Start();
+                            }
+                            else
+                            {
+                                AnewluvMessages.errormessages.Add("no changes made");
+                            }
+                        }
+                        else
+                        {
+                            AnewluvMessages.errormessages.Add("invalid token for this profile id! please log in to perform this action");
+                            //TO DO log this 
+                        }
+
+
+
+
+                        return AnewluvMessages;
+
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        //TO DO track the transaction types only rollback on DB connections
+                        //rollback transaction
+                        // transaction.Rollback();
+                        //instantiate logger here so it does not break anything else.
+                        logger = new Logging(applicationEnum.MediaService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in photo service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                    }
+
                 }
             }
 
-        }        
-        public async Task<AnewluvMessages> updatephotossecuritylevel(PhotoModel model)
+        }
+        public async Task<AnewluvMessages> removephotossecuritylevel(PhotoModel model)
+        {
+
+            {
+                //do not audit on adds
+                AnewluvMessages AnewluvMessages = new AnewluvMessages();
+                bool updated = false;
+                //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
+                {
+
+                    try
+                    {
+
+                        //check the api key matches the profile id pased 
+                        var profileidmatchesapikey = Api.AsyncCalls.validateapikeybyuseridentifierasync(new
+                                        ApiKeyValidationModel { application_id = (int)applicationenum.anewluv, keyvalue = model.apikey.Value, useridentifier = model.profileid.Value }).Result;
+
+
+                        if (profileidmatchesapikey)
+                        {
+                            if (model.photosecuritylevelid != null | model.photoids == null)
+                            {
+                                foreach (Guid photoid in model.photoids)
+                                {
+                                    // Retrieve single value from photos table
+                                    IEnumerable<photo> result = await _unitOfWorkAsync.RepositoryAsync<photo>().Query(u => u.id == photoid && u.profile_id == model.profileid)
+                                        .Include(z => z.photo_securitylevel.Select(f => f.lu_securityleveltype)).SelectAsync();
+
+                                
+                                    if (result.FirstOrDefault() != null)
+                                    {
+                                        var PhotoModify = result.FirstOrDefault();
+                                        if (PhotoModify.photo_securitylevel.Count() > 0)
+                                        {
+                                            var securitytoremove = PhotoModify.photo_securitylevel.Where(z => z.securityleveltype_id == model.photosecuritylevelid).FirstOrDefault();
+
+                                            if (securitytoremove != null)
+                                            {
+                                                securitytoremove.ObjectState = Repository.Pattern.Infrastructure.ObjectState.Deleted;
+                                                _unitOfWorkAsync.Repository<photo_securitylevel>().Delete(securitytoremove);
+                                                updated = true;
+                                                AnewluvMessages.messages.Add("photo scurity added removed for the photo :" + PhotoModify.imagecaption);
+                                            }
+                                            else
+                                            {
+                                                AnewluvMessages.errormessages.Add("the photo: " + PhotoModify.imagecaption + " does not have the security setting : " + ((securityleveltypeEnum)model.photosecuritylevelid.Value).ToDescription());
+                                            }
+                                        }
+                                        else
+                                        {
+                                            AnewluvMessages.errormessages.Add("the photo : " + PhotoModify.imagecaption + "  has no current security settings to remove! !");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        AnewluvMessages.errormessages.Add("the photoid : " +  photoid + " is invalid for this profile , cannot modify security level");
+                                    }
+                                }                            }
+
+                            else
+                            {
+                                AnewluvMessages.errormessages.Add("no photoids or  photosecuritylevelid passed, cannot modify security level");
+                            }
+
+
+                            if (updated)
+                            {
+                                 _unitOfWorkAsync.SaveChangesAsync().Start();
+                            }
+                            else
+                            {
+                                AnewluvMessages.errormessages.Add("photosecuritylevelid to remove not passed or photoids are empty , cannot modify security level");
+                            }
+                        }
+                        else
+                        {
+                            AnewluvMessages.errormessages.Add("invalid token for this profile id! please log in to perform this action");
+                            //TO DO log this 
+                        }
+
+
+                           
+
+                            return AnewluvMessages;
+                       
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        //TO DO track the transaction types only rollback on DB connections
+                        //rollback transaction
+                        // transaction.Rollback();
+                        //instantiate logger here so it does not break anything else.
+                        logger = new Logging(applicationEnum.MediaService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in photo service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                    }
+
+                }
+            }
+
+        }
+        public async Task<AnewluvMessages> makephotospublic(PhotoModel model)
         {
 
             {
@@ -591,70 +907,71 @@ namespace Anewluv.Services.Media
                 AnewluvMessages AnewluvMessages = new AnewluvMessages();
                 //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
                 {
+                    bool updated = false;
                     try
                     {
 
+                          //check the api key matches the profile id pased 
+                        var profileidmatchesapikey = Api.AsyncCalls.validateapikeybyuseridentifierasync(new
+                                        ApiKeyValidationModel { application_id = (int)applicationenum.anewluv, keyvalue = model.apikey.Value, useridentifier = model.profileid.Value }).Result;
 
-                        var task = Task.Factory.StartNew(() =>
+                        if (profileidmatchesapikey)
                         {
-                            //var  model.photoformat = model. model.photoformat);
-                            //  var photoid = Guid.Parse(photoid);
-                            // var convertedprofileid = Convert.ToInt32(model.profileid);
-                            // var convertedstatus =  model.photostatus);
-                            foreach (Guid photoid in model.photoids)
-                            {
-                                // Retrieve single value from photos table
-                                photo PhotoModify = _unitOfWorkAsync.Repository<photo>().Query(u => u.id == photoid && u.profile_id ==model.profileid)
-                                    .Include(z=>z.photo_securitylevel.Select(f=>f.lu_securityleveltype)).Select()                                    
-                                    .FirstOrDefault();                             
 
-
-                               //remove all secruity otptions if its public
-                                if (model.makepublic!=null & model.makepublic == true)
+                           
+                                //var  model.photoformat = model. model.photoformat);
+                                //  var photoid = Guid.Parse(photoid);
+                                // var convertedprofileid = Convert.ToInt32(model.profileid);
+                                // var convertedstatus =  model.photostatus);
+                                foreach (Guid photoid in model.photoids)
                                 {
-                                    foreach (photo_securitylevel securitylevel in PhotoModify.photo_securitylevel.ToList())
-                                    {
-                                        var secruityleveltodelete = _unitOfWorkAsync.Repository<photo_securitylevel>().Query(p => p.id == securitylevel.id).Select().FirstOrDefault();
-                                        _unitOfWorkAsync.Repository<photo_securitylevel>().Delete(secruityleveltodelete);
-                                        // newsecurity.id = (int)securityleveltypeEnum.Private;
-                                    }
-                                    _unitOfWorkAsync.SaveChanges();
-                                    AnewluvMessages.messages.Add("photo security removed for selected photos");
-                                }
-                                else if (model.photosecuritylevelid != null)
-                                {
-                                    foreach (photo_securitylevel securitylevel in PhotoModify.photo_securitylevel.ToList())
-                                    {
-                                        var existingsecuritylevel = _unitOfWorkAsync.Repository<photo_securitylevel>().Query(p => p.id == securitylevel.id).Select().FirstOrDefault();
 
-                                        if (existingsecuritylevel == null)
+                                    IEnumerable<photo> result = await _unitOfWorkAsync.RepositoryAsync<photo>().Query(u => u.id == photoid && u.profile_id == model.profileid)
+                                           .Include(z => z.photo_securitylevel.Select(f => f.lu_securityleveltype)).SelectAsync();
+
+
+
+                                    if (result.FirstOrDefault() != null)
+                                    {
+                                        var PhotoModify = result.FirstOrDefault();
+
+                                        //remove all secruity otptions if its public
+
+                                        foreach (photo_securitylevel securitylevel in PhotoModify.photo_securitylevel.ToList())
                                         {
-                                            //add it only if it exists
-
-                                            var newsecuritylevel = new photo_securitylevel
-                                            {
-                                                photo_id = model.photoid.Value,
-                                                securityleveltype_id = model.photosecuritylevelid,
-                                                lu_securityleveltype = _unitOfWorkAsync.Repository<lu_securityleveltype>().Queryable().Where(p => p.id == model.photosecuritylevelid).FirstOrDefault()
-                                            };
-                                            _unitOfWorkAsync.Repository<photo_securitylevel>().Insert(newsecuritylevel);
+                                            var secruityleveltodelete = await _unitOfWorkAsync.RepositoryAsync<photo_securitylevel>().Query(p => p.id == securitylevel.id).SelectAsync();
+                                            secruityleveltodelete.FirstOrDefault().ObjectState = Repository.Pattern.Infrastructure.ObjectState.Deleted;
+                                            _unitOfWorkAsync.Repository<photo_securitylevel>().Delete(secruityleveltodelete);
+                                            // newsecurity.id = (int)securityleveltypeEnum.Private;
+                                            updated = true;
                                         }
+                                        AnewluvMessages.messages.Add("photo security removed for : " + PhotoModify.imagecaption);
 
                                     }
-
-                                    _unitOfWorkAsync.SaveChanges();
-                                    AnewluvMessages.messages.Add("photo scurity added removed for selected photos");
+                                    else
+                                    {
+                                        AnewluvMessages.errormessages.Add("the photoid : " + photoid + " is invalid for this profile , cannot modify security level");
+                                    }
                                 }
-                                else
-                                {
-                                    AnewluvMessages.errormessages.Add("photosecuritylevelid or makepublic or photoids are empty , cannot modify security level");
-                                }
-
-                            
                             }
-                            return AnewluvMessages;
-                        });
-                        return await task.ConfigureAwait(false);
+                        else
+                        {
+                            AnewluvMessages.errormessages.Add("invalid token for this profile id! please log in to perform this action");
+                            //TO DO log this 
+                        }
+
+
+                        if (updated)
+                        {
+                            _unitOfWorkAsync.SaveChangesAsync().Start();
+                        }
+                        else
+                        {
+                            AnewluvMessages.errormessages.Add("invalid data no changes made!");
+                        }
+                        
+                        return AnewluvMessages;
+
 
 
                     }
@@ -677,7 +994,6 @@ namespace Anewluv.Services.Media
             }
 
         }       
-               
         #endregion
 
         #region "Edit Methods for Admin role"
@@ -1376,6 +1692,8 @@ namespace Anewluv.Services.Media
 
 
         }
+
+
 
     }
 }

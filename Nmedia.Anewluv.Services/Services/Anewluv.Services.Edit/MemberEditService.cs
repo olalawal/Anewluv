@@ -900,39 +900,70 @@ namespace Anewluv.Services.Edit
                 //update my settings 
                 //this does nothing but we shoul verify that items changed before updating anything so have to test each input and list
 
-                var height = (newmodel.appearancesettings.height == p.profiledata.height) ? newmodel.appearancesettings.height : null;
-                if (height.HasValue == true)
+                //var height = (newmodel.appearancesettings.height == p.profiledata.height) ? newmodel.appearancesettings.height : null;
+                //if (height.HasValue == true)
+                //{
+                //    p.profiledata.height = height;
+                //    profileupdated = true;
+                //}
+
+                //these all pass back the list of all body vlaues with the selecteced being exculsive so we need to parse through
+                //update the list with the items that are selected.
+                if (newmodel.appearancesettings.metricheightlist != null)
                 {
-                    p.profiledata.height = height;
-                    profileupdated = true;
-                }
+                    foreach (metricheight metricheight in newmodel.appearancesettings.metricheightlist.Where(c => c.selected == true ))
+                    {
+                        //only update if the heigt is not a maych of existing
+                        if (metricheight.heightindex != p.profiledata.height.ToString())
+                        {
+                            //update the value as checked here on the list
+                            p.profiledata.height = Convert.ToInt16(metricheight.heightindex);
+                            //  model.showmelist.First(d => d.id == showme.id).selected = true;
+                            //if (bodytype != null) p.profiledata.lu_bodytype = bodytype;
+                            profileupdated = true;
+                        }
+                    }
+               }
+
                 //these all pass back the list of all body vlaues with the selecteced being exculsive so we need to parse through
                  //update the list with the items that are selected.
-                foreach (listitem selectedbodytype in  newmodel.appearancesettings.bodytypelist.Where(c => c.selected == true && c.id != p.profiledata.bodytype_id))
+                if (newmodel.appearancesettings.bodytypelist != null)
                 {
-                    //update the value as checked here on the list
-                    p.profiledata.bodytype_id = selectedbodytype.id;
-                  //  model.showmelist.First(d => d.id == showme.id).selected = true;
-                    //if (bodytype != null) p.profiledata.lu_bodytype = bodytype;
-                    profileupdated = true;
+                    foreach (listitem selectedbodytype in newmodel.appearancesettings.bodytypelist.Where(c => c.selected == true && c.id != p.profiledata.bodytype_id))
+                    {
+                        //update the value as checked here on the list
+                        p.profiledata.bodytype_id = selectedbodytype.id;
+                        //  model.showmelist.First(d => d.id == showme.id).selected = true;
+                        //if (bodytype != null) p.profiledata.lu_bodytype = bodytype;
+                        profileupdated = true;
+                    }
                 }
-                foreach (listitem selectedhaircolor in  newmodel.appearancesettings.haircolorlist.Where(c => c.selected == true && c.id != p.profiledata.haircolor_id))
+
+                if (newmodel.appearancesettings.haircolorlist != null)
                 {
-                    p.profiledata.haircolor_id = selectedhaircolor.id; profileupdated = true;
+                    foreach (listitem selectedhaircolor in newmodel.appearancesettings.haircolorlist.Where(c => c.selected == true && c.id != p.profiledata.haircolor_id))
+                    {
+                        p.profiledata.haircolor_id = selectedhaircolor.id; 
+                        profileupdated = true;
+                    }                   
                 }
-               
-                foreach (listitem selectedeyecolor in  newmodel.appearancesettings.eyecolorlist.Where(c => c.selected == true && c.id != p.profiledata.eyecolor_id))
+
+                if (newmodel.appearancesettings.eyecolorlist != null)
                 {
-                    p.profiledata.eyecolor_id = selectedeyecolor.id;
-                    profileupdated = true;
+                    foreach (listitem selectedeyecolor in newmodel.appearancesettings.eyecolorlist.Where(c => c.selected == true && c.id != p.profiledata.eyecolor_id))
+                    {
+                        p.profiledata.eyecolor_id = selectedeyecolor.id;
+                        profileupdated = true;
+                    }
                 }
-                              
-            
+
+
+
                 //if (height.HasValue == true) p.profiledata.lu_height = height;
 
-                if (newmodel.appearancesettings.hotfeaturelist.Count > 0)
+                if (newmodel.appearancesettings.hotfeaturelist != null && newmodel.appearancesettings.hotfeaturelist.Count > 0)
                     profilelistsupdated = updatemembermetatdatahotfeatures(newmodel.appearancesettings.hotfeaturelist, p.profilemetadata, profilelistsupdated);
-                if (newmodel.appearancesettings.ethnicitylist.Count > 0)
+                if (newmodel.appearancesettings.ethnicitylist !=null && newmodel.appearancesettings.ethnicitylist.Count > 0)
                     profilelistsupdated = updatemembermetatdataethnicity(newmodel.appearancesettings.ethnicitylist, p.profilemetadata, profilelistsupdated);
 
 
@@ -951,6 +982,7 @@ namespace Anewluv.Services.Edit
                     _unitOfWorkAsync.SaveChanges();
                     messages.messages.Add("Appearance settings have been updated !");
                 }
+                else
                 {
                     messages.errormessages.Add("Nothing to update!");
                 }
@@ -997,92 +1029,119 @@ namespace Anewluv.Services.Edit
                 //update my settings 
                 //this does nothing but we shoul verify that items changed before updating anything so have to test each input and list
 
-             
 
-                foreach (listitem selecteddiet in newmodel.charactersettings.dietlist.Where(c => c.selected == true && c.id != p.profiledata.diet_id))
+                if (newmodel.charactersettings.dietlist != null)
                 {
-                    //update the value as checked here on the list
-                    p.profiledata.diet_id = selecteddiet.id;
-                    //  model.showmelist.First(d => d.id == showme.id).selected = true;
-                    //if (diet != null) p.profiledata.lu_diet = diet;
-                    profileupdated = true;
+                    foreach (listitem selecteddiet in newmodel.charactersettings.dietlist.Where(c => c.selected == true && c.id != p.profiledata.diet_id))
+                    {
+                        //update the value as checked here on the list
+                        p.profiledata.diet_id = selecteddiet.id;
+                        //  model.showmelist.First(d => d.id == showme.id).selected = true;
+                        //if (diet != null) p.profiledata.lu_diet = diet;
+                        profileupdated = true;
+                    }
                 }
 
-                foreach (listitem selectedhumor in newmodel.charactersettings.humorlist.Where(c => c.selected == true && c.id != p.profiledata.humor_id))
+                if (newmodel.charactersettings.humorlist != null)
                 {
-                    //update the value as checked here on the list
-                    p.profiledata.humor_id = selectedhumor.id;
-                    //  model.showmelist.First(d => d.id == showme.id).selected = true;
-                    //if (humor != null) p.profiledata.lu_humor = humor;
-                    profileupdated = true;
+                    foreach (listitem selectedhumor in newmodel.charactersettings.humorlist.Where(c => c.selected == true && c.id != p.profiledata.humor_id))
+                    {
+                        //update the value as checked here on the list
+                        p.profiledata.humor_id = selectedhumor.id;
+                        //  model.showmelist.First(d => d.id == showme.id).selected = true;
+                        //if (humor != null) p.profiledata.lu_humor = humor;
+                        profileupdated = true;
+                    }
                 }
 
-                foreach (listitem selecteddrinks in newmodel.charactersettings.drinkslist.Where(c => c.selected == true && c.id != p.profiledata.drinking_id))
+
+                if (newmodel.charactersettings.drinkslist != null)
                 {
-                    //update the value as checked here on the list
-                    p.profiledata.drinking_id = selecteddrinks.id;
-                    //  model.showmelist.First(d => d.id == showme.id).selected = true;
-                    //if (drinks != null) p.profiledata.lu_drinks = drinks;
-                    profileupdated = true;
+                    foreach (listitem selecteddrinks in newmodel.charactersettings.drinkslist.Where(c => c.selected == true && c.id != p.profiledata.drinking_id))
+                    {
+                        //update the value as checked here on the list
+                        p.profiledata.drinking_id = selecteddrinks.id;
+                        //  model.showmelist.First(d => d.id == showme.id).selected = true;
+                        //if (drinks != null) p.profiledata.lu_drinks = drinks;
+                        profileupdated = true;
+                    }
                 }
 
-                foreach (listitem selectedexercise in newmodel.charactersettings.exerciselist.Where(c => c.selected == true && c.id != p.profiledata.exercise_id))
+                if (newmodel.charactersettings.exerciselist != null)
                 {
-                    //update the value as checked here on the list
-                    p.profiledata.exercise_id = selectedexercise.id;
-                    //  model.showmelist.First(d => d.id == showme.id).selected = true;
-                    //if (exercise != null) p.profiledata.lu_exercise = exercise;
-                    profileupdated = true;
+                    foreach (listitem selectedexercise in newmodel.charactersettings.exerciselist.Where(c => c.selected == true && c.id != p.profiledata.exercise_id))
+                    {
+                        //update the value as checked here on the list
+                        p.profiledata.exercise_id = selectedexercise.id;
+                        //  model.showmelist.First(d => d.id == showme.id).selected = true;
+                        //if (exercise != null) p.profiledata.lu_exercise = exercise;
+                        profileupdated = true;
+                    }
                 }
 
-                foreach (listitem selectedsmokes in newmodel.charactersettings.smokeslist.Where(c => c.selected == true && c.id != p.profiledata.smoking_id))
+                if (newmodel.charactersettings.smokeslist != null)
                 {
-                    //update the value as checked here on the list
-                    p.profiledata.smoking_id = selectedsmokes.id;
-                    //  model.showmelist.First(d => d.id == showme.id).selected = true;
-                    //if (smokes != null) p.profiledata.lu_smokes = smokes;
-                    profileupdated = true;
+                    foreach (listitem selectedsmokes in newmodel.charactersettings.smokeslist.Where(c => c.selected == true && c.id != p.profiledata.smoking_id))
+                    {
+                        //update the value as checked here on the list
+                        p.profiledata.smoking_id = selectedsmokes.id;
+                        //  model.showmelist.First(d => d.id == showme.id).selected = true;
+                        //if (smokes != null) p.profiledata.lu_smokes = smokes;
+                        profileupdated = true;
+                    }
                 }
 
-                foreach (listitem selectedsign in newmodel.charactersettings.signlist.Where(c => c.selected == true && c.id != p.profiledata.sign_id))
+                if (newmodel.charactersettings.signlist != null)
                 {
-                    //update the value as checked here on the list
-                    p.profiledata.sign_id = selectedsign.id;
-                    //  model.showmelist.First(d => d.id == showme.id).selected = true;
-                    //if (sign != null) p.profiledata.lu_sign = sign;
-                    profileupdated = true;
+                    foreach (listitem selectedsign in newmodel.charactersettings.signlist.Where(c => c.selected == true && c.id != p.profiledata.sign_id))
+                    {
+                        //update the value as checked here on the list
+                        p.profiledata.sign_id = selectedsign.id;
+                        //  model.showmelist.First(d => d.id == showme.id).selected = true;
+                        //if (sign != null) p.profiledata.lu_sign = sign;
+                        profileupdated = true;
+                    }
                 }
 
-                foreach (listitem selectedpoliticalview in newmodel.charactersettings.politicalviewlist.Where(c => c.selected == true && c.id != p.profiledata.politicalview_id))
+                if (newmodel.charactersettings.politicalviewlist != null)
                 {
-                    //update the value as checked here on the list
-                    p.profiledata.politicalview_id = selectedpoliticalview.id;
-                    //  model.showmelist.First(d => d.id == showme.id).selected = true;
-                    //if (politicalview != null) p.profiledata.lu_politicalview = politicalview;
-                    profileupdated = true;
+                    foreach (listitem selectedpoliticalview in newmodel.charactersettings.politicalviewlist.Where(c => c.selected == true && c.id != p.profiledata.politicalview_id))
+                    {
+                        //update the value as checked here on the list
+                        p.profiledata.politicalview_id = selectedpoliticalview.id;
+                        //  model.showmelist.First(d => d.id == showme.id).selected = true;
+                        //if (politicalview != null) p.profiledata.lu_politicalview = politicalview;
+                        profileupdated = true;
 
+                    }
                 }
 
-                foreach (listitem selectedreligion in newmodel.charactersettings.religionlist.Where(c => c.selected == true && c.id != p.profiledata.religion_id))
+                if (newmodel.charactersettings.religionlist != null)
                 {
-                    //update the value as checked here on the list
-                    p.profiledata.religion_id = selectedreligion.id;
-                    //  model.showmelist.First(d => d.id == showme.id).selected = true;
-                    //if (religionlist != null) p.profiledata.lu_religionlist = religionlist;
-                    profileupdated = true;
+                    foreach (listitem selectedreligion in newmodel.charactersettings.religionlist.Where(c => c.selected == true && c.id != p.profiledata.religion_id))
+                    {
+                        //update the value as checked here on the list
+                        p.profiledata.religion_id = selectedreligion.id;
+                        //  model.showmelist.First(d => d.id == showme.id).selected = true;
+                        //if (religionlist != null) p.profiledata.lu_religionlist = religionlist;
+                        profileupdated = true;
+                    }
                 }
 
-                foreach (listitem selectedreligiousattendance in newmodel.charactersettings.religiousattendancelist.Where(c => c.selected == true && c.id != p.profiledata.religiousattendance_id))
+                if (newmodel.charactersettings.religiousattendancelist != null)
                 {
-                    //update the value as checked here on the list
-                    p.profiledata.religiousattendance_id = selectedreligiousattendance.id;
-                    //  model.showmelist.First(d => d.id == showme.id).selected = true;
-                    //if (religionlist != null) p.profiledata.lu_religionlist = religionlist;
-                    profileupdated = true;
+                    foreach (listitem selectedreligiousattendance in newmodel.charactersettings.religiousattendancelist.Where(c => c.selected == true && c.id != p.profiledata.religiousattendance_id))
+                    {
+                        //update the value as checked here on the list
+                        p.profiledata.religiousattendance_id = selectedreligiousattendance.id;
+                        //  model.showmelist.First(d => d.id == showme.id).selected = true;
+                        //if (religionlist != null) p.profiledata.lu_religionlist = religionlist;
+                        profileupdated = true;
+                    }
                 }
-                 
 
-                if (newmodel.charactersettings.hobbylist.Count > 0)
+
+                if (newmodel.charactersettings.hobbylist !=null && newmodel.charactersettings.hobbylist.Count > 0)
                   profilelistsupdated =    updatemembermetatdatahobby(newmodel.charactersettings.hobbylist, p.profilemetadata,profilelistsupdated);
 
 
@@ -1152,84 +1211,109 @@ namespace Anewluv.Services.Edit
 
                 //update my settings 
                 //this does nothing but we shoul verify that items changed before updating anything so have to test each input and list
-                foreach (listitem selectededucationlevel in newmodel.lifestylesettings.educationlevellist.Where(c => c.selected == true && c.id != p.profiledata.educationlevel_id))
+                if (newmodel.lifestylesettings.educationlevellist != null)
                 {
-                    //update the value as checked here on the list
-                    p.profiledata.educationlevel_id = selectededucationlevel.id;
-                    //  model.showmelist.First(d => d.id == showme.id).selected = true;
-                    //if (educationlevel != null) p.profiledata.lu_educationlevel = educationlevel;
-                    profileupdated = true;
+                    foreach (listitem selectededucationlevel in newmodel.lifestylesettings.educationlevellist.Where(c => c.selected == true && c.id != p.profiledata.educationlevel_id))
+                    {
+                        //update the value as checked here on the list
+                        p.profiledata.educationlevel_id = selectededucationlevel.id;
+                        //  model.showmelist.First(d => d.id == showme.id).selected = true;
+                        //if (educationlevel != null) p.profiledata.lu_educationlevel = educationlevel;
+                        profileupdated = true;
+                    }
                 }
 
-                foreach (listitem selectedemploymentstatus in newmodel.lifestylesettings.employmentstatuslist.Where(c => c.selected == true && c.id != p.profiledata.employmentstatus_id))
+                if (newmodel.lifestylesettings.employmentstatuslist != null)
                 {
-                    //update the value as checked here on the list
-                    p.profiledata.employmentstatus_id = selectedemploymentstatus.id;
-                    //  model.showmelist.First(d => d.id == showme.id).selected = true;
-                    //if (employmentstatus != null) p.profiledata.lu_employmentstatus = employmentstatus;
-                    profileupdated = true;
+                    foreach (listitem selectedemploymentstatus in newmodel.lifestylesettings.employmentstatuslist.Where(c => c.selected == true && c.id != p.profiledata.employmentstatus_id))
+                    {
+                        //update the value as checked here on the list
+                        p.profiledata.employmentstatus_id = selectedemploymentstatus.id;
+                        //  model.showmelist.First(d => d.id == showme.id).selected = true;
+                        //if (employmentstatus != null) p.profiledata.lu_employmentstatus = employmentstatus;
+                        profileupdated = true;
+                    }
+                }
+                if (newmodel.lifestylesettings.havekidslist != null)
+                {
+
+                    foreach (listitem selectedhavekids in newmodel.lifestylesettings.havekidslist.Where(c => c.selected == true && c.id != p.profiledata.kidstatus_id))
+                    {
+                        //update the value as checked here on the list
+                        p.profiledata.kidstatus_id = selectedhavekids.id;
+                        //  model.showmelist.First(d => d.id == showme.id).selected = true;
+                        //if (havekids != null) p.profiledata.lu_havekids = havekids;
+                        profileupdated = true;
+                    }
                 }
 
-                foreach (listitem selectedhavekids in newmodel.lifestylesettings.havekidslist.Where(c => c.selected == true && c.id != p.profiledata.kidstatus_id))
+                if (newmodel.lifestylesettings.incomelevellist != null)
                 {
-                    //update the value as checked here on the list
-                    p.profiledata.kidstatus_id = selectedhavekids.id;
-                    //  model.showmelist.First(d => d.id == showme.id).selected = true;
-                    //if (havekids != null) p.profiledata.lu_havekids = havekids;
-                    profileupdated = true;
+                    foreach (listitem selectedincomelevel in newmodel.lifestylesettings.incomelevellist.Where(c => c.selected == true && c.id != p.profiledata.incomelevel_id))
+                    {
+                        //update the value as checked here on the list
+                        p.profiledata.incomelevel_id = selectedincomelevel.id;
+                        //  model.showmelist.First(d => d.id == showme.id).selected = true;
+                        //if (incomelevel != null) p.profiledata.lu_incomelevel = incomelevel;
+                        profileupdated = true;
+                    }
                 }
 
-                foreach (listitem selectedincomelevel in newmodel.lifestylesettings.incomelevellist.Where(c => c.selected == true && c.id != p.profiledata.incomelevel_id))
+                if (newmodel.lifestylesettings.livingsituationlist != null)
                 {
-                    //update the value as checked here on the list
-                    p.profiledata.incomelevel_id = selectedincomelevel.id;
-                    //  model.showmelist.First(d => d.id == showme.id).selected = true;
-                    //if (incomelevel != null) p.profiledata.lu_incomelevel = incomelevel;
-                    profileupdated = true;
+                    foreach (listitem selectedlivingsituation in newmodel.lifestylesettings.livingsituationlist.Where(c => c.selected == true && c.id != p.profiledata.livingsituation_id))
+                    {
+                        //update the value as checked here on the list
+                        p.profiledata.livingsituation_id = selectedlivingsituation.id;
+                        //  model.showmelist.First(d => d.id == showme.id).selected = true;
+                        //if (livingsituation != null) p.profiledata.lu_livingsituation = livingsituation;
+                        profileupdated = true;
+                    }
                 }
 
-                foreach (listitem selectedlivingsituation in newmodel.lifestylesettings.livingsituationlist.Where(c => c.selected == true && c.id != p.profiledata.livingsituation_id))
+                if (newmodel.lifestylesettings.maritalstatuslist != null)
                 {
-                    //update the value as checked here on the list
-                    p.profiledata.livingsituation_id = selectedlivingsituation.id;
-                    //  model.showmelist.First(d => d.id == showme.id).selected = true;
-                    //if (livingsituation != null) p.profiledata.lu_livingsituation = livingsituation;
-                    profileupdated = true;
+                    foreach (listitem selectedmaritalstatus in newmodel.lifestylesettings.maritalstatuslist.Where(c => c.selected == true && c.id != p.profiledata.maritalstatus_id))
+                    {
+                        //update the value as checked here on the list
+                        p.profiledata.maritalstatus_id = selectedmaritalstatus.id;
+                        //  model.showmelist.First(d => d.id == showme.id).selected = true;
+                        //if (maritalstatus != null) p.profiledata.lu_maritalstatus = maritalstatus;
+                        profileupdated = true;
+                    }
                 }
 
-                foreach (listitem selectedmaritalstatus in newmodel.lifestylesettings.maritalstatuslist.Where(c => c.selected == true && c.id != p.profiledata.maritalstatus_id))
+                if (newmodel.lifestylesettings.professionlist != null)
                 {
-                    //update the value as checked here on the list
-                    p.profiledata.maritalstatus_id = selectedmaritalstatus.id;
-                    //  model.showmelist.First(d => d.id == showme.id).selected = true;
-                    //if (maritalstatus != null) p.profiledata.lu_maritalstatus = maritalstatus;
-                    profileupdated = true;
+
+                    foreach (listitem selectedprofession in newmodel.lifestylesettings.professionlist.Where(c => c.selected == true && c.id != p.profiledata.profession_id))
+                    {
+                        //update the value as checked here on the list
+                        p.profiledata.profession_id = selectedprofession.id;
+                        //  model.showmelist.First(d => d.id == showme.id).selected = true;
+                        //if (profession != null) p.profiledata.lu_profession = profession;
+                        profileupdated = true;
+                    }
                 }
 
-                foreach (listitem selectedprofession in newmodel.lifestylesettings.professionlist.Where(c => c.selected == true && c.id != p.profiledata.profession_id))
+                if (newmodel.lifestylesettings.wantskidslist != null)
                 {
-                    //update the value as checked here on the list
-                    p.profiledata.profession_id = selectedprofession.id;
-                    //  model.showmelist.First(d => d.id == showme.id).selected = true;
-                    //if (profession != null) p.profiledata.lu_profession = profession;
-                    profileupdated = true;
+                    foreach (listitem selectedwantskids in newmodel.lifestylesettings.wantskidslist.Where(c => c.selected == true && c.id != p.profiledata.wantsKidstatus_id))
+                    {
+                        //update the value as checked here on the list
+                        p.profiledata.wantsKidstatus_id = selectedwantskids.id;
+                        //  model.showmelist.First(d => d.id == showme.id).selected = true;
+                        //if (wantskids != null) p.profiledata.lu_wantskids = wantskids;
+                        profileupdated = true;
+                    }
                 }
 
-                foreach (listitem selectedwantskids in newmodel.lifestylesettings.wantskidslist.Where(c => c.selected == true && c.id != p.profiledata.wantsKidstatus_id))
-                {
-                    //update the value as checked here on the list
-                    p.profiledata.wantsKidstatus_id = selectedwantskids.id;
-                    //  model.showmelist.First(d => d.id == showme.id).selected = true;
-                    //if (wantskids != null) p.profiledata.lu_wantskids = wantskids;
-                    profileupdated = true;
-                }
 
                 //checkbos item updates 
-                if (newmodel.lifestylesearchsettings.lookingforlist.Count > 0)
-                {
+                if (newmodel.lifestylesearchsettings.lookingforlist != null && newmodel.lifestylesearchsettings.lookingforlist.Count > 0)             
                     profilelistsupdated = updatemembermetatdatalookingfor(newmodel.lifestylesearchsettings.lookingforlist, p.profilemetadata, profilelistsupdated);
                    
-                }
+             
 
 
                 //_unitOfWorkAsync.Entry(profiledata).State = EntityState.Modified;
@@ -1314,7 +1398,7 @@ namespace Anewluv.Services.Edit
                         {
                             //SearchSettings_showme.showmeID = showme.showmeID;
                             var temp = new profiledata_ethnicity();
-                            temp.id = item.id;
+                            temp.ethnicty_id = item.id;
                             temp.profile_id = currentprofilemetadata.profile_id;
                             temp.ObjectState = ObjectState.Added;
                             _unitOfWorkAsync.Repository<profiledata_ethnicity>().Insert(temp);
@@ -1371,7 +1455,7 @@ namespace Anewluv.Services.Edit
                         {
                             //SearchSettings_showme.showmeID = showme.showmeID;
                             var temp = new profiledata_hotfeature();
-                            temp.id = item.id;
+                            temp.hotfeature_id = item.id;
                             temp.profile_id = currentprofilemetadata.profile_id;
                             temp.ObjectState = ObjectState.Added;
                             _unitOfWorkAsync.Repository<profiledata_hotfeature>().Insert(temp);
@@ -1428,7 +1512,7 @@ namespace Anewluv.Services.Edit
                         {
                             //SearchSettings_showme.showmeID = showme.showmeID;
                             var temp = new profiledata_hobby();
-                            temp.id = item.id;
+                            temp.hobby_id = item.id;
                             temp.profile_id = currentprofilemetadata.profile_id;
                             temp.ObjectState = ObjectState.Added;
                             _unitOfWorkAsync.Repository<profiledata_hobby>().Insert(temp);
@@ -1485,7 +1569,7 @@ namespace Anewluv.Services.Edit
                         {
                             //SearchSettings_showme.showmeID = showme.showmeID;
                             var temp = new profiledata_lookingfor();
-                            temp.id = item.id;
+                            temp.lookingfor_id = item.id;
                             temp.profile_id = currentprofilemetadata.profile_id;
                             temp.ObjectState = ObjectState.Added;
                             _unitOfWorkAsync.Repository<profiledata_lookingfor>().Insert(temp);
