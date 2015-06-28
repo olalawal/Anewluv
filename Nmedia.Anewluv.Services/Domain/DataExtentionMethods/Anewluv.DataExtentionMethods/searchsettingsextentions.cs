@@ -547,11 +547,12 @@ namespace Anewluv.DataExtentionMethods
        public static AnewluvMessages updateappearancesearchsettings(AppearanceSearchSettingsModel model, searchsetting p, AnewluvMessages messages,IUnitOfWorkAsync _unitOfWorkAsync)
         {
             bool updated = false;
+            bool heightsupdated = false;
             try
 
                    //TO DO validate that there are changes before saving
             {
-                //  searchsetting p =searchsettingdetailtypeEnum.Repository<searchsetting>().Queryable().Where(z => z.id == model.searchid || z.profile_id == model.profileid || z.searchname == model.searchname).FirstOrDefault();
+                //  searchsetting p =searchsettingd etailtypeEnum.Repository<searchsetting>().Queryable().Where(z => z.id == model.searchid || z.profile_id == model.profileid || z.searchname == model.searchname).FirstOrDefault();
                 //create a new messages object
                 if (p == null)
                 {
@@ -559,8 +560,8 @@ namespace Anewluv.DataExtentionMethods
                     return messages;
                 }
 
-                if (model.heightmax != null && p.heightmax != model.heightmax) { p.heightmax = model.heightmax; updated = true; }
-                if (model.heightmin != null && p.heightmin != model.heightmin) { p.heightmin = model.heightmin; updated = true; }
+                if (model.heightmax != null && p.heightmax != model.heightmax) { p.heightmax = model.heightmax; heightsupdated = true; }
+                if (model.heightmin != null && p.heightmin != model.heightmin) { p.heightmin = model.heightmin; heightsupdated = true; }
                 //checkbos item updates 
                 if (model.ethnicitylist != null && model.ethnicitylist.Count > 0)
                   updated =   updatesearchsettingsdetail(model.ethnicitylist.ToList(), p, searchsettingdetailtypeEnum.ethnicity , _unitOfWorkAsync , updated);
@@ -573,8 +574,15 @@ namespace Anewluv.DataExtentionMethods
                 if (model.hotfeaturelist != null && model.hotfeaturelist.Count > 0)
                     updated = updatesearchsettingsdetail(model.hotfeaturelist.ToList(), p, searchsettingdetailtypeEnum.hotfeature,  _unitOfWorkAsync , updated);
 
+                if (heightsupdated)
+                {
+                    p.ObjectState = ObjectState.Modified; 
+                    _unitOfWorkAsync.Repository<searchsetting>().Update(p);
 
-                if (updated)
+                }
+
+
+                if (updated | heightsupdated)
                 {
                     var i = _unitOfWorkAsync.SaveChanges();
                     messages.messages.Add("Appearance Search Settings Upated");

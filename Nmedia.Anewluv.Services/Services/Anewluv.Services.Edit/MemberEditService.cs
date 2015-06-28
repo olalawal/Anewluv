@@ -339,7 +339,7 @@ namespace Anewluv.Services.Edit
                     //set default values for edit profile                
                     model.humorlist =  Extensions.getDeepCopy<List<listitem>>(humorlist); ;
                     model.dietlist =  Extensions.getDeepCopy<List<listitem>>(dietlist); ;
-                    model.drinkslist =  Extensions.getDeepCopy<List<listitem>>(drinkslist); ;
+                    model.drinkslist =  Extensions.getDeepCopy<List<listitem>>(drinkslist).ToList(); ;
                     model.exerciselist =  Extensions.getDeepCopy<List<listitem>>(exerciselist); ;
                     model.smokeslist =  Extensions.getDeepCopy<List<listitem>>(smokeslist); ;
                     model.signlist =  Extensions.getDeepCopy<List<listitem>>(signlist); ;
@@ -972,7 +972,7 @@ namespace Anewluv.Services.Edit
                 if (profileupdated)
                 {
                     p.ObjectState = ObjectState.Modified;
-                    _unitOfWorkAsync.Repository<profile>().Update(p);
+                    _unitOfWorkAsync.Repository<profiledata>().Update(p.profiledata);
 
                 }
 
@@ -1148,7 +1148,7 @@ namespace Anewluv.Services.Edit
                 if (profileupdated)
                 {
                     p.ObjectState = ObjectState.Modified;
-                    _unitOfWorkAsync.Repository<profile>().Update(p);
+                    _unitOfWorkAsync.Repository<profiledata>().Update(p.profiledata);
 
                 }
 
@@ -1310,19 +1310,17 @@ namespace Anewluv.Services.Edit
 
 
                 //checkbos item updates 
-                if (newmodel.lifestylesearchsettings.lookingforlist != null && newmodel.lifestylesearchsettings.lookingforlist.Count > 0)             
-                    profilelistsupdated = updatemembermetatdatalookingfor(newmodel.lifestylesearchsettings.lookingforlist, p.profilemetadata, profilelistsupdated);
-                   
-             
+                if (newmodel.lifestylesettings.lookingforlist !=null  && newmodel.lifestylesettings.lookingforlist.Count > 0)             
+                    profilelistsupdated = updatemembermetatdatalookingfor(newmodel.lifestylesettings.lookingforlist, p.profilemetadata, profilelistsupdated);
 
 
-                //_unitOfWorkAsync.Entry(profiledata).State = EntityState.Modified;
-                // int changes = _unitOfWorkAsync.SaveChanges();
+
+
                 if (profileupdated)
                 {
                     p.ObjectState = ObjectState.Modified;
-                    _unitOfWorkAsync.Repository<profile>().Update(p);
-                   
+                    _unitOfWorkAsync.Repository<profiledata>().Update(p.profiledata);
+
                 }
 
 
@@ -1332,7 +1330,7 @@ namespace Anewluv.Services.Edit
                     messages.messages.Add("Character settings have been updated !");
                 }
                 {
-                    messages.errormessages.Add("Nothing to update!");
+                    messages.errormessages.Add("Nothing has changed so nothing updated!");
                 }
               
                 //TOD DO
