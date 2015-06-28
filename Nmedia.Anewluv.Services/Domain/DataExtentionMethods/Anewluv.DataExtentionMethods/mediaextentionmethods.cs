@@ -39,6 +39,8 @@ namespace Anewluv.DataExtentionMethods
                         .Select().AsQueryable();
                 
 
+
+
                 //public photos
                 returnmodel.PublicPhotoCount = photomodel.Where(a => a.photostatus_id == (int)photoapprovalstatusEnum.Approved && a.photo_securitylevel.Count() == 0).Count();
                 //not reviewed
@@ -46,6 +48,8 @@ namespace Anewluv.DataExtentionMethods
                 //rejected
                 returnmodel.RejectedPhotoCount = photomodel.Where(a => a.photostatus_id == (int)photoapprovalstatusEnum.Rejected && a.photo_securitylevel.Count() == 0).Count();
                 //interests only view
+                returnmodel.PeeksOnlyPhotoCount = photomodel.Where(a => a.photo_securitylevel.Count() > 0 && a.photo_securitylevel.Any(d => d.securityleveltype_id == (int)securityleveltypeEnum.Peeks)).Count();
+                //likes only view
                 returnmodel.InterestsOnlyPhotoCount = photomodel.Where(a => a.photo_securitylevel.Count() > 0 && a.photo_securitylevel.Any(d => d.securityleveltype_id == (int)securityleveltypeEnum.Intrests)).Count();
                 //likes only view
                 returnmodel.LikesOnlyPhotoCount = photomodel.Where(a => a.photo_securitylevel.Count() > 0 && a.photo_securitylevel.Any(d => d.securityleveltype_id == (int)securityleveltypeEnum.Likes)).Count();

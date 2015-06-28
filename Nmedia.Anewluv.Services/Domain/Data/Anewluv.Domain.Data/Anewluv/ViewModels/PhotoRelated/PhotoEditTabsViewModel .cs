@@ -17,6 +17,9 @@ namespace Anewluv.Domain.Data.ViewModels
         [DataMember]
         public int? PublicPhotoCount { get; set; }
 
+        [DataMember]
+        public int? PeeksOnlyPhotoCount { get; set; }
+
         [DataMember]      
         public int ?PrivatePhotoCount { get; set; }
 

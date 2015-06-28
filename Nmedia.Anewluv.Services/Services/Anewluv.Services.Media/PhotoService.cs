@@ -630,12 +630,9 @@ namespace Anewluv.Services.Media
                                     AnewluvMessages.messages.Add("photo deleted successfully");
                                 }
 
-
-
-
                                 if (updated)
                                 {
-                                    _unitOfWorkAsync.SaveChangesAsync().Start();
+                                    _unitOfWorkAsync.SaveChangesAsync().DoNotAwait();
                                 }
                                 else
                                 {
@@ -647,15 +644,8 @@ namespace Anewluv.Services.Media
                             AnewluvMessages.errormessages.Add("invalid token for this profile id! please log in to perform this action");
                             //TO DO log this 
                         }
-
-
-
-
+                        
                         return AnewluvMessages;
-                       
-
-
-
 
                     }
                     catch (Exception ex)
@@ -752,7 +742,7 @@ namespace Anewluv.Services.Media
 
                             if (updated)
                             {
-                                _unitOfWorkAsync.SaveChangesAsync().Start();
+                                _unitOfWorkAsync.SaveChangesAsync().DoNotAwait();
                             }
                             else
                             {
@@ -859,7 +849,10 @@ namespace Anewluv.Services.Media
 
                             if (updated)
                             {
-                                 _unitOfWorkAsync.SaveChangesAsync().Start();
+
+                                _unitOfWorkAsync.SaveChangesAsync().DoNotAwait();
+                              
+
                             }
                             else
                             {
@@ -963,7 +956,7 @@ namespace Anewluv.Services.Media
 
                         if (updated)
                         {
-                            _unitOfWorkAsync.SaveChangesAsync().Start();
+                            _unitOfWorkAsync.SaveChangesAsync().DoNotAwait();
                         }
                         else
                         {

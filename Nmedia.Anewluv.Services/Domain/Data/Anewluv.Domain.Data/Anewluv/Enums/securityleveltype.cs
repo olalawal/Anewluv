@@ -28,7 +28,11 @@ namespace Anewluv.Domain.Data
         Intrests=4,
         [Description("No One")]
         [EnumMember]
-        NoOne=5,  
+        NoOne=5,
+        [Description("Peeks")]
+        [EnumMember]
+        Peeks = 6,  
+     
      
         
     }
