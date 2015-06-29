@@ -30,6 +30,8 @@ using Nmedia.Infrastructure.DTOs;
 using Anewluv.Caching.RedisCaching;
 using Nmedia.Infrastructure;
 using Repository.Pattern.Infrastructure;
+using Nmedia.Infrastructure.Domain.Data.Apikey.DTOs;
+using Nmedia.Infrastructure.Domain.Data.Apikey;
 
 //TO DO cache all the gets in redis and update when items are saved to keep it in sync
 
@@ -165,7 +167,10 @@ namespace Anewluv.Services.Edit
                              SearchViewModel.genderlist = genderlist;                        
                              SearchViewModel.sortbylist = sortbylist;
                              SearchViewModel.agelist = agelist;                            
-                             searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id ,searchname="myperfectmatch"}, _unitOfWorkAsync);
+                             searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().getorcreatesearchsettings(new SearchSettingsModel { profileid = p.id ,searchname="myperfectmatch"}, _unitOfWorkAsync);
+                             //empty search setting handling
+                            
+               
                              SearchViewModel = searchsettingsextentions.getbasicsearchsettings(SearchViewModel, s, _unitOfWorkAsync);
                              //add the value to viewmodel
                              viewmodel.basicsearchsettings = SearchViewModel;
@@ -275,7 +280,10 @@ namespace Anewluv.Services.Edit
                             SearchViewModel.ethnicitylist = (ethnicitylist);
                             SearchViewModel.hotfeaturelist = (hotfeaturelist);
                             SearchViewModel.metricheightlist =(metricheightlist); 
-                            searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id, searchname = "MyPerfectMatch" }, _unitOfWorkAsync);
+                            searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().getorcreatesearchsettings(new SearchSettingsModel { profileid = p.id, searchname = "MyPerfectMatch" }, _unitOfWorkAsync);
+                            //empty search setting handling
+                           
+               
                             SearchViewModel = searchsettingsextentions.getappearancesearchsettings(SearchViewModel, s, _unitOfWorkAsync);
                             //add the value to viewmodel
                             viewmodel.appearancesearchsettings = SearchViewModel;
@@ -387,7 +395,10 @@ namespace Anewluv.Services.Edit
                         SearchViewModel.religiousattendancelist = (religiousattendancelist); ;
                         SearchViewModel.hobbylist = (hobbylist); ;
 
-                        searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id, searchname = "MyPerfectMatch" }, _unitOfWorkAsync);
+                        searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().getorcreatesearchsettings(new SearchSettingsModel { profileid = p.id, searchname = "MyPerfectMatch" }, _unitOfWorkAsync);
+                        //empty search setting handling
+                       
+               
                         SearchViewModel = searchsettingsextentions.getcharactersearchsettings(SearchViewModel, s, _unitOfWorkAsync);
                         //add the value to viewmodel
                         viewmodel.charactersearchsettings = SearchViewModel;
@@ -492,7 +503,10 @@ namespace Anewluv.Services.Edit
                         SearchViewModel.professionlist = (professionlist);
                         SearchViewModel.wantskidslist =  (wantskidslist); 
                         
-                        searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id, searchname = "MyPerfectMatch" }, _unitOfWorkAsync);
+                        searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().getorcreatesearchsettings(new SearchSettingsModel { profileid = p.id, searchname = "MyPerfectMatch" }, _unitOfWorkAsync);
+                        //empty search setting handling
+                       
+               
                         SearchViewModel = searchsettingsextentions.getlifestylesearchsettings(SearchViewModel, s, _unitOfWorkAsync);
                         //add the value to viewmodel
                         viewmodel.lifestylesearchsettings = SearchViewModel;
@@ -534,6 +548,28 @@ namespace Anewluv.Services.Edit
 
         #region "Edit profile Public methods here "
 
+        //this function validates the user has a matching apikey for this profile as well as has the role access to create new searches if its other than perfectmatch
+        private AnewluvMessages validatecanmodifyprofile(EditProfileModel editprofilemodel, AnewluvMessages AnewluvMessages)
+        {
+            //make sure API key matches 
+            //check the api key matches the profile id pased 
+            bool profileidmatchesapikey = false;
+            if (editprofilemodel.apikey != null)
+            {
+
+                 profileidmatchesapikey = Api.AsyncCalls.validateapikeybyuseridentifierasync(new
+                              ApiKeyValidationModel { application_id = (int)applicationenum.anewluv, keyvalue = editprofilemodel.apikey.Value, useridentifier = editprofilemodel.profileid }).Result;
+            }
+           
+
+            if (!profileidmatchesapikey)
+                AnewluvMessages.errormessages.Add("invalid token for this profile id! please log in to perform this action");
+
+
+            return AnewluvMessages;
+
+        }
+
         //global profile upddate
         public async Task<AnewluvMessages> membereditallsettings(EditProfileModel editprofilemodel)
         {
@@ -548,24 +584,30 @@ namespace Anewluv.Services.Edit
 
                         var task = Task.Factory.StartNew(() =>
                         {
+                              //create a new messages object
+                            AnewluvMessages AnewluvMessages = new AnewluvMessages();
+                            //validate that this user is corret for the passed apikey
+                            AnewluvMessages = validatecanmodifyprofile(editprofilemodel, AnewluvMessages);
+                            //exit with error status 
+                            if (AnewluvMessages.errormessages.Count() > 0) return AnewluvMessages;
+
 
                             profile p = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = editprofilemodel.profileid});
 
-                            //create a new messages object
-                            AnewluvMessages messages = new AnewluvMessages();
+                          
 
                             //messages = updatememberbasicsettings(editprofilemodel.basicsettings, p, messages);
                             //messages = updatememberappearancesettings(editprofilemodel.appearancesettings, p, messages);
                             //messages = updatemembercharactersettings (editprofilemodel.charactersettings, p, messages);
                             //messages = updatememberlifestylesettings(editprofilemodel.lifestylesettings, p, messages);
 
-                            if (messages.errormessages.Count > 0)
+                            if (AnewluvMessages.errormessages.Count > 0)
                             {
-                                messages.errormessages.Add("There was a problem Editing your profile settings, Please try again later");
-                                return messages;
+                                AnewluvMessages.errormessages.Add("There was a problem Editing your profile settings, Please try again later");
+                                return AnewluvMessages;
                             }
-                            messages.messages.Add("Edit profile Settings Successful");
-                            return messages;
+                            AnewluvMessages.messages.Add("Edit profile Settings Successful");
+                            return AnewluvMessages;
                         });
                         return await task.ConfigureAwait(false);
 
@@ -606,23 +648,29 @@ namespace Anewluv.Services.Edit
                          var task = Task.Factory.StartNew(() =>
                     {
 
-                        profile p = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = editprofilemodel.profileid});
-
+                      
                         //create a new messages object
-                        AnewluvMessages messages = new AnewluvMessages();
+                        AnewluvMessages AnewluvMessages = new AnewluvMessages();
+
+                        //validate that this user is corret for the passed apikey
+                        AnewluvMessages = validatecanmodifyprofile(editprofilemodel, AnewluvMessages);
+                        //exit with error status 
+                        if (AnewluvMessages.errormessages.Count() > 0) return AnewluvMessages;
+
+                        profile p = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = editprofilemodel.profileid });
 
 
-                        messages = updatememberbasicsettings(editprofilemodel, p, messages);
+                        AnewluvMessages = updatememberbasicsettings(editprofilemodel, p, AnewluvMessages);
                         //  messages=(membereditBasicSettingsPage2Update(newmodel,profileid ,messages));
 
 
-                        if (messages.errormessages.Count > 0)
+                        if (AnewluvMessages.errormessages.Count > 0)
                         {
-                            messages.errormessages.Add("There was a problem Editing You Basic Settings, Please try again later");
-                            return messages;
+                            AnewluvMessages.errormessages.Add("There was a problem Editing You Basic Settings, Please try again later");
+                            return AnewluvMessages;
                         }
-                        messages.messages.Add("Edit Basic Settings Successful");
-                        return messages;
+                        AnewluvMessages.messages.Add("Edit Basic Settings Successful");
+                        return AnewluvMessages;
                     });
                          return await task.ConfigureAwait(false);
 
@@ -660,24 +708,28 @@ namespace Anewluv.Services.Edit
                          var task = Task.Factory.StartNew(() =>
                     {
                         //create a new messages object
-                        AnewluvMessages messages = new AnewluvMessages();
+                        AnewluvMessages AnewluvMessages = new AnewluvMessages();
 
+                        //validate that this user is corret for the passed apikey
+                        AnewluvMessages = validatecanmodifyprofile(editprofilemodel, AnewluvMessages);
+                        //exit with error status 
+                        if (AnewluvMessages.errormessages.Count() > 0) return AnewluvMessages;
 
                         //get the profile details :
                         profile p = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = editprofilemodel.profileid });
 
-                        messages = (updatememberappearancesettings(editprofilemodel, p, messages));
+                        AnewluvMessages = (updatememberappearancesettings(editprofilemodel, p, AnewluvMessages));
                         // messages = (membereditAppearanceSettingsPage2Update(newmodel, profileid, messages));
                         // messages = (membereditAppearanceSettingsPage3Update(newmodel, profileid, messages));
                         //  messages = (membereditAppearanceSettingsPage4Update(newmodel, profileid, messages));
 
-                        if (messages.errormessages.Count > 0)
+                        if (AnewluvMessages.errormessages.Count > 0)
                         {
-                            messages.errormessages.Add("There was a problem Editing You Appearance Settings, Please try again later");
-                            return messages;
+                            AnewluvMessages.errormessages.Add("There was a problem Editing You Appearance Settings, Please try again later");
+                            return AnewluvMessages;
                         }
-                        messages.messages.Add("Edit Appearance Settings Successful");
-                        return messages;
+                        AnewluvMessages.messages.Add("Edit Appearance Settings Successful");
+                        return AnewluvMessages;
 
                     });
                          return await task.ConfigureAwait(false);
@@ -719,24 +771,29 @@ namespace Anewluv.Services.Edit
                         {
 
                         //create a new messages object
-                        AnewluvMessages messages = new AnewluvMessages();
+                            AnewluvMessages AnewluvMessages = new AnewluvMessages();
+
+                        //validate that this user is corret for the passed apikey
+                        AnewluvMessages = validatecanmodifyprofile(editprofilemodel, AnewluvMessages);
+                        //exit with error status 
+                        if (AnewluvMessages.errormessages.Count() > 0) return AnewluvMessages;
 
 
                         //get the profile details :
                         profile p = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = editprofilemodel.profileid });
 
-                        messages = (updatemembercharactersettings(editprofilemodel, p, messages));
+                        AnewluvMessages = (updatemembercharactersettings(editprofilemodel, p, AnewluvMessages));
                         // messages = (membereditcharacterSettingsPage2Update(newmodel, profileid, messages));
                         // messages = (membereditcharacterSettingsPage3Update(newmodel, profileid, messages));
                         //  messages = (membereditcharacterSettingsPage4Update(newmodel, profileid, messages));
 
-                        if (messages.errormessages.Count > 0)
+                        if (AnewluvMessages.errormessages.Count > 0)
                         {
-                            messages.errormessages.Add("There was a problem Editing You character Settings, Please try again later");
-                            return messages;
+                            AnewluvMessages.errormessages.Add("There was a problem Editing You character Settings, Please try again later");
+                            return AnewluvMessages;
                         }
-                        messages.messages.Add("Edit character Settings Successful");
-                        return messages;
+                        AnewluvMessages.messages.Add("Edit character Settings Successful");
+                        return AnewluvMessages;
                          });
                     return await task.ConfigureAwait(false);
 
@@ -777,24 +834,30 @@ namespace Anewluv.Services.Edit
                           var task = Task.Factory.StartNew(() =>
                     {
                         //create a new messages object
-                        AnewluvMessages messages = new AnewluvMessages();
+                        AnewluvMessages AnewluvMessages = new AnewluvMessages();
+
+                        //validate that this user is corret for the passed apikey
+                        AnewluvMessages = validatecanmodifyprofile(editprofilemodel, AnewluvMessages);
+                        //exit with error status 
+                        if (AnewluvMessages.errormessages.Count() > 0) return AnewluvMessages;
+
                         //get the profile details :
                         profile p = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = editprofilemodel.profileid});
-                          
 
 
-                        messages = (updatememberlifestylesettings(editprofilemodel, p, messages));
+
+                        AnewluvMessages = (updatememberlifestylesettings(editprofilemodel, p, AnewluvMessages));
                         // messages = (membereditlifestyleSettingsPage2Update(newmodel, profileid, messages));
                         // messages = (membereditlifestyleSettingsPage3Update(newmodel, profileid, messages));
                         //  messages = (membereditlifestyleSettingsPage4Update(newmodel, profileid, messages));
 
-                        if (messages.errormessages.Count > 0)
+                        if (AnewluvMessages.errormessages.Count > 0)
                         {
-                            messages.errormessages.Add("There was a problem Editing You lifestyle Settings, Please try again later");
-                            return messages;
+                            AnewluvMessages.errormessages.Add("There was a problem Editing You lifestyle Settings, Please try again later");
+                            return AnewluvMessages;
                         }
-                        messages.messages.Add("Edit lifestyle Settings Successful");
-                        return messages;
+                        AnewluvMessages.messages.Add("Edit lifestyle Settings Successful");
+                        return AnewluvMessages;
                     });
                           return await task.ConfigureAwait(false);
                     }
@@ -864,7 +927,10 @@ namespace Anewluv.Services.Edit
                 if (newmodel.basicsearchsettings != null)
                 {
                     //update the search settings 
-                    searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id,searchname = "MyPerfectMatch" },_unitOfWorkAsync);
+                    searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().getorcreatesearchsettings(new SearchSettingsModel { profileid = p.id,searchname = "MyPerfectMatch" },_unitOfWorkAsync);
+                    //empty search setting handling
+                   
+               
                     messages = searchsettingsextentions.updatebasicsearchsettings(newmodel.basicsearchsettings, s, messages, _unitOfWorkAsync);
                 }
 
@@ -989,8 +1055,11 @@ namespace Anewluv.Services.Edit
               
                 if (newmodel.appearancesearchsettings != null)
                 {
-                    searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id, searchname = "MyPerfectMatch" }, _unitOfWorkAsync);
-                   messages = searchsettingsextentions.updateappearancesearchsettings(newmodel.appearancesearchsettings, s, messages, _unitOfWorkAsync);
+                    searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().getorcreatesearchsettings(new SearchSettingsModel { profileid = p.id, searchname = "MyPerfectMatch" }, _unitOfWorkAsync);
+                    //empty search setting handling
+                   
+               
+                    messages = searchsettingsextentions.updateappearancesearchsettings(newmodel.appearancesearchsettings, s, messages, _unitOfWorkAsync);
                 }
                 //TOD DO
                 //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
@@ -1164,7 +1233,9 @@ namespace Anewluv.Services.Edit
 
                if (newmodel.charactersearchsettings != null)
                {
-                   searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id, searchname = "MyPerfectMatch" }, _unitOfWorkAsync);
+                   searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().getorcreatesearchsettings(new SearchSettingsModel { profileid = p.id, searchname = "MyPerfectMatch" }, _unitOfWorkAsync);
+                   //handling for a new search
+                  
                    messages = searchsettingsextentions.updatecharactersearchsettings(newmodel.charactersearchsettings, s, messages, _unitOfWorkAsync);
                }
                 
@@ -1190,8 +1261,6 @@ namespace Anewluv.Services.Edit
 
 
         }
-
-
 
         //TO DO send back the messages on errors and when nothing is changed
         private AnewluvMessages updatememberlifestylesettings(EditProfileModel newmodel, profile p, AnewluvMessages messages)
@@ -1343,7 +1412,9 @@ namespace Anewluv.Services.Edit
                 // return model;
                if (newmodel.lifestylesearchsettings != null)
                {
-                   searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = p.id, searchname = "MyPerfectMatch" }, _unitOfWorkAsync);
+                   searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().getorcreatesearchsettings(new SearchSettingsModel { profileid = p.id, searchname = "MyPerfectMatch" }, _unitOfWorkAsync);
+                  
+               
                    messages = searchsettingsextentions.updatelifestylesearchsettings(newmodel.lifestylesearchsettings, s, messages, _unitOfWorkAsync);
                }
 

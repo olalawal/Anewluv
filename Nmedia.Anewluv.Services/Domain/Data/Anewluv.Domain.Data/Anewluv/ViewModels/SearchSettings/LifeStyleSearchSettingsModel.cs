@@ -27,9 +27,9 @@ namespace Anewluv.Domain.Data.ViewModels
 
 
           [DataMember]
-          public int profileid { get; set; }
+          public int? profileid { get; set; }
         [DataMember]
-        public int searchid { get; set; }
+        public int? searchid { get; set; }
         [DataMember]
         public string searchname { get; set; }
         //Lifestyle setting here

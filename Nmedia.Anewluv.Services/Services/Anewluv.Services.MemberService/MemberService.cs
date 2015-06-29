@@ -159,7 +159,7 @@ namespace Anewluv.Services.Members
                           var task = Task.Factory.StartNew(() =>
                           {
 
-                              profileextentionmethods.createmyperfectmatchsearchsettingsbyprofileid(model, _unitOfWorkAsync);
+                              profileextentionmethods.createsearchbyprofileid("MyPerfectMatch",true, model, _unitOfWorkAsync);
 
                           });
                           await task.ConfigureAwait(false);

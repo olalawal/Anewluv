@@ -32,6 +32,8 @@ namespace Anewluv.Domain.Data.ViewModels
         //index of what page we are looking at i.e we want to split up this model into diff partial views
         [DataMember]
         public int? profileid { get; set; }
+         [DataMember]
+        public Guid? apikey { get; set; }
         [DataMember]
         public int? searchid { get; set; }
         [DataMember]
@@ -40,9 +42,9 @@ namespace Anewluv.Domain.Data.ViewModels
         public int? searchrank { get; set; }
         [DataMember]
         public int? viewindex { get; set; }
-        public bool postalcodestatus { get; set; }
+        public bool? postalcodestatus { get; set; }
         [DataMember]
-        public bool isfullediting { get; set; }
+        public bool? isfullediting { get; set; }
 
         public  List<string> currenterrors = new List<string>();
     }

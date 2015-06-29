@@ -430,7 +430,7 @@ namespace Anewluv.DataExtentionMethods
         }
 
 
-        public static searchsetting createmyperfectmatchsearchsettingsbyprofileid(ProfileModel model, IUnitOfWorkAsync db)
+        public static searchsetting createsearchbyprofileid(string searchname,bool isperfectmatch,ProfileModel model, IUnitOfWorkAsync db)
         {
 
             // db.DisableProxyCreation = true;
@@ -446,13 +446,14 @@ namespace Anewluv.DataExtentionMethods
 
                         Newsearchsettings = new searchsetting();
                         Newsearchsettings.profile_id = model.profileid.Value; //.GetValueOrDefault();
-                        Newsearchsettings.myperfectmatch = true;
-                        Newsearchsettings.searchrank =1;
+                        Newsearchsettings.myperfectmatch = isperfectmatch;
+                        Newsearchsettings.searchrank =null;
                         Newsearchsettings.creationdate = DateTime.Now;
-                        Newsearchsettings.searchname = "Myperfectmatch";
+                        Newsearchsettings.searchname = searchname;
 
+                        Newsearchsettings.ObjectState = Repository.Pattern.Infrastructure.ObjectState.Added;
                         //Newsearchsettings.profiledata = this.GetProfileDataByProfileID(profileid);
-                        db.Repository<searchsetting>().InsertOrUpdateGraph(Newsearchsettings);
+                        db.Repository<searchsetting>().Insert(Newsearchsettings);
                         db.SaveChanges();
                        // transaction.Commit();
 

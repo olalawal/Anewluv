@@ -22,6 +22,8 @@ namespace Anewluv.Domain.Data.ViewModels
 
             [DataMember]
             public int profileid { get; set; }
+            [DataMember]
+            public Guid? apikey { get; set; }
         //basic settings
         [DataMember ]
         public  BasicSettingsModel basicsettings { get; set; }

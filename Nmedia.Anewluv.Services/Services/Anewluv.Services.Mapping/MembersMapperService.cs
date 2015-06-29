@@ -1086,13 +1086,12 @@ namespace Anewluv.Services.Mapping
                         //searchsetting perfectmatchsearchsettings = null;
 
                         MembersViewModel model = membermappingextentions.mapmember(Model, db, geodb);
-
-                        searchsetting perfectmatchsearchsettings = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = model.profile_id, searchname = "MyPerfectMatch" }, _unitOfWorkAsync);
+                        searchsetting perfectmatchsearchsettings = _unitOfWorkAsync.Repository<searchsetting>().getorcreatesearchsettings(new SearchSettingsModel { profileid = model.profile_id, searchname = "MyPerfectMatch" }, _unitOfWorkAsync);
 
                         //TO do handle empty perfect match settings here
                         if (perfectmatchsearchsettings == null )
                         {
-                          perfectmatchsearchsettings=  profileextentionmethods.createmyperfectmatchsearchsettingsbyprofileid(new ProfileModel { profileid = Model.profileid }, db);
+                          perfectmatchsearchsettings=  profileextentionmethods.createsearchbyprofileid("MyPerfectMatch",true, new ProfileModel { profileid = Model.profileid }, db);
                         }
                         else
                         {
@@ -1303,13 +1302,13 @@ namespace Anewluv.Services.Mapping
                        // model.profile = profile;
                         //get search sttings from DB
                         searchsetting perfectmatchsearchsettings = 
-                       _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(new SearchSettingsModel { profileid = model.profile_id, searchname = "MyPerfectMatch" }, _unitOfWorkAsync);
+                       _unitOfWorkAsync.Repository<searchsetting>().getorcreatesearchsettings(new SearchSettingsModel { profileid = model.profile_id, searchname = "MyPerfectMatch" }, _unitOfWorkAsync);
 
 
                         //TO do handle empty perfect match settings here
                         if (perfectmatchsearchsettings == null)
                         {
-                            perfectmatchsearchsettings = profileextentionmethods.createmyperfectmatchsearchsettingsbyprofileid(new ProfileModel { profileid = Model.profileid }, db);
+                            perfectmatchsearchsettings = profileextentionmethods.createsearchbyprofileid("MyPerfectMatch",true, new ProfileModel { profileid = Model.profileid }, db);
                         }
 
                         //set default perfect match distance as 100 for now later as we get more members lower

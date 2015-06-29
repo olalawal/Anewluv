@@ -20,7 +20,7 @@ namespace Anewluv.DataExtentionMethods
 
         //TO DO cache this in REdis
         //generic filtering function we can reuse, filters all search settings using profileid,searchname and other data
-        public static searchsetting filtersearchsettings(this IRepository<searchsetting> repo, SearchSettingsModel searchmodel,IUnitOfWorkAsync db)
+        public static searchsetting getorcreatesearchsettings(this IRepository<searchsetting> repo, SearchSettingsModel searchmodel,IUnitOfWorkAsync db)
         {
 
             try
@@ -51,19 +51,51 @@ namespace Anewluv.DataExtentionMethods
                 {
                     p = allsearchsettings.Where(z => z.searchname.ToUpper() == searchmodel.searchname.ToUpper()).FirstOrDefault();                    
                 }
-                else if (allsearchsettings.Count() > 0)
+                else if (allsearchsettings.Count() > 0)  //if search name is not passed we probbaly want the first one which is perfect match 
                 {
-                    p = allsearchsettings.OrderByDescending(z => z.creationdate).FirstOrDefault();  //get the first one thats probbaly the default.
+                    p = allsearchsettings.Where(z => z.searchname == "MyPerfectMatch").FirstOrDefault();  //get the first one thats probbaly the default.
                 }
 
+                //here is where we handle the results 
                 //if none is found create a new perfect match setting for this user since they dont have one
-                if (p == null) return profileextentionmethods.createmyperfectmatchsearchsettingsbyprofileid(new ProfileModel { profileid = searchmodel.profileid }, db);
+                if (p == null )
+                {
+                   p= createnewsearch(searchmodel, db);
+                }
 
                 return p;
             }
             catch (Exception ex)
             { throw ex; }
         }
+
+        public static searchsetting createnewsearch( SearchSettingsModel searchmodel, IUnitOfWorkAsync db)
+        {
+
+            try
+            {
+
+                //here is where we handle the results 
+                //if none is found create a new perfect match setting for this user since they dont have one
+                if (searchmodel.searchname == null | searchmodel.searchname == "" | searchmodel.searchname != "MyPerfectMatch")
+                {
+                    return profileextentionmethods.createsearchbyprofileid("MyPerfectMatch", true, new ProfileModel { profileid = searchmodel.profileid }, db);
+                }
+                else if (searchmodel.searchname != null | searchmodel.searchname != "" | searchmodel.searchname != "MyPerfectMatch") //create a new standard search
+                {
+
+                    return profileextentionmethods.createsearchbyprofileid(searchmodel.searchname, false, new ProfileModel { profileid = searchmodel.profileid }, db);
+                }
+                else
+                {
+                    return null;
+                }
+                
+            }
+            catch (Exception ex)
+            { throw ex; }
+        }
+
 
         //generic filtering function we can reuse
         public static searchsetting getsearchsettingsbysearchid(this IRepository<searchsetting> repo,int? searchid)
@@ -489,12 +521,20 @@ namespace Anewluv.DataExtentionMethods
 
                 if (model.agemin != null && p.agemin!= model.agemin) { p.agemin = model.agemin; updated = true; }           
                 if (model.agemax!= null && p.agemax != model.agemax) { p.agemax = model.agemax; updated = true; }              
-                if (model.distancefromme != null && p.distancefromme != model.distancefromme) { p.distancefromme =model.distancefromme; updated = true; }   
-                if (!string.IsNullOrEmpty(model.searchname) && p.searchname != model.searchname) { p.searchname = model.searchname; updated = true; }                
-                if (model.searchrank != null && p.searchrank != model.searchrank) { p.searchrank = model.searchrank; updated = true; }
-                if (model.myperfectmatch != null && p.myperfectmatch != model.myperfectmatch) { p.myperfectmatch = model.myperfectmatch; updated = true; }
+                if (model.distancefromme != null && p.distancefromme != model.distancefromme) { p.distancefromme =model.distancefromme; updated = true; }  
+                           
+                
+                //TO DO down the line allow user to make any search thier perfect match
+                //do not allow user to change perfect match right now 
+                //if (model.myperfectmatch != null && p.myperfectmatch != model.myperfectmatch) { p.myperfectmatch = model.myperfectmatch; updated = true; }
+                //handling for search name and rank only allowed if not perfect match
+                if (model.searchname != "MyPerfectMatch" && p.searchname != "MyPerfectMatch")
+                {
+                    if (!string.IsNullOrEmpty(model.searchname) && p.searchname != model.searchname) { p.searchname = model.searchname; updated = true; }  
+                    if (model.searchrank != null && p.searchrank != model.searchrank) { p.searchrank = model.searchrank; updated = true; }
+                }
 
-                updated = true;  //temp for now to force update
+             
                 if (updated)
                 {
                     p.lastupdatedate = DateTime.Now;
@@ -502,13 +542,13 @@ namespace Anewluv.DataExtentionMethods
                 }
                 //checkbos item updates 
                 if (model.genderlist != null && model.genderlist.Count() > 0)
-                    updatesearchsettingsdetail(model.genderlist, p, searchsettingdetailtypeEnum.gender, _unitOfWorkAsync , updated);
+                  updated =  updatesearchsettingsdetail(model.genderlist, p, searchsettingdetailtypeEnum.gender, _unitOfWorkAsync , updated);
                 if (model.sortbylist != null && model.sortbylist.Count() > 0)
-                    updatesearchsettingsdetail(model.sortbylist, p, searchsettingdetailtypeEnum.sortbytype,  _unitOfWorkAsync , updated);
+                    updated = updatesearchsettingsdetail(model.sortbylist, p, searchsettingdetailtypeEnum.sortbytype, _unitOfWorkAsync, updated);
                 if (model.showmelist != null && model.showmelist.Count > 0)
-                    updatesearchsettingsdetail(model.showmelist, p, searchsettingdetailtypeEnum.showme , _unitOfWorkAsync , updated);
+                    updated = updatesearchsettingsdetail(model.showmelist, p, searchsettingdetailtypeEnum.showme, _unitOfWorkAsync, updated);
                 if (model.locationlist != null && model.locationlist.Count > 0)
-                    updatesearchsettingslocation(model.locationlist, p , _unitOfWorkAsync,updated );
+                    updated = updatesearchsettingslocation(model.locationlist, p, _unitOfWorkAsync, updated);
              
 
                 //TO DO validate that there are changes before saving
@@ -517,11 +557,11 @@ namespace Anewluv.DataExtentionMethods
                 if (updated)
                 {
                     var i = _unitOfWorkAsync.SaveChanges();
-                    messages.messages.Add("Basic Search Settings Upated");
+                    messages.messages.Add("Basic Search Settings  : changes  saved!");
                 }
                 else
                 {
-                    messages.messages.Add("No changes to update");
+                    messages.messages.Add("Basic Search Settings : No changes to save");
                 }
 
                 // return messages;
@@ -585,11 +625,11 @@ namespace Anewluv.DataExtentionMethods
                 if (updated | heightsupdated)
                 {
                     var i = _unitOfWorkAsync.SaveChanges();
-                    messages.messages.Add("Appearance Search Settings Upated");
+                    messages.messages.Add("Appearance Search Settings : changes saved");
                 }
                 else
                 {
-                    messages.messages.Add("No changes to update");
+                    messages.messages.Add("Appearance Search Settings : No changes to save");
                 }
                 
             }
@@ -658,11 +698,11 @@ namespace Anewluv.DataExtentionMethods
                 if (updated)
                 {
                     var i = _unitOfWorkAsync.SaveChanges();
-                    messages.messages.Add("Character Search Settings Upated");
+                    messages.messages.Add("Character Search Settings : Changes saved");
                 }
                 else
                 {
-                    messages.messages.Add("No changes to update");
+                    messages.messages.Add("Character Search Settings : No Changes to Save");
                 }
 
 
@@ -731,11 +771,11 @@ namespace Anewluv.DataExtentionMethods
                 if (updated)
                 {
                     var i = _unitOfWorkAsync.SaveChanges();
-                    messages.messages.Add("Lifestyle Search Settings Upated");
+                    messages.messages.Add("Lifestyle Search Settings : Changes saved");
                 }
                 else
                 {
-                    messages.messages.Add("No changes to update");
+                    messages.messages.Add("Lifestyle Search Settings : No changes to save");
                 }
 
 
@@ -818,11 +858,11 @@ namespace Anewluv.DataExtentionMethods
         }
 
         //profiledata location
-       public static void updatesearchsettingslocation(List<searchsetting_location> updatedlocations, searchsetting currentsearchsettings,IUnitOfWorkAsync _unitOfWorkAsync,bool updated)
+       public static bool updatesearchsettingslocation(List<searchsetting_location> updatedlocations, searchsetting currentsearchsettings,IUnitOfWorkAsync _unitOfWorkAsync,bool updated)
         {
             if (updatedlocations == null)
             {
-                return;
+                return updated;
             }
 
             //only get the selected values 
@@ -851,13 +891,14 @@ namespace Anewluv.DataExtentionMethods
                     if (temp != null)
                         temp.ObjectState = ObjectState.Deleted;
                         _unitOfWorkAsync.Repository<searchsettingdetail>().Delete(temp);
+                        updated = true;
                 }
 
 
             }
 
 
-
+            return updated;
         }
 
         //END of Basic settings ///////////////////////
