@@ -27,6 +27,8 @@ namespace Anewluv.Domain.Data.ViewModels
        [DataMember]
        public DateTime birthdate { get; set; }
        [DataMember]
+       public string genderid { get; set; }
+       [DataMember]
        public string gender { get; set; }
        [DataMember]
        public string country { get; set; }
@@ -37,11 +39,12 @@ namespace Anewluv.Domain.Data.ViewModels
          [DataMember]
        public string longitude { get; set; }
          [DataMember]
-       public string lattitude { get; set; } 
+       public string latitude { get; set; } 
          [DataMember]
        public string screenname { get; set; }
          [DataMember]
-       public string zippostalcode { get; set; } 
+       public string zippostalcode { get; set; }
+         [DataMember]
        public string activationcode { get; set; }
           [DataMember]
        public bool isApproved { get; set; }

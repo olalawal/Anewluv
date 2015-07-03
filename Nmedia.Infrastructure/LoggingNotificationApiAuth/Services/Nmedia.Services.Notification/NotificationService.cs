@@ -288,7 +288,8 @@ namespace Nmedia.Services.Notification
                         // var templateenum = (templateenum)Enum.Parse(typeof(templateenum), model.templateid);
                         //Id's messed up in DB use the first 
                         //6	1	Anewluv@sendmail.com	NULL	smtp.sendgrid.net	olawal	azure_b5dd8d41de89841c3093bbb13c07425d@azure.com	kw8LHWnK9rnH7zQ	True	2015-04-20 00:00:00.000	NULL               
-                        dynamic systemsenderaddress = _unitOfWorkAsync.Repository<systemaddress>().Query(a=>a.id == (int)systemaddresseenum.SendGridSMTPrelay).Select().FirstOrDefault();
+                        var result = await _unitOfWorkAsync.RepositoryAsync<systemaddress>().Query(a=>a.id == (int)systemaddresseenum.SendGridSMTPrelay).SelectAsync();
+                        var systemsenderaddress = result.FirstOrDefault();
                         //11-29-2013 get the template path from web config
                         var TemplatePath = ConfigurationManager.AppSettings["razortemplatefilelocation"];
 
@@ -299,7 +300,6 @@ namespace Nmedia.Services.Notification
                              {
                                 try
                                  {
-                                   
 
                                     if (model != null)
                                     {
@@ -307,11 +307,14 @@ namespace Nmedia.Services.Notification
                                         message message = new message();
                                         ICollection<address> addresses = new List<address>();
 
-                                       //TO DO load from cache
-                                        var template = _unitOfWorkAsync.Repository<lu_template>().Query(f => f.id == model.templateid)
-                                            .Include(z => z.filename).Include(z => z.body).Include(z => z.subject).Select().FirstOrDefault();
 
-                                        currentEmailViewModel = getemailVMbyEmailModel(model, template);
+                                       //TO DO load from cache
+                                      //  var template = _unitOfWorkAsync.Repository<lu_template>().Query(f => f.id == model.templateid)
+                                        //    .Include(z => z.filename).Include(z => z.body).Include(z => z.subject).Select().FirstOrDefault();
+                                        var templatefilename = (templatefilenameenum)model.templateid;
+
+                                        currentEmailViewModel = getemailVMbyEmailModelFromEnums(model);
+                                       // currentEmailViewModel = getemailVMbyEmailModel(model, template);
                                         //model.memberEmailViewModel = currentEmailModel;
                                         //create the user address
                                         addresses.Add(getorcreateaddaddress(model, _unitOfWorkAsync));
@@ -319,20 +322,21 @@ namespace Nmedia.Services.Notification
                                         //the member message created and sent here
                                         message = (message.Create(c =>
                                         {
-                                            c.template_id = template.id;
+                                            c.template_id = model.templateid;
                                             c.messagetype_id = currentEmailViewModel.EmailModel.messagetypeid;
-                                            c.body = TemplateParser.RazorFileTemplate(template.filename.description + ".cshtml", ref currentEmailViewModel, TemplatePath); // c.template == null ? TemplateParser.RazorFileTemplate("", ref error) :                                                            
+                                            c.body = TemplateParser.RazorFileTemplate(templatefilename.ToDescription() + ".cshtml", ref currentEmailViewModel, TemplatePath); // c.template == null ? TemplateParser.RazorFileTemplate("", ref error) :                                                            
                                             c.subject = currentEmailViewModel.EmailModel.subject;
                                             c.recipients = addresses;
                                             c.sendingapplication = "NotificationService";
-                                            c.systemaddress = systemsenderaddress;
+                                            c.systemaddress_id = systemsenderaddress.id;
                                         }));
 
+                                    
                                         message.sent = message.body != null ? sendemail(message) : false;//attempt to send the message
                                         message.sendattempts = message.body != null ? 1 : 0;
                                         //  db.Add(message);
                                         // int j = db.Commit();
-
+                                        message.ObjectState = Repository.Pattern.Infrastructure.ObjectState.Added;
                                         _unitOfWorkAsync.Repository<message>().Insert(message);
                                         var j = _unitOfWorkAsync.SaveChanges();
                                     }                         
@@ -341,6 +345,7 @@ namespace Nmedia.Services.Notification
                                  catch (Exception ex)
                                  {
                                      //log individual error for this email and move to next
+                                     var dd = ex.Message;
                                  }
                              }
 
@@ -351,6 +356,8 @@ namespace Nmedia.Services.Notification
                     {
                         //to do log error
                         //thow service error
+                        var dd = ex.Message;
+                        throw ex;
 
                     }
 
@@ -362,18 +369,19 @@ namespace Nmedia.Services.Notification
 
         #region "Private methods"
 
-        private EmailViewModel getemailVMbyEmailModel(EmailModel model, lu_template template)
+
+        private EmailViewModel getemailVMbyEmailModelFromEnums(EmailModel model)
         {
             EmailViewModel emaildetail = new EmailViewModel();
 
             try
             {
 
-                string subject = template.subject.description;
-                string body = template.body.description;
+                string subject = ((templatesubjectenum)model.templateid).ToDescription() ;
+                string body = ((templatebodyenum)model.templateid).ToDescription();
                 templateenum selectedtemplate = (templateenum)model.templateid;
 
-
+                //custom model stuff
                 switch (selectedtemplate)
                 {
                     case templateenum.GenericErrorMessage:
@@ -384,7 +392,68 @@ namespace Nmedia.Services.Notification
                         model.body = string.Format(body, model.screenname, model.username, model.passwordtoken);
                         emaildetail.EmailModel = model;  //add the new updated model
                         break;
+                    case templateenum.MemberCreatedMemberNotification:
+                        model.subject = subject;
+                        model.body = string.Format(body, model.username, model.activationcode);
+                        emaildetail.EmailModel = model;  //add the new updated model
+                        break;
                     default:
+                        model.subject = subject;
+                        model.body = string.Format(body, model.screenname, model.username);
+                        emaildetail.EmailModel = model;  //add the new updated model
+                        Console.WriteLine("Default case");
+                        break;
+                }
+
+
+
+                //TO DO figure out if we will populate other values here
+                return emaildetail;
+            }
+            catch (Exception ex)
+            {
+                //handle logging here
+                using (var logger = new Logging(applicationEnum.NotificationService))
+                {
+                    logger.WriteSingleEntry(logseverityEnum.Warning, enviromentEnum.dev, ex, null, null, false);
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason              
+                }
+            }
+            return null;
+
+        }
+
+        private EmailViewModel getemailVMbyEmailModelFromDB(EmailModel model, lu_template template)
+        {
+            EmailViewModel emaildetail = new EmailViewModel();
+
+            try
+            {
+
+                string subject = template.subject.description;
+                string body = template.body.description;
+                templateenum selectedtemplate = (templateenum)model.templateid;
+
+                //custom model stuff
+                switch (selectedtemplate)
+                {
+                    case templateenum.GenericErrorMessage:
+                        // Console.WriteLine("Case 1");
+                        break;
+                    case templateenum.MemberPasswordChangeMemberNotification:
+                        model.subject = subject;
+                        model.body = string.Format(body, model.screenname, model.username, model.passwordtoken);
+                        emaildetail.EmailModel = model;  //add the new updated model
+                        break;
+                    //case templateenum.MemberCreatedMemberNotification:
+                    //    model.subject = subject;
+                    //    model.body = string.Format(body, model.screenname, model.username);
+                    //    emaildetail.EmailModel = model;  //add the new updated model
+                    //    break;
+                    default:
+                        model.subject = subject;
+                        model.body = string.Format(body, model.screenname, model.username);
+                        emaildetail.EmailModel = model;  //add the new updated model
                         Console.WriteLine("Default case");
                         break;
                 }

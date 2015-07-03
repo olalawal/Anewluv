@@ -12,7 +12,7 @@ namespace GeoData.Domain.Models.ViewModels
         [DataMember]
         public string postalcodevalue { get; set; }
            [DataMember]
-        public string lattitude { get; set; }
+        public string latitude { get; set; }
            [DataMember]
            public string longitude { get; set; }
         [DataMember]

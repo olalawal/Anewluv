@@ -1,6 +1,7 @@
 using GeoData.Domain.Models.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace GeoData.Domain.Models
 {
@@ -35,6 +36,8 @@ public interface IGeoDataStoredProcedures
      IEnumerable<CityList> CityListbycountryIDCityFilter(string countryid,string filter);
 
      IEnumerable<PostalCodeList> GetPostalCodesByCountryIDCityandPrefix(string countryid,string cityname,string filter);
+
+     Task<PostalCodeList> GetPostalCodeByCountryNameandCity(string countryname, string city);
 
      bool GetPostalCodeStatusByCountryID(string countryid);
 

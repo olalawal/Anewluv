@@ -171,9 +171,9 @@ namespace Anewluv.Services.Spatial
                             //1-11-2011 postal code and city are flipped by the way not this function should be renamed
                             //TO DO rename this function.                  
                             // gpsData =  this.getgpsdatabycitycountrypostalcode(new GeoModel { country = model.country, postalcode = model.ziporpostalcode, city = tempcityAndStateProvince[0] },db);
-                            model.lattitude = (gpsData != null) ? Convert.ToDouble(gpsData.Latitude) : 0;
-                            model.longitude = (gpsData != null) ? Convert.ToDouble(gpsData.Longitude) : 0;
-                            model.stateprovince = (gpsData != null) ? gpsData.State_Province : "";
+                            model.lattitude = (gpsData != null) ? Convert.ToDouble(gpsData.latitude) : 0;
+                            model.longitude = (gpsData != null) ? Convert.ToDouble(gpsData.longitude) : 0;
+                            model.stateprovince = (gpsData != null) ? gpsData.state_province : "";
 
                             return model;
 
@@ -481,7 +481,7 @@ namespace Anewluv.Services.Spatial
 
 
                             var gpsdatalist = _storedProcedures.GetGPSDatasByPostalCodeandCity(model.country, model.city, model.postalcode);
-                            return ((from s in gpsdatalist.ToList() select new gpsdata { Latitude = s.Latitude, Longitude = s.Longitude, State_Province = s.State_Province }).ToList());
+                            return ((from s in gpsdatalist.ToList() select new gpsdata { latitude = s.latitude, longitude = s.longitude, state_province = s.state_province }).ToList());
             
 
                         });
@@ -597,11 +597,10 @@ namespace Anewluv.Services.Spatial
                         var task = Task.Factory.StartNew(() =>
                         {
 
-                            if (model.country == null | model.filter == null | model.postalcode == null) return false;
+                            if (model.country == null | model.city == null | model.postalcode == null) return false;
 
-                            //Dim _PostalCodeList As New List(Of PostalCodeList)()
-
-                            model.city = string.Format("{0}%", model.city);
+                         
+                           
                             model.country = string.Format(model.country.Replace(" ", ""));
 
                             // fix country names if theres a space
@@ -610,7 +609,8 @@ namespace Anewluv.Services.Spatial
                             var foundpostalcodes = _storedProcedures.ValidatePostalCodeByCountryNameandCity(model.country, model.city, model.postalcode);
                             // var foundpostalcodes = _postalcontext.ValidatePostalCodeByCOuntryandCity(countryname, city, postalcode);
                             // return foundpostalcodes;
-                            if (foundpostalcodes.Count() > 0) return true;
+                            var test = foundpostalcodes.FirstOrDefault();
+                            if (test!=null) return true;
                             return false;
 
                         });
@@ -799,7 +799,6 @@ namespace Anewluv.Services.Spatial
                         string ErrorMessage = "";
                         string ErrorDetail = "ErrorMessage: " + ex.Message;
                         throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-
                         //throw convertedexcption;
                     }
 
@@ -958,10 +957,10 @@ namespace Anewluv.Services.Spatial
                             //11/13/2009 addded wild ca
 
                             //sp_GetPostalCodesByCountryNameCityandPrefix
-                              var postalcodelist = _storedProcedures.GetPostalCodesByCountryIDCityandPrefix(model.country, model.filter, model.postalcode);
+                              var postalcodelist = _storedProcedures.GetPostalCodesByCountryNameCityandPrefix(model.country, model.city, model.filter);
                           
                             if (postalcodelist !=null)
-                                return ((from s in postalcodelist.Take(25).ToList() select new postalcode { postalcodevalue = s.PostalCode, lattitude = s.LATITUDE, longitude = s.LONGITUDE }).ToList());
+                                return ((from s in postalcodelist.Take(25).ToList() select new postalcode { postalcodevalue = s.PostalCode, latitude = s.LATITUDE, longitude = s.LONGITUDE }).ToList());
 
                             return null;
 
@@ -1021,7 +1020,7 @@ namespace Anewluv.Services.Spatial
                               var postalcodelist = _storedProcedures.GetPostalCodesByCountryIDCityandPrefix(model.countryid,model.city, model.filter);
                             //TO DO scafold in lattitude and longitude
                             if (postalcodelist != null)
-                                return ((from s in postalcodelist.Take(25).ToList() select new postalcode { postalcodevalue = s.PostalCode, lattitude =s.LATITUDE,longitude =s.LONGITUDE }).ToList());
+                                return ((from s in postalcodelist.Take(25).ToList() select new postalcode { postalcodevalue = s.PostalCode, latitude =s.LATITUDE,longitude =s.LONGITUDE }).ToList());
 
                             return null;
                         });
@@ -1101,7 +1100,7 @@ namespace Anewluv.Services.Spatial
            
             }
 
-            //gets the single geo code as string
+            //gets a list of postal codes by coutnry name and city
             //No using internal method
             public async Task<List<postalcode>> getpostalcodesbycountrynamecity(GeoModel model)
             {
@@ -1157,7 +1156,67 @@ namespace Anewluv.Services.Spatial
 
                 }
 
-       
+            //gets a list of postal codes by coutnry name and city
+            //No using internal method
+            public async Task<postalcode> getpostalcodebycountrynamecity(GeoModel model)
+            {
+
+                //_unitOfWorkAsync.DisableProxyCreation = true;
+
+                try
+                {
+
+
+                    var task = Task.Factory.StartNew(() =>
+                    {
+
+                        if (model.country == null | model.city == null) return null;
+
+
+                        //added 5/12/2011 to handle empty countries
+                        if (model.country == null) return null;
+
+                        //List<PostalCodeList> _PostalCodeList = new List<PostalCodeList>();                      
+                        model.country = string.Format(model.country.Replace(" ", ""));
+                        // fix country names if theres a space
+                        // StrprefixText = string.Format("%{0}%", StrprefixText);
+                        //11/13/2009 addded wild ca
+
+
+                        var postalcode = _storedProcedures.GetPostalCodeByCountryNameandCity(model.country, model.city).Result;
+
+                        //  var postalcodelist = _postalcontext.getpostalcodesbycountrynamecity(countryname, city);
+                        if (postalcode != null)
+                        {
+                            return (new postalcode { postalcodevalue = postalcode.PostalCode, latitude = postalcode.LATITUDE, longitude = postalcode.LONGITUDE });
+                        }
+                        return null;
+                    });
+                    return await task.ConfigureAwait(false);
+
+
+
+
+                }
+                catch (Exception ex)
+                {
+
+                    Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(model.country.ToString(), "", "", ex.Message, ex.InnerException);
+                    new Logging(applicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, convertedexcption);
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in GeoService service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                    //throw convertedexcption;
+                }
+
+            }
+
+    
+
+
 
             #region "private shared functions"
 
@@ -1183,7 +1242,7 @@ namespace Anewluv.Services.Spatial
                      
                                       var gpsdatalist = _storedProcedures.GetGPSDataByCountryAndCity(model.country, model.city);
                                     //  var gpsdatalist = _postalcontext.GetGpsDataByCountryAndCity(countryname, city);
-                                    return ((from s in gpsdatalist.ToList() select new gpsdata { Latitude = s.Latitude, Longitude = s.Longitude, State_Province = s.State_Province }).ToList().FirstOrDefault());
+                                    return ((from s in gpsdatalist.ToList() select new gpsdata { latitude = s.latitude, longitude = s.longitude, state_province = s.state_province }).ToList().FirstOrDefault());
 
 
                                 }

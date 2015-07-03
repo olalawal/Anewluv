@@ -80,9 +80,6 @@ namespace Anewluv.Services.Authentication
         }
 
 
-
-
-
         public async Task<AnewluvResponse> createuser(MembershipUserViewModel model)
         {
 
@@ -104,7 +101,7 @@ namespace Anewluv.Services.Authentication
                 var membershipprovider = CreateUserCustom(model.username, model.password, model.openidIdentifer,
                    model.openidProvidername,
                  model.email,
-                DateTime.Now, model.gender, model.country, model.city, model.stateprovince, model.longitude, model.lattitude,
+               model.birthdate, model.genderid, model.country, model.city, model.stateprovince, model.longitude, model.latitude,
                 model.screenname, model.zippostalcode, model.activationcode, false, model.providerUserKey,
                  out status);
 
@@ -163,8 +160,8 @@ namespace Anewluv.Services.Authentication
             return CreateUserCustom(model.username,
                         model.password, model.openidIdentifer, model.openidProvidername,
                        model.email,
-                       model.birthdate, model.gender, model.country, model.city, model.stateprovince,
-                       model.longitude, model.lattitude, model.screenname, model.zippostalcode, model.activationcode,
+                       model.birthdate, model.genderid, model.country, model.city, model.stateprovince,
+                       model.longitude, model.latitude, model.screenname, model.zippostalcode, model.activationcode,
                        model.isApproved,
                        model.providerUserKey, out status);
 
@@ -626,7 +623,7 @@ namespace Anewluv.Services.Authentication
                   string email,
             //  string securityQuestion,
             // string securityAnswer,
-                  DateTime birthdate, string gender, string country, string city, string stateprovince, string longitude, string latitude, string screenname, string zippostalcode, string activationcode,
+                  DateTime birthdate, string genderid, string country, string city, string stateprovince, string longitude, string latitude, string screenname, string zippostalcode, string activationcode,
                   bool isApproved,
                   object providerUserKey,
                  out MembershipCreateStatus status)
@@ -670,6 +667,7 @@ namespace Anewluv.Services.Authentication
                         Random objRandom = new Random();
                         int intStart = objRandom.Next(1, 9);
                         int intLastTwo = objRandom.Next(10, 99);
+                        //int genderid = Convert.ToInt32(genderid);
                         //convert the string values to byte as needed
                         //NumberFormatInfo provider = new NumberFormatInfo();
                         // These properties affect the conversion.
@@ -677,7 +675,7 @@ namespace Anewluv.Services.Authentication
 
 
 
-                         var guid = Api.AsyncCalls.getcountryidbycountryname(country).Result;
+                        //var guid = Api.AsyncCalls.getcountryidbycountryname(country).Result;
                      //   PostalData2Context GeoContext = new PostalData2Context();
                        // using (var tempdb = GeoContext)
                      //   {
@@ -707,8 +705,8 @@ namespace Anewluv.Services.Authentication
                         ObjProfileEntity.forwardmessages = 1;
                         //  ObjProfileEntity.SecurityQuestionID = 1;                
                         // ObjProfileEntity.SecurityAnswer =  securityAnswer;
-                        ObjProfileEntity.lu_profilestatus = (openidIdentifer == "" || openidIdentifer == null) ? _unitOfWorkAsync.Repository<lu_profilestatus>().Query(p => p.id == 1).Select().FirstOrDefault() :
-                            _unitOfWorkAsync.Repository<lu_profilestatus>().Query(p => p.id == 2).Select().FirstOrDefault();   //auto activate profiles fi we have an openID user since we have verifed thier info
+                        ObjProfileEntity.status_id = (openidIdentifer == "" || openidIdentifer == null) ? (int)profilestatusEnum.NotActivated : (int)profilestatusEnum.Activated;
+                           //auto activate profiles fi we have an openID user since we have verifed thier info
 
 
 
@@ -724,7 +722,8 @@ namespace Anewluv.Services.Authentication
 
                         objprofileDataEntity.countryid = countryID;
                         objprofileDataEntity.postalcode = zippostalcode;
-                        objprofileDataEntity.lu_gender = _unitOfWorkAsync.Repository<lu_gender>().Query(p => p.description == gender).Select().FirstOrDefault();
+                        objprofileDataEntity.gender_id = Convert.ToInt16(genderid);
+                        //objprofileDataEntity.lu_gender = _unitOfWorkAsync.Repository<lu_gender>().Query(p => p.description == gender ).Select().FirstOrDefault();
 
 
                         //  =  Int32.Parse(gender): objprofileDataEntity.gender.GenderName  = gender;
@@ -737,14 +736,40 @@ namespace Anewluv.Services.Authentication
                         //TOD DO add open ID identifier as well Profider type to ssoProvider table 
 
                          //get profile and profile datas
-                      
+
+                        ObjProfileEntity.ObjectState = ObjectState.Added;
                         profilerepo.Insert(ObjProfileEntity);
+                        objprofileDataEntity.ObjectState = ObjectState.Added;
                         profiledatarepo.Insert(objprofileDataEntity);
 
                         //_unitOfWorkAsync
                         var i =  _unitOfWorkAsync.SaveChanges();
                        // transaction.Commit();
 
+                        //send the emails
+                        //**************************************
+                        var EmailModels = new List<EmailModel>();
+
+                        EmailModels.Add(new EmailModel
+                        {
+                            templateid = (int)templateenum.MemberCreatedMemberNotification,
+                            messagetypeid = (int)messagetypeenum.UserUpdate,
+                            addresstypeid = (int)addresstypeenum.SiteUser,
+                            activationcode =  ObjProfileEntity.activationcode,
+                            emailaddress = email,
+                            screenname = screenname,
+                            username = username
+                            
+                        });
+                        EmailModels.Add(new EmailModel
+                        {
+                            templateid = (int)templateenum.MemberCreatedAdminNotification,
+                            messagetypeid = (int)messagetypeenum.SysAdminUpdate,
+                            addresstypeid = (int)addresstypeenum.SystemAdmin,
+                        });
+                        //this sends both admin and user emails  
+                        Api.AsyncCalls.sendmessagesbytemplate(EmailModels); 
+                        //************* end of email send ************************
 
                         //populate the object to send back so we do not have to requery from athe service side
                         profile profile =  _unitOfWorkAsync.Repository<profile>().getprofilebyusername(new ProfileModel { username = username });
@@ -1083,8 +1108,8 @@ namespace Anewluv.Services.Authentication
 
                         //split up the city from state province
                         //Build the profile data table                   
-                        objprofileDateEntity.latitude = Convert.ToDouble( _GpsData.Latitude);
-                        objprofileDateEntity.longitude = Convert.ToDouble( _GpsData.Longitude);
+                        objprofileDateEntity.latitude = Convert.ToDouble( _GpsData.latitude);
+                        objprofileDateEntity.longitude = Convert.ToDouble( _GpsData.longitude);
                         objprofileDateEntity.city = tempCityAndStateProvince[0];
                         objprofileDateEntity.countryregion = "NA";
 
@@ -1099,7 +1124,7 @@ namespace Anewluv.Services.Authentication
 
                         objprofileDateEntity.countryid = countryID;
                         objprofileDateEntity.postalcode = u.ziporpostalcode;
-                        objprofileDateEntity.gender_id = Int32.Parse(u.gender);
+                        objprofileDateEntity.gender_id = Int32.Parse(u.genderid);
                         objprofileDateEntity.birthdate = u.birthdate;
                         objprofileDateEntity.phone = "NA";
                         //objprofileDateEntity.AboutMe = "Hello";
@@ -1310,7 +1335,7 @@ namespace Anewluv.Services.Authentication
                 string password,
                 string securityQuestion,
                 string securityAnswer,
-                DateTime birthdate, string gender, string country, string city, string zippostalcode)
+                DateTime birthdate, string genderid, string country, string city, string zippostalcode)
         {
         }
 
@@ -1319,15 +1344,11 @@ namespace Anewluv.Services.Authentication
 
         public async Task<bool> checkifemailalreadyexists(ProfileModel model)
         {
-           
 
-                Boolean result = false;
                 try
                 {
-                    if (model == null | model.username == null) return false;
-                    var task = Task.Factory.StartNew(() =>
-                    {
-
+                    if (model == null | model.email == null) return false;
+                 
                        
                      
                                 //while (db.ObjectContext.Connection.State  != System.Data.ConnectionState.Closed)
@@ -1335,46 +1356,17 @@ namespace Anewluv.Services.Authentication
 
                                   // db.DisableProxyCreation = true;;
                                     //db.DisableLazyLoading = true;
-                                    result = (( _unitOfWorkAsync.Repository<profile>().Queryable().Where(p => p.emailaddress == model.email).FirstOrDefault()) != null);
-                                        
-                                      //   _unitOfWorkAsync.Repository<profile>().Query.checkifscreennamealreadyexists(model);
-                                //}
+                                   var result = await _unitOfWorkAsync.RepositoryAsync<profile>().Query(p => p.emailaddress == model.email).SelectAsync();
 
-                           
-                        return result;
-
-                        //// _unitOfWorkAsync.DisableProxyCreation = true;
-                        //_unitOfWorkAsync.DisableLazyLoading = true;
-                        //using (var db = _unitOfWorkAsync)
-                        //{
-                         
-                        //    result = db.
-                        //        ((db.profiles.Where(p => p.screenname == model.screenname).FirstOrDefault()) != null);
-
-                        //    result =  _unitOfWorkAsync.Repository<profile>().Query.checkifemailalreadyexists(model);
-                        //}
-
-
-                        // using (var db = new AnewluvContext())
-                        // {
-                        //  // db.DisableProxyCreation = true;;
-                        //    db.DisableLazyLoading = true;
-                        //    result =  _unitOfWorkAsync.Repository<profile>().Query.checkifemailalreadyexists(model);
-                                           
-                        //}
-                      //  return result;
-                     //  
-                    });
-                    return await task.ConfigureAwait(false);
-               
+                                   if (result.FirstOrDefault() != null) return true;
+                                   return false;
+                   
 
                 }
                 catch (Exception ex)
                 {
-
                     using (var logger = new  Logging(applicationEnum.UserAuthorizationService))
                     {
-
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     } 
                    //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1383,12 +1375,8 @@ namespace Anewluv.Services.Authentication
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-
                     //throw convertedexcption;
                 }
-
-            
-
         }
         /// <summary>
         /// Determines wethare an activation code matches the value in the Initial Catalog= for a given profileid
@@ -1400,7 +1388,7 @@ namespace Anewluv.Services.Authentication
                
                 try
                 {
-                    if (model == null | model.username == null) return false;
+                    if (model == null | model.username == null | model.activationcode == null) return false;
                     var task = Task.Factory.StartNew(() =>
                     {
                         //Dim ctx As New Entities()
@@ -1535,24 +1523,14 @@ namespace Anewluv.Services.Authentication
         public async  Task<bool> checkifscreennamealreadyexists(ProfileModel model)
         {       
         
-                Boolean result = false;              
+                   
                 try
                 {
-                    var task = Task.Factory.StartNew(() =>
-                    {
 
-                    
-                            {
-                               
-                                result = ((_unitOfWorkAsync.Repository<profile>().Queryable().Where(p => p.screenname == model.screenname).FirstOrDefault()) != null);
-                                        
-                                      //   _unitOfWorkAsync.Repository<profile>().Query.checkifscreennamealreadyexists(model);
-                                //}
-
-                            }
-                        return result;
-                    });
-                    return await task.ConfigureAwait(false);                  
+                          var result = await _unitOfWorkAsync.RepositoryAsync<profile>().Query(p => p.screenname == model.screenname).SelectAsync();
+                          if (result.FirstOrDefault() != null) return true;
+                          return false;
+    
 
                 }
                 catch (Exception ex)

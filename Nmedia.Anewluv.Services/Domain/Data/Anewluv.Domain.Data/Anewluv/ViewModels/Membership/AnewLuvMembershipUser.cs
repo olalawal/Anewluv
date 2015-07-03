@@ -16,8 +16,6 @@ namespace Anewluv.Domain.Data
             //  DatingService datingService = new DatingService();
 
 
-
-
             DateTime _birthdate;
             int _profileid;
             //  string _securityquestion;
@@ -26,11 +24,11 @@ namespace Anewluv.Domain.Data
             string _city;
             string _country;
             double? _longitude;
-            double? _lattitude;
+            double? _latitude;
             string _stateprovince;
             public profile _thisprofile;
             string _screenName;
-            string _gender;
+            string _genderid;
             string _password;
             string _openidIdentifer;
             string _openidProvidername;
@@ -62,10 +60,10 @@ namespace Anewluv.Domain.Data
                 set { _stateprovince = value; }
             }
             [DataMember]
-            public double? lattitude
+            public double? latitude
             {
-                get { return _lattitude; }
-                set { _lattitude = value; }
+                get { return _latitude; }
+                set { _latitude = value; }
             }
             [DataMember]
             public double? longitude
@@ -111,10 +109,10 @@ namespace Anewluv.Domain.Data
             }
 
             [DataMember]
-            public string gender
+            public string genderid
             {
-                get { return _gender; }
-                set { _gender = value; }
+                get { return _genderid; }
+                set { _genderid = value; }
             }
 
             [DataMember]
@@ -184,11 +182,11 @@ namespace Anewluv.Domain.Data
                 // this.securityquestion  = securityquestion;
                 //  this.securityanswer = securityanswer ;
                 this.ziporpostalcode = ziporpostalcode;
-                this.lattitude = lattitude;
+                this.latitude = latitude;
                 this.longitude = longitude;
                 this.stateprovince = stateprovince;
                 this.thisprofile = thisprofile;
-                this.gender = gender;
+                this.genderid = genderid;
                 this.password = password;
                 this.openidIdentifer = openidIdentifer;
                 this.openidProvidername = openidProvidername;
