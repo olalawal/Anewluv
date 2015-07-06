@@ -1923,8 +1923,11 @@ namespace Anewluv.Services.Authentication
 
 
                         //Dim ctx As New Entities()
+                        //TO DO add an inactive count login to track how many times a user logs in before they active profile default max should be = 3
                         //added profile status ID validation as well i.e 2 for activated and is not banned 
-                        myQuery =  _unitOfWorkAsync.Repository<profile>().Queryable().Where(p => p.username == profile.username && p.status_id == 2).FirstOrDefault();
+                        myQuery =  _unitOfWorkAsync.Repository<profile>().Queryable().Where(p => p.username == profile.username && 
+                            (p.status_id != (int)profilestatusEnum.Banned | p.status_id !=  (int)profilestatusEnum.Inactive | p.status_id !=  (int)profilestatusEnum.ResetingPassword)
+                             ).FirstOrDefault();
 
 
 

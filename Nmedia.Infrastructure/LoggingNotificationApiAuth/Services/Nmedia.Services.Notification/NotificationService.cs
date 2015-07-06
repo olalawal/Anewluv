@@ -329,6 +329,7 @@ namespace Nmedia.Services.Notification
                                             c.recipients = addresses;
                                             c.sendingapplication = "NotificationService";
                                             c.systemaddress_id = systemsenderaddress.id;
+                                            c.systemaddress = systemsenderaddress;  //needed for the host info
                                         }));
 
                                     
