@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="CORS_Sample.EmailMessagingService" CodeBehind="EmailMessagingService.svc.cs" %>

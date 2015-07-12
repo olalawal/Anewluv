@@ -27,6 +27,7 @@ using System.Xml;
 using Anewluv.Domain.Data;
 using Anewluv.Domain.Data.Anewluv.ViewModels;
 using Nmedia.Infrastructure.Utils;
+using System.ServiceModel.Dispatcher;
 //using Anewluv.Lib;
 //using Nmedia.Services.Authorization;
 //using Anewluv.Domain;
@@ -355,17 +356,51 @@ namespace Anewluv.Apikey
         }
 
 
+        //private static void PreflightRequestAprovalOld(OperationContext operationContext)
+        //{
+        //    // The error message is padded so that IE shows the response by default
+        //    using (var sr = new StringReader("<?xml version=\"1.0\" encoding=\"utf-8\"?>" + PreflightRequestApprovalHTML))
+        //    {
+        //        XElement response = XElement.Load(sr);
+        //        using (Message reply = Message.CreateMessage(MessageVersion.None, null, response))
+        //        {
+        //            HttpResponseMessageProperty responseProp = new HttpResponseMessageProperty() { StatusCode = HttpStatusCode.NoContent, StatusDescription = String.Format("AnewLuv Says :Preflightrequest allowed") };
+        //            responseProp.Headers[HttpResponseHeader.ContentType] = "text/html";
+        //            reply.Properties[HttpResponseMessageProperty.Name] = responseProp;
+        //            operationContext.RequestContext.Reply(reply);
+        //            // set the request context to null to terminate processing of this request
+        //            operationContext.RequestContext = null;
+        //        }
+        //    }
+        //}
+
+
         private static void PreflightRequestAproval(OperationContext operationContext)
         {
+
+            //these are added in web config so dont need to add 
+            //var requiredHeaders = new Dictionary<string, string>();
+            //requiredHeaders.Add("Access-Control-Allow-Origin", "*");
+            //requiredHeaders.Add("Access-Control-Request-Method", "POST,GET,PUT,DELETE,OPTIONS");
+            //requiredHeaders.Add("Access-Control-Allow-Headers", "X-Requested-With,Content-Type,apikey,Authorization ,,Accept");
+
+
+            var incmessage = operationContext.RequestContext.RequestMessage;
             // The error message is padded so that IE shows the response by default
             using (var sr = new StringReader("<?xml version=\"1.0\" encoding=\"utf-8\"?>" + PreflightRequestApprovalHTML))
             {
                 XElement response = XElement.Load(sr);
-                using (Message reply = Message.CreateMessage(MessageVersion.None, null, response))
+                using (Message reply = Message.CreateMessage(incmessage.Version, FindReplyAction(incmessage.Headers.Action), response))
                 {
-                    HttpResponseMessageProperty responseProp = new HttpResponseMessageProperty() { StatusCode = HttpStatusCode.OK, StatusDescription = String.Format("AnewLuv Says :Preflightrequest allowed") };
+                    HttpRequestMessageProperty httpRequestHeader = (HttpRequestMessageProperty)operationContext.RequestContext.RequestMessage.Properties[HttpRequestMessageProperty.Name];
+                    HttpResponseMessageProperty responseProp = new HttpResponseMessageProperty() { StatusCode = HttpStatusCode.NoContent, StatusDescription = String.Format("AnewLuv Says :Preflightrequest allowed") };
+                   
+                    //these are added via web config
+                    //foreach (KeyValuePair<string, string> item in requiredHeaders)
+                   //     responseProp.Headers.Add(item.Key, item.Value);
                     responseProp.Headers[HttpResponseHeader.ContentType] = "text/html";
                     reply.Properties[HttpResponseMessageProperty.Name] = responseProp;
+
                     operationContext.RequestContext.Reply(reply);
                     // set the request context to null to terminate processing of this request
                     operationContext.RequestContext = null;
@@ -373,6 +408,27 @@ namespace Anewluv.Apikey
             }
         }
 
+        /// <summary>
+        /// Finds the reply action based on the supplied request action
+        /// </summary>
+        /// <param name="requestAction">The request action for witch the reply action should be found.</param>
+        /// <returns></returns>
+        public static string FindReplyAction(string requestAction)
+        {
+            OperationContext ctx = OperationContext.Current;
+            EndpointDispatcher epd = ctx.EndpointDispatcher;
+
+            // var dd = OperationContext.Current.EndpointDispatcher.Op;
+            foreach (var operation in epd.DispatchRuntime.Operations)
+            {
+                //if (operation.Messages[0].Action == requestAction)
+                //{
+                //    return operation.Messages[1].Action;
+                //}
+                if (operation.Action == requestAction) return operation.Action;
+            }
+            return null;
+        }
 
         const string PreflightRequestApprovalHTML = @"
 <html>
