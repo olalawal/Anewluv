@@ -14,6 +14,8 @@ namespace Anewluv.Domain.Data.ViewModels
         //current values selected from User Interface , we bind them to the user 
         //viewmodel for now unless we run into memory issues and effecinery, then they will expire with the view
 
+        [DataMember]
+        public int? profileid { get; set; }
         //added stuff for paging
         [DataMember]
         public int? page { get; set; }

@@ -33,6 +33,8 @@ namespace Anewluv.Domain.Data.ViewModels
        [DataMember]
        public string country { get; set; }
        [DataMember]
+       public int countryid { get; set; }
+       [DataMember]
        public string city { get; set; }
        [DataMember]
        public string stateprovince { get; set; } 

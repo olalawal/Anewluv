@@ -8,6 +8,7 @@ using Anewluv.Domain.Data;
 using Anewluv.Domain.Data.ViewModels;
 using Repository.Pattern.Repositories;
 using Repository.Pattern.UnitOfWork;
+using Nmedia.Infrastructure.Utils;
 
 
 
@@ -36,51 +37,60 @@ namespace Anewluv.DataExtentionMethods
         //TO DO add photos and photo conversions maybe ? so we dont need the profile viewmodel
         public static profilemetadata getprofilemetadatabyprofileid(this IRepository<profilemetadata> repo, ProfileModel model)
         {
-            return repo.Query(p => p.profile_id == model.profileid.Value)
 
-                .Include(x => x.profile)
-                   .Include(z => z.photos.Select(s => s.photoconversions))
-                      .Include(z => z.profiledata_ethnicity.Select(s => s.lu_ethnicity))
-                         .Include(z => z.profiledata_hobby.Select(s => s.lu_hobby))
-                            .Include(z => z.profiledata_hotfeature.Select(s => s.lu_hotfeature))
-                    .Include(z => z.profiledata_lookingfor.Select(s=>s.lu_lookingfor))
-                    .Include(z => z.rateeratingvalues)
-                    .Include(z => z.createdactions)
-                    .Include(z => z.targetofactions)
-                    .Include(z => z.applications)
+            try
+            {
+                return repo.Query(p => p.profile_id == model.profileid.Value)
 
-                    .Include(x => x.profile.profiledata)
-                     .Include(x => x.profile.profiledata.lu_bodytype)
-                     .Include(x => x.profile.profiledata.lu_diet)
-                 .Include(x => x.profile.profiledata.lu_drinks)
-                  .Include(x => x.profile.profiledata.lu_educationlevel)
-                   .Include(x => x.profile.profiledata.lu_employmentstatus)
-                    .Include(x => x.profile.profiledata.lu_exercise)
-                     .Include(x => x.profile.profiledata.lu_eyecolor)
+                    .Include(x => x.profile)
+                       .Include(z => z.photos.Select(s => s.photoconversions))
+                          .Include(z => z.profiledata_ethnicity.Select(s => s.lu_ethnicity))
+                             .Include(z => z.profiledata_hobby.Select(s => s.lu_hobby))
+                                .Include(z => z.profiledata_hotfeature.Select(s => s.lu_hotfeature))
+                        .Include(z => z.profiledata_lookingfor.Select(s => s.lu_lookingfor))
+                        .Include(z => z.rateeratingvalues)
+                        .Include(z => z.createdactions)
+                        .Include(z => z.targetofactions)
+                        .Include(z => z.applications)
 
-                      .Include(x => x.profile.profiledata.lu_gender)
-                      .Include(x => x.profile.profiledata.lu_haircolor)
-                      .Include(x => x.profile.profiledata.lu_havekids)
-                      .Include(x => x.profile.profiledata.lu_humor)
-                      .Include(x => x.profile.profiledata.lu_incomelevel)
-                      .Include(x => x.profile.profiledata.lu_livingsituation)
-                      .Include(x => x.profile.profiledata.lu_maritalstatus)
-                      .Include(x => x.profile.profiledata.lu_politicalview)
-                      .Include(x => x.profile.profiledata.lu_profession)
-                      .Include(x => x.profile.profiledata.lu_religion)
-                      .Include(x => x.profile.profiledata.lu_religiousattendance)
-                      .Include(x => x.profile.profiledata.lu_sign)
-                      .Include(x => x.profile.profiledata.lu_smokes)
-                       .Include(x => x.profile.profiledata.lu_wantskids)
+                        .Include(x => x.profile.profiledata)
+                         .Include(x => x.profile.profiledata.lu_bodytype)
+                         .Include(x => x.profile.profiledata.lu_diet)
+                     .Include(x => x.profile.profiledata.lu_drinks)
+                      .Include(x => x.profile.profiledata.lu_educationlevel)
+                       .Include(x => x.profile.profiledata.lu_employmentstatus)
+                        .Include(x => x.profile.profiledata.lu_exercise)
+                         .Include(x => x.profile.profiledata.lu_eyecolor)
 
-                   
-                    
-                       //searchsettings
-                       .Include(x => x.searchsettings.Select(s => s.details))
-                          .Include(x => x.searchsettings.Select(s => s.locations))
+                          .Include(x => x.profile.profiledata.lu_gender)
+                          .Include(x => x.profile.profiledata.lu_haircolor)
+                          .Include(x => x.profile.profiledata.lu_havekids)
+                          .Include(x => x.profile.profiledata.lu_humor)
+                          .Include(x => x.profile.profiledata.lu_incomelevel)
+                          .Include(x => x.profile.profiledata.lu_livingsituation)
+                          .Include(x => x.profile.profiledata.lu_maritalstatus)
+                          .Include(x => x.profile.profiledata.lu_politicalview)
+                          .Include(x => x.profile.profiledata.lu_profession)
+                          .Include(x => x.profile.profiledata.lu_religion)
+                          .Include(x => x.profile.profiledata.lu_religiousattendance)
+                          .Include(x => x.profile.profiledata.lu_sign)
+                          .Include(x => x.profile.profiledata.lu_smokes)
+                           .Include(x => x.profile.profiledata.lu_wantskids)
 
 
-                .Select().FirstOrDefault();
+
+                           //searchsettings
+                           .Include(x => x.searchsettings.Select(s => s.details))
+                              .Include(x => x.searchsettings.Select(s => s.locations))
+
+
+                    .Select().FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
         }
 
         /// <summary>
@@ -441,6 +451,7 @@ namespace Anewluv.DataExtentionMethods
                     try
                     {
                         //get the profileDta                    
+                         profile profile = db.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = model.profileid.Value });
 
                         searchsetting Newsearchsettings = new searchsetting();
 
@@ -450,6 +461,16 @@ namespace Anewluv.DataExtentionMethods
                         Newsearchsettings.searchrank =null;
                         Newsearchsettings.creationdate = DateTime.Now;
                         Newsearchsettings.searchname = searchname;
+                        //TO Do put in perfect macth settings closer to user's profile data
+                        if (searchname == "MyPerfectMatch")
+                        {
+                            var myage = DateManipulation.GetAge(DateTime.Now, profile.profiledata.birthdate.GetValueOrDefault());
+                            Newsearchsettings.agemin = myage !=null ?  myage : 18;
+                            Newsearchsettings.agemax = myage != null ? myage + 20 : 99;
+                            Newsearchsettings.distancefromme = 500;
+                            Newsearchsettings.heightmax = 89;
+                            Newsearchsettings.heightmin = 48;
+                        }
 
                         Newsearchsettings.ObjectState = Repository.Pattern.Infrastructure.ObjectState.Added;
                         //Newsearchsettings.profiledata = this.GetProfileDataByProfileID(profileid);

@@ -621,7 +621,7 @@ namespace Anewluv.Services.MemberActions
              
                     try
                     {
-
+                       var activitylist = new List<ActivityModel>(); OperationContext ctx = OperationContext.Current;
                         var task = Task.Factory.StartNew(() =>
                         {
 
@@ -669,6 +669,37 @@ namespace Anewluv.Services.MemberActions
                                 //handele the update using EF
                                 // this. db.Repository<profile>().Queryable().AttachAsModified(Profile, this.ChangeSet.GetOriginal(Profile));
                                 db.Repository<action>().Insert(newaction);
+
+                                //int? currentactivitytype = null;
+                                // switch ( model.actiontypeid.GetValueOrDefault())
+                                //{
+                                //    case (int)actiontypeEnum.Like:
+                                //        currentactivitytype = (int)activitytypeEnum.sentlike;
+                                //        break;
+                                //    case (int)actiontypeEnum.Peek:
+                                //        currentactivitytype = (int)activitytypeEnum.pe;
+                                //        break;
+                                //    case (int)actiontypeEnum.Interest:
+                                //        currentactivitytype = (int)activitytypeEnum.sentlike;
+                                //        break;
+                                //    case (int)actiontypeEnum.Peek:
+                                //        currentactivitytype = (int)activitytypeEnum.sentlike;
+                                //        break;
+                                //    case (int)actiontypeEnum.Peek:
+                                //        currentactivitytype = (int)activitytypeEnum.sentlike;
+                                //        break;
+                                //    case (int)actiontypeEnum.Peek:
+                                //        currentactivitytype = (int)activitytypeEnum.sentlike;
+                                //        break;
+                                //    case (int)actiontypeEnum.Peek:
+                                //        currentactivitytype = (int)activitytypeEnum.sentlike;
+                                //        break;
+                                //    default:
+                                //        currentactivitytype = null;
+                                //        break;
+                                //}
+
+                                // activitylist.Add(Api.AnewLuvLogging.CreateActivity(model.profileid.GetValueOrDefault(), currentactivitytype,ctx));}
 
                             }
 

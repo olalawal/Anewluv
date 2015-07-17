@@ -320,11 +320,62 @@ namespace Nmedia.Services.Authorization
 
         }
 
+        public async Task InValidateUserApiKey(ApiKeyValidationModel model)
+        {
+
+            try
+            {
+
+                //Convert the string into a Guid and validate it
+                // not validating against a list anymore
+
+
+
+                   var application = await _unitOfWorkAsync.RepositoryAsync<lu_application>().Query(p => p.id == model.application_id).SelectAsync();
+                   var validapplication = application.FirstOrDefault();
+
+                   if (validapplication != null)
+                   {
+                       
+                       //user handling   
+                       //check for existing user that is tied to this application, search the apikey table
+                       var result = await _unitOfWorkAsync.RepositoryAsync<user>()
+                           .Query(p => p.username.ToUpper() == model.username.ToUpper() && p.useridentifier == model.useridentifier && p.apikeys.Any(z => z.application_id == validapplication.id)).SelectAsync();
+
+                       var existinguser = result.FirstOrDefault();
+                       if (existinguser != null)
+                           DeactivateAllApiKeysByUserIdentifierAndKeyAndApplication(existinguser.id, validapplication.id);
+                   }
+
+               
+            }
+
+
+
+            catch (Exception ex)
+            {
+
+                //instantiate logger here so it does not break anything else.
+                logger = new Logging(applicationEnum.MemberService);
+                //int profileid = Convert.ToInt32(viewerprofileid);
+                logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member Apikey service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw ex;
+
+                //throw convertedexcption;
+            }
+
+
+        }
+
         /// <summary>
         /// invalidate all other API keys , its part of the retival of a new key so its not asycn, should be fast becuase its a store cammand in any case
         /// </summary>
         /// <param name="model"></param>
-        private  void InValidateApiKeysByUserIdentifierAndKeyAndApplication(int userid,Guid keyvalue, int application_id, IUnitOfWorkAsync db)
+        private  void DeactivateOldApiKeysByUserIdentifierAndKeyAndApplication(int userid,Guid keyvalue, int application_id)
         {
 
             try
@@ -337,7 +388,7 @@ namespace Nmedia.Services.Authorization
                 
              //   var task = Task.Factory.StartNew(() =>
               //  {      
-                _storedProcedures.ResetApiKeys(userid.ToString(),keyvalue.ToString(), application_id.ToString());
+                _storedProcedures.ResetApplicationtUserApiKeys(userid.ToString(),keyvalue.ToString(), application_id.ToString());
                         //return result.key;
 
               //  });
@@ -354,6 +405,43 @@ namespace Nmedia.Services.Authorization
                 //int profileid = Convert.ToInt32(viewerprofileid);
                 logger.WriteSingleEntry(logseverityEnum.Warning, globals.getenviroment, ex, null);
                
+                //throw convertedexcption;
+                //log the error and do nothing for for now
+            }
+
+
+        }
+
+        private void DeactivateAllApiKeysByUserIdentifierAndKeyAndApplication(int userid,int application_id)
+        {
+
+            try
+            {
+
+                //Convert the string into a Guid and validate it
+                // not validating against a list anymore
+
+
+
+                //   var task = Task.Factory.StartNew(() =>
+                //  {      
+                _storedProcedures.DeactivateApplicationUserApiKeys(userid.ToString(), application_id.ToString());
+                //return result.key;
+
+                //  });
+                // await task.ConfigureAwait(false);
+            }
+
+
+
+            catch (Exception ex)
+            {
+
+                //instantiate logger here so it does not break anything else.
+                logger = new Logging(applicationEnum.MemberService);
+                //int profileid = Convert.ToInt32(viewerprofileid);
+                logger.WriteSingleEntry(logseverityEnum.Warning, globals.getenviroment, ex, null);
+
                 //throw convertedexcption;
                 //log the error and do nothing for for now
             }
@@ -492,7 +580,7 @@ namespace Nmedia.Services.Authorization
                        
                         //disable all other keys for this user since we have made a new one
                         //async call
-                        InValidateApiKeysByUserIdentifierAndKeyAndApplication(userid,newkey.keyvalue,applicationid, db);
+                        DeactivateOldApiKeysByUserIdentifierAndKeyAndApplication(userid, newkey.keyvalue, applicationid);
 
                         return newkey.keyvalue;
                 }

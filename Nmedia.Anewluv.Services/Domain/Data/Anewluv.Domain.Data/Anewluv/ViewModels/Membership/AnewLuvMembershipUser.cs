@@ -23,6 +23,7 @@ namespace Anewluv.Domain.Data
             string _ziporpostalcode;
             string _city;
             string _country;
+            int? _countryid;
             double? _longitude;
             double? _latitude;
             string _stateprovince;
@@ -77,6 +78,13 @@ namespace Anewluv.Domain.Data
                 get { return _country; }
                 set { _country = value; }
             }
+            [DataMember]
+            public int? countryid
+            {
+                get { return _countryid; }
+                set { _countryid = value; }
+            }
+
             [DataMember]
             public int profileid
             {
@@ -177,6 +185,7 @@ namespace Anewluv.Domain.Data
                 this.screenName = screenName;
                 this.city = city;
                 this.country = country;
+                this.countryid = countryid;
                 this.birthdate = birthdate;
                 this.profileid = profileid;
                 // this.securityquestion  = securityquestion;

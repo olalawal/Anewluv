@@ -279,7 +279,9 @@ namespace Anewluv.DataExtentionMethods
                     model.mycatchyintroline = profile.profiledata.mycatchyintroLine;
                     model.aboutme = profile.profiledata.aboutme;
                     model.online = db.Repository<profile>().getuseronlinestatus(new ProfileModel { profileid = profile.id });
-                    model.perfectmatchsettings = profile.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault();
+                   
+                    model.perfectmatchsettings = profile.profilemetadata.searchsettings != null ? profile.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault() : null;
+                 
                     // PerfectMatchSettings = Currentprofiledata.SearchSettings.First();
                     //DistanceFromMe = 0  get distance from somwhere else
                     //to do do something with the unaproved photos so it is a nullable value , private photos are linked too here
@@ -703,19 +705,21 @@ namespace Anewluv.DataExtentionMethods
             // db.DisableProxyCreation = false;
           //  db.DisableLazyLoading = false;
             MembersViewModel model = new MembersViewModel();
-            profile profile = new profile();
+           // profile profile = new profile();
 
     
 
-            profile = db.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = newmodel.profileid.Value}); //  .getprofilebyprofileid(newmodel);
+          //  profile = db.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = newmodel.profileid.Value}); //  .getprofilebyprofileid(newmodel);
+
+           // profile profile = db.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = newmodel.profileid.GetValueOrDefault()) });
            
             //handles failues in lazy loading
             //TO DO this should be a try cacth with exception handling
-            if (profile.profilemetadata == null)
-            {
-                profile.profiledata = db.Repository<profiledata>().getprofiledatabyprofileid(new ProfileModel { profileid = model.profile_id });
-                profile.profilemetadata = db.Repository<profilemetadata>().getprofilemetadatabyprofileid(new ProfileModel { profileid = model.profile_id });
-            }
+          //  if (profile.profilemetadata == null)
+          //  {
+            //    profile.profiledata = db.Repository<profiledata>().getprofiledatabyprofileid(new ProfileModel { profileid = model.profile_id });
+               profilemetadata profilemetadata = db.Repository<profilemetadata>().getprofilemetadatabyprofileid(new ProfileModel { profileid = newmodel.profileid.GetValueOrDefault() });
+           // }
 
             try
             {
@@ -723,31 +727,31 @@ namespace Anewluv.DataExtentionMethods
                  // new HashSet<int>(profile.profilemetadata.searchsettings.FirstOrDefault().details.Where(p=>p.lu_searchsettingdetailtype == (int)searchsettingdetailtypeEnum.gender) : null;
                 //TO DO do away with this since we already have the profile via include from the profile DATA
                 // model.Profile = model.profile;
-                model.profile_id = profile.id;
+                model.profile_id = profilemetadata.profile.id;
                 //4-28-2012 added mapping for profile visiblity
 
-                model.profilevisiblity = profile.profiledata.visiblitysettings.FirstOrDefault();   //swict this to have flags 
-                model.profile = profile;
+                model.profilevisiblity = profilemetadata.profile.profiledata.visiblitysettings.FirstOrDefault();   //swict this to have flags 
+                model.profile = profilemetadata.profile;
                
                 //on first load this should always be false
                 //to DO   DO  we still need this
                 model.profilestatusmessageshown = false;
-                model.mygenderid = profile.profiledata.gender_id.GetValueOrDefault();
+                model.mygenderid = profilemetadata.profile.profiledata.gender_id.GetValueOrDefault();
                
                 //get the user's gender and the use the if below to convert it to to default oppos
 
-                if (profile.profilemetadata.searchsettings.FirstOrDefault() != null && profile.profilemetadata.searchsettings.FirstOrDefault().details !=null) 
-                {
-                    foreach (var item in profile.profilemetadata.searchsettings.FirstOrDefault().details.Where(p =>  p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.gender))
-                    {
-                        model.lookingforgendersid.Add(item.value);                        
-                    }             
-                }
+                //if (profilemetadata.searchsettings.FirstOrDefault() != null && profilemetadata.searchsettings.FirstOrDefault().details !=null) 
+                //{
+                //    foreach (var item in profilemetadata.profile.profilemetadata.searchsettings.FirstOrDefault().details.Where(p => p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.gender))
+                //    {
+                //        model.lookingforgendersid.Add(item.value);                        
+                //    }             
+                //}
                 
                 //add default i.e opposite if user does not have it in details
-                if (model.lookingforgendersid.Count  != null)
+                if (model.defaultlookingforgenders.Count != null)
                 {
-                    model.lookingforgendersid.Add(Extensions.GetLookingForGenderID(profile.profiledata.gender_id.GetValueOrDefault()));
+                    model.defaultlookingforgenders.Add(Extensions.GetLookingForGenderID(profilemetadata.profile.profiledata.gender_id.GetValueOrDefault()));
                 }
 
 
@@ -756,15 +760,15 @@ namespace Anewluv.DataExtentionMethods
                 model.mycountryname = "United States";// georepository.getcountrynamebycountryid(profile.profiledata.countryid);
 #else
 
-                model.mycountryname = spatialextentions.getcountrynamebycountryid(new GeoModel { countryid = profile.profiledata.countryid.GetValueOrDefault().ToString() }, geodb);
+                model.mycountryname = spatialextentions.getcountrynamebycountryid(new GeoModel { countryid = profilemetadata.profile.profiledata.countryid.GetValueOrDefault().ToString() }, geodb);
 
 #endif
 
-                model.mycountryid = profile.profiledata.countryid.GetValueOrDefault();
-                model.mycity = profile.profiledata.city;
+                model.mycountryid = profilemetadata.profile.profiledata.countryid.GetValueOrDefault();
+                model.mycity = profilemetadata.profile.profiledata.city;
                 //TO DO items need to be populated with real values, in this case change model to double for latt
-                model.mylatitude = profile.profiledata.latitude.ToString(); //model.Lattitude
-                model.mylongitude = profile.profiledata.longitude.ToString();
+                model.mylatitude = profilemetadata.profile.profiledata.latitude.ToString(); //model.Lattitude
+                model.mylongitude = profilemetadata.profile.profiledata.longitude.ToString();
                 //update 9-21-2011 get fro search settings
                // model.maxdistancefromme = profile.profilemetadata.searchsettings != null ? profile.profilemetadata.searchsettings.FirstOrDefault().distancefromme.GetValueOrDefault() : 500;
 

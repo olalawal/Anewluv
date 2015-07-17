@@ -25,7 +25,7 @@ using System.Threading.Tasks;
 using Nmedia.Infrastructure.Domain.Data.Apikey;
 using System.Xml;
 using Anewluv.Domain.Data;
-using Anewluv.Domain.Data.Anewluv.ViewModels;
+using Anewluv.Domain.Data.ViewModels;
 using Nmedia.Infrastructure.Utils;
 using System.ServiceModel.Dispatcher;
 //using Anewluv.Lib;

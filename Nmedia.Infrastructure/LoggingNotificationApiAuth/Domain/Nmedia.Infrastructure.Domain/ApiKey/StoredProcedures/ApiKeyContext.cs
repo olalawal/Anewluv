@@ -17,17 +17,31 @@ namespace Nmedia.Infrastructure.Domain
 
 {
 
-    public void ResetApiKeys(string userid,string keyvalue,string application_id)
+        public async Task ResetApplicationtUserApiKeys(string userid, string keyvalue, string application_id)
     {
         try
         {
-            var unicornNames = Database.ExecuteSqlCommand("UPDATE Apikeys SET active = 'false' WHERE user_id = {0} and keyvalue <> {1} and application_id = {2} ", userid, keyvalue, application_id);
+            await Database.ExecuteSqlCommandAsync("UPDATE Apikeys SET active = 'false' WHERE user_id = {0} and keyvalue <> {1} and application_id = {2} ", userid, keyvalue, application_id);
         }
         catch ( Exception ex)
             {
             
             var dd = ex.Message;
             }
+
+    }
+
+    public async Task DeactivateApplicationUserApiKeys(string userid,string application_id)
+    {
+        try
+        {
+          await Database.ExecuteSqlCommandAsync("UPDATE Apikeys SET active = 'false' WHERE application_id = {2} ", userid, application_id);
+        }
+        catch (Exception ex)
+        {
+
+            var dd = ex.Message;
+        }
 
     }
 

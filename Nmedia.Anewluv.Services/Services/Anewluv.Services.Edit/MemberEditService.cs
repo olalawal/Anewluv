@@ -32,6 +32,7 @@ using Nmedia.Infrastructure;
 using Repository.Pattern.Infrastructure;
 using Nmedia.Infrastructure.Domain.Data.Apikey.DTOs;
 using Nmedia.Infrastructure.Domain.Data.Apikey;
+using Anewluv.Domain.Data.ViewModels;
 
 //TO DO cache all the gets in redis and update when items are saved to keep it in sync
 
@@ -645,6 +646,8 @@ namespace Anewluv.Services.Edit
                 {
                     try
                     {
+
+                        var activitylist = new List<ActivityModel>(); OperationContext ctx = OperationContext.Current;   
                          var task = Task.Factory.StartNew(() =>
                     {
 
@@ -669,6 +672,11 @@ namespace Anewluv.Services.Edit
                             AnewluvMessages.errormessages.Add("There was a problem Editing You Basic Settings, Please try again later");
                             return AnewluvMessages;
                         }
+
+                        //log activity
+                        foreach (activitytypeEnum activity in AnewluvMessages.actvitytypes) { activitylist.Add(Api.AnewLuvLogging.CreateActivity(p.id, (int)activity, ctx)); }
+                        Api.AnewLuvLogging.LogProfileActivities(activitylist);
+
                         AnewluvMessages.messages.Add("Edit Basic Settings Successful");
                         return AnewluvMessages;
                     });
@@ -728,6 +736,11 @@ namespace Anewluv.Services.Edit
                             AnewluvMessages.errormessages.Add("There was a problem Editing You Appearance Settings, Please try again later");
                             return AnewluvMessages;
                         }
+
+                        var activitylist = new List<ActivityModel>(); OperationContext ctx = OperationContext.Current;
+                        foreach (activitytypeEnum activity in AnewluvMessages.actvitytypes) { activitylist.Add(Api.AnewLuvLogging.CreateActivity(p.id, (int)activity, ctx)); }
+                        Api.AnewLuvLogging.LogProfileActivities(activitylist);
+
                         AnewluvMessages.messages.Add("Edit Appearance Settings Successful");
                         return AnewluvMessages;
 
@@ -792,6 +805,11 @@ namespace Anewluv.Services.Edit
                             AnewluvMessages.errormessages.Add("There was a problem Editing You character Settings, Please try again later");
                             return AnewluvMessages;
                         }
+
+                        var activitylist = new List<ActivityModel>(); OperationContext ctx = OperationContext.Current;
+                        foreach (activitytypeEnum activity in AnewluvMessages.actvitytypes) { activitylist.Add(Api.AnewLuvLogging.CreateActivity(p.id, (int)activity, ctx)); }
+                        Api.AnewLuvLogging.LogProfileActivities(activitylist);
+
                         AnewluvMessages.messages.Add("Edit character Settings Successful");
                         return AnewluvMessages;
                          });
@@ -856,6 +874,11 @@ namespace Anewluv.Services.Edit
                             AnewluvMessages.errormessages.Add("There was a problem Editing You lifestyle Settings, Please try again later");
                             return AnewluvMessages;
                         }
+
+                        var activitylist = new List<ActivityModel>(); OperationContext ctx = OperationContext.Current;
+                        foreach (activitytypeEnum activity in AnewluvMessages.actvitytypes) { activitylist.Add(Api.AnewLuvLogging.CreateActivity(p.id, (int)activity, ctx)); }
+                        Api.AnewLuvLogging.LogProfileActivities(activitylist);
+
                         AnewluvMessages.messages.Add("Edit lifestyle Settings Successful");
                         return AnewluvMessages;
                     });
@@ -892,23 +915,48 @@ namespace Anewluv.Services.Edit
         private AnewluvMessages updatememberbasicsettings(EditProfileModel newmodel, profile p, AnewluvMessages messages)
         {
 
+
             try
             {
-
-
                bool updated = false;
                var convertedbirthdate = (DateTime?)newmodel.basicsettings.birthdate.Value.Date;
 
                 //TO DO
-                //Up here we will check to see if the values have not changed 
-                if (  p.profiledata.birthdate.Value.Date != convertedbirthdate ) { p.profiledata.birthdate = convertedbirthdate  ; updated =true; };
+                //TO DO must be suscribere to change birthdate more than once so check the profile activities for prior change
+                if (  p.profiledata.birthdate.Value.Date != convertedbirthdate ) { 
+                    p.profiledata.birthdate = convertedbirthdate  ; updated =true;                 
+                     messages.actvitytypes.Add(activitytypeEnum.changebirthdate);
+
+                
+                };
+
+                //TO DO must be suscriber to change screen name 
+                if (!string.IsNullOrEmpty(newmodel.basicsettings.screenname) && p.screenname != newmodel.basicsettings.screenname)
+                {
+                    var existingscreenname =  _unitOfWorkAsync.Repository<profile>().checkifscreennamealreadyexists(new ProfileModel { screenname  = newmodel.basicsettings.screenname});
+                    if (!existingscreenname)
+                    {
+                       updated = true;
+                        messages.actvitytypes.Add(activitytypeEnum.changescreenname);
+                        updated = true;
+                    }
+                };
+
+                if (newmodel.basicsettings.gender.id != 0 && p.profiledata.gender_id != newmodel.basicsettings.gender.id)
+                { 
+                    p.profiledata.gender_id = newmodel.basicsettings.gender.id; updated = true;                 
+                    messages.actvitytypes.Add(activitytypeEnum.updatedgendersettings);
+                };
+
+
+
                 if (p.profiledata.aboutme != newmodel.basicsettings.aboutme) { p.profiledata.aboutme = newmodel.basicsettings.aboutme; updated = true; };                
                 if (  p.profiledata.mycatchyintroLine !=newmodel.basicsettings.catchyintroline ) { p.profiledata.mycatchyintroLine = newmodel.basicsettings.catchyintroline  ; updated =true; };
                 if (p.profiledata.city != newmodel.basicsettings.city) { p.profiledata.city = newmodel.basicsettings.city; updated = true; };                
                 if ( (newmodel.basicsettings.stateprovince != null ) && p.profiledata.stateprovince != newmodel.basicsettings.stateprovince ) { p.profiledata.stateprovince = newmodel.basicsettings.stateprovince  ; updated =true; };              
                 if (newmodel.basicsettings.countryid != null &&  p.profiledata.countryid != newmodel.basicsettings.countryid) { p.profiledata.countryid = newmodel.basicsettings.countryid  ; updated =true; };
-                if (  newmodel.basicsettings.gender.id !=0 &&  p.profiledata.gender_id != newmodel.basicsettings.gender.id ) { p.profiledata.gender_id = newmodel.basicsettings.gender.id  ; updated =true; };
-                if (  (p.profiledata.postalcode !=null |  p.profiledata.postalcode !="" )&&  p.profiledata.postalcode != newmodel.basicsettings.postalcode ) { p.profiledata.postalcode = newmodel.basicsettings.postalcode  ; updated =true; };
+               
+                if ((p.profiledata.postalcode !=null |  p.profiledata.postalcode !="" )&&  p.profiledata.postalcode != newmodel.basicsettings.postalcode ) { p.profiledata.postalcode = newmodel.basicsettings.postalcode  ; updated =true; };
                 if ((newmodel.basicsettings.phonenumber  != "" | newmodel.basicsettings.phonenumber  != "NA") &&  p.profiledata.phone!= newmodel.basicsettings.phonenumber ) { p.profiledata.phone = newmodel.basicsettings.phonenumber  ; updated =true; };
              
 
@@ -919,7 +967,7 @@ namespace Anewluv.Services.Edit
                     p.modificationdate = DateTime.Now;                   
                     _unitOfWorkAsync.Repository<profile>().InsertOrUpdateGraph(p);
                     _unitOfWorkAsync.SaveChanges();
-                    Api.AnewLuvLogging.LogProfileActivity(new ProfileModel { profileid = p.id }, (int)activitytypeEnum.updateprofile, OperationContext.Current);
+                      messages.actvitytypes.Add(activitytypeEnum.updateprofile);
                 }
 
                   // LogProfileActivity(ProfileModel ProfileModel, int activitytypeid,OperationContext context)
@@ -929,10 +977,12 @@ namespace Anewluv.Services.Edit
                     //update the search settings 
                     searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().getorcreatesearchsettings(new SearchSettingsModel { profileid = p.id,searchname = "MyPerfectMatch" },_unitOfWorkAsync);
                     //empty search setting handling
-                   
-               
                     messages = searchsettingsextentions.updatebasicsearchsettings(newmodel.basicsearchsettings, s, messages, _unitOfWorkAsync);
+                 
                 }
+
+                //log activities
+               
 
 
                 //TOD DO
@@ -958,6 +1008,7 @@ namespace Anewluv.Services.Edit
         {
             bool profileupdated = false ;
             bool profilelistsupdated  = false;
+         //  var activitylist = new List<ActivityModel>(); OperationContext ctx = OperationContext.Current;
 
             try
             {
@@ -1047,6 +1098,7 @@ namespace Anewluv.Services.Edit
                 {
                     _unitOfWorkAsync.SaveChanges();
                     messages.messages.Add("Appearance settings have been updated !");
+                     messages.actvitytypes.Add(activitytypeEnum.updateprofile);
                 }
                 else
                 {
@@ -1056,11 +1108,13 @@ namespace Anewluv.Services.Edit
                 if (newmodel.appearancesearchsettings != null)
                 {
                     searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().getorcreatesearchsettings(new SearchSettingsModel { profileid = p.id, searchname = "MyPerfectMatch" }, _unitOfWorkAsync);
-                    //empty search setting handling
-                   
-               
+                    //empty search setting handling     
                     messages = searchsettingsextentions.updateappearancesearchsettings(newmodel.appearancesearchsettings, s, messages, _unitOfWorkAsync);
+                 
+                  
                 }
+
+            
                 //TOD DO
                 //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
                 //update session too just in case
@@ -1088,6 +1142,7 @@ namespace Anewluv.Services.Edit
         {
             bool profileupdated = false;
             bool profilelistsupdated = false;
+           var activitylist = new List<ActivityModel>(); OperationContext ctx = OperationContext.Current;
 
             try
             {
@@ -1217,7 +1272,7 @@ namespace Anewluv.Services.Edit
                 if (profileupdated)
                 {
                     p.ObjectState = ObjectState.Modified;
-                    _unitOfWorkAsync.Repository<profiledata>().Update(p.profiledata);
+                    _unitOfWorkAsync.Repository<profiledata>().Update(p.profiledata);                   
 
                 }
 
@@ -1225,6 +1280,7 @@ namespace Anewluv.Services.Edit
                 {
                     _unitOfWorkAsync.SaveChanges();
                     messages.messages.Add("Character settings have been updated !");
+                    messages.actvitytypes.Add(activitytypeEnum.updateprofile);
                 }
                 {
                     messages.errormessages.Add("Nothing to update!");
@@ -1235,9 +1291,16 @@ namespace Anewluv.Services.Edit
                {
                    searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().getorcreatesearchsettings(new SearchSettingsModel { profileid = p.id, searchname = "MyPerfectMatch" }, _unitOfWorkAsync);
                    //handling for a new search
-                  
+                 //  foreach (activitytypeEnum activity in messages.actvitytypes) { activitylist.Add(Api.AnewLuvLogging.CreateActivity(p.id, (int)activity,ctx));} }
                    messages = searchsettingsextentions.updatecharactersearchsettings(newmodel.charactersearchsettings, s, messages, _unitOfWorkAsync);
+                 
+                  
+
                }
+
+               //log activities
+               //if (activitylist.Count() > 0) Api.AnewLuvLogging.LogProfileActivities(activitylist);
+
                 
                 
                 //TOD DO
@@ -1267,6 +1330,7 @@ namespace Anewluv.Services.Edit
         {
             bool profileupdated = false;
             bool profilelistsupdated = false;
+          //  var activitylist = new List<ActivityModel>(); OperationContext ctx = OperationContext.Current;
 
             try
             {
@@ -1397,6 +1461,8 @@ namespace Anewluv.Services.Edit
                 {
                     _unitOfWorkAsync.SaveChanges();
                     messages.messages.Add("Character settings have been updated !");
+                    //activitylist.Add(Api.AnewLuvLogging.CreateActivity(p.id, (int)activitytypeEnum.updateprofile, ctx));
+                    messages.actvitytypes.Add(activitytypeEnum.updateprofile);
                 }
                 {
                     messages.errormessages.Add("Nothing has changed so nothing updated!");
@@ -1413,11 +1479,13 @@ namespace Anewluv.Services.Edit
                if (newmodel.lifestylesearchsettings != null)
                {
                    searchsetting s = _unitOfWorkAsync.Repository<searchsetting>().getorcreatesearchsettings(new SearchSettingsModel { profileid = p.id, searchname = "MyPerfectMatch" }, _unitOfWorkAsync);
-                  
-               
+                   //add all relevant activities to the list
+                  // foreach(activitytypeEnum activity in messages.actvitytypes ) { activitylist.Add(Api.AnewLuvLogging.CreateActivity(p.id, (int)activity,ctx));}
                    messages = searchsettingsextentions.updatelifestylesearchsettings(newmodel.lifestylesearchsettings, s, messages, _unitOfWorkAsync);
                }
 
+               //log activities
+             //  if (activitylist.Count() > 0) Api.AnewLuvLogging.LogProfileActivities(activitylist);
 
             }
             catch (Exception ex)

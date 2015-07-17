@@ -28,9 +28,11 @@ using Nmedia.Infrastructure.Domain.Data;
 
 using Anewluv.DataExtentionMethods;
 using System.Threading.Tasks;
-using Anewluv.Domain.Data.Anewluv.ViewModels;
+using Anewluv.Domain.Data.ViewModels;
 using Repository.Pattern.UnitOfWork;
 using Repository.Pattern.Infrastructure;
+using Nmedia.Infrastructure;
+
 
 
 namespace Anewluv.Services.Members
@@ -873,7 +875,7 @@ namespace Anewluv.Services.Members
         }
 
 
-      public async Task addprofileactvity(ActivityModel model)
+       public async Task addprofileactvity(ActivityModel model)
         {
             //get the profile
             //profile myProfile;
@@ -898,14 +900,12 @@ namespace Anewluv.Services.Members
                         
                     var task = Task.Factory.StartNew(() =>
                     {
-                        var id = addprofileactvity(model.activitybase, _unitOfWorkAsync); 
-                             //get the ID and save geodata if there is data for it
-                             model.activitygeodata.activity_id =id;
-                             
-                             if (id!=0 && ( model.activitygeodata.countryname != null | ( model.activitygeodata.lattitude != 0 & model.activitygeodata.longitude !=0)) )
-                                 addprofileactvitygeodata(model.activitygeodata, _unitOfWorkAsync);
-                   
-                           });
+                        var id = addprofileactvity(model.activitybase);
+                         //get the ID and save geodata if there is data for it
+                        model.activitygeodata.activity_id = id;
+                        if (id != 0 && (model.activitygeodata.countryname != null | (model.activitygeodata.lattitude != 0 & model.activitygeodata.longitude != 0)))
+                            addprofileactvitygeodata(model.activitygeodata, _unitOfWorkAsync);
+                    });
                     await task.ConfigureAwait(false);
                        
                       
@@ -920,9 +920,9 @@ namespace Anewluv.Services.Members
                         logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.activitybase.profile_id));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member service");
-                        string ErrorMessage = "";
-                        string ErrorDetail = "ErrorMessage: " + ex.Message;
-                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                      //  string ErrorMessage = "";
+                     //   string ErrorDetail = "ErrorMessage: " + ex.Message;
+                      //  throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
 
                         //throw convertedexcption;
                     }
@@ -931,27 +931,66 @@ namespace Anewluv.Services.Members
 
         }
 
+       public async Task addprofileactivities(List<ActivityModel> models)
+      {
+        
+              {
+
+                  try
+                  {
+                      //update all other sessions that were not properly logged out
+                      // var  myQuery = _unitOfWorkAsync.Repository<userlogtime>().Queryable().Where(p => p.profile_id == model.profileid.Value && p.offline == false).ToList(); ;
+
+                      //do nothing if we have no models
+                      if (models.Count() == 0 )return;
+
+                      var task = Task.Factory.StartNew(() =>
+                      {
+                          foreach (ActivityModel item in models)
+                          {
+                              var id = addprofileactvity(item.activitybase);
+                              //get the ID and save geodata if there is data for it
+                              item.activitygeodata.activity_id = id;
+
+                              if (id != 0 && (item.activitygeodata.countryname != null | (item.activitygeodata.lattitude != 0 & item.activitygeodata.longitude != 0)))
+                                  addprofileactvitygeodata(item.activitygeodata, _unitOfWorkAsync);
+                          }
+                      });
+                      await task.ConfigureAwait(false);
+
+
+
+                  }
+                  catch (Exception ex)
+                  {
+                      // transaction.Rollback();
+                      //instantiate logger here so it does not break anything else.
+                      logger = new Logging(applicationEnum.MemberService);
+                      var dd = models.FirstOrDefault();
+
+                      if(dd!=null && dd.activitybase !=null)
+                      logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(dd.activitybase.profile_id));
+                      //can parse the error to build a more custom error mssage and populate fualt faultreason
+                   //   FaultReason faultreason = new FaultReason("Error in member service");
+                   //   string ErrorMessage = "";
+                   //   string ErrorDetail = "ErrorMessage: " + ex.Message;
+                     // throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                      //throw convertedexcption;
+                  }
+              }
+          
+
+      }
+ 
         /// <summary>
         /// actvity ID is needed for this so use this carefully
         /// </summary>
         /// <param name="model"></param>
-      public async Task addprofileactvitygeodata(ActivityModel model)
+       public async Task addprofileactvitygeodata(ActivityModel model)
         {
-            //get the profile
-            //profile myProfile;
-            //IQueryable<userlogtime> myQuery = default(IQueryable<userlogtime>);
-            // profile myProfile = new profile();
-            // userlogtime myLogtime = new userlogtime();
-            //  DateTime currenttime = DateTime.Now;
-
-            //_unitOfWork.DisableProxyCreation = true;
-            
-            {
-
-               //do not audit on adds
-            // //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
-              //  {
-
+          
+           
                     try
                     {
                         //update all other sessions that were not properly logged out
@@ -978,31 +1017,23 @@ namespace Anewluv.Services.Members
                         //int profileid = Convert.ToInt32(viewerprofileid);
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.activitygeodata.activity_id));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
-                        FaultReason faultreason = new FaultReason("Error in member service");
-                        string ErrorMessage = "";
-                        string ErrorDetail = "ErrorMessage: " + ex.Message;
-                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                    //    FaultReason faultreason = new FaultReason("Error in member service");
+                    //    string ErrorMessage = "";
+                    //    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                   //     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
 
                         //throw convertedexcption;
                     }
-                }
-          // }
+                
+       
 
         }
 
         #region "private methods for actvity"
     
-        public int addprofileactvity(profileactivity model,IUnitOfWorkAsync db)
+        private int addprofileactvity(profileactivity model)
         {
-            //get the profile
-            //profile myProfile;
-            //IQueryable<userlogtime> myQuery = default(IQueryable<userlogtime>);
-            // profile myProfile = new profile();
-            // userlogtime myLogtime = new userlogtime();
-            //  DateTime currenttime = DateTime.Now;
-
-               //do not audit on adds
-                //using (var transaction = _unitOfWorkAsync.BeginTransaction())
+           
                 {
 
                     try
@@ -1010,25 +1041,18 @@ namespace Anewluv.Services.Members
                         //update all other sessions that were not properly logged out
                         // var  myQuery = _unitOfWorkAsync.Repository<userlogtime>().Queryable().Where(p => p.profile_id == model.profileid.Value && p.offline == false).ToList(); ;
 
+                        model.ObjectState = ObjectState.Added;
                         _unitOfWorkAsync.Repository<profileactivity>().Insert(model);
                             //save all changes bro
-                          var i  =_unitOfWorkAsync.SaveChanges();
+                        _unitOfWorkAsync.SaveChanges();
+
+                        return model.id;
                         //   // transaction.Commit();
-                            return model.id;
+                           
                     }
                     catch (Exception ex)
                     {
-                       //// transaction.Rollback();
-                        //instantiate logger here so it does not break anything else.
-                        logger = new Logging(applicationEnum.MemberService);
-                        //int profileid = Convert.ToInt32(viewerprofileid);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profile_id));
-                        //can parse the error to build a more custom error mssage and populate fualt faultreason
-                        FaultReason faultreason = new FaultReason("Error in member service");
-                        string ErrorMessage = "";
-                        string ErrorDetail = "ErrorMessage: " + ex.Message;
                         throw ex;
-
                         //throw convertedexcption;
                     }
                 
@@ -1039,42 +1063,31 @@ namespace Anewluv.Services.Members
         private int addprofileactvitygeodata(profileactivitygeodata model,IUnitOfWorkAsync db)
         {
 
-           //do not audit on adds
-             //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
-                {
-
+          
                     try
                     {
                         //update all other sessions that were not properly logged out
                         // var  myQuery = _unitOfWorkAsync.Repository<userlogtime>().Queryable().Where(p => p.profile_id == model.profileid.Value && p.offline == false).ToList(); ;
 
 
-
+                        model.ObjectState = ObjectState.Added;
                         _unitOfWorkAsync.Repository<profileactivitygeodata>().Insert(model);
                             //save all changes bro
                           var i  =_unitOfWorkAsync.SaveChanges();
+                         
                            // transaction.Commit();
 
-                           return model.id;
+                          return model.id; ; ;
 
 
                     }
                     catch (Exception ex)
                     {
-                       // transaction.Rollback();
-                        //instantiate logger here so it does not break anything else.
-                        logger = new Logging(applicationEnum.MemberService);
-                        //int profileid = Convert.ToInt32(viewerprofileid);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.activity_id));
-                        //can parse the error to build a more custom error mssage and populate fualt faultreason
-                        FaultReason faultreason = new FaultReason("Error in member service");
-                        string ErrorMessage = "";
-                        string ErrorDetail = "ErrorMessage: " + ex.Message;
                         throw ex;
 
                         //throw convertedexcption;
                     }
-                }
+                
             
 
         }

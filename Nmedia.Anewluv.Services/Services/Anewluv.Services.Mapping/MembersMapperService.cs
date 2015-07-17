@@ -1113,6 +1113,7 @@ namespace Anewluv.Services.Mapping
                         //get the  gender's from search settings
 
                         // int[,] courseIDs = new int[,] UserProfile.profiledata.searchsettings.FirstOrDefault().searchsettings_Genders.ToList();
+                      
                         int intAgeTo = perfectmatchsearchsettings.agemax != null ? perfectmatchsearchsettings.agemax.GetValueOrDefault() : 99;
                         int intAgeFrom = perfectmatchsearchsettings.agemin != null ? perfectmatchsearchsettings.agemin.GetValueOrDefault() : 18;
                         //Height
@@ -1121,7 +1122,7 @@ namespace Anewluv.Services.Mapping
                         bool blEvaluateHeights = intheightmin > 0 ? true : false;
                         //convert lattitudes from string (needed for JSON) to bool
                         double? myLongitude = (model.mylongitude != "") ? Convert.ToDouble(model.mylongitude) : 0;
-                        double? myLattitude = (model.mylongitude != "") ? Convert.ToDouble(model.mylongitude) : 0;
+                        double? myLattitude = (model.mylongitude != "") ? Convert.ToDouble(model.mylatitude) : 0;
                         //get the rest of the values if they are needed in calculations
 
 
@@ -1131,12 +1132,13 @@ namespace Anewluv.Services.Mapping
                         DateTime max = today.AddYears(-(intAgeFrom + 1));
                         DateTime min = today.AddYears(-intAgeTo);
 
-
+                       
                         //TO DO Move this to a function so its cleaner and re-usable
                         //get values from the collections to test for , this should already be done in the viewmodel mapper but juts incase they made changes that were not updated
                         //requery all the has tbls
-                        HashSet<int> LookingForGenderValues = new HashSet<int>();
-                        LookingForGenderValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.details.Where(p=>p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.gender).Select(c => c.value)) : LookingForGenderValues;
+                        HashSet<int> LookingForGenderValues =new HashSet<int>();
+                        LookingForGenderValues = (perfectmatchsearchsettings != null && perfectmatchsearchsettings.details.Where(p => p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.gender).Count() > 0) ? new HashSet<int>(perfectmatchsearchsettings.details.Where(p => p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.gender).Select(c => c.value))
+                        : model.defaultlookingforgenders;
                         //Appearacnce seache settings values         
 
                         //set a value to determine weather to evaluate hights i.e if this user has not height values whats the point ?
@@ -1178,8 +1180,10 @@ namespace Anewluv.Services.Mapping
                         //****** end of visiblity test settings *****************************************
 
                         var MemberSearchViewmodels = (from x in db.Repository<profiledata>().Queryable().Where(p => p.birthdate > min && p.birthdate <= max &&
-                              p.profile.profilemetadata.photos.Any(z => z.photostatus_id == (int)photostatusEnum.Gallery)).ToList()
-
+                              p.profile.profilemetadata.photos.Any(z => z.photostatus_id == (int)photostatusEnum.Gallery)  
+                              &&  LookingForGenderValues.Contains((int)p.gender_id)                              
+                              ).ToList()
+                              
                                             //** visiblity settings still needs testing           
                                                           //5-8-2012 add profile visiblity code here
                                                           // .Where(x => x.profile.username == "case")
@@ -1189,8 +1193,8 @@ namespace Anewluv.Services.Mapping
                                                           // .Where(x => x.ProfileVisiblitySetting != null || x.ProfileVisiblitySetting.countryid != null && x.ProfileVisiblitySetting.countryid == model.profile.profiledata.countryid  )
                                                           // .Where(x => x.ProfileVisiblitySetting != null || x.ProfileVisiblitySetting.GenderID != null && x.ProfileVisiblitySetting.GenderID ==  model.profile.profiledata.GenderID )
                                                           //** end of visiblity settings ***
-                                         .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.gender_id.GetValueOrDefault())).ToList() //using whereIF predicate function 
-                                         .WhereIf(LookingForGenderValues.Count == 0, z => model.lookingforgendersid.Contains(z.gender_id.GetValueOrDefault())).ToList() //  == model.lookingforgenderid)    
+                                        //using whereIF predicate function 
+                                        // .WhereIf(LookingForGenderValues.Count == 0, z => model.lookingforgendersid.Contains(z.gender_id.GetValueOrDefault())).ToList() //  == model.lookingforgenderid)    
                                                           //TO DO add the rest of the filitering here 
                                                           //Appearance filtering                         
                                          .WhereIf(blEvaluateHeights, z => z.height > intheightmin && z.height <= intheightmax).ToList() //Only evealuate if the user searching actually has height values they look for                         
@@ -1218,7 +1222,7 @@ namespace Anewluv.Services.Mapping
                                                           //       lookingforagefrom = x.profile.profilemetadata.searchsettings != null ? x.profile.profilemetadata.searchsettings.FirstOrDefault().agemin.ToString() : "25",
                                                    
 
-                                                      }).OrderByDescending(p => p.creationdate).ThenByDescending(p => p.distancefromme);//.OrderBy(p=>p.creationdate ).Take(maxwebmatches).ToList();
+                                                      }).OrderBy(p => p.distancefromme).ThenByDescending(p => p.creationdate);//.OrderBy(p=>p.creationdate ).Take(maxwebmatches).ToList();
 
 
 
@@ -1235,8 +1239,8 @@ namespace Anewluv.Services.Mapping
 
 
                         //filter our the ones in the right distance and reutnr the top webmacthes
-                        var FilteredMemberSearchviewmodels = (model.maxdistancefromme > 0) ? (from q in MemberSearchViewmodels
-                            .Where(a => a.distancefromme.GetValueOrDefault() <= model.maxdistancefromme)
+                        var FilteredMemberSearchviewmodels = (model.maxdistancefromme > 0 && MemberSearchViewmodels.Where(d=>d.distancefromme.GetValueOrDefault() <= model.maxdistancefromme).Count() > 8) ? (from q in MemberSearchViewmodels
+                            .Where(a =>  a.distancefromme.GetValueOrDefault() <= model.maxdistancefromme)
                                                                         select q).Take(maxwebmatches)
                                                                     : MemberSearchViewmodels.Take(maxwebmatches);
 
@@ -1333,7 +1337,7 @@ namespace Anewluv.Services.Mapping
                         //get the rest of the values if they are needed in calculations
                         //convert lattitudes from string (needed for JSON) to bool           
                         double? myLongitude = (model.mylongitude != "") ? Convert.ToDouble(model.mylongitude) : 0;
-                        double? myLattitude = (model.mylatitude != "") ? Convert.ToDouble(model.mylongitude) : 0;
+                        double? myLattitude = (model.mylatitude != "") ? Convert.ToDouble(model.mylatitude) : 0;
 
 
                         //set variables
@@ -1345,7 +1349,8 @@ namespace Anewluv.Services.Mapping
 
                         //TO DO this needs to be in a function to build all these
                         HashSet<int> LookingForGenderValues = new HashSet<int>();
-                        LookingForGenderValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.details.Where(p=>p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.gender).Select(c => c.value)) : LookingForGenderValues;
+                        LookingForGenderValues = (perfectmatchsearchsettings != null && perfectmatchsearchsettings.details.Where(p => p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.gender).Count() > 0) ? new HashSet<int>(perfectmatchsearchsettings.details.Where(p => p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.gender).Select(c => c.value))
+                        : model.defaultlookingforgenders;
                         //Appearacnce seache settings values         
 
                         //set a value to determine weather to evaluate hights i.e if this user has not height values whats the point ?
@@ -1383,7 +1388,7 @@ namespace Anewluv.Services.Mapping
                                                           //if there are no genders selected in seach settigs since this is required handle the other case.. also handle the issue where no mapping was done
                                                           //to create a default list of looking for geners and just use the opposite of the user searching i.e mapped user
                             .WhereIf(LookingForGenderValues.Count == 0, z =>
-                                 (model.lookingforgendersid.Count > 0 && model.lookingforgendersid.Contains(z.gender_id.GetValueOrDefault())
+                                 (model.defaultlookingforgenders.Count > 0 && model.defaultlookingforgenders.Contains(z.gender_id.GetValueOrDefault())
                                                                      || z.gender_id != model.mygenderid))
              
                                         .WhereIf(blEvaluateHeights, z => z.height > intheightmin && z.height <= intheightmax).ToList() //Only evealuate if the user searching actually has height values they look for 
@@ -1413,7 +1418,7 @@ namespace Anewluv.Services.Mapping
                                                           //lookingforagefrom = x.profile.profilemetadata.searchsettings != null ? x.profile.profilemetadata.searchsettings.FirstOrDefault().agemin.ToString() : "25",
                                                    
 
-                                                      }).OrderByDescending(p => p.creationdate).ThenByDescending(p => p.distancefromme);//.OrderBy(p=>p.creationdate ).Take(maxwebmatches).ToList();
+                                                      }).OrderBy(p => p.distancefromme).ThenByDescending(p => p.creationdate);//.OrderBy(p=>p.creationdate ).Take(maxwebmatches).ToList();
 
 
 
@@ -1482,6 +1487,8 @@ namespace Anewluv.Services.Mapping
         public async Task<SearchResultsViewModel> getquicksearch(quicksearchmodel Model)
         {
 
+
+           var activitylist = new List<ActivityModel>(); OperationContext ctx = OperationContext.Current;
 //            _unitOfWorkAsync.DisableProxyCreation = false;
            var db = _unitOfWorkAsync;
             {
@@ -1597,7 +1604,7 @@ namespace Anewluv.Services.Mapping
                                                           //  distancefromme = _datingcontext.fnGetDistance((double)x.latitude, (double)x.longitude,myLattitude.Value  , myLongitude.Value   , "Miles")
                                                           //       lookingforagefrom = x.profile.profilemetadata.searchsettings != null ? x.profile.profilemetadata.searchsettings.FirstOrDefault().agemin.ToString() : "25",
                                                           //lookingForageto = x.profile.profilemetadata.searchsettings != null ? x.profile.profilemetadata.searchsettings.FirstOrDefault().agemax.ToString() : "45",
-                                                      }).OrderByDescending(p => p.creationdate).ThenByDescending(p => p.distancefromme).ToList();//.OrderBy(p=>p.creationdate ).Take(maxwebmatches).ToList();
+                                                      }).OrderByDescending(p => p.hasgalleryphoto ==true).OrderBy(p => p.distancefromme).ThenByDescending(p => p.creationdate).ToList();//.OrderBy(p=>p.creationdate ).Take(maxwebmatches).ToList();
 
                     
 
@@ -1629,7 +1636,14 @@ namespace Anewluv.Services.Mapping
                         //do paging here after last filtering
                        // int? totalrecordcount = MemberSearchViewmodels.Count;
                         //handle zero and null paging values
+
+                        activitylist.Add(Api.AnewLuvLogging.CreateActivity(Model.profileid.GetValueOrDefault(), (int)activitytypeEnum.changebirthdate,ctx));
+                      
+                        if (activitylist.Count() > 0) Api.AnewLuvLogging.LogProfileActivities(activitylist);
+
                         return GenerateSearchSearchResults(MemberSearchViewmodels, Model.page, Model.numberperpage,db);
+
+                     
 
 
                     });
@@ -1885,7 +1899,7 @@ namespace Anewluv.Services.Mapping
                 //TO DO move this to a _datingcontext setting or resourcer file
 
                 if (perfectmatchsearchsettings.distancefromme == null | perfectmatchsearchsettings.distancefromme == 0)
-                    model.maxdistancefromme = 5000;
+                    model.maxdistancefromme = 2000;
 
                 //TO DO add this code to search after types have been made into doubles
                 //postaldataservicecontext.GetdistanceByLatLon(p.latitude,p.longitude,UserProfile.Lattitude,UserProfile.longitude,"M") > UserProfile.DiatanceFromMe
@@ -1928,7 +1942,7 @@ namespace Anewluv.Services.Mapping
                                                   //if there are no genders selected in seach settigs since this is required handle the other case.. also handle the issue where no mapping was done
                                                   //to create a default list of looking for geners and just use the opposite of the user searching i.e mapped user
                                 .WhereIf(LookingForGenderValues.Count == 0, z =>
-                                     (model.lookingforgendersid.Count > 0 && model.lookingforgendersid.Contains(z.gender_id.GetValueOrDefault())
+                                     (model.defaultlookingforgenders.Count > 0 && model.defaultlookingforgenders.Contains(z.gender_id.GetValueOrDefault())
                                                                          || z.gender_id != model.mygenderid))
 
 
@@ -1952,7 +1966,7 @@ namespace Anewluv.Services.Mapping
                                                   distancefromme = spatialextentions.getdistancebetweenmembers((double)x.latitude, (double)x.longitude, myLattitude.Value, myLongitude.Value, "Miles")
                                              
 
-                                              }).OrderByDescending(p => p.creationdate).ThenByDescending(p => p.distancefromme);//.OrderBy(p=>p.creationdate ).Take(maxwebmatches).ToList();
+                                              }).OrderBy(p => p.distancefromme).ThenByDescending(p => p.creationdate);//.OrderBy(p=>p.creationdate ).Take(maxwebmatches).ToList();
 
 
                 //filter our the ones in the right distance and reutnr the top webmacthes

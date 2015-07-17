@@ -1,5 +1,5 @@
 ﻿using Anewluv.Domain.Data;
-using Anewluv.Domain.Data.Anewluv.ViewModels;
+using Anewluv.Domain.Data.ViewModels;
 using Anewluv.Domain.Data.ViewModels;
 using LoggingLibrary;
 using Nmedia.Infrastructure.Domain.Data;

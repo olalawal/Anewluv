@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Anewluv.Domain.Data.Anewluv.ViewModels
+namespace Anewluv.Domain.Data.ViewModels
 {
    
    

@@ -69,6 +69,10 @@
       <Project>{EFC502AE-DD76-4278-8738-DD0B1F55A724}</Project>
       <Name>Anewluv.Services.Contracts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Common\NET\Shared\Nmedia.Infrastructure\Nmedia.Infrastructure.csproj">
+      <Project>{d0fa8aa1-5a17-4c42-a92f-f1266cd01d7c}</Project>
+      <Name>Nmedia.Infrastructure</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Nmedia.Infrastructure\LoggingNotificationApiAuth\Domain\Nmedia.Infrastructure.Domain.Data\Nmedia.Infrastructure.Domain.Data.csproj">
       <Project>{59BC30AF-1691-44EA-BFFA-34B39E334E93}</Project>
       <Name>Nmedia.Infrastructure.Domain.Data</Name>

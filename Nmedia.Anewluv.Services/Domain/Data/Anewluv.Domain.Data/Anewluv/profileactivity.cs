@@ -16,11 +16,11 @@ namespace Anewluv.Domain.Data
         [DataMember]
         public string ipaddress { get; set; }
         [DataMember]
-        public int profile_id { get; set; }
+        public int? profile_id { get; set; }
         [DataMember]
         public string sessionid { get; set; }
         [DataMember]
-        public Guid apikey { get; set; }
+        public Guid? apikey { get; set; }
         [DataMember]
         public string useragent { get; set; }
         [DataMember]

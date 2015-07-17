@@ -28,6 +28,8 @@ namespace Anewluv.Domain.Data.ViewModels
         [DataMember]
         public DateTime? birthdate { get; set; }
         [DataMember]
+        public string screenname  { get; set; }
+        [DataMember]
         public lu_gender gender { get; set; }
         [DataMember]
         public int? countryid { get; set; }

@@ -40,7 +40,7 @@ namespace Anewluv.Domain.Data.ViewModels
 
         public MembersViewModel()
         {
-            lookingforgendersid = new HashSet<int>();
+            defaultlookingforgenders = new HashSet<int>();
         }
 
         //Added session ID
@@ -144,8 +144,8 @@ namespace Anewluv.Domain.Data.ViewModels
         public string myblockcount { get; set; }
 
         //male would be default looking for female etc
-        // [DataMember]
-        public HashSet<int> lookingforgendersid { get; set; }
+        //[DataMember]
+        public HashSet<int> defaultlookingforgenders { get; set; }
 
         //gender ID when they do not have anything in search settings fallback 
        //  [DataMember]

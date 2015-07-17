@@ -1,5 +1,5 @@
 ﻿using Anewluv.Domain.Data;
-using Anewluv.Domain.Data.Anewluv.ViewModels;
+using Anewluv.Domain.Data.ViewModels;
 using Anewluv.Domain.Data.ViewModels;
 using GeoData.Domain.Models.ViewModels;
 using GeoData.Domain.ViewModels;
@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 
 namespace Anewluv.Api
 {
@@ -79,6 +80,30 @@ namespace Anewluv.Api
 
 
         }
+
+        public static async Task invalidateuserapikey(ApiKeyValidationModel model)
+        {
+
+            try
+            {
+
+
+                await Api.ApiKeyService.InValidateUserApiKey(model);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+     
+
+     
+            
+
+        
+
+
+        }
+        
 
         #endregion
 
@@ -152,6 +177,8 @@ namespace Anewluv.Api
             return result;
 
         }
+
+
         //old method that returned bool, now we want profileid to validate agains body
         public static async Task<bool> validateuserbyusernamepasswordasync(string username,string password)
         {
@@ -161,6 +188,7 @@ namespace Anewluv.Api
                     return result;
 
         }
+      
         public static async Task addprofileactvity(ActivityModel activitymodel)
         {
            // Api.MemberService.addprofileactvity(activity);
@@ -168,8 +196,20 @@ namespace Anewluv.Api
            // IsApiKeyValid = await 
           //  return result;
 
-           await Api.MemberService.addprofileactvity(activitymodel);
+           await  Api.MemberService.addprofileactvity(activitymodel);
         }
+
+        public static async Task addprofileactivities(List<ActivityModel> activitymodels)
+        {
+            // Api.MemberService.addprofileactvity(activity);
+            //  result = await returnedTaskTResult;
+            // IsApiKeyValid = await 
+            //  return result;
+
+            await Api.MemberService.addprofileactivities(activitymodels);
+        }
+
+
         public static void updateuserlogintimeasync(ProfileModel model)
         {
             // Api.MemberService.addprofileactvity(activity);

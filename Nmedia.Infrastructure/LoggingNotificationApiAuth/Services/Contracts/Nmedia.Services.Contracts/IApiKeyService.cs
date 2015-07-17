@@ -43,10 +43,14 @@ namespace Nmedia.Services.Contracts
         Task<Guid> GenerateAPIkey(ApiKeyValidationModel model);
 
         //temporary method for use by designer to get the message information formated for them
-        [OperationContract(AsyncPattern = true), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
+        [OperationContract, FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         [WebInvoke(UriTemplate = "/ValidateApiKeyByUseridentifier", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
         Task<bool> ValidateApiKeyByUseridentifier(ApiKeyValidationModel  model);
 
+        //used for logout proccess
+        [OperationContract, FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
+        [WebInvoke(UriTemplate = "/InValidateUserApiKey", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+        Task InValidateUserApiKey(ApiKeyValidationModel model);
       
     }
 }

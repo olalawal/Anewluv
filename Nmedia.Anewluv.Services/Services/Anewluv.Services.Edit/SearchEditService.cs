@@ -417,6 +417,7 @@ namespace Anewluv.Services.Edit
                 {
                     try
                     {
+                        var activitylist = new List<ActivityModel>(); OperationContext ctx = OperationContext.Current;
 
                         var task = Task.Factory.StartNew(() =>
                         {
@@ -445,6 +446,11 @@ namespace Anewluv.Services.Edit
                                 AnewluvMessages.errormessages.Add("There was a problem Editing Your Search Settings, Please try again later");
                                 return AnewluvMessages;
                             }
+
+                            //log activity
+                            foreach (activitytypeEnum activity in AnewluvMessages.actvitytypes) { activitylist.Add(Api.AnewLuvLogging.CreateActivity(p.id, (int)activity, ctx)); }
+                            Api.AnewLuvLogging.LogProfileActivities(activitylist);
+
                             AnewluvMessages.messages.Add("Edit Search Settings Succesful");
                             return AnewluvMessages;
                         });
@@ -472,14 +478,11 @@ namespace Anewluv.Services.Edit
         public async Task<AnewluvMessages> searcheditbasicsettings(SearchSettingsModel searchmodel)
         {
 
-         
             {
-              
-             //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
+                var activitylist = new List<ActivityModel>(); OperationContext ctx = OperationContext.Current;             
                 {
                     try
                     {
-
                         var task = Task.Factory.StartNew(() =>
                         {
 
@@ -502,7 +505,16 @@ namespace Anewluv.Services.Edit
                                 AnewluvMessages.errormessages.Add("There was a problem Editing You character Settings, Please try again later");
                                 return AnewluvMessages;
                             }
+
+                            //log activity
+                            foreach (activitytypeEnum activity in AnewluvMessages.actvitytypes) { activitylist.Add(Api.AnewLuvLogging.CreateActivity(p.id, (int)activity, ctx)); }
+                            Api.AnewLuvLogging.LogProfileActivities(activitylist);
+
                             AnewluvMessages.messages.Add("Edit character Settings Successful");
+
+                            //log here 
+
+
                             return AnewluvMessages;
                         });
                         return await task.ConfigureAwait(false);
@@ -540,6 +552,8 @@ namespace Anewluv.Services.Edit
                 {
                     try
                     {
+                        var activitylist = new List<ActivityModel>(); OperationContext ctx = OperationContext.Current;
+                       
 
                         var task = Task.Factory.StartNew(() =>
                         {
@@ -561,6 +575,11 @@ namespace Anewluv.Services.Edit
                                 AnewluvMessages.errormessages.Add("There was a problem Editing You Appearance Settings, Please try again later");
                                 return AnewluvMessages;
                             }
+
+                            //log activity
+                            foreach (activitytypeEnum activity in AnewluvMessages.actvitytypes) { activitylist.Add(Api.AnewLuvLogging.CreateActivity(p.id, (int)activity, ctx)); }
+                            Api.AnewLuvLogging.LogProfileActivities(activitylist);
+
                             AnewluvMessages.messages.Add("Edit Appearance Settings Successful");
                             return AnewluvMessages;
 
@@ -600,6 +619,9 @@ namespace Anewluv.Services.Edit
                     try
                     {
 
+                        var activitylist = new List<ActivityModel>(); OperationContext ctx = OperationContext.Current;
+                       
+
                         var task = Task.Factory.StartNew(() =>
                         {
 
@@ -623,6 +645,10 @@ namespace Anewluv.Services.Edit
                                 AnewluvMessages.errormessages.Add("There was a problem Editing You character Settings, Please try again later");
                                 return AnewluvMessages;
                             }
+
+                            foreach (activitytypeEnum activity in AnewluvMessages.actvitytypes) { activitylist.Add(Api.AnewLuvLogging.CreateActivity(p.id, (int)activity, ctx)); }
+                            Api.AnewLuvLogging.LogProfileActivities(activitylist);
+                            
                             AnewluvMessages.messages.Add("Edit character Settings Successful");
                             return AnewluvMessages;
                         });
@@ -662,6 +688,9 @@ namespace Anewluv.Services.Edit
                     try
                     {
 
+                        var activitylist = new List<ActivityModel>(); OperationContext ctx = OperationContext.Current;
+                       
+
                         var task = Task.Factory.StartNew(() =>
                         {
                             //create a new messages object
@@ -685,6 +714,11 @@ namespace Anewluv.Services.Edit
                                 return AnewluvMessages;
                             }
                             AnewluvMessages.messages.Add("Edit lifestyle Settings Successful");
+
+                            //log this new activity
+                            foreach (activitytypeEnum activity in AnewluvMessages.actvitytypes) { activitylist.Add(Api.AnewLuvLogging.CreateActivity(p.id, (int)activity, ctx)); }
+                            Api.AnewLuvLogging.LogProfileActivities(activitylist);
+
                             return AnewluvMessages;
                         });
                         return await task.ConfigureAwait(false);

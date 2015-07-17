@@ -55,10 +55,7 @@ namespace Anewluv.DataExtentionMethods
                 {
                     p = allsearchsettings.Where(z => z.searchname == "MyPerfectMatch").FirstOrDefault();  //get the first one thats probbaly the default.
                 }
-
-                //here is where we handle the results 
-                //if none is found create a new perfect match setting for this user since they dont have one
-                if (p == null )
+                else
                 {
                    p= createnewsearch(searchmodel, db);
                 }
@@ -507,6 +504,7 @@ namespace Anewluv.DataExtentionMethods
         {
 
             bool updated = false;
+           
             try
             {
 
@@ -530,8 +528,13 @@ namespace Anewluv.DataExtentionMethods
                 //handling for search name and rank only allowed if not perfect match
                 if (model.searchname != "MyPerfectMatch" && p.searchname != "MyPerfectMatch")
                 {
-                    if (!string.IsNullOrEmpty(model.searchname) && p.searchname != model.searchname) { p.searchname = model.searchname; updated = true; }  
+                    if (!string.IsNullOrEmpty(model.searchname) && p.searchname != model.searchname) { 
+                        p.searchname = model.searchname; updated = true;
+                        messages.actvitytypes.Add(activitytypeEnum.createadvancedsearch);
+                    }  
                     if (model.searchrank != null && p.searchrank != model.searchrank) { p.searchrank = model.searchrank; updated = true; }
+                    
+
                 }
 
              
@@ -539,6 +542,7 @@ namespace Anewluv.DataExtentionMethods
                 {
                     p.lastupdatedate = DateTime.Now;
                     p.ObjectState = ObjectState.Modified; _unitOfWorkAsync.Repository<searchsetting>().Update(p);
+                  
                 }
                 //checkbos item updates 
                 if (model.genderlist != null && model.genderlist.Count() > 0)
@@ -557,7 +561,16 @@ namespace Anewluv.DataExtentionMethods
                 if (updated)
                 {
                     var i = _unitOfWorkAsync.SaveChanges();
-                    messages.messages.Add("Basic Search Settings  : changes  saved!");
+                    messages.messages.Add("Basic Search Settings  : changes saved!");
+                 
+                    if (p.searchname != "MyPerfectMatch")
+                    {
+                        messages.actvitytypes.Add(activitytypeEnum.advancedsearchupdated);
+                    }
+                    else
+                    {
+                        messages.actvitytypes.Add(activitytypeEnum.updatedprofilematchsettings);
+                    }
                 }
                 else
                 {
@@ -618,6 +631,7 @@ namespace Anewluv.DataExtentionMethods
                 {
                     p.ObjectState = ObjectState.Modified; 
                     _unitOfWorkAsync.Repository<searchsetting>().Update(p);
+                   
 
                 }
 
@@ -626,6 +640,15 @@ namespace Anewluv.DataExtentionMethods
                 {
                     var i = _unitOfWorkAsync.SaveChanges();
                     messages.messages.Add("Appearance Search Settings : changes saved");
+                 
+                    if (p.searchname != "MyPerfectMatch")
+                    {
+                        messages.actvitytypes.Add(activitytypeEnum.advancedsearchupdated);
+                    }
+                    else
+                    {
+                        messages.actvitytypes.Add(activitytypeEnum.updatedprofilematchsettings);
+                    }
                 }
                 else
                 {
@@ -699,6 +722,15 @@ namespace Anewluv.DataExtentionMethods
                 {
                     var i = _unitOfWorkAsync.SaveChanges();
                     messages.messages.Add("Character Search Settings : Changes saved");
+                 
+                    if (p.searchname != "MyPerfectMatch")
+                    {
+                        messages.actvitytypes.Add(activitytypeEnum.advancedsearchupdated);
+                    }
+                    else
+                    {
+                        messages.actvitytypes.Add(activitytypeEnum.updatedprofilematchsettings);
+                    }
                 }
                 else
                 {
@@ -772,6 +804,15 @@ namespace Anewluv.DataExtentionMethods
                 {
                     var i = _unitOfWorkAsync.SaveChanges();
                     messages.messages.Add("Lifestyle Search Settings : Changes saved");
+                   // messages.activitycreated = true;
+                    if (p.searchname != "MyPerfectMatch")
+                    {
+                        messages.actvitytypes.Add(activitytypeEnum.advancedsearchupdated);
+                    }
+                    else
+                    {
+                        messages.actvitytypes.Add(activitytypeEnum.updatedprofilematchsettings);
+                    }
                 }
                 else
                 {

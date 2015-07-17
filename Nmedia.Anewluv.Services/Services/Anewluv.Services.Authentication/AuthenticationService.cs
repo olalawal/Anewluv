@@ -101,7 +101,7 @@ namespace Anewluv.Services.Authentication
                 var membershipprovider = CreateUserCustom(model.username, model.password, model.openidIdentifer,
                    model.openidProvidername,
                  model.email,
-               model.birthdate, model.genderid, model.country, model.city, model.stateprovince, model.longitude, model.latitude,
+               model.birthdate, model.genderid, model.country,model.countryid, model.city, model.stateprovince, model.longitude, model.latitude,
                 model.screenname, model.zippostalcode, model.activationcode, false, model.providerUserKey,
                  out status);
 
@@ -160,7 +160,7 @@ namespace Anewluv.Services.Authentication
             return CreateUserCustom(model.username,
                         model.password, model.openidIdentifer, model.openidProvidername,
                        model.email,
-                       model.birthdate, model.genderid, model.country, model.city, model.stateprovince,
+                       model.birthdate, model.genderid, model.country,model.countryid, model.city, model.stateprovince,
                        model.longitude, model.latitude, model.screenname, model.zippostalcode, model.activationcode,
                        model.isApproved,
                        model.providerUserKey, out status);
@@ -589,7 +589,7 @@ namespace Anewluv.Services.Authentication
                 //  securityQuestion,
                 //  securityAnswer
                  DateTime.Now,
-                  "", "", "", "", null, null, "", "", "",
+                  "", "",null, "", "", null, null, "", "", "",
                   false,
                   null,
                   out status);
@@ -623,7 +623,7 @@ namespace Anewluv.Services.Authentication
                   string email,
             //  string securityQuestion,
             // string securityAnswer,
-                  DateTime birthdate, string genderid, string country, string city, string stateprovince, string longitude, string latitude, string screenname, string zippostalcode, string activationcode,
+                  DateTime birthdate, string genderid, string country,int? countryid, string city, string stateprovince, string longitude, string latitude, string screenname, string zippostalcode, string activationcode,
                   bool isApproved,
                   object providerUserKey,
                  out MembershipCreateStatus status)
@@ -661,9 +661,10 @@ namespace Anewluv.Services.Authentication
 
                         profile ObjProfileEntity = new profile();
                         profiledata objprofileDataEntity = new profiledata();
+                        profilemetadata objprofileMetaDataEntity = new profilemetadata();
 
                         //TO DO new entity for OPEN ID data
-                        int countryID = 0;
+                       
                         Random objRandom = new Random();
                         int intStart = objRandom.Next(1, 9);
                         int intLastTwo = objRandom.Next(10, 99);
@@ -718,9 +719,10 @@ namespace Anewluv.Services.Authentication
                         objprofileDataEntity.city = city;
                         objprofileDataEntity.countryregion = "NA";
 
+
                         objprofileDataEntity.stateprovince = (stateprovince == null || stateprovince == "") ?   "" :stateprovince;
 
-                        objprofileDataEntity.countryid = countryID;
+                        objprofileDataEntity.countryid = countryid;
                         objprofileDataEntity.postalcode = zippostalcode;
                         objprofileDataEntity.gender_id = Convert.ToInt16(genderid);
                         //objprofileDataEntity.lu_gender = _unitOfWorkAsync.Repository<lu_gender>().Query(p => p.description == gender ).Select().FirstOrDefault();
@@ -737,10 +739,22 @@ namespace Anewluv.Services.Authentication
 
                          //get profile and profile datas
 
-                        ObjProfileEntity.ObjectState = ObjectState.Added;
-                        profilerepo.Insert(ObjProfileEntity);
+
+                        //set states 
+                        objprofileMetaDataEntity.ObjectState = ObjectState.Added;
                         objprofileDataEntity.ObjectState = ObjectState.Added;
-                        profiledatarepo.Insert(objprofileDataEntity);
+
+                        ObjProfileEntity.profiledata = objprofileDataEntity;
+                        ObjProfileEntity.profilemetadata = objprofileMetaDataEntity;
+
+                        ObjProfileEntity.ObjectState = ObjectState.Added;   
+                        _unitOfWorkAsync.Repository<profile>().InsertOrUpdateGraph(ObjProfileEntity);
+
+                        //objprofileDataEntity.ObjectState = ObjectState.Added;
+                        //_unitOfWorkAsync.Repository<profiledata>().Insert(objprofileDataEntity);
+
+                        //objprofileMetaDataEntity.ObjectState = ObjectState.Added;
+                       //  _unitOfWorkAsync.Repository<profilemetadata>().Insert()
 
                         //_unitOfWorkAsync
                         var i =  _unitOfWorkAsync.SaveChanges();
@@ -1897,6 +1911,9 @@ namespace Anewluv.Services.Authentication
 
             var myQuery = new profile();
             var currenttoken = new NmediaToken();
+
+           var activitylist = new List<ActivityModel>(); OperationContext ctx = OperationContext.Current; 
+
             if (profile == null | profile.username == null) return currenttoken;
            // _unitOfWorkAsync.DisableProxyCreation = true;
           //  using (var db = _unitOfWorkAsync)
@@ -1985,8 +2002,12 @@ namespace Anewluv.Services.Authentication
                            // var guid = getcurrentapikeybyprofileid(myQuery.id,db);
                             if (guid != null)                          
                                 currenttoken.Apikey = guid;
-                            
-                          
+
+
+                            activitylist.Add(Api.AnewLuvLogging.CreateActivity(profile.profileid, (int)activitytypeEnum.changebirthdate, ctx));
+                            Api.AnewLuvLogging.LogProfileActivities(activitylist);
+
+
                             return currenttoken;
                             //get the token here
 
@@ -1995,6 +2016,83 @@ namespace Anewluv.Services.Authentication
                         {
                             return currenttoken;
                         }
+                    });
+                    return await task.ConfigureAwait(false);
+
+
+
+                }
+                catch (Exception ex)
+                {
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    //instantiate logger here so it does not break anything else.
+
+                    using (var logger = new Logging(applicationEnum.UserAuthorizationService))
+                    {
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, myQuery != null ? myQuery.id : 0, null);
+                    }
+
+                    FaultReason faultreason = new FaultReason("Error in authenitcation service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                }
+                //finally
+                //{
+                //    Api.DisposeMemberService();
+                //}
+
+            }
+        }
+
+
+        public async Task<Boolean> logoutuserandinvalidatetoken(ProfileModel profile)
+        {
+
+            var myQuery = new profile();
+            var activitylist = new List<ActivityModel>(); OperationContext ctx = OperationContext.Current;
+            if (profile == null | profile.username == null) return false; ;
+            // _unitOfWorkAsync.DisableProxyCreation = true;
+            //  using (var db = _unitOfWorkAsync)
+            {
+                try
+                {
+
+
+                    var task = Task.Factory.StartNew(() =>
+                    {
+
+
+
+                        //Dim ctx As New Entities()
+                        //TO DO add an inactive count login to track how many times a user logs in before they active profile default max should be = 3
+                        //added profile status ID validation as well i.e 2 for activated and is not banned 
+                        myQuery = _unitOfWorkAsync.Repository<profile>().Queryable().Where(p => p.id == profile.profileid.GetValueOrDefault()).FirstOrDefault();
+
+
+                      if (myQuery !=null)
+                      {
+                            Api.AsyncCalls.invalidateuserapikey(new ApiKeyValidationModel
+                            {
+                                service = "AuthenticationService",
+                                username = profile.username,
+                                useridentifier = myQuery.id,
+                                application = "Anewluv",
+                                application_id = (int)applicationenum.anewluv,
+                                keyvalue = null
+                            }).DoNotAwait();
+
+
+
+                            activitylist.Add(Api.AnewLuvLogging.CreateActivity(profile.profileid, (int)activitytypeEnum.changebirthdate, ctx));
+                            Api.AnewLuvLogging.LogProfileActivities(activitylist);
+
+
+                            return true;
+
+                      }
+                      return false;
+                    
                     });
                     return await task.ConfigureAwait(false);
 
