@@ -22,15 +22,17 @@ namespace Anewluv.DataExtentionMethods
         //generic filtering function we can reuse, filters all search settings using profileid,searchname and other data
         public static searchsetting getorcreatesearchsettings(this IRepository<searchsetting> repo, SearchSettingsModel searchmodel,IUnitOfWorkAsync db)
         {
-
+            searchsetting p = new searchsetting();
             try
             {
                 //This query assumes that one search is always called default and cannot be deleted dont like that
                 List<searchsetting> allsearchsettings = new List<searchsetting>();
-                searchsetting p = new searchsetting();
+               
+
+                if (searchmodel.profileid  ==null || searchmodel.profileid !=0 ) return p;
 
                 //default handling for empty profile ID and other search data
-                if (searchmodel == null) return p;
+               // if (searchmodel == null) return p;
 
                 allsearchsettings = repo.Query
                 (z => (searchmodel.searchid != 0 && z.id == searchmodel.searchid) ||
@@ -51,11 +53,11 @@ namespace Anewluv.DataExtentionMethods
                 {
                     p = allsearchsettings.Where(z => z.searchname.ToUpper() == searchmodel.searchname.ToUpper()).FirstOrDefault();                    
                 }
-                else if (allsearchsettings.Count() > 0)  //if search name is not passed we probbaly want the first one which is perfect match 
+                else if (allsearchsettings.Count() > 0 )  //if search name is not passed we probbaly want the first one which is perfect match 
                 {
                     p = allsearchsettings.Where(z => z.searchname == "MyPerfectMatch").FirstOrDefault();  //get the first one thats probbaly the default.
                 }
-                else
+                else 
                 {
                    p= createnewsearch(searchmodel, db);
                 }
@@ -63,7 +65,10 @@ namespace Anewluv.DataExtentionMethods
                 return p;
             }
             catch (Exception ex)
-            { throw ex; }
+            {// throw ex; 
+                //to do log
+                return p;
+            }
         }
 
         public static searchsetting createnewsearch( SearchSettingsModel searchmodel, IUnitOfWorkAsync db)
