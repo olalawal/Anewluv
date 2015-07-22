@@ -35,8 +35,8 @@ using Repository.Pattern.UnitOfWork;
 
 
 
- //  <!-- THis code uses mars due to threading issue with  an injected data context.  The best solutuion is a data content tracker i.e http://mehdi.me/ has a dbcontext scope i want to test and maybe implement in furthe releases
- //   this works for reads but for writes it would be a terrible idea -->
+//  <!-- THis code uses mars due to threading issue with  an injected data context.  The best solutuion is a data content tracker i.e http://mehdi.me/ has a dbcontext scope i want to test and maybe implement in furthe releases
+//   this works for reads but for writes it would be a terrible idea -->
 namespace Anewluv.Services.Mapping
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "MembersService" in both code and config file together.
@@ -52,7 +52,7 @@ namespace Anewluv.Services.Mapping
         //private IPromotionRepository  promotionrepository;
 
         private readonly IUnitOfWorkAsync _unitOfWorkAsync;
-      //  private readonly IUnitOfWorkAsync _geodatastoredProcedures;
+        //  private readonly IUnitOfWorkAsync _geodatastoredProcedures;
         private readonly IGeoDataStoredProcedures _geodatastoredProcedures;
         private LoggingLibrary.Logging logger;
 
@@ -61,7 +61,7 @@ namespace Anewluv.Services.Mapping
 
 
 
-        public MembersMapperService([IAnewluvEntitesScope]IUnitOfWorkAsync unitOfWork,[ISpatialEntitesScope]IGeoDataStoredProcedures storedProcedures)
+        public MembersMapperService([IAnewluvEntitesScope]IUnitOfWorkAsync unitOfWork, [ISpatialEntitesScope]IGeoDataStoredProcedures storedProcedures)
         {
 
             if (unitOfWork == null)
@@ -86,7 +86,7 @@ namespace Anewluv.Services.Mapping
         }
 
 
- 
+
 
         /// maps a single profile to another
         /// </summary>
@@ -97,7 +97,7 @@ namespace Anewluv.Services.Mapping
         {
 
 
-          //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+            //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
             var geodb = _geodatastoredProcedures;
             var db = _unitOfWorkAsync;
             {
@@ -129,19 +129,20 @@ namespace Anewluv.Services.Mapping
                     // throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
                     throw;
                 }
-                finally {
-                  // 
+                finally
+                {
+                    // 
                 }
             }
 
         }
-       
-        public async  Task<SearchResultsViewModel> getmembersearchviewmodels(ProfileModel model)
+
+        public async Task<SearchResultsViewModel> getmembersearchviewmodels(ProfileModel model)
         {
 
-          //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+            //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
             var geodb = _geodatastoredProcedures;
-           var db = _unitOfWorkAsync;
+            var db = _unitOfWorkAsync;
             {
                 try
                 {
@@ -158,8 +159,8 @@ namespace Anewluv.Services.Mapping
                             modeltomap = null;
                             modeltomap.id = Convert.ToInt32(item);
                             tempmodel.modeltomap = modeltomap;
-                            returnmodel.results.Add(membermappingextentions.mapmembersearchviewmodel(tempmodel.profileid, tempmodel.modeltomap,  db, geodb));
-                            
+                            returnmodel.results.Add(membermappingextentions.mapmembersearchviewmodel(tempmodel.profileid, tempmodel.modeltomap, db, geodb));
+
 
                         }
                         return returnmodel;
@@ -167,7 +168,7 @@ namespace Anewluv.Services.Mapping
                     });
                     return await task.ConfigureAwait(false);
 
-                  
+
 
                 }
                 catch (Exception ex)
@@ -187,14 +188,14 @@ namespace Anewluv.Services.Mapping
                 }
                 finally
                 {
-                   
+
                 }
 
             }
         }
 
-      
-      //TO DO use roles to determine what photos and other data a user sees btw  
+
+        //TO DO use roles to determine what photos and other data a user sees btw  
         /// <summary>
         /// profile detail that compares two users
         /// the viewer is the profileid and the person being viewed is the viewing profileid
@@ -206,7 +207,7 @@ namespace Anewluv.Services.Mapping
         public async Task<ProfileBrowseModel> getprofilebrowsemodel(ProfileModel model)
         {
 
-          //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+            //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
             var geodb = _geodatastoredProcedures;
             var db = _unitOfWorkAsync;
             {
@@ -215,24 +216,24 @@ namespace Anewluv.Services.Mapping
 
                     var task = Task.Factory.StartNew(() =>
                     {
-                       
+
                         //THIS NEEDS to go away and be done in the profile browsemodel !!!!
                         var NewProfileBrowseModel = new ProfileBrowseModel
-                        {  
+                        {
                             //TO Do user a mapper instead of a contructur and map it from the service
                             //Move all this to a service
-                          //ViewerProfileDetails = membermappingextentions.mapmembersearchviewmodel(null, new MemberSearchViewModel { id = model.profileid.Value }, model.allphotos, db, geodb),
+                            //ViewerProfileDetails = membermappingextentions.mapmembersearchviewmodel(null, new MemberSearchViewModel { id = model.profileid.Value }, model.allphotos, db, geodb),
                             //profile of the person being viewed
-                            ProfileDetails = membermappingextentions.mapmembersearchviewmodel(model.profileid.Value, new MemberSearchViewModel { id = model.viewingprofileid.GetValueOrDefault() },  db, geodb),
+                            ProfileDetails = membermappingextentions.mapmembersearchviewmodel(model.profileid.Value, new MemberSearchViewModel { id = model.viewingprofileid.GetValueOrDefault() }, db, geodb),
                             ProfileCriteria = membermappingextentions.getprofilecriteriamodel(model.viewingprofileid.GetValueOrDefault(), db),
-                            ViewActionsToProfile = membermappingextentions.mapmemberactionsrelationships(model.profileid.Value,model.viewingprofileid.Value, db)
+                            ViewActionsToProfile = membermappingextentions.mapmemberactionsrelationships(model.profileid.Value, model.viewingprofileid.Value, db)
                         };
 
                         //TO DO add a cache object for the profilebrowesemodel and Memberseachmodel of the currently logged in user
                         //this should probbaly be cached client side or server side no need to requery, if anything get from Cache
                         //NewProfileBrowseModel.ViewerProfileCriteria = membermappingextentions.getprofilecriteriamodel(model.profileid.Value, db);
-                        
-                     
+
+
                         // NewProfileBrowseModel.ProfileCriteria = membermappingextentions.getprofilecriteriamodel(model.viewingprofileid.GetValueOrDefault(), db);
 
 
@@ -269,7 +270,7 @@ namespace Anewluv.Services.Mapping
         public async Task<FullProfileViewModel> getprofiledetails(ProfileModel model)
         {
 
-          //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+            //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
             var geodb = _geodatastoredProcedures;
             var db = _unitOfWorkAsync;
             {
@@ -278,7 +279,7 @@ namespace Anewluv.Services.Mapping
 
                     var task = Task.Factory.StartNew(() =>
                     {
-                        
+
 
                         //TO DO add a cache object for the profilebrowesemodel and Memberseachmodel of the currently logged in user
                         //this should probbaly be cached client side or server side no need to requery, if anything get from Cache
@@ -313,7 +314,7 @@ namespace Anewluv.Services.Mapping
 
             }
         }
-     
+
         /// <summary>
         /// get cretieri details for a given user
         /// </summary>
@@ -332,7 +333,7 @@ namespace Anewluv.Services.Mapping
                     var task = Task.Factory.StartNew(() =>
                     {
 
-                        return  membermappingextentions.getprofilecriteriamodel(model.profileid.Value, db);
+                        return membermappingextentions.getprofilecriteriamodel(model.profileid.Value, db);
 
                     });
                     return await task.ConfigureAwait(false);
@@ -361,14 +362,14 @@ namespace Anewluv.Services.Mapping
 
             }
         }
-        
+
         //returns a list of profile browsemodles for a given user
         public async Task<List<ProfileBrowseModel>> getprofilebrowsemodels(ProfileModel model)
         {
 
-          //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+            //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
             var geodb = _geodatastoredProcedures;
-           var db = _unitOfWorkAsync;
+            var db = _unitOfWorkAsync;
             {
                 try
                 {
@@ -383,7 +384,7 @@ namespace Anewluv.Services.Mapping
                             {
                                 //TO Do user a mapper instead of a contructur and map it from the service
                                 //Move all this to a service
-                                ViewerProfileDetails = membermappingextentions.mapmembersearchviewmodel(null, new MemberSearchViewModel { id = model.profileid.Value },  db, geodb),
+                                ViewerProfileDetails = membermappingextentions.mapmembersearchviewmodel(null, new MemberSearchViewModel { id = model.profileid.Value }, db, geodb),
                                 ProfileDetails = membermappingextentions.mapmembersearchviewmodel(model.profileid.Value, new MemberSearchViewModel { id = Convert.ToInt32(item) }, db, geodb)
 
                             };
@@ -401,7 +402,7 @@ namespace Anewluv.Services.Mapping
                     });
                     return await task.ConfigureAwait(false);
 
-                 
+
 
                 }
                 catch (Exception ex)
@@ -421,31 +422,31 @@ namespace Anewluv.Services.Mapping
                 }
                 finally
                 {
-                   
+
                 }
 
 
             }
         }
-     
+
         //gets search settings
         //TO DO this function is just setting temp values for now
         //9 -21- 2011 added code to get age at least from search settings , more values to follow
         public async Task<MembersViewModel> getdefaultquicksearchsettingsmembers(ProfileModel Model)
         {
 
-          //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
-              var geodb = _geodatastoredProcedures;
-           var db = _unitOfWorkAsync;
+            //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+            var geodb = _geodatastoredProcedures;
+            var db = _unitOfWorkAsync;
             {
                 try
                 {
 
-                      var task = Task.Factory.StartNew(() =>
+                    var task = Task.Factory.StartNew(() =>
                     {
 
-                                      quicksearchmodel quicksearchmodel = new quicksearchmodel();
-                        MembersViewModel model =  membermappingextentions.mapmember(Model,db,geodb);
+                        quicksearchmodel quicksearchmodel = new quicksearchmodel();
+                        MembersViewModel model = membermappingextentions.mapmember(Model, db, geodb);
                         // PostalDataService postaldataservicecontext = new PostalDataService().Initialize();
                         //set deafult paging or pull from DB
                         //quicksearchmodel.myse = 4;
@@ -465,9 +466,9 @@ namespace Anewluv.Services.Mapping
                         quicksearchmodel.myselectedseekinggenderid = Extensions.GetLookingForGenderID(model.profile.profiledata.gender_id.GetValueOrDefault());
                         quicksearchmodel.myselectedcountryname = model.mycountryname; //use same country for now
                         //add the postal code status here as well
-                        
-                        quicksearchmodel.myselectedpostalcodestatus =  spatialextentions.getpostalcodestatusbycountryname(new GeoModel { country = model.mycountryname },geodb);
-                   
+
+                        quicksearchmodel.myselectedpostalcodestatus = spatialextentions.getpostalcodestatusbycountryname(new GeoModel { country = model.mycountryname }, geodb);
+
                         //TO do get this from search settings
                         //default for has photos only get this from the 
                         quicksearchmodel.myselectedphotostatus = true;
@@ -481,7 +482,7 @@ namespace Anewluv.Services.Mapping
                     });
                     return await task.ConfigureAwait(false);
 
-       
+
 
                 }
                 catch (Exception ex)
@@ -501,7 +502,7 @@ namespace Anewluv.Services.Mapping
                 }
                 finally
                 {
-                   
+
                 }
 
 
@@ -511,8 +512,8 @@ namespace Anewluv.Services.Mapping
         public MembersViewModel getdefaultsearchsettingsguest(ProfileModel Model)
         {
 
-          //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
-           var db = _unitOfWorkAsync;
+            //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+            var db = _unitOfWorkAsync;
             {
                 try
                 {
@@ -535,12 +536,12 @@ namespace Anewluv.Services.Mapping
                     {
 
                         //PostalData2Context GeoContext = new PostalData2Context();
-                      //  using (var tempdb = GeoContext)
-                      //  {
-                           // GeoService GeoService = new GeoService(tempdb);
-                                                                         
-                            model.myquicksearch.myselectedcountryname =   spatialextentions.getcountrynamebycountryid(new GeoModel { country = Model.Countryname },_geodatastoredProcedures) == "" ? "United States" : Model.Countryname; //use same country for now
-                       // }
+                        //  using (var tempdb = GeoContext)
+                        //  {
+                        // GeoService GeoService = new GeoService(tempdb);
+
+                        model.myquicksearch.myselectedcountryname = spatialextentions.getcountrynamebycountryid(new GeoModel { country = Model.Countryname }, _geodatastoredProcedures) == "" ? "United States" : Model.Countryname; //use same country for now
+                        // }
                     }
                     else
                     {
@@ -577,7 +578,7 @@ namespace Anewluv.Services.Mapping
         public registermodel getregistermodel(MembersViewModel membersmodel)
         {
 
-          //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+            //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
             _unitOfWorkAsync.Dispose();
             try
             {
@@ -620,8 +621,8 @@ namespace Anewluv.Services.Mapping
         public registermodel getregistermodelopenid(MembersViewModel membersmodel)
         {
 
-          //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
-           var db = _unitOfWorkAsync;
+            //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+            var db = _unitOfWorkAsync;
             {
                 try
                 {
@@ -671,8 +672,8 @@ namespace Anewluv.Services.Mapping
                     //PhotoUploadModel> photouploadvm = new List<PhotoUploadModel>();
 
                     //initlaize PhotosUploadModel object          
-                   // photouploadvm.profileid = membersmodel.profile.id; //set the profileID  
-                   // photouploadvm.photosuploaded = new List<PhotoUploadModel>();
+                    // photouploadvm.profileid = membersmodel.profile.id; //set the profileID  
+                    // photouploadvm.photosuploaded = new List<PhotoUploadModel>();
                     var photobeinguploaded = new PhotoUploadModel();
 
                     //right now we are only uploading one photo 
@@ -687,8 +688,8 @@ namespace Anewluv.Services.Mapping
                         //  {
                         //  PhotoService PhotoService = new PhotoService(tempdb);
 
-                      
-                        var returnedTaskTResult = AsyncCalls.getimageb64stringfromurlasync(new PhotoModel { imageUrl =   membersmodel.rpxmodel.photo,inmagesource =""});
+
+                        var returnedTaskTResult = AsyncCalls.getimageb64stringfromurlasync(new PhotoModel { imageUrl = membersmodel.rpxmodel.photo, inmagesource = "" });
                         photobeinguploaded.imageb64string = returnedTaskTResult.Result;
 
                         //    }
@@ -752,7 +753,7 @@ namespace Anewluv.Services.Mapping
         {
 
 
-          //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+            //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
             _unitOfWorkAsync.Dispose();
             try
             {
@@ -815,8 +816,8 @@ namespace Anewluv.Services.Mapping
         public MembersViewModel updatememberdata(MembersViewModel model)
         {
 
-          //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
-           var db = _unitOfWorkAsync;
+            //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+            var db = _unitOfWorkAsync;
             {
                 try
                 {
@@ -849,9 +850,9 @@ namespace Anewluv.Services.Mapping
 
         public async Task<MembersViewModel> updatememberdatabyprofileid(ProfileModel newmodel)
         {
-          //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+            //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
             var geodb = _geodatastoredProcedures;
-           var db = _unitOfWorkAsync;
+            var db = _unitOfWorkAsync;
             {
                 try
                 {
@@ -864,9 +865,9 @@ namespace Anewluv.Services.Mapping
                         return model;
 
                     });
-                   return await task.ConfigureAwait(false);
+                    return await task.ConfigureAwait(false);
 
-                   
+
 
                 }
                 catch (Exception ex)
@@ -886,7 +887,7 @@ namespace Anewluv.Services.Mapping
                 }
                 finally
                 {
-                   
+
                 }
 
             }
@@ -896,8 +897,8 @@ namespace Anewluv.Services.Mapping
         public bool updateguestdata(MembersViewModel model)
         {
 
-          //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
-           var db = _unitOfWorkAsync;
+            //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+            var db = _unitOfWorkAsync;
             {
                 try
                 {
@@ -929,8 +930,8 @@ namespace Anewluv.Services.Mapping
         public bool removeguestdata(string sessionid)
         {
 
-          //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
-           var db = _unitOfWorkAsync;
+            //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+            var db = _unitOfWorkAsync;
             {
                 try
                 {
@@ -961,8 +962,8 @@ namespace Anewluv.Services.Mapping
         public MembersViewModel getguestdata(string sessionid)
         {
 
-          //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
-           var db = _unitOfWorkAsync;
+            //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+            var db = _unitOfWorkAsync;
             {
                 try
                 {
@@ -996,14 +997,14 @@ namespace Anewluv.Services.Mapping
         {
 
 
-          //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
-           var db = _unitOfWorkAsync;
+            //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+            var db = _unitOfWorkAsync;
             {
                 try
                 {
                     //    return CachingFactory.MembersViewModelHelper.getmemberdata(profileid, this);
 
-                  //  return this.mapmember(newmodel,db);
+                    //  return this.mapmember(newmodel,db);
                     return null;
 
                 }
@@ -1025,12 +1026,12 @@ namespace Anewluv.Services.Mapping
 
             }
 
-        }        
+        }
 
         public MembersViewModel mapguest()
         {
 
-          //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+            //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
             _unitOfWorkAsync.Dispose();
 
             try
@@ -1072,9 +1073,9 @@ namespace Anewluv.Services.Mapping
         {
 
 
-          //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;            
+            //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;            
             var geodb = _geodatastoredProcedures;
-           var db = _unitOfWorkAsync;
+            var db = _unitOfWorkAsync;
             {
                 try
                 {
@@ -1089,21 +1090,21 @@ namespace Anewluv.Services.Mapping
                         searchsetting perfectmatchsearchsettings = _unitOfWorkAsync.Repository<searchsetting>().getorcreatesearchsettings(new SearchSettingsModel { profileid = model.profile_id, searchname = "MyPerfectMatch" }, _unitOfWorkAsync);
 
                         //TO do handle empty perfect match settings here
-                        if (perfectmatchsearchsettings == null )
+                        if (perfectmatchsearchsettings == null)
                         {
-                          perfectmatchsearchsettings=  profileextentionmethods.createsearchbyprofileid("MyPerfectMatch",true, new ProfileModel { profileid = Model.profileid }, db);
+                            perfectmatchsearchsettings = profileextentionmethods.createsearchbyprofileid("MyPerfectMatch", true, new ProfileModel { profileid = Model.profileid }, db);
                         }
                         else
                         {
                             int searchid = model.profile.profilemetadata.searchsettings.FirstOrDefault().id;
-                            perfectmatchsearchsettings = db.Repository<searchsetting>().getsearchsettingsbysearchid( searchid);
+                            perfectmatchsearchsettings = db.Repository<searchsetting>().getsearchsettingsbysearchid(searchid);
                         }
 
 
                         //set default perfect match distance as 100 for now later as we get more members lower
                         //TO DO move this to a db setting or resourcer file
-                        if (perfectmatchsearchsettings.distancefromme == null | perfectmatchsearchsettings.distancefromme == 0)
-                            model.maxdistancefromme = 500;
+                        int maxdistancefromme = (perfectmatchsearchsettings.distancefromme == null | perfectmatchsearchsettings.distancefromme == 0) ? 1000 : perfectmatchsearchsettings.distancefromme.GetValueOrDefault();
+
 
                         //TO DO add this code to search after types have been made into doubles
                         //postaldataservicecontext.GetdistanceByLatLon(p.latitude,p.longitude,UserProfile.Lattitude,UserProfile.longitude,"M") > UserProfile.DiatanceFromMe
@@ -1113,7 +1114,7 @@ namespace Anewluv.Services.Mapping
                         //get the  gender's from search settings
 
                         // int[,] courseIDs = new int[,] UserProfile.profiledata.searchsettings.FirstOrDefault().searchsettings_Genders.ToList();
-                      
+
                         int intAgeTo = perfectmatchsearchsettings.agemax != null ? perfectmatchsearchsettings.agemax.GetValueOrDefault() : 99;
                         int intAgeFrom = perfectmatchsearchsettings.agemin != null ? perfectmatchsearchsettings.agemin.GetValueOrDefault() : 18;
                         //Height
@@ -1132,11 +1133,11 @@ namespace Anewluv.Services.Mapping
                         DateTime max = today.AddYears(-(intAgeFrom + 1));
                         DateTime min = today.AddYears(-intAgeTo);
 
-                       
+
                         //TO DO Move this to a function so its cleaner and re-usable
                         //get values from the collections to test for , this should already be done in the viewmodel mapper but juts incase they made changes that were not updated
                         //requery all the has tbls
-                        HashSet<int> LookingForGenderValues =new HashSet<int>();
+                        HashSet<int> LookingForGenderValues = new HashSet<int>();
                         LookingForGenderValues = (perfectmatchsearchsettings != null && perfectmatchsearchsettings.details.Where(p => p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.gender).Count() > 0) ? new HashSet<int>(perfectmatchsearchsettings.details.Where(p => p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.gender).Select(c => c.value))
                         : model.defaultlookingforgenders;
                         //Appearacnce seache settings values         
@@ -1172,7 +1173,7 @@ namespace Anewluv.Services.Mapping
 
 
                         //TO DO add code to filter out blocked members
-                        var otherblocks = db.Repository<action>().getothersactiontomebyprofileidandactiontype(model.profile_id,(int) actiontypeEnum.Block);
+                        var otherblocks = db.Repository<action>().getothersactiontomebyprofileidandactiontype(model.profile_id, (int)actiontypeEnum.Block);
                         //mailboxmessagefolderlist = (from m in mailboxmessagefolderlist.Where(a => a.mailboxmessage.sender_id == model.profileid.Value)
                         //                           where (!otherblocks.Any(f => f.target_profile_id != m.mailboxmessage.sender_id))
                         //                           select m).AsQueryable();     
@@ -1180,10 +1181,10 @@ namespace Anewluv.Services.Mapping
                         //****** end of visiblity test settings *****************************************
 
                         var MemberSearchViewmodels = (from x in db.Repository<profiledata>().Queryable().Where(p => p.birthdate > min && p.birthdate <= max &&
-                              p.profile.profilemetadata.photos.Any(z => z.photostatus_id == (int)photostatusEnum.Gallery)  
-                              &&  LookingForGenderValues.Contains((int)p.gender_id)                              
+                              p.profile.profilemetadata.photos.Any(z => z.photostatus_id == (int)photostatusEnum.Gallery)
+                              && LookingForGenderValues.Contains((int)p.gender_id)
                               ).ToList()
-                              
+
                                             //** visiblity settings still needs testing           
                                                           //5-8-2012 add profile visiblity code here
                                                           // .Where(x => x.profile.username == "case")
@@ -1193,8 +1194,8 @@ namespace Anewluv.Services.Mapping
                                                           // .Where(x => x.ProfileVisiblitySetting != null || x.ProfileVisiblitySetting.countryid != null && x.ProfileVisiblitySetting.countryid == model.profile.profiledata.countryid  )
                                                           // .Where(x => x.ProfileVisiblitySetting != null || x.ProfileVisiblitySetting.GenderID != null && x.ProfileVisiblitySetting.GenderID ==  model.profile.profiledata.GenderID )
                                                           //** end of visiblity settings ***
-                                        //using whereIF predicate function 
-                                        // .WhereIf(LookingForGenderValues.Count == 0, z => model.lookingforgendersid.Contains(z.gender_id.GetValueOrDefault())).ToList() //  == model.lookingforgenderid)    
+                                                          //using whereIF predicate function 
+                                                          // .WhereIf(LookingForGenderValues.Count == 0, z => model.lookingforgendersid.Contains(z.gender_id.GetValueOrDefault())).ToList() //  == model.lookingforgenderid)    
                                                           //TO DO add the rest of the filitering here 
                                                           //Appearance filtering                         
                                          .WhereIf(blEvaluateHeights, z => z.height > intheightmin && z.height <= intheightmax).ToList() //Only evealuate if the user searching actually has height values they look for                         
@@ -1220,7 +1221,7 @@ namespace Anewluv.Services.Mapping
                                                           //TO DO look at this and explore
                                                           //  distancefromme = _datingcontext.fnGetDistance((double)x.latitude, (double)x.longitude,myLattitude.Value  , myLongitude.Value   , "Miles")
                                                           //       lookingforagefrom = x.profile.profilemetadata.searchsettings != null ? x.profile.profilemetadata.searchsettings.FirstOrDefault().agemin.ToString() : "25",
-                                                   
+
 
                                                       }).OrderBy(p => p.distancefromme).ThenByDescending(p => p.creationdate);//.OrderBy(p=>p.creationdate ).Take(maxwebmatches).ToList();
 
@@ -1228,29 +1229,29 @@ namespace Anewluv.Services.Mapping
 
 
 
-                 
+
                         //11/20/2011 handle case where  no profiles were found
                         if (MemberSearchViewmodels.Count() == 0)
                         {
-                            var dd = getquickmatcheswhenquickmatchesempty(model,perfectmatchsearchsettings, Model.page, Model.numberperpage, db, geodb); //.Take(maxemailmatches).ToList();
+                            var dd = getquickmatcheswhenquickmatchesempty(model, perfectmatchsearchsettings, Model.page, Model.numberperpage, db, geodb); //.Take(maxemailmatches).ToList();
                             dd.results.Take(maxemailmatches);
                             return dd;
                         }
 
 
                         //filter our the ones in the right distance and reutnr the top webmacthes
-                        var FilteredMemberSearchviewmodels = (model.maxdistancefromme > 0 && MemberSearchViewmodels.Where(d=>d.distancefromme.GetValueOrDefault() <= model.maxdistancefromme).Count() > 8) ? (from q in MemberSearchViewmodels
-                            .Where(a =>  a.distancefromme.GetValueOrDefault() <= model.maxdistancefromme)
-                                                                        select q).Take(maxwebmatches)
+                        var FilteredMemberSearchviewmodels = (maxdistancefromme > 0 && MemberSearchViewmodels.Where(d => d.distancefromme.GetValueOrDefault() <= maxdistancefromme).Count() > 8) ? (from q in MemberSearchViewmodels
+                              .Where(a => a.distancefromme.GetValueOrDefault() <= maxdistancefromme)
+                                                                                                                                                                                                    select q).Take(maxwebmatches)
                                                                     : MemberSearchViewmodels.Take(maxwebmatches);
 
-                        return GenerateSearchSearchResults(FilteredMemberSearchviewmodels, Model.page, Model.numberperpage,db);
+                        return GenerateSearchSearchResults(FilteredMemberSearchviewmodels, Model.page, Model.numberperpage, db);
 
                     });
                     return await task.ConfigureAwait(false);
 
 
-                  
+
                 }
                 catch (Exception ex)
                 {
@@ -1272,7 +1273,7 @@ namespace Anewluv.Services.Mapping
                     //  Api.DisposeGeoService();
                     //  Api.DisposeMemberService();
                     //   Api.DisposePhotoService();
-                   
+
 
                 }
 
@@ -1285,9 +1286,9 @@ namespace Anewluv.Services.Mapping
         public async Task<SearchResultsViewModel> getemailmatches(ProfileModel Model)
         {
 
-//            _unitOfWorkAsync.DisableProxyCreation = false;
+            //            _unitOfWorkAsync.DisableProxyCreation = false;
             var geodb = _geodatastoredProcedures;
-           var db = _unitOfWorkAsync;
+            var db = _unitOfWorkAsync;
             {
                 try
                 {
@@ -1298,21 +1299,21 @@ namespace Anewluv.Services.Mapping
 
 
                         profile profile = new profile();
-                       // profile = db.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = (Model.profileid) });
-                        
+                        // profile = db.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = (Model.profileid) });
+
                         MembersViewModel model = membermappingextentions.mapmember(new ProfileModel { profileid = profile.id }, db, geodb);
 
 
-                       // model.profile = profile;
+                        // model.profile = profile;
                         //get search sttings from DB
-                        searchsetting perfectmatchsearchsettings = 
+                        searchsetting perfectmatchsearchsettings =
                        _unitOfWorkAsync.Repository<searchsetting>().getorcreatesearchsettings(new SearchSettingsModel { profileid = model.profile_id, searchname = "MyPerfectMatch" }, _unitOfWorkAsync);
 
 
                         //TO do handle empty perfect match settings here
                         if (perfectmatchsearchsettings == null)
                         {
-                            perfectmatchsearchsettings = profileextentionmethods.createsearchbyprofileid("MyPerfectMatch",true, new ProfileModel { profileid = Model.profileid }, db);
+                            perfectmatchsearchsettings = profileextentionmethods.createsearchbyprofileid("MyPerfectMatch", true, new ProfileModel { profileid = Model.profileid }, db);
                         }
 
                         //set default perfect match distance as 100 for now later as we get more members lower
@@ -1374,7 +1375,7 @@ namespace Anewluv.Services.Mapping
                         // var photostest = _datingcontext.profiles.Where(p => (p.profilemetadata.photos.Any(z => z.photostatus != null && z.photostatus.id != (int)photostatusEnum.Gallery)));
 
                         //TO DO add code to filter out blocked members
-                        var otherblocks = db.Repository<action>().getothersactiontomebyprofileidandactiontype(model.profile_id,(int) actiontypeEnum.Block);
+                        var otherblocks = db.Repository<action>().getothersactiontomebyprofileidandactiontype(model.profile_id, (int)actiontypeEnum.Block);
                         //mailboxmessagefolderlist = (from m in mailboxmessagefolderlist.Where(a => a.mailboxmessage.sender_id == model.profileid.Value)
                         //                           where (!otherblocks.Any(f => f.target_profile_id != m.mailboxmessage.sender_id))
                         //                           select m).AsQueryable();   
@@ -1390,7 +1391,7 @@ namespace Anewluv.Services.Mapping
                             .WhereIf(LookingForGenderValues.Count == 0, z =>
                                  (model.defaultlookingforgenders.Count > 0 && model.defaultlookingforgenders.Contains(z.gender_id.GetValueOrDefault())
                                                                      || z.gender_id != model.mygenderid))
-             
+
                                         .WhereIf(blEvaluateHeights, z => z.height > intheightmin && z.height <= intheightmax).ToList() //Only evealuate if the user searching actually has height values they look for 
                                                       //we have to filter on the back end now since we cant use UDFs
                                                       // .WhereIf(model.maxdistancefromme  > 0, a => _datingcontext.fnGetDistance((double)a.latitude, (double)a.longitude, Convert.ToDouble(model.Mylattitude) ,Convert.ToDouble(model.MyLongitude), "Miles") <= model.maxdistancefromme)
@@ -1416,7 +1417,7 @@ namespace Anewluv.Services.Mapping
                                                           //TO DO look at this and explore
                                                           //distancefromme = _datingcontext.fnGetDistance((double)x.latitude, (double)x.longitude,myLattitude.Value  , myLongitude.Value   , "Miles")
                                                           //lookingforagefrom = x.profile.profilemetadata.searchsettings != null ? x.profile.profilemetadata.searchsettings.FirstOrDefault().agemin.ToString() : "25",
-                                                   
+
 
                                                       }).OrderBy(p => p.distancefromme).ThenByDescending(p => p.creationdate);//.OrderBy(p=>p.creationdate ).Take(maxwebmatches).ToList();
 
@@ -1427,7 +1428,7 @@ namespace Anewluv.Services.Mapping
                         //11/20/2011 handle case where  no profiles were found
                         if (MemberSearchViewmodels.Count() == 0)
                         {
-                            var dd = getquickmatcheswhenquickmatchesempty(model,perfectmatchsearchsettings,Model.page,Model.numberperpage,db,geodb); //.Take(maxemailmatches).ToList();
+                            var dd = getquickmatcheswhenquickmatchesempty(model, perfectmatchsearchsettings, Model.page, Model.numberperpage, db, geodb); //.Take(maxemailmatches).ToList();
                             dd.results.Take(maxemailmatches);
                             return dd;
                         }
@@ -1437,10 +1438,10 @@ namespace Anewluv.Services.Mapping
                         var profiles = (model.maxdistancefromme > 0) ? (from q in MemberSearchViewmodels
                             .Where(a => a.distancefromme.GetValueOrDefault() <= model.maxdistancefromme)
                                                                         select q).Take(maxemailmatches)
-                                                                    :  MemberSearchViewmodels.Take(maxemailmatches);
+                                                                    : MemberSearchViewmodels.Take(maxemailmatches);
 
 
-                         return GenerateSearchSearchResults(MemberSearchViewmodels, Model.page, Model.numberperpage,db);
+                        return GenerateSearchSearchResults(MemberSearchViewmodels, Model.page, Model.numberperpage, db);
 
 
                     });
@@ -1488,9 +1489,9 @@ namespace Anewluv.Services.Mapping
         {
 
 
-           var activitylist = new List<ActivityModel>(); OperationContext ctx = OperationContext.Current;
-//            _unitOfWorkAsync.DisableProxyCreation = false;
-           var db = _unitOfWorkAsync;
+            var activitylist = new List<ActivityModel>(); OperationContext ctx = OperationContext.Current;
+            //            _unitOfWorkAsync.DisableProxyCreation = false;
+            var db = _unitOfWorkAsync;
             {
                 try
                 {
@@ -1569,7 +1570,7 @@ namespace Anewluv.Services.Mapping
 
 
 
-                      
+
 
 
                         //TO DO change the photostatus thing to where if maybe, based on HAS PHOTOS only matches
@@ -1596,7 +1597,7 @@ namespace Anewluv.Services.Mapping
                                                           screenname = f.screenname,
                                                           longitude = x.longitude ?? 0,
                                                           latitude = x.latitude ?? 0,
-                                                          creationdate = f.creationdate,                                                        
+                                                          creationdate = f.creationdate,
                                                           // lastloggedonString = _datingcontext.fnGetLastLoggedOnTime(f.logindate),
                                                           lastlogindate = f.logindate,
                                                           distancefromme = spatialextentions.getdistancebetweenmembers((double)x.latitude, (double)x.longitude, myLattitude.Value, myLongitude.Value, "Miles")
@@ -1604,9 +1605,9 @@ namespace Anewluv.Services.Mapping
                                                           //  distancefromme = _datingcontext.fnGetDistance((double)x.latitude, (double)x.longitude,myLattitude.Value  , myLongitude.Value   , "Miles")
                                                           //       lookingforagefrom = x.profile.profilemetadata.searchsettings != null ? x.profile.profilemetadata.searchsettings.FirstOrDefault().agemin.ToString() : "25",
                                                           //lookingForageto = x.profile.profilemetadata.searchsettings != null ? x.profile.profilemetadata.searchsettings.FirstOrDefault().agemax.ToString() : "45",
-                                                      }).OrderByDescending(p => p.hasgalleryphoto ==true).OrderBy(p => p.distancefromme).ThenByDescending(p => p.creationdate).ToList();//.OrderBy(p=>p.creationdate ).Take(maxwebmatches).ToList();
+                                                      }).OrderByDescending(p => p.hasgalleryphoto == true).OrderBy(p => p.distancefromme).ThenByDescending(p => p.creationdate).ToList();//.OrderBy(p=>p.creationdate ).Take(maxwebmatches).ToList();
 
-                    
+
 
 
                         //this.AddRange(pageData.ToList());
@@ -1634,16 +1635,16 @@ namespace Anewluv.Services.Mapping
                         //  .First();
 
                         //do paging here after last filtering
-                       // int? totalrecordcount = MemberSearchViewmodels.Count;
+                        // int? totalrecordcount = MemberSearchViewmodels.Count;
                         //handle zero and null paging values
 
-                        activitylist.Add(Api.AnewLuvLogging.CreateActivity(Model.profileid.GetValueOrDefault(), (int)activitytypeEnum.changebirthdate,ctx));
-                      
-                        if (activitylist.Count() > 0) Api.AnewLuvLogging.LogProfileActivities(activitylist);
+                        activitylist.Add(Api.AnewLuvLogging.CreateActivity(Model.profileid,null, (int)activitytypeEnum.quicksearch, ctx));
 
-                        return GenerateSearchSearchResults(MemberSearchViewmodels, Model.page, Model.numberperpage,db);
+                        if (activitylist.Count() > 0) Anewluv.Api.AsyncCalls.addprofileactivities(activitylist).DoNotAwait();
 
-                     
+                        return GenerateSearchSearchResults(MemberSearchViewmodels, Model.page, Model.numberperpage, db);
+
+
 
 
                     });
@@ -1876,11 +1877,11 @@ namespace Anewluv.Services.Mapping
         }
 
         //TO DO clean up and just use gener and newest
-        internal SearchResultsViewModel getquickmatcheswhenquickmatchesempty(MembersViewModel model,searchsetting perfectmatchsearchsettings,int? page, int? numberperpage, IUnitOfWorkAsync db,IGeoDataStoredProcedures geodb)
+        internal SearchResultsViewModel getquickmatcheswhenquickmatchesempty(MembersViewModel model, searchsetting perfectmatchsearchsettings, int? page, int? numberperpage, IUnitOfWorkAsync db, IGeoDataStoredProcedures geodb)
         {
 
-        
-//            _unitOfWorkAsync.DisableProxyCreation = false;
+
+            //            _unitOfWorkAsync.DisableProxyCreation = false;
             try
             {
 
@@ -1888,13 +1889,13 @@ namespace Anewluv.Services.Mapping
                 //get search sttings from DB
 
                 profile profile = model.profile;
-              //  profile = db.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = (profilemodel.profileid) });
+                //  profile = db.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = (profilemodel.profileid) });
                 // MembersViewModel model = mapmember(profilemodel.profileid.ToString());
 
-               // MembersViewModel model = membermappingextentions.mapmember(profilemodel,db,geodb);
+                // MembersViewModel model = membermappingextentions.mapmember(profilemodel,db,geodb);
 
                 //get search sttings from DB
-              
+
                 //set default perfect match distance as 100 for now later as we get more members lower
                 //TO DO move this to a _datingcontext setting or resourcer file
 
@@ -1927,8 +1928,8 @@ namespace Anewluv.Services.Mapping
                 //requery all the has tbls
                 HashSet<int> LookingForGenderValues = new HashSet<int>();
                 LookingForGenderValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.details.Where(p => p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.gender).Select(c => c.value)) : LookingForGenderValues;
-  
-              
+
+
                 //basic search
                 var repo = db.Repository<profiledata>().Query(p => p.birthdate > min && p.birthdate <= max &&
                     p.profile.profilemetadata.photos.Any(z => z.photostatus_id == (int)photostatusEnum.Gallery)).Select();
@@ -1949,7 +1950,7 @@ namespace Anewluv.Services.Mapping
                                               join f in db.Repository<profile>().Queryable() on x.profile_id equals f.id
                                               select new MemberSearchViewModel
                                               {
-                                                  city =x.city,
+                                                  city = x.city,
                                                   id = x.profile_id,
                                                   stateprovince = x.stateprovince,
                                                   postalcode = x.postalcode,
@@ -1961,10 +1962,10 @@ namespace Anewluv.Services.Mapping
                                                   longitude = x.longitude ?? 0,
                                                   latitude = x.latitude ?? 0,
                                                   hasgalleryphoto = true,  //set inthe above query 
-                                                  creationdate = f.creationdate,                                                 
+                                                  creationdate = f.creationdate,
                                                   lastlogindate = f.logindate,
                                                   distancefromme = spatialextentions.getdistancebetweenmembers((double)x.latitude, (double)x.longitude, myLattitude.Value, myLongitude.Value, "Miles")
-                                             
+
 
                                               }).OrderBy(p => p.distancefromme).ThenByDescending(p => p.creationdate);//.OrderBy(p=>p.creationdate ).Take(maxwebmatches).ToList();
 
@@ -2036,7 +2037,7 @@ namespace Anewluv.Services.Mapping
                     screenname = x.screenname,
                     longitude = x.longitude ?? 0,
                     latitude = x.latitude ?? 0,
-              
+
                     hasgalleryphoto = db.Repository<photo>().Queryable().Where(i => i.profile_id == x.id && i.photostatus_id == (int)photostatusEnum.Gallery).FirstOrDefault() != null ? true : false,
                     creationdate = x.creationdate,
                     city = Extensions.Chop(x.city, 11),
@@ -2152,7 +2153,7 @@ namespace Anewluv.Services.Mapping
 //                    });
 //                    return await task.ConfigureAwait(false);
 
-                  
+
 //                }
 //                catch (Exception ex)
 //                {

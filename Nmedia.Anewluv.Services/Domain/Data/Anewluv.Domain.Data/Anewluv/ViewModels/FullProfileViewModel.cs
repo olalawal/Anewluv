@@ -11,7 +11,8 @@ using Anewluv.Domain.Data.ViewModels;
 
 
 using System.Runtime.Serialization;
-using Anewluv.Domain.Data.Helpers;
+using Nmedia.Infrastructure.Helpers;
+
 
 namespace Anewluv.Domain.Data.ViewModels
 {

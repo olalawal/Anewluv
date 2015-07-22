@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 //using Nmedia.Infrastructure;
 using System.Runtime.Serialization;
-using Anewluv.Domain.Data.Helpers;
+
 
 namespace Anewluv.Domain.Data.ViewModels
 {

@@ -28,6 +28,8 @@ namespace Anewluv.Domain.Data.ViewModels
         [DataMember]
         public int? profileid { get; set; }
         [DataMember]
+        public string apikey { get; set; }
+        [DataMember]
         public int? targetprofileid { get; set; }
         [DataMember]
         public string screenname { get; set; }   

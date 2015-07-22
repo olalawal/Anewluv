@@ -189,15 +189,15 @@ namespace Anewluv.Api
 
         }
       
-        public static async Task addprofileactvity(ActivityModel activitymodel)
-        {
-           // Api.MemberService.addprofileactvity(activity);
-           //  result = await returnedTaskTResult;
-           // IsApiKeyValid = await 
-          //  return result;
+        //public static async Task addprofileactvity(ActivityModel activitymodel)
+        //{
+        //   // Api.MemberService.addprofileactvity(activity);
+        //   //  result = await returnedTaskTResult;
+        //   // IsApiKeyValid = await 
+        //  //  return result;
 
-           await  Api.MemberService.addprofileactvity(activitymodel);
-        }
+        //   await  Api.MemberService.addprofileactvity(activitymodel);
+        //}
 
         public static async Task addprofileactivities(List<ActivityModel> activitymodels)
         {
@@ -209,24 +209,32 @@ namespace Anewluv.Api
             await Api.MemberService.addprofileactivities(activitymodels);
         }
 
-
-        public static void updateuserlogintimeasync(ProfileModel model)
+        public static async Task updateuserlogintimeasync(ProfileModel model)
         {
             // Api.MemberService.addprofileactvity(activity);
             //  result = await returnedTaskTResult;
             // IsApiKeyValid = await 
             //  return result;
 
-            Task.Run(() => Api.MemberService.updateuserlogintimebyprofileid(model));
+            await Api.MemberService.updateuserlogintimebyprofileid(model);
         }
-        public static void updateuserlogintimebyprofileidandsessionidasync(ProfileModel model)
+
+        public static async Task updateuserlogintimebyprofileidandsessionidasync(ProfileModel model)
         {
 
-            Task.Run(() => Api.MemberService.updateuserlogintimebyprofileidandsessionid(model));
+          await Api.MemberService.updateuserlogintimebyprofileidandsessionid(model);
         
         }
+
+        public static async Task updateuserlogouttimebyprofileidasync(ProfileModel model)
+        {
+            await Api.MemberService.updateuserlogouttimebyprofileid(model);
+            
+        }
+
         public static async Task<bool> checkifprofileisactivatedasync(ProfileModel model)
         {
+
          Task<bool> returnedTaskTResult =  Api.MemberService.checkifprofileisactivated(model);
                     bool result = await returnedTaskTResult;
                     // IsApiKeyValid = await 

@@ -38,6 +38,7 @@ using Repository.Pattern.UnitOfWork;
 using Nmedia.Infrastructure.Domain.Data.Notification;
 using Nmedia.Infrastructure.Helpers;
 using Repository.Pattern.Infrastructure;
+using Nmedia.Infrastructure.Utils;
 
 
 
@@ -87,62 +88,62 @@ namespace Anewluv.Services.Authentication
             {
 
                 var task = Task.Factory.StartNew(() =>
-                {                   
-              
-
-                // string username,
-                //string password,
-                //string email, string securityQuestion,
-                //   string securityAnswer,
-                //bool isApproved,
-                //string providerUserKey,
-                MembershipCreateStatus status;
-
-                var membershipprovider = CreateUserCustom(model.username, model.password, model.openidIdentifer,
-                   model.openidProvidername,
-                 model.email,
-               model.birthdate, model.genderid, model.country,model.countryid, model.city, model.stateprovince, model.longitude, model.latitude,
-                model.screenname, model.zippostalcode, model.activationcode, false, model.providerUserKey,
-                 out status);
-
-                AnewluvResponse response = new AnewluvResponse();
-                ResponseMessage responsemessage = new ResponseMessage();
-                switch (status)
                 {
 
-                    case MembershipCreateStatus.Success:
-                        //get the profile info to return
-                        //Shell.MVC2.Domain.Entities.Anewluv.profile profile = _memberservice.getprofilebyusername(model.username);                         
-                        response.profileid1 = membershipprovider.profileid.ToString(); //profile.id.ToString();
-                        response.email = membershipprovider.Email; //profile.emailaddress;
-                        responsemessage = new ResponseMessage("", "Profile created succesfully", "");
-                        break;
-                    case MembershipCreateStatus.DuplicateUserName:
-                        // AnewluvResponse response = new AnewluvResponse();
-                        responsemessage = new ResponseMessage("", "Unable to create profile", "Duplicate username : the username :" + model.username + "already exists");
-                        break;
-                    case MembershipCreateStatus.DuplicateEmail:
-                        responsemessage = new ResponseMessage("", "Unable to create profile", "Duplicate email : the email :" + model.email + "already exists");
-                        break;
-                    default:
-                        // Console.WriteLine("Invalid selection. Please select 1, 2, or 3.");
-                        ResponseMessage reponsemessage = new ResponseMessage("", "Unable to create profile", "There was a problem creation the profile, please try again later");
-                        response.ResponseMessages.Add(reponsemessage);
-                        break;
-                }
 
-                response.ResponseMessages.Add(responsemessage);
-                return response;
+                    // string username,
+                    //string password,
+                    //string email, string securityQuestion,
+                    //   string securityAnswer,
+                    //bool isApproved,
+                    //string providerUserKey,
+                    MembershipCreateStatus status;
+
+                    var membershipprovider = CreateUserCustom(model.username, model.password, model.openidIdentifer,
+                       model.openidProvidername,
+                     model.email,
+                   model.birthdate, model.genderid, model.country, model.countryid, model.city, model.stateprovince, model.longitude, model.latitude,
+                    model.screenname, model.zippostalcode, model.activationcode, false, model.providerUserKey,
+                     out status);
+
+                    AnewluvResponse response = new AnewluvResponse();
+                    ResponseMessage responsemessage = new ResponseMessage();
+                    switch (status)
+                    {
+
+                        case MembershipCreateStatus.Success:
+                            //get the profile info to return
+                            //Shell.MVC2.Domain.Entities.Anewluv.profile profile = _memberservice.getprofilebyusername(model.username);                         
+                            response.profileid1 = membershipprovider.profileid.ToString(); //profile.id.ToString();
+                            response.email = membershipprovider.Email; //profile.emailaddress;
+                            responsemessage = new ResponseMessage("", "Profile created succesfully", "");
+                            break;
+                        case MembershipCreateStatus.DuplicateUserName:
+                            // AnewluvResponse response = new AnewluvResponse();
+                            responsemessage = new ResponseMessage("", "Unable to create profile", "Duplicate username : the username :" + model.username + "already exists");
+                            break;
+                        case MembershipCreateStatus.DuplicateEmail:
+                            responsemessage = new ResponseMessage("", "Unable to create profile", "Duplicate email : the email :" + model.email + "already exists");
+                            break;
+                        default:
+                            // Console.WriteLine("Invalid selection. Please select 1, 2, or 3.");
+                            ResponseMessage reponsemessage = new ResponseMessage("", "Unable to create profile", "There was a problem creation the profile, please try again later");
+                            response.ResponseMessages.Add(reponsemessage);
+                            break;
+                    }
+
+                    response.ResponseMessages.Add(responsemessage);
+                    return response;
                 });
                 return await task.ConfigureAwait(false);
             }
             catch (Exception ex)
             {
-                using (var logger = new  Logging(applicationEnum.UserAuthorizationService))
+                using (var logger = new Logging(applicationEnum.UserAuthorizationService))
                 {
                     logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
-                }      
-               
+                }
+
                 FaultReason faultreason = new FaultReason("Error in authenitcation service");
                 string ErrorMessage = "";
                 string ErrorDetail = "ErrorMessage: " + ex.Message;
@@ -153,14 +154,14 @@ namespace Anewluv.Services.Authentication
         }
 
 
-       
+
         public AnewLuvMembershipUser createusercustom(MembershipUserViewModel model)
         {
             MembershipCreateStatus status;
             return CreateUserCustom(model.username,
                         model.password, model.openidIdentifer, model.openidProvidername,
                        model.email,
-                       model.birthdate, model.genderid, model.country,model.countryid, model.city, model.stateprovince,
+                       model.birthdate, model.genderid, model.country, model.countryid, model.city, model.stateprovince,
                        model.longitude, model.latitude, model.screenname, model.zippostalcode, model.activationcode,
                        model.isApproved,
                        model.providerUserKey, out status);
@@ -174,7 +175,7 @@ namespace Anewluv.Services.Authentication
                 return ValidateUser(profile.username, profile.password);
             });
             return await task.ConfigureAwait(false);
-          
+
 
         }
 
@@ -202,8 +203,8 @@ namespace Anewluv.Services.Authentication
 
             var myQuery = new profile();
 
-           // _unitOfWorkAsync.DisableProxyCreation = true;
-          //  using (var db = _unitOfWorkAsync)
+            // _unitOfWorkAsync.DisableProxyCreation = true;
+            //  using (var db = _unitOfWorkAsync)
             {
                 try
                 {
@@ -219,7 +220,7 @@ namespace Anewluv.Services.Authentication
 
                     //Dim ctx As New Entities()
                     //added profile status ID validation as well i.e 2 for activated and is not banned 
-                    myQuery =  _unitOfWorkAsync.Repository<profile>().Query(p => p.username == username && p.status_id == 2).Select().FirstOrDefault();
+                    myQuery = _unitOfWorkAsync.Repository<profile>().Query(p => p.username == username && p.status_id == 2).Select().FirstOrDefault();
 
 
 
@@ -268,9 +269,9 @@ namespace Anewluv.Services.Authentication
                                 //we dont do anything really with the callback so not needed really
                                 //  MemberService.Endupdateuserlogintimebyprofileidandsessionid(result);
                             };
-                            
-                            
-                          
+
+
+
                         }
                         else
                         {
@@ -284,7 +285,7 @@ namespace Anewluv.Services.Authentication
                                 //  MemberService.Endupdateuserlogintimebyprofileidandsessionid(result);
                             };
 
-                         
+
                         }
 
 
@@ -316,11 +317,11 @@ namespace Anewluv.Services.Authentication
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     //instantiate logger here so it does not break anything else.
 
-                    using (var logger = new  Logging(applicationEnum.UserAuthorizationService))
+                    using (var logger = new Logging(applicationEnum.UserAuthorizationService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, myQuery != null ? myQuery.id : 0, null);
-                    }                   
-                 
+                    }
+
                     FaultReason faultreason = new FaultReason("Error in authenitcation service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
@@ -340,8 +341,8 @@ namespace Anewluv.Services.Authentication
         {
             var myQuery = new profile();
 
-           // _unitOfWorkAsync.DisableProxyCreation = true;
-          //  using (var db = _unitOfWorkAsync)
+            // _unitOfWorkAsync.DisableProxyCreation = true;
+            //  using (var db = _unitOfWorkAsync)
             {
                 try
                 {
@@ -356,7 +357,7 @@ namespace Anewluv.Services.Authentication
                     //dynamic user = datingcontext.profiles.Where(u => u.username == username && u.Password == Common.Encryption.EncodePasswordWithSalt(password, username).FirstOrDefault());
                     // Return user IsNot Nothing
 
-                    myQuery =  _unitOfWorkAsync.Repository<profile>().Query(p => p.username == username).Select().FirstOrDefault();//&& p.ProfileStatusID == 2);
+                    myQuery = _unitOfWorkAsync.Repository<profile>().Query(p => p.username == username).Select().FirstOrDefault();//&& p.ProfileStatusID == 2);
 
 
                     if (myQuery != null)
@@ -371,9 +372,9 @@ namespace Anewluv.Services.Authentication
                                 //we dont do anything really with the callback so not needed really
                                 //  MemberService.Endupdateuserlogintimebyprofileidandsessionid(result);
                             };
-                            
-                            
-                         
+
+
+
                         }
                         else
                         {
@@ -388,8 +389,8 @@ namespace Anewluv.Services.Authentication
                             };
 
                             //use anew  the same DB context
-                         
-                           
+
+
                         }
                         //TO DO get geodata from IP address down the line
                         //also update profile activity
@@ -415,11 +416,11 @@ namespace Anewluv.Services.Authentication
                 }
                 catch (Exception ex)
                 {
-                    using (var logger = new  Logging(applicationEnum.UserAuthorizationService))
+                    using (var logger = new Logging(applicationEnum.UserAuthorizationService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, myQuery != null ? myQuery.id : 0, null);
-                    }          
-                   
+                    }
+
                     FaultReason faultreason = new FaultReason("Error in authenitcation service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
@@ -427,7 +428,7 @@ namespace Anewluv.Services.Authentication
                 }
                 finally
                 {
-                   // Api.DisposeMemberService();
+                    // Api.DisposeMemberService();
                 }
             }
         }
@@ -436,16 +437,16 @@ namespace Anewluv.Services.Authentication
         {
 
             var myprofile = new profile();
-           // _unitOfWorkAsync.DisableProxyCreation = true;
-          //  using (var db = _unitOfWorkAsync)
+            // _unitOfWorkAsync.DisableProxyCreation = true;
+            //  using (var db = _unitOfWorkAsync)
             {
                 try
                 {
                     //open ID members are already verifed but it is posublethat a member who is not activated tries to use open ID
                     //so they could be in order status 1
-                    myprofile =  _unitOfWorkAsync.Repository<profile>().Query(p => p.emailaddress == VerifedEmail && p.status_id <= 2).Select().FirstOrDefault();
+                    myprofile = _unitOfWorkAsync.Repository<profile>().Query(p => p.emailaddress == VerifedEmail && p.status_id <= 2).Select().FirstOrDefault();
 
-                
+
 
                     //get the openid providoer
                     lu_openidprovider provider = _unitOfWorkAsync.Repository<lu_openidprovider>().Queryable().Where(p => (p.description).ToUpper() == openidProvidername.ToUpper()).FirstOrDefault();
@@ -476,7 +477,7 @@ namespace Anewluv.Services.Authentication
                     if (myprofile != null)
                         //log the user logtime here so it is common to silverlight and MVC
                         if (HttpContext.Current != null)
-                                {
+                        {
                             //Just for testing that it worked
                             //TO DO remove when in prod
                             AsyncCallback callback = result =>
@@ -484,9 +485,9 @@ namespace Anewluv.Services.Authentication
                                 //we dont do anything really with the callback so not needed really
                                 //  MemberService.Endupdateuserlogintimebyprofileidandsessionid(result);
                             };
-                            
-                            
-                         
+
+
+
                         }
                         else
                         {
@@ -501,7 +502,7 @@ namespace Anewluv.Services.Authentication
                             };
 
                             //use anew  the same DB context
-                         
+
                         }
                     //TO DO get geodata from IP address down the line
                     //also update profile activity
@@ -532,12 +533,12 @@ namespace Anewluv.Services.Authentication
                 catch (Exception ex)
                 {
 
-                    using (var logger = new  Logging(applicationEnum.UserAuthorizationService))
+                    using (var logger = new Logging(applicationEnum.UserAuthorizationService))
                     {
 
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, myprofile != null ? myprofile.id : 0, null);
-                    }          
-                   
+                    }
+
 
                     FaultReason faultreason = new FaultReason("Error in authenitcation service");
                     string ErrorMessage = "";
@@ -589,7 +590,7 @@ namespace Anewluv.Services.Authentication
                 //  securityQuestion,
                 //  securityAnswer
                  DateTime.Now,
-                  "", "",null, "", "", null, null, "", "", "",
+                  "", "", null, "", "", null, null, "", "", "",
                   false,
                   null,
                   out status);
@@ -623,7 +624,7 @@ namespace Anewluv.Services.Authentication
                   string email,
             //  string securityQuestion,
             // string securityAnswer,
-                  DateTime birthdate, string genderid, string country,int? countryid, string city, string stateprovince, string longitude, string latitude, string screenname, string zippostalcode, string activationcode,
+                  DateTime birthdate, string genderid, string country, int? countryid, string city, string stateprovince, string longitude, string latitude, string screenname, string zippostalcode, string activationcode,
                   bool isApproved,
                   object providerUserKey,
                  out MembershipCreateStatus status)
@@ -633,10 +634,10 @@ namespace Anewluv.Services.Authentication
 
             AnewLuvMembershipUser membershipprovider = new AnewLuvMembershipUser();
 
-          //  using (var db = _unitOfWorkAsync)
+            //  using (var db = _unitOfWorkAsync)
             {
-               //////do not audit on adds
-             //   using (var transaction = db.BeginTransaction())
+                //////do not audit on adds
+                //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -646,13 +647,13 @@ namespace Anewluv.Services.Authentication
                         //get profile and profile datas
                         var profilerepo = _unitOfWorkAsync.Repository<profile>();
                         var profiledatarepo = _unitOfWorkAsync.Repository<profiledata>();
-                      
-                        if ( _unitOfWorkAsync.Repository<profile>().checkifemailalreadyexists(new ProfileModel { email = email }) == true)
+
+                        if (_unitOfWorkAsync.Repository<profile>().checkifemailalreadyexists(new ProfileModel { email = email }) == true)
                         {
                             status = MembershipCreateStatus.DuplicateEmail;
                             return membershipprovider;
                         }
-                        if ( _unitOfWorkAsync.Repository<profile>().checkifusernamealreadyexists(new ProfileModel { username = username }) == true)
+                        if (_unitOfWorkAsync.Repository<profile>().checkifusernamealreadyexists(new ProfileModel { username = username }) == true)
                         {
                             status = MembershipCreateStatus.DuplicateUserName;
                             return membershipprovider;
@@ -664,7 +665,7 @@ namespace Anewluv.Services.Authentication
                         profilemetadata objprofileMetaDataEntity = new profilemetadata();
 
                         //TO DO new entity for OPEN ID data
-                       
+
                         Random objRandom = new Random();
                         int intStart = objRandom.Next(1, 9);
                         int intLastTwo = objRandom.Next(10, 99);
@@ -677,13 +678,13 @@ namespace Anewluv.Services.Authentication
 
 
                         //var guid = Api.AsyncCalls.getcountryidbycountryname(country).Result;
-                     //   PostalData2Context GeoContext = new PostalData2Context();
-                       // using (var tempdb = GeoContext)
-                     //   {
-                     //       GeoService GeoService = new GeoService(tempdb);
-                           // countryID = GeoService.getcountryidbycountryname(new GeoModel { country = country });    
-                      //  }
-                       // countryID = Api.GeoService.getcountryidbycountryname(country);
+                        //   PostalData2Context GeoContext = new PostalData2Context();
+                        // using (var tempdb = GeoContext)
+                        //   {
+                        //       GeoService GeoService = new GeoService(tempdb);
+                        // countryID = GeoService.getcountryidbycountryname(new GeoModel { country = country });    
+                        //  }
+                        // countryID = Api.GeoService.getcountryidbycountryname(country);
 
 
                         //split up the city from state province
@@ -707,7 +708,7 @@ namespace Anewluv.Services.Authentication
                         //  ObjProfileEntity.SecurityQuestionID = 1;                
                         // ObjProfileEntity.SecurityAnswer =  securityAnswer;
                         ObjProfileEntity.status_id = (openidIdentifer == "" || openidIdentifer == null) ? (int)profilestatusEnum.NotActivated : (int)profilestatusEnum.Activated;
-                           //auto activate profiles fi we have an openID user since we have verifed thier info
+                        //auto activate profiles fi we have an openID user since we have verifed thier info
 
 
 
@@ -720,7 +721,7 @@ namespace Anewluv.Services.Authentication
                         objprofileDataEntity.countryregion = "NA";
 
 
-                        objprofileDataEntity.stateprovince = (stateprovince == null || stateprovince == "") ?   "" :stateprovince;
+                        objprofileDataEntity.stateprovince = (stateprovince == null || stateprovince == "") ? "" : stateprovince;
 
                         objprofileDataEntity.countryid = countryid;
                         objprofileDataEntity.postalcode = zippostalcode;
@@ -737,7 +738,7 @@ namespace Anewluv.Services.Authentication
 
                         //TOD DO add open ID identifier as well Profider type to ssoProvider table 
 
-                         //get profile and profile datas
+                        //get profile and profile datas
 
 
                         //set states 
@@ -747,18 +748,18 @@ namespace Anewluv.Services.Authentication
                         ObjProfileEntity.profiledata = objprofileDataEntity;
                         ObjProfileEntity.profilemetadata = objprofileMetaDataEntity;
 
-                        ObjProfileEntity.ObjectState = ObjectState.Added;   
+                        ObjProfileEntity.ObjectState = ObjectState.Added;
                         _unitOfWorkAsync.Repository<profile>().InsertOrUpdateGraph(ObjProfileEntity);
 
                         //objprofileDataEntity.ObjectState = ObjectState.Added;
                         //_unitOfWorkAsync.Repository<profiledata>().Insert(objprofileDataEntity);
 
                         //objprofileMetaDataEntity.ObjectState = ObjectState.Added;
-                       //  _unitOfWorkAsync.Repository<profilemetadata>().Insert()
+                        //  _unitOfWorkAsync.Repository<profilemetadata>().Insert()
 
                         //_unitOfWorkAsync
-                        var i =  _unitOfWorkAsync.SaveChanges();
-                       // transaction.Commit();
+                        var i = _unitOfWorkAsync.SaveChanges();
+                        // transaction.Commit();
 
                         //send the emails
                         //**************************************
@@ -769,11 +770,11 @@ namespace Anewluv.Services.Authentication
                             templateid = (int)templateenum.MemberCreatedMemberNotification,
                             messagetypeid = (int)messagetypeenum.UserUpdate,
                             addresstypeid = (int)addresstypeenum.SiteUser,
-                            activationcode =  ObjProfileEntity.activationcode,
+                            activationcode = ObjProfileEntity.activationcode,
                             emailaddress = email,
                             screenname = screenname,
                             username = username
-                            
+
                         });
                         EmailModels.Add(new EmailModel
                         {
@@ -782,11 +783,11 @@ namespace Anewluv.Services.Authentication
                             addresstypeid = (int)addresstypeenum.SystemAdmin,
                         });
                         //this sends both admin and user emails  
-                        Api.AsyncCalls.sendmessagesbytemplate(EmailModels); 
+                        Api.AsyncCalls.sendmessagesbytemplate(EmailModels);
                         //************* end of email send ************************
 
                         //populate the object to send back so we do not have to requery from athe service side
-                        profile profile =  _unitOfWorkAsync.Repository<profile>().getprofilebyusername(new ProfileModel { username = username });
+                        profile profile = _unitOfWorkAsync.Repository<profile>().getprofilebyusername(new ProfileModel { username = username });
                         membershipprovider.profileid = profile.id;
                         membershipprovider.Email = email;
 
@@ -795,15 +796,15 @@ namespace Anewluv.Services.Authentication
                     }
                     catch (Exception ex)
                     {
-                       // transaction.Rollback();
+                        // transaction.Rollback();
 
-                        using (var logger = new  Logging(applicationEnum.UserAuthorizationService))
+                        using (var logger = new Logging(applicationEnum.UserAuthorizationService))
                         {
 
                             logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null);
-                        }          
-                   
-                      
+                        }
+
+
                         FaultReason faultreason = new FaultReason("Error in User Authentication service");
                         string ErrorMessage = "";
                         string ErrorDetail = "ErrorMessage: " + ex.Message;
@@ -814,7 +815,7 @@ namespace Anewluv.Services.Authentication
                     }
                     finally
                     {
-                      //  Api.DisposeGeoService();
+                        //  Api.DisposeGeoService();
                     }
                 }
             }
@@ -830,7 +831,7 @@ namespace Anewluv.Services.Authentication
 
                 throw new NotImplementedException();
 
-               // return this.ResetPasswordCustom(model.profileid.Value, model.securityanswer).Result;
+                // return this.ResetPasswordCustom(model.profileid.Value, model.securityanswer).Result;
 
             }
             catch (Exception ex)
@@ -855,23 +856,23 @@ namespace Anewluv.Services.Authentication
 
         }
 
-        
+
         public string resetpasswordcustom(ProfileModel model)
         {
             try
             {
-                return this.ResetPasswordCustom(model.email, model.securityanswer).Result;             
-              
+                return this.ResetPasswordCustom(model.email, model.securityanswer).Result;
+
             }
             catch (Exception ex)
             {
-                using (var logger = new  Logging(applicationEnum.UserAuthorizationService))
+                using (var logger = new Logging(applicationEnum.UserAuthorizationService))
                 {
 
                     logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null);
-                }          
-                   
-              
+                }
+
+
                 //log error mesasge
                 //handle logging here
                 var message = ex.Message;
@@ -890,130 +891,130 @@ namespace Anewluv.Services.Authentication
         //handles reseting password duties.  First verifys that security uqestion was correct for the profile ID, the generated a password
         // using the local generatepassword method the send the encyrpted passwoerd and profile ID to the dating service so it can be updated in the DB
         //finally returns the new password to the calling functon or an empty string if failure.
-        public async Task<string> ResetPasswordCustom(string emailaddress,string securityanswer)
+        public async Task<string> ResetPasswordCustom(string emailaddress, string securityanswer)
         {
 
-       
-                    try
+
+            try
+            {
+                var task = Task.Factory.StartNew(() =>
+                {
+                    // var username = datingService.ValidateSecurityAnswerIsCorrect(profileid, securityquestionID.GetValueOrDefault(), answer);
+                    var profile = _unitOfWorkAsync.Repository<profile>().getprofilebyemailaddress(new ProfileModel { email = emailaddress });
+                    if (profile != null)
                     {
-                        var task = Task.Factory.StartNew(() =>
-                       {
-                            // var username = datingService.ValidateSecurityAnswerIsCorrect(profileid, securityquestionID.GetValueOrDefault(), answer);
-                            var profile =  _unitOfWorkAsync.Repository<profile>().getprofilebyemailaddress(new ProfileModel { email = emailaddress });                            
-                            if (profile != null)
-                            {
-                                //we have the generated password now update the user's account with new password
+                        //we have the generated password now update the user's account with new password
 
-                                //generatedpassword = GeneratePassword();
-                                //AnewluvContext AnewluvContext  = new AnewluvContext();
-                                Guid guid = Guid.NewGuid();
-                                ShortGuid sguid1 = guid; // implicitly cast the guid as a shortguid
+                        //generatedpassword = GeneratePassword();
+                        //AnewluvContext AnewluvContext  = new AnewluvContext();
+                        Guid guid = Guid.NewGuid();
+                        ShortGuid sguid1 = guid; // implicitly cast the guid as a shortguid
 
 
-                                if (profile.status_id != (int)profilestatusEnum.ResetingPassword && (profile.passwordresetwindow!=null && profile.passwordresetwindow > DateTime.Now))
-                                {
-                                    bool dd = enablepasswordreset(new ProfileModel { profileid = profile.id }, sguid1);
-                                }
-                                else
-                                {
-
-                                  //  return "password is already in reset satatus";
-
-                                }
-
-
-                                var EmailModels = new List<EmailModel>();
-
-                                EmailModels.Add(new EmailModel
-                                {
-                                    templateid = (int)templateenum.MemberPasswordChangeMemberNotification,
-                                    messagetypeid = (int)messagetypeenum.UserUpdate,
-                                    addresstypeid = (int)addresstypeenum.SiteUser,
-                                    emailaddress = profile.emailaddress,
-                                    screenname = profile.screenname,
-                                    username = profile.username,
-                                    passwordtoken = sguid1
-                                });
-                                EmailModels.Add(new EmailModel
-                                {
-                                    templateid = (int)templateenum.MemberPasswordChangedAdminNotification,
-                                    messagetypeid = (int)messagetypeenum.SysAdminUpdate,
-                                    addresstypeid = (int)addresstypeenum.SystemAdmin,
-                                });
-                                //this sends both admin and user emails  
-                                Api.AsyncCalls.sendmessagesbytemplate(EmailModels); 
-                               
-
-                                return "true";
-                            }
-                            // throw new NotImplementedException();
-                       
-                           return "false";
-                         
-                         });
-                        return await task.ConfigureAwait(false);
-
-                    }
-                    catch (Exception ex)
-                    {
-                        using (var logger = new  Logging(applicationEnum.UserAuthorizationService))
+                        if (profile.status_id != (int)profilestatusEnum.ResetingPassword && (profile.passwordresetwindow != null && profile.passwordresetwindow > DateTime.Now))
+                        {
+                            bool dd = enablepasswordreset(new ProfileModel { profileid = profile.id }, sguid1);
+                        }
+                        else
                         {
 
-                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null);
-                        }          
-                   
-                       //log error mesasge
-                        //handle logging here
-                        FaultReason faultreason = new FaultReason("Error in member service");
-                        string ErrorMessage = "";
-                        string ErrorDetail = "ErrorMessage: " + ex.Message;
-                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                            //  return "password is already in reset satatus";
+
+                        }
+
+
+                        var EmailModels = new List<EmailModel>();
+
+                        EmailModels.Add(new EmailModel
+                        {
+                            templateid = (int)templateenum.MemberPasswordChangeMemberNotification,
+                            messagetypeid = (int)messagetypeenum.UserUpdate,
+                            addresstypeid = (int)addresstypeenum.SiteUser,
+                            emailaddress = profile.emailaddress,
+                            screenname = profile.screenname,
+                            username = profile.username,
+                            passwordtoken = sguid1
+                        });
+                        EmailModels.Add(new EmailModel
+                        {
+                            templateid = (int)templateenum.MemberPasswordChangedAdminNotification,
+                            messagetypeid = (int)messagetypeenum.SysAdminUpdate,
+                            addresstypeid = (int)addresstypeenum.SystemAdmin,
+                        });
+                        //this sends both admin and user emails  
+                        Api.AsyncCalls.sendmessagesbytemplate(EmailModels);
+
+
+                        return "true";
                     }
-                    finally
-                    {
-                       // Api.DisposeMemberService();
-                    }
-                
-            
+                    // throw new NotImplementedException();
+
+                    return "false";
+
+                });
+                return await task.ConfigureAwait(false);
+
+            }
+            catch (Exception ex)
+            {
+                using (var logger = new Logging(applicationEnum.UserAuthorizationService))
+                {
+
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null);
+                }
+
+                //log error mesasge
+                //handle logging here
+                FaultReason faultreason = new FaultReason("Error in member service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
+            finally
+            {
+                // Api.DisposeMemberService();
+            }
+
+
         }
 
         //updates the profile with a password that is presumed to be already encyrpted
         private bool updatepassword(ProfileModel model, string encryptedpassword)
         {
-            
-          //// 
+
+            //// 
             {
                 // ////do not audit on adds
                 //   using (var transaction = db.BeginTransaction())
-                  {
-                      try
-                      {
-                          var profilerepo = _unitOfWorkAsync.Repository<profile>();
-                          var myProfile = profilerepo.getprofilebyprofileid(model); 
-                          //update the profile status to 2
-                          myProfile.password = encryptedpassword;
-                          myProfile.modificationdate = DateTime.Now;
-                          myProfile.passwordChangeddate = DateTime.Now;
-                          myProfile.passwordchangecount = (myProfile.passwordchangecount == null) ? 1 : myProfile.passwordchangecount + 1;
-                          //handele the update using EF
-                          //  _unitOfWorkAsync.Repository<Country_PostalCode_List>().profiles.AttachAsModified(myProfile, this.ChangeSet.GetOriginal(myProfile));
-                          profilerepo.Update(myProfile);
-                          var i = _unitOfWorkAsync.SaveChanges();
-                         // transaction.Commit();
+                {
+                    try
+                    {
+                        var profilerepo = _unitOfWorkAsync.Repository<profile>();
+                        var myProfile = profilerepo.getprofilebyprofileid(model);
+                        //update the profile status to 2
+                        myProfile.password = encryptedpassword;
+                        myProfile.modificationdate = DateTime.Now;
+                        myProfile.passwordChangeddate = DateTime.Now;
+                        myProfile.passwordchangecount = (myProfile.passwordchangecount == null) ? 1 : myProfile.passwordchangecount + 1;
+                        //handele the update using EF
+                        //  _unitOfWorkAsync.Repository<Country_PostalCode_List>().profiles.AttachAsModified(myProfile, this.ChangeSet.GetOriginal(myProfile));
+                        profilerepo.Update(myProfile);
+                        var i = _unitOfWorkAsync.SaveChanges();
+                        // transaction.Commit();
 
-                          return true;
-                      }
-                      catch (Exception ex)
-                      {
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
 
-                          throw ex;
+                        throw ex;
 
-                          //throw convertedexcption;
-                      }
-                  }
+                        //throw convertedexcption;
+                    }
+                }
             }
 
-         }
+        }
 
         //updates the profile with a password that is presumed to be already encyrpted
         private bool enablepasswordreset(ProfileModel model, ShortGuid shortguid)
@@ -1032,12 +1033,12 @@ namespace Anewluv.Services.Authentication
                         var myProfile = profilerepo.getprofilebyprofileid(model);
                         //update the profile status to 2
                         myProfile.status_id = (int)profilestatusEnum.ResetingPassword;
-                        myProfile.passwordresettoken  = shortguid;
+                        myProfile.passwordresettoken = shortguid;
                         myProfile.passwordresetwindow = DateTime.Now.AddMinutes(30);
                         myProfile.passwordchangeattempts = myProfile.passwordchangeattempts + 1;
                         myProfile.modificationdate = DateTime.Now;
-                       // myProfile.passwordChangeddate = DateTime.Now;
-                       // myProfile.passwordchangecount = (myProfile.passwordchangecount == null) ? 1 : myProfile.passwordchangecount + 1;
+                        // myProfile.passwordChangeddate = DateTime.Now;
+                        // myProfile.passwordchangecount = (myProfile.passwordchangecount == null) ? 1 : myProfile.passwordchangecount + 1;
                         //handele the update using EF
                         //  _unitOfWorkAsync.Repository<Country_PostalCode_List>().profiles.AttachAsModified(myProfile, this.ChangeSet.GetOriginal(myProfile));
                         profilerepo.Update(myProfile);
@@ -1070,10 +1071,10 @@ namespace Anewluv.Services.Authentication
 
 
             AnewLuvMembershipUser u = (AnewLuvMembershipUser)user;
-          //  using (var db = _unitOfWorkAsync)
+            //  using (var db = _unitOfWorkAsync)
             {
                 //db.IsAuditEnabled = false; //do not audit on adds
-             //   using (var transaction = db.BeginTransaction())
+                //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -1083,7 +1084,7 @@ namespace Anewluv.Services.Authentication
                         var profilerepo = _unitOfWorkAsync.Repository<profile>();
                         var profiledatarepo = _unitOfWorkAsync.Repository<profiledata>();
 
-                        profile ObjProfileEntity =  _unitOfWorkAsync.Repository<profile>().Query(p => p.id == Convert.ToInt16(u.profileid)).Select().FirstOrDefault();
+                        profile ObjProfileEntity = _unitOfWorkAsync.Repository<profile>().Query(p => p.id == Convert.ToInt16(u.profileid)).Select().FirstOrDefault();
                         profiledata objprofileDateEntity = _unitOfWorkAsync.Repository<profiledata>().Query(p => p.profile_id == Convert.ToInt16(u.profileid)).Select().FirstOrDefault();
 
                         // new gpsdata;
@@ -1101,29 +1102,29 @@ namespace Anewluv.Services.Authentication
 
                         //conver the unquiqe coountry Name to an ID
                         //store country ID for use later 
-                       // PostalData2Context GeoContext = new PostalData2Context();
-                    //    using (var tempdb = GeoContext)
-                       // {
-                           // GeoService GeoService = new GeoService(tempdb);
-                          //  countryID = GeoService.getcountryidbycountryname(country);
+                        // PostalData2Context GeoContext = new PostalData2Context();
+                        //    using (var tempdb = GeoContext)
+                        // {
+                        // GeoService GeoService = new GeoService(tempdb);
+                        //  countryID = GeoService.getcountryidbycountryname(country);
 
-                         var value = spatialextentions.getcountrynamebycountryid(new GeoModel { country = u.country },_storedProcedures);
-
-                            //get the longidtue and latttude 
-                            _GpsData = spatialextentions.getgpsdatabycitycountrypostalcode(new GeoModel { country = u.country, city = tempCityAndStateProvince[0], postalcode = u.ziporpostalcode },_storedProcedures);
-                      //  }
-
-                      //  int countryID = Api.GeoService.getcountryidbycountryname(u.country);
+                        var value = spatialextentions.getcountrynamebycountryid(new GeoModel { country = u.country }, _storedProcedures);
 
                         //get the longidtue and latttude 
-                     //   gpsdata _GpsData = Api.GeoService.getgpsdatabycitycountrypostalcode(u.country, tempCityAndStateProvince[0], u.ziporpostalcode);
+                        _GpsData = spatialextentions.getgpsdatabycitycountrypostalcode(new GeoModel { country = u.country, city = tempCityAndStateProvince[0], postalcode = u.ziporpostalcode }, _storedProcedures);
+                        //  }
+
+                        //  int countryID = Api.GeoService.getcountryidbycountryname(u.country);
+
+                        //get the longidtue and latttude 
+                        //   gpsdata _GpsData = Api.GeoService.getgpsdatabycitycountrypostalcode(u.country, tempCityAndStateProvince[0], u.ziporpostalcode);
 
 
 
                         //split up the city from state province
                         //Build the profile data table                   
-                        objprofileDateEntity.latitude = Convert.ToDouble( _GpsData.latitude);
-                        objprofileDateEntity.longitude = Convert.ToDouble( _GpsData.longitude);
+                        objprofileDateEntity.latitude = Convert.ToDouble(_GpsData.latitude);
+                        objprofileDateEntity.longitude = Convert.ToDouble(_GpsData.longitude);
                         objprofileDateEntity.city = tempCityAndStateProvince[0];
                         objprofileDateEntity.countryregion = "NA";
 
@@ -1175,22 +1176,22 @@ namespace Anewluv.Services.Authentication
                         //dbContext.AddToprofiledatas(objprofileDateEntity);
                         // dbContext.AddToprofiles(ObjProfileEntity);
                         profilerepo.Update(ObjProfileEntity);
-                         profiledatarepo.Update(objprofileDateEntity);
+                        profiledatarepo.Update(objprofileDateEntity);
                         //save all changes bro                         
-//                        _unitOfWorkAsync
+                        //                        _unitOfWorkAsync
                         var i = _unitOfWorkAsync.SaveChanges();
-                       // transaction.Commit();
+                        // transaction.Commit();
 
                     }
                     catch (Exception ex)
                     {
-                       // transaction.Rollback();
-                        using (var logger = new  Logging(applicationEnum.UserAuthorizationService))
+                        // transaction.Rollback();
+                        using (var logger = new Logging(applicationEnum.UserAuthorizationService))
                         {
 
                             logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null);
-                        } 
-                      
+                        }
+
                         FaultReason faultreason = new FaultReason("Error in User Authentication service");
                         string ErrorMessage = "";
                         string ErrorDetail = "ErrorMessage: " + ex.Message;
@@ -1237,12 +1238,12 @@ namespace Anewluv.Services.Authentication
             //    //    strScreenName = tmpScreenName.FirstOrDefault().ToString();
 
             //}
-           // _unitOfWorkAsync.DisableProxyCreation = true;
-          //  using (var db = _unitOfWorkAsync)
+            // _unitOfWorkAsync.DisableProxyCreation = true;
+            //  using (var db = _unitOfWorkAsync)
             {
                 try
                 {
-                    u =  _unitOfWorkAsync.Repository<profile>().getprofilebyusername(new ProfileModel { username = username });
+                    u = _unitOfWorkAsync.Repository<profile>().getprofilebyusername(new ProfileModel { username = username });
 
 
                     if (u == null)
@@ -1281,11 +1282,11 @@ namespace Anewluv.Services.Authentication
 
 
                     //instantiate logger here so it does not break anything else.
-                    using (var logger = new  Logging(applicationEnum.UserAuthorizationService))
+                    using (var logger = new Logging(applicationEnum.UserAuthorizationService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null);
-                    }      
-                   
+                    }
+
                     FaultReason faultreason = new FaultReason("Error in User Authentication service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
@@ -1325,11 +1326,11 @@ namespace Anewluv.Services.Authentication
             catch (Exception ex)
             {
                 //instantiate logger here so it does not break anything else.
-                using (var logger = new  Logging(applicationEnum.UserAuthorizationService))
+                using (var logger = new Logging(applicationEnum.UserAuthorizationService))
                 {
                     logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null);
-                }   
-              
+                }
+
                 //log error mesasge
                 //handle logging here
                 var message = ex.Message;
@@ -1359,71 +1360,71 @@ namespace Anewluv.Services.Authentication
         public async Task<bool> checkifemailalreadyexists(ProfileModel model)
         {
 
-                try
+            try
+            {
+                if (model == null | model.email == null) return false;
+
+
+
+                //while (db.ObjectContext.Connection.State  != System.Data.ConnectionState.Closed)
+                //{
+
+                // db.DisableProxyCreation = true;;
+                //db.DisableLazyLoading = true;
+                var result = await _unitOfWorkAsync.RepositoryAsync<profile>().Query(p => p.emailaddress == model.email).SelectAsync();
+
+                if (result.FirstOrDefault() != null) return true;
+                return false;
+
+
+            }
+            catch (Exception ex)
+            {
+                using (var logger = new Logging(applicationEnum.UserAuthorizationService))
                 {
-                    if (model == null | model.email == null) return false;
-                 
-                       
-                     
-                                //while (db.ObjectContext.Connection.State  != System.Data.ConnectionState.Closed)
-                                //{
-
-                                  // db.DisableProxyCreation = true;;
-                                    //db.DisableLazyLoading = true;
-                                   var result = await _unitOfWorkAsync.RepositoryAsync<profile>().Query(p => p.emailaddress == model.email).SelectAsync();
-
-                                   if (result.FirstOrDefault() != null) return true;
-                                   return false;
-                   
-
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                 }
-                catch (Exception ex)
-                {
-                    using (var logger = new  Logging(applicationEnum.UserAuthorizationService))
-                    {
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
-                    } 
-                   //can parse the error to build a more custom error mssage and populate fualt faultreason
-                   // logger.Dispose();
-                    FaultReason faultreason = new FaultReason("Error in member service");
-                    string ErrorMessage = "";
-                    string ErrorDetail = "ErrorMessage: " + ex.Message;
-                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-                    //throw convertedexcption;
-                }
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                // logger.Dispose();
+                FaultReason faultreason = new FaultReason("Error in member service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                //throw convertedexcption;
+            }
         }
         /// <summary>
         /// Determines wethare an activation code matches the value in the Initial Catalog= for a given profileid
         /// </summary>
-       public async Task<bool> checkifactivationcodeisvalid(ProfileModel model)
+        public async Task<bool> checkifactivationcodeisvalid(ProfileModel model)
         {
-            
+
             {
-               
+
                 try
                 {
                     if (model == null | model.username == null | model.activationcode == null) return false;
                     var task = Task.Factory.StartNew(() =>
                     {
                         //Dim ctx As New Entities()
-                        var dd =   _unitOfWorkAsync.Repository<profile>().checkifactivationcodeisvalid(model);
+                        var dd = _unitOfWorkAsync.Repository<profile>().checkifactivationcodeisvalid(model);
 
                         return dd;
 
 
                     });
                     return await task.ConfigureAwait(false);
-                   
+
                 }
                 catch (Exception ex)
                 {
 
 
-                    using (var logger = new  Logging(applicationEnum.UserAuthorizationService))
+                    using (var logger = new Logging(applicationEnum.UserAuthorizationService))
                     {
 
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
-                    } 
+                    }
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member service");
                     string ErrorMessage = "";
@@ -1440,15 +1441,15 @@ namespace Anewluv.Services.Authentication
         public async Task<bool> checkifprofileisactivated(ProfileModel model)
         {
             //BAEntities Context
-           
+
             {
-              // db.DisableProxyCreation = true;;
+                // db.DisableProxyCreation = true;;
                 if (model == null | model.username == null) return false;
                 try
                 {
                     var task = Task.Factory.StartNew(() =>
                     {
-                        var dd =   _unitOfWorkAsync.Repository<profile>().checkifprofileisactivated(model);
+                        var dd = _unitOfWorkAsync.Repository<profile>().checkifprofileisactivated(model);
                         return dd;
                     });
                     return await task.ConfigureAwait(false);
@@ -1460,11 +1461,11 @@ namespace Anewluv.Services.Authentication
                 catch (Exception ex)
                 {
 
-                    using (var logger = new  Logging(applicationEnum.UserAuthorizationService))
+                    using (var logger = new Logging(applicationEnum.UserAuthorizationService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
-                    } 
-                   //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    }
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
@@ -1487,12 +1488,12 @@ namespace Anewluv.Services.Authentication
         /// <returns></returns>
         public async Task<bool> checkifusernamealreadyexists(ProfileModel model)
         {
-            
+
             Boolean result = false;
-            
+
             {
-              //  db.DisableProxyCreation = false;
-              //  db.DisableLazyLoading = false;
+                //  db.DisableProxyCreation = false;
+                //  db.DisableLazyLoading = false;
                 try
                 {
                     var task = Task.Factory.StartNew(() =>
@@ -1500,8 +1501,8 @@ namespace Anewluv.Services.Authentication
 
                         if (model == null | model.username == null) return false;
 
-                     
-                        result =  _unitOfWorkAsync.Repository<profile>().checkifusernamealreadyexists(model);
+
+                        result = _unitOfWorkAsync.Repository<profile>().checkifusernamealreadyexists(model);
                         //    }
 
                         //using (var db = new AnewluvContext())
@@ -1534,36 +1535,36 @@ namespace Anewluv.Services.Authentication
 
         }
 
-        public async  Task<bool> checkifscreennamealreadyexists(ProfileModel model)
-        {       
-        
-                   
-                try
+        public async Task<bool> checkifscreennamealreadyexists(ProfileModel model)
+        {
+
+
+            try
+            {
+
+                var result = await _unitOfWorkAsync.RepositoryAsync<profile>().Query(p => p.screenname == model.screenname).SelectAsync();
+                if (result.FirstOrDefault() != null) return true;
+                return false;
+
+
+            }
+            catch (Exception ex)
+            {
+
+                using (var logger = new Logging(applicationEnum.UserAuthorizationService))
                 {
-
-                          var result = await _unitOfWorkAsync.RepositoryAsync<profile>().Query(p => p.screenname == model.screenname).SelectAsync();
-                          if (result.FirstOrDefault() != null) return true;
-                          return false;
-    
-
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                 }
-                catch (Exception ex)
-                {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
 
-                    using (var logger = new  Logging(applicationEnum.UserAuthorizationService))
-                    {
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
-                    } 
-                  //can parse the error to build a more custom error mssage and populate fualt faultreason
-                    FaultReason faultreason = new FaultReason("Error in member service");
-                    string ErrorMessage = "";
-                    string ErrorDetail = "ErrorMessage: " + ex.Message;
-                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                //throw convertedexcption;
+            }
 
-                    //throw convertedexcption;
-                }
 
-            
 
 
         }
@@ -1577,196 +1578,198 @@ namespace Anewluv.Services.Authentication
         public async Task<AnewluvMessages> activateprofile(activateprofilemodel model)
         {
             AnewluvMessages messages = new AnewluvMessages();
-           // messages.message = "";
+            // messages.message = "";
             messages.errormessages = null;
             profile profile = new profile();
             AnewluvResponse response = new AnewluvResponse();
-           
-         
+
+
             {
 
                 {
 
                     try
+                    {
+
+                        ResponseMessage reponsemessage = new ResponseMessage();
+
+
+                        var task = Task.Factory.StartNew(() =>
                         {
 
-                            ResponseMessage reponsemessage = new ResponseMessage();
-
-
-                            var task = Task.Factory.StartNew(() =>
+                            //Clear any errors kinda redundant tho  
+                            //also create a members view model to store pertinent data i.e persist photos profile ID etc
+                            var membersmodel = new MembersViewModel();
+                            //get the macthcing member data using the profile ID/email entered
+                            if (!string.IsNullOrEmpty(model.emailaddress))
                             {
-
-                                //Clear any errors kinda redundant tho  
-                                //also create a members view model to store pertinent data i.e persist photos profile ID etc
-                                var membersmodel = new MembersViewModel();
-                                //get the macthcing member data using the profile ID/email entered
-                                if (!string.IsNullOrEmpty(model.emailaddress))
-                                {
-                                    profile =  _unitOfWorkAsync.Repository<profile>().getprofilebyemailaddress(new ProfileModel { email = model.emailaddress });
-                                }
-                                else if (!string.IsNullOrEmpty(model.username))
-                                {
-                                    profile =  _unitOfWorkAsync.Repository<profile>().getprofilebyusername(new ProfileModel { username = model.username });
-                             
-                                }
-                                else { profile = null;
-                                
-                                };
-
-
-                                //  membersmodel =  _m .GetMemberData( model.activateprofilemodel.profileid);
-
-                                //verify that user entered correct email before doing anything
-                                //TO DO add these error messages to resource files
-                                if (profile == null )
-                                {
-                                   // messages.errormessages.Add("There is no registered account with the email address: " + model.emailaddress + " on AnewLuv.com, please either register for a new account or use the contact us link to get help");
-                                    messages.errormessages.Add("invalid useraccount or Email");
-                                    //hide the photo view in thsi case
-                                    // model.photostatus = true;
-                                    // return messages;
-                                }
-                                else if ( _unitOfWorkAsync.Repository<profile>().checkifprofileisactivated(new ProfileModel { profileid = profile.id }) == true)
-                                {
-                                    messages.errormessages.Add("Your Profile has already been activated");
-                                    //hide the photo view in thsi case
-                                    //ViewData["ActivateProfileStatus"]=
-                                    // return View("LogOn", _logonmodel);
-                                    //return messages;
-                                }
-                                else
-                                {
-
-                                    var UploadedPhoto = _unitOfWorkAsync.Repository<photo>().Queryable().Where(p => p.profile_id == profile.id ).FirstOrDefault();
-                                    if (UploadedPhoto == null) messages.errormessages.Add("Please upload at least one profile photo");
-
-                                    //var returnedTaskTResult = checkforuploadedphotobyprofileidasync(profile.id).Result;
-                                    // bool result =
-                                   // model.photostatus = returnedTaskTResult;
-                                    //}
-
-                                    //5/3/2011 instantiace the photo upload model as well since its the next step if we were succesful    
-                                    // photoeditmodel photoviewmodel = new photoeditmodel();
-                                    //registermodel registerviewmodel = new registermodel();
-                                   // model.emailaddress = profile.emailaddress;
-                                   // model.activationcode = profile.activationcode; //model.activateprofilemodel.ActivationCode;
-
-                                    //5/11/2011
-                                    //TO DO USE TASK for this
-                                    // add photo view model stuff
-                                    //Need to me made to run asynch
-                                    //if (model.PhotosUploadModel.photosuploaded.Count() > 0)
-                                    //{
-
-                                    //    var returnedTaskTResult = AsyncCalls.addphotosasync(model.PhotosUploadModel);
-
-                                    //    // Api.PhotoService.addphotos(model.PhotosUploadModel);
-                                    //}
-
-                                    //since we got here we can now check if the user has a photo
-                                    //first check to see if there is an email address for the given user on the server add it to the data anotaions validation                 
-                                    //get a value for photo status so we know weather to display uplodad phot dialog or not
-                                    //if the photo status is TRUE then hide the upload photo div
-
-                                    //we area still allowing activation with no photo but we will force user to re-direct to edit profile/photos
-                                   
-
-                                    //activaate profile here as long as photo exists 
-                                   
-                                        //TO DO convert to Asynch call
-                                        // AnewluvContext = new AnewluvContext();
-                                        // using (var tempdb = AnewluvContext)
-                                        // {
-                                        //       MemberService MemberService = new MemberService(tempdb);
-                                     // var activateProfileResult= activateprofileasync(new ProfileModel { profileid = profile.id }).Result;
-                                     // activationsuccesful = activateProfileResult;
-                                        //  }
-
-                                      profile.status_id = (int)profilestatusEnum.Activated;
-                                      profile.ObjectState = ObjectState.Modified;
-                                    //handele the update using EF
-                                    //  _unitOfWorkAsync.Repository<Country_PostalCode_List>().profiles.AttachAsModified(myProfile, this.ChangeSet.GetOriginal(myProfile));
-                                     _unitOfWorkAsync.Repository<profile>().Update(profile);
-                                     var i = _unitOfWorkAsync.SaveChanges();
-
-
-                                    //check if mailbox folders exist, if they dont create em , don't add any error status
-
-                                   // var areamailboxfolderscreated = false;
-                                    //AnewluvContext = new AnewluvContext();
-                                    //  using (var tempdb = AnewluvContext)
-                                    //   {
-                                    //     MemberService MemberService = new MemberService(tempdb);
-                                  //  areamailboxfolderscreated =  Api.AsyncCalls.checkifmailboxfoldersarecreatedasync(new ProfileModel { profileid = profile.id }).Result;
-                                    // }
-
-                                    //if (!(areamailboxfolderscreated))                                    
-                                   // {
-                                        //    AnewluvContext = new AnewluvContext();
-                                        //  using (var tempdb = AnewluvContext)
-                                        //   {
-                                        //    MemberService MemberService = new MemberService(tempdb);
-                                        Api.AsyncCalls.createmailboxfoldersasync(new ProfileModel { profileid = profile.id });
-                                        //  }
-                                        // MemberService.createmailboxfolders(new ProfileModel { profileid = profile.id });
-                                  //  }
-
-                                    messages.messages.Add("Activation Sucssesful");
-                                }
-
-
-
-
-                              //  if (messages.errormessages.Count() > 0 )
-                               // {
-                                    //get the profile info to return
-                                    //Shell.MVC2.Domain.Entities.Anewluv.profile profile = _memberservice.getpro(model.username);
-                                    //  response.profileid1 = model.profileid.ToString();//profile.id.ToString();
-                                  //  response.email = model.emailaddress;//profile.emailaddress;
-                                  ////  ResponseMessage currentmessages = new ResponseMessage("", messages.messages.FirstOrDefault(), "");
-                                  //  response.ResponseMessages.Add(currentmessages);
-
-                              //  }
-                              //  else
-                              //  {
-                                 
-                                   //  messages.errormessages.Add("There was a problem activating the profile, please try again later");
-                                 //   response.ResponseMessages.Add(reponsemessage);
-                              //  }
-
-                                return messages;
-
-                                // return messages;
-                            });
-                            return await task.ConfigureAwait(false);
-
-                        }
-                        catch (Exception ex)
-                        {
-                          // // transaction.Rollback();
-                            using (var logger = new Logging(applicationEnum.UserAuthorizationService))
-                            {
-                                logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null);
+                                profile = _unitOfWorkAsync.Repository<profile>().getprofilebyemailaddress(new ProfileModel { email = model.emailaddress });
                             }
-                            FaultReason faultreason = new FaultReason("Error in User Authentication service");
-                            string ErrorMessage = "";
-                            string ErrorDetail = "ErrorMessage: " + ex.Message;
-                            throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                            else if (!string.IsNullOrEmpty(model.username))
+                            {
+                                profile = _unitOfWorkAsync.Repository<profile>().getprofilebyusername(new ProfileModel { username = model.username });
+
+                            }
+                            else
+                            {
+                                profile = null;
+
+                            };
 
 
-                            //throw convertedexcption;
-                        }
-                        finally
+                            //  membersmodel =  _m .GetMemberData( model.activateprofilemodel.profileid);
+
+                            //verify that user entered correct email before doing anything
+                            //TO DO add these error messages to resource files
+                            if (profile == null)
+                            {
+                                // messages.errormessages.Add("There is no registered account with the email address: " + model.emailaddress + " on AnewLuv.com, please either register for a new account or use the contact us link to get help");
+                                messages.errormessages.Add("invalid useraccount or Email");
+                                //hide the photo view in thsi case
+                                // model.photostatus = true;
+                                // return messages;
+                            }
+                            else if (_unitOfWorkAsync.Repository<profile>().checkifprofileisactivated(new ProfileModel { profileid = profile.id }) == true)
+                            {
+                                messages.errormessages.Add("Your Profile has already been activated");
+                                //hide the photo view in thsi case
+                                //ViewData["ActivateProfileStatus"]=
+                                // return View("LogOn", _logonmodel);
+                                //return messages;
+                            }
+                            else
+                            {
+
+                                var UploadedPhoto = _unitOfWorkAsync.Repository<photo>().Queryable().Where(p => p.profile_id == profile.id).FirstOrDefault();
+                                if (UploadedPhoto == null) messages.errormessages.Add("Please upload at least one profile photo");
+
+                                //var returnedTaskTResult = checkforuploadedphotobyprofileidasync(profile.id).Result;
+                                // bool result =
+                                // model.photostatus = returnedTaskTResult;
+                                //}
+
+                                //5/3/2011 instantiace the photo upload model as well since its the next step if we were succesful    
+                                // photoeditmodel photoviewmodel = new photoeditmodel();
+                                //registermodel registerviewmodel = new registermodel();
+                                // model.emailaddress = profile.emailaddress;
+                                // model.activationcode = profile.activationcode; //model.activateprofilemodel.ActivationCode;
+
+                                //5/11/2011
+                                //TO DO USE TASK for this
+                                // add photo view model stuff
+                                //Need to me made to run asynch
+                                //if (model.PhotosUploadModel.photosuploaded.Count() > 0)
+                                //{
+
+                                //    var returnedTaskTResult = AsyncCalls.addphotosasync(model.PhotosUploadModel);
+
+                                //    // Api.PhotoService.addphotos(model.PhotosUploadModel);
+                                //}
+
+                                //since we got here we can now check if the user has a photo
+                                //first check to see if there is an email address for the given user on the server add it to the data anotaions validation                 
+                                //get a value for photo status so we know weather to display uplodad phot dialog or not
+                                //if the photo status is TRUE then hide the upload photo div
+
+                                //we area still allowing activation with no photo but we will force user to re-direct to edit profile/photos
+
+
+                                //activaate profile here as long as photo exists 
+
+                                //TO DO convert to Asynch call
+                                // AnewluvContext = new AnewluvContext();
+                                // using (var tempdb = AnewluvContext)
+                                // {
+                                //       MemberService MemberService = new MemberService(tempdb);
+                                // var activateProfileResult= activateprofileasync(new ProfileModel { profileid = profile.id }).Result;
+                                // activationsuccesful = activateProfileResult;
+                                //  }
+
+                                profile.status_id = (int)profilestatusEnum.Activated;
+                                profile.ObjectState = ObjectState.Modified;
+                                //handele the update using EF
+                                //  _unitOfWorkAsync.Repository<Country_PostalCode_List>().profiles.AttachAsModified(myProfile, this.ChangeSet.GetOriginal(myProfile));
+                                _unitOfWorkAsync.Repository<profile>().Update(profile);
+                                var i = _unitOfWorkAsync.SaveChanges();
+
+
+                                //check if mailbox folders exist, if they dont create em , don't add any error status
+
+                                // var areamailboxfolderscreated = false;
+                                //AnewluvContext = new AnewluvContext();
+                                //  using (var tempdb = AnewluvContext)
+                                //   {
+                                //     MemberService MemberService = new MemberService(tempdb);
+                                //  areamailboxfolderscreated =  Api.AsyncCalls.checkifmailboxfoldersarecreatedasync(new ProfileModel { profileid = profile.id }).Result;
+                                // }
+
+                                //if (!(areamailboxfolderscreated))                                    
+                                // {
+                                //    AnewluvContext = new AnewluvContext();
+                                //  using (var tempdb = AnewluvContext)
+                                //   {
+                                //    MemberService MemberService = new MemberService(tempdb);
+                                Api.AsyncCalls.createmailboxfoldersasync(new ProfileModel { profileid = profile.id });
+                                //  }
+                                // MemberService.createmailboxfolders(new ProfileModel { profileid = profile.id });
+                                //  }
+
+                                messages.messages.Add("Activation Sucssesful");
+                            }
+
+
+
+
+                            //  if (messages.errormessages.Count() > 0 )
+                            // {
+                            //get the profile info to return
+                            //Shell.MVC2.Domain.Entities.Anewluv.profile profile = _memberservice.getpro(model.username);
+                            //  response.profileid1 = model.profileid.ToString();//profile.id.ToString();
+                            //  response.email = model.emailaddress;//profile.emailaddress;
+                            ////  ResponseMessage currentmessages = new ResponseMessage("", messages.messages.FirstOrDefault(), "");
+                            //  response.ResponseMessages.Add(currentmessages);
+
+                            //  }
+                            //  else
+                            //  {
+
+                            //  messages.errormessages.Add("There was a problem activating the profile, please try again later");
+                            //   response.ResponseMessages.Add(reponsemessage);
+                            //  }
+
+                            return messages;
+
+                            // return messages;
+                        });
+                        return await task.ConfigureAwait(false);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        // // transaction.Rollback();
+                        using (var logger = new Logging(applicationEnum.UserAuthorizationService))
                         {
-                            //  Api.DisposePhotoService();
-                            // Api.DisposeMemberService();
+                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null);
                         }
-                  
+                        FaultReason faultreason = new FaultReason("Error in User Authentication service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
 
-                   
+
+                        //throw convertedexcption;
+                    }
+                    finally
+                    {
+                        //  Api.DisposePhotoService();
+                        // Api.DisposeMemberService();
+                    }
 
 
-             }
+
+
+
+                }
             }
 
 
@@ -1782,97 +1785,97 @@ namespace Anewluv.Services.Authentication
             AnewluvResponse response = new AnewluvResponse();
 
 
-          //  using (var db = _unitOfWorkAsync)
+            //  using (var db = _unitOfWorkAsync)
             {
-             //  ////do not audit on adds
-             //   using (var transaction = db.BeginTransaction())
+                //  ////do not audit on adds
+                //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
 
-                     var task = Task.Factory.StartNew(() =>
-                    {
-
-                        AnewluvMessages messages = new AnewluvMessages();
-                       // messages.messages = "";
-                        messages.errormessages = null;
-                        var isprofileactivated = false;
-
-                        //Clear any errors kinda redundant tho  
-                        //also create a members view model to store pertinent data i.e persist photos profile ID etc
-                        var membersmodel = new MembersViewModel();
-                        //get the macthcing member data using the profile ID/email entered
-                        profile =  _unitOfWorkAsync.Repository<profile>().getprofilebyemailaddress(new ProfileModel { email = model.emailaddress });
-                        //  membersmodel =  _m .GetMemberData( model.activateprofilemodel.profileid);
-
-                        //verify that user entered correct email before doing anything
-                        //TO DO add these error messages to resource files
-                        if (profile == null)
-                        {
-                            // messages.errormessages.Add("There is no registered account with the email address: " + model.emailaddress + " on AnewLuv.com, please either register for a new account or use the contact us link to get help");
-                            messages.errormessages.Add("invalid useraccount or Email");
-                            //hide the photo view in thsi case
-
-                        }
-                        else
+                        var task = Task.Factory.StartNew(() =>
                         {
 
-                            isprofileactivated = (_unitOfWorkAsync.Repository<profile>().checkifprofileisactivated(new ProfileModel { profileid = profile.id }) == true);
+                            AnewluvMessages messages = new AnewluvMessages();
+                            // messages.messages = "";
+                            messages.errormessages = null;
+                            var isprofileactivated = false;
 
+                            //Clear any errors kinda redundant tho  
+                            //also create a members view model to store pertinent data i.e persist photos profile ID etc
+                            var membersmodel = new MembersViewModel();
+                            //get the macthcing member data using the profile ID/email entered
+                            profile = _unitOfWorkAsync.Repository<profile>().getprofilebyemailaddress(new ProfileModel { email = model.emailaddress });
+                            //  membersmodel =  _m .GetMemberData( model.activateprofilemodel.profileid);
 
-                            if (isprofileactivated == true)
+                            //verify that user entered correct email before doing anything
+                            //TO DO add these error messages to resource files
+                            if (profile == null)
                             {
-                                messages.errormessages.Add("Your Profile has already been activated");
+                                // messages.errormessages.Add("There is no registered account with the email address: " + model.emailaddress + " on AnewLuv.com, please either register for a new account or use the contact us link to get help");
+                                messages.errormessages.Add("invalid useraccount or Email");
                                 //hide the photo view in thsi case
-                                //ViewData["ActivateProfileStatus"]=
-                                // return View("LogOn", _logonmodel);
+
                             }
                             else
                             {
 
-                                var EmailModels = new List<EmailModel>();
+                                isprofileactivated = (_unitOfWorkAsync.Repository<profile>().checkifprofileisactivated(new ProfileModel { profileid = profile.id }) == true);
 
-                                //memeber notification
-                                EmailModels.Add(new EmailModel
+
+                                if (isprofileactivated == true)
                                 {
-                                    templateid = (int)templateenum.MemberActivationCodeRecoveredMemberNotification,
-                                    messagetypeid = (int)messagetypeenum.UserUpdate,
-                                    addresstypeid = (int)addresstypeenum.SiteUser,
-                                    emailaddress = profile.emailaddress,
-                                    screenname = profile.screenname,
-                                    username = profile.username,
-                                 
-                                });
-
-                                //admin notificaiton
-                                EmailModels.Add(new EmailModel
+                                    messages.errormessages.Add("Your Profile has already been activated");
+                                    //hide the photo view in thsi case
+                                    //ViewData["ActivateProfileStatus"]=
+                                    // return View("LogOn", _logonmodel);
+                                }
+                                else
                                 {
-                                    templateid = (int)templateenum.MemberActivationCodeRecoveredAdminNotification,
-                                    messagetypeid = (int)messagetypeenum.SysAdminUpdate,
-                                    addresstypeid = (int)addresstypeenum.SystemAdmin,
-                                });
-                                //this sends both admin and user emails  
-                                Api.AsyncCalls.sendmessagesbytemplate(EmailModels); 
 
-                                //get the profile info to return
-                                //Shell.MVC2.Domain.Entities.Anewluv.profile profile = _memberservice.getpro(model.username);
-                                //  response.profileid1 = model.profileid.ToString();//profile.id.ToString();
-                                //oke send back theer activvation code
-                                messages.messages.Add("Your activiation code has been sent to the email address: " + model.emailaddress);
+                                    var EmailModels = new List<EmailModel>();
 
-                                //Code to send message here 
-                             
+                                    //memeber notification
+                                    EmailModels.Add(new EmailModel
+                                    {
+                                        templateid = (int)templateenum.MemberActivationCodeRecoveredMemberNotification,
+                                        messagetypeid = (int)messagetypeenum.UserUpdate,
+                                        addresstypeid = (int)addresstypeenum.SiteUser,
+                                        emailaddress = profile.emailaddress,
+                                        screenname = profile.screenname,
+                                        username = profile.username,
+
+                                    });
+
+                                    //admin notificaiton
+                                    EmailModels.Add(new EmailModel
+                                    {
+                                        templateid = (int)templateenum.MemberActivationCodeRecoveredAdminNotification,
+                                        messagetypeid = (int)messagetypeenum.SysAdminUpdate,
+                                        addresstypeid = (int)addresstypeenum.SystemAdmin,
+                                    });
+                                    //this sends both admin and user emails  
+                                    Api.AsyncCalls.sendmessagesbytemplate(EmailModels);
+
+                                    //get the profile info to return
+                                    //Shell.MVC2.Domain.Entities.Anewluv.profile profile = _memberservice.getpro(model.username);
+                                    //  response.profileid1 = model.profileid.ToString();//profile.id.ToString();
+                                    //oke send back theer activvation code
+                                    messages.messages.Add("Your activiation code has been sent to the email address: " + model.emailaddress);
+
+                                    //Code to send message here 
 
 
-                           
+
+
+                                }
+
+
                             }
 
 
-                        }
 
-
-
-                        return messages;
+                            return messages;
 
                         });
                         return await task.ConfigureAwait(false);
@@ -1880,12 +1883,12 @@ namespace Anewluv.Services.Authentication
                     }
                     catch (Exception ex)
                     {
-                       // transaction.Rollback();
+                        // transaction.Rollback();
                         //instantiate logger here so it does not break anything else.
-                        using (var logger = new  Logging(applicationEnum.UserAuthorizationService))
+                        using (var logger = new Logging(applicationEnum.UserAuthorizationService))
                         {
                             logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null);
-                        } 
+                        }
                         FaultReason faultreason = new FaultReason("Error in User Authentication service");
                         string ErrorMessage = "";
                         string ErrorDetail = "ErrorMessage: " + ex.Message;
@@ -1895,7 +1898,7 @@ namespace Anewluv.Services.Authentication
                     }
                     finally
                     {
-                      //  Api.DisposeMemberService();
+                        //  Api.DisposeMemberService();
                     }
                 }
             }
@@ -1906,21 +1909,22 @@ namespace Anewluv.Services.Authentication
 
         }
 
-        public async Task<NmediaToken> validateuserandgettoken(ProfileModel profile)
+        public async Task<NmediaToken> validateuserandgettoken(ProfileModel model)
         {
 
-            var myQuery = new profile();
+            var profile = new profile();
             var currenttoken = new NmediaToken();
 
-           var activitylist = new List<ActivityModel>(); OperationContext ctx = OperationContext.Current; 
+            var activitylist = new List<ActivityModel>();
+            OperationContext ctx = OperationContext.Current;
 
-            if (profile == null | profile.username == null) return currenttoken;
-           // _unitOfWorkAsync.DisableProxyCreation = true;
-          //  using (var db = _unitOfWorkAsync)
+            if (model == null | model.username == null) return currenttoken;
+            // _unitOfWorkAsync.DisableProxyCreation = true;
+            //  using (var db = _unitOfWorkAsync)
             {
                 try
                 {
-                 
+
 
                     var task = Task.Factory.StartNew(() =>
                     {
@@ -1936,25 +1940,25 @@ namespace Anewluv.Services.Authentication
                         string decryptedPassword;
                         string actualpasswordstring;
 
-                        if (profile == null) return null;
+                        if (model == null) return null;
 
 
                         //Dim ctx As New Entities()
                         //TO DO add an inactive count login to track how many times a user logs in before they active profile default max should be = 3
                         //added profile status ID validation as well i.e 2 for activated and is not banned 
-                        myQuery =  _unitOfWorkAsync.Repository<profile>().Queryable().Where(p => p.username == profile.username && 
-                            (p.status_id != (int)profilestatusEnum.Banned | p.status_id !=  (int)profilestatusEnum.Inactive | p.status_id !=  (int)profilestatusEnum.ResetingPassword)
+                        profile = _unitOfWorkAsync.Repository<profile>().Queryable().Where(p => p.username == model.username &&
+                            (p.status_id != (int)profilestatusEnum.Banned | p.status_id != (int)profilestatusEnum.Inactive | p.status_id != (int)profilestatusEnum.ResetingPassword)
                              ).FirstOrDefault();
 
 
 
-                        if (myQuery != null)
+                        if (profile != null)
                         {
-                                                       
+
                             //retirve encypted password
-                            encryptedPassword = myQuery.password;
-                            creationdate = myQuery.creationdate.GetValueOrDefault();
-                            passwordchangedate = myQuery.passwordChangeddate;
+                            encryptedPassword = profile.password;
+                            creationdate = profile.creationdate.GetValueOrDefault();
+                            passwordchangedate = profile.passwordChangeddate;
                         }
                         else
                         {
@@ -1970,12 +1974,12 @@ namespace Anewluv.Services.Authentication
                         {
 
                             decryptedPassword = Encryption.decryptString(encryptedPassword);
-                            actualpasswordstring = profile.password;
+                            actualpasswordstring = model.password;
                         }
                         else
                         {
-                            decryptedPassword = Encryption.Decrypt(encryptedPassword, profile.password);
-                            actualpasswordstring = profile.username.ToUpper() + Encryption.EncryptionKey;
+                            decryptedPassword = Encryption.Decrypt(encryptedPassword, model.password);
+                            actualpasswordstring = model.username.ToUpper() + Encryption.EncryptionKey;
                         }
 
 
@@ -1984,30 +1988,35 @@ namespace Anewluv.Services.Authentication
                         //check if decrypted string macthed username to upper  + secret
                         if (actualpasswordstring == decryptedPassword)
                         {
-                            //login time updated here
-                            updateuserlogintime(myQuery.id);
-                           //No need to log this since its used the APIkey inspector on checkascccesscore
-                            currenttoken.id = myQuery.id;
+
+                            //No need to log this since its used the APIkey inspector on checkascccesscore
+                            currenttoken.id = profile.id;
                             currenttoken.timestamp = DateTime.Now;
                             //return the profile ID so it can be used for whatver
-                           
+
                             //for now have it generate a new GUID each time to test 
                             // var existingguid = getcurrentapikeybyprofileid(myQuery.id, db);
-                            
-                            var guid = Api.AsyncCalls.validateorgetapikeyasync(new ApiKeyValidationModel { service = "AuthenticationService", username = profile.username,
-                                                                                                           useridentifier = currenttoken.id,
-                                                                                                           application = "Anewluv", application_id = (int)applicationenum.anewluv,
-                                                                                                           keyvalue = null
+
+                            var guid = Api.AsyncCalls.validateorgetapikeyasync(new ApiKeyValidationModel
+                            {
+                                service = "AuthenticationService",
+                                username = model.username,
+                                useridentifier = currenttoken.id,
+                                application = "Anewluv",
+                                application_id = (int)applicationenum.anewluv,
+                                keyvalue = null
                             }).Result;
-                           // var guid = getcurrentapikeybyprofileid(myQuery.id,db);
-                            if (guid != null)                          
+                            // var guid = getcurrentapikeybyprofileid(myQuery.id,db);
+                            if (guid != null)
                                 currenttoken.Apikey = guid;
 
+                            //updated activity // TO Do we migght use to replace logtimes below ?
+                            activitylist.Add(Api.AnewLuvLogging.CreateActivity(profile.id,guid, (int)activitytypeEnum.login, ctx));
+                            Anewluv.Api.AsyncCalls.addprofileactivities(activitylist).DoNotAwait();
 
-                            activitylist.Add(Api.AnewLuvLogging.CreateActivity(profile.profileid, (int)activitytypeEnum.changebirthdate, ctx));
-                            Api.AnewLuvLogging.LogProfileActivities(activitylist);
 
-
+                            //login time updated here
+                            updateuserlogintime(profile.id, ctx, guid.ToString());
                             return currenttoken;
                             //get the token here
 
@@ -2029,7 +2038,7 @@ namespace Anewluv.Services.Authentication
 
                     using (var logger = new Logging(applicationEnum.UserAuthorizationService))
                     {
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, myQuery != null ? myQuery.id : 0, null);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, profile != null ? profile.id : 0, null);
                     }
 
                     FaultReason faultreason = new FaultReason("Error in authenitcation service");
@@ -2070,8 +2079,8 @@ namespace Anewluv.Services.Authentication
                         myQuery = _unitOfWorkAsync.Repository<profile>().Queryable().Where(p => p.id == profile.profileid.GetValueOrDefault()).FirstOrDefault();
 
 
-                      if (myQuery !=null)
-                      {
+                        if (myQuery != null)
+                        {
                             Api.AsyncCalls.invalidateuserapikey(new ApiKeyValidationModel
                             {
                                 service = "AuthenticationService",
@@ -2083,16 +2092,18 @@ namespace Anewluv.Services.Authentication
                             }).DoNotAwait();
 
 
+                            //updated logout time
+                            updateuserloggout(myQuery.id, ctx, profile.apikey);
 
-                            activitylist.Add(Api.AnewLuvLogging.CreateActivity(profile.profileid, (int)activitytypeEnum.changebirthdate, ctx));
-                            Api.AnewLuvLogging.LogProfileActivities(activitylist);
+                            activitylist.Add(Api.AnewLuvLogging.CreateActivity(profile.profileid,new Guid(profile.apikey), (int)activitytypeEnum.changebirthdate, ctx));
+                            Anewluv.Api.AsyncCalls.addprofileactivities(activitylist).DoNotAwait();
 
 
                             return true;
 
-                      }
-                      return false;
-                    
+                        }
+                        return false;
+
                     });
                     return await task.ConfigureAwait(false);
 
@@ -2125,82 +2136,110 @@ namespace Anewluv.Services.Authentication
 
         #region "private methods for reuse or other async calls"
 
-        private Guid? getcurrentapikeybyprofileid(int profileid,IUnitOfWorkAsync db)
-        {      
-
-                   //////do not audit on adds               
-                    try
-                    {
-                        //get the last current activity 
-                        //dont worry about user logtime here and session ID's since user is re-validating we are starting over with this user anyways                        
-                        var  myQuery = _unitOfWorkAsync.Repository<profileactivity>().Queryable().Where(p => p.profile_id == profileid && p.apikey != null).OrderByDescending(p=>p.creationdate).FirstOrDefault();
-
-                        if (myQuery != null && myQuery.apikey != null)
-                        {
-                             return myQuery.apikey;
-                        }
-                        return null;
-                      
-
-
-
-                    }
-                    catch (Exception ex)
-                    {
-                       
-                         using (var logger = new Logging(applicationEnum.UserAuthorizationService))
-                        {
-                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, profileid, null);
-                        }
-
-                        //can parse the error to build a more custom error mssage and populate fualt faultreason
-                        FaultReason faultreason = new FaultReason("Error in member service");
-                        string ErrorMessage = "";
-                        string ErrorDetail = "ErrorMessage: " + ex.Message;
-                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-
-                        //throw convertedexcption;
-                    }
-       }
-
-        private void updateuserlogintime(int profileid)
+        private Guid? getcurrentapikeybyprofileid(int profileid, IUnitOfWorkAsync db)
         {
-          //  MemberService MemberService = new MemberService(db);
+
+            //////do not audit on adds               
             try
             {
-                //log the user logtime here so it is common to silverlight and MVC
-                if (HttpContext.Current != null)
+                //get the last current activity 
+                //dont worry about user logtime here and session ID's since user is re-validating we are starting over with this user anyways                        
+                var myQuery = _unitOfWorkAsync.Repository<profileactivity>().Queryable().Where(p => p.profile_id == profileid && p.apikey != null).OrderByDescending(p => p.creationdate).FirstOrDefault();
+
+                if (myQuery != null && myQuery.apikey != null)
                 {
-                    //Just for testing that it worked
-                    //TO DO remove when in prod                           
-                    Api.AsyncCalls.updateuserlogintimebyprofileidandsessionidasync(new ProfileModel { profileid = profileid, sessionid = HttpContext.Current.Session.SessionID });
-                  //  MemberService.
+                    return myQuery.apikey;
                 }
-                else
+                return null;
+
+
+
+
+            }
+            catch (Exception ex)
+            {
+
+                using (var logger = new Logging(applicationEnum.UserAuthorizationService))
                 {
-                  
-                  //  MemberService.updateuserlogintimebyprofileid(new ProfileModel { profileid = profileid });
-                    Api.AsyncCalls.updateuserlogintimeasync(new ProfileModel { profileid = profileid });
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, profileid, null);
+                }
+
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                //throw convertedexcption;
+            }
+        }
+
+        private void updateuserlogintime(int profileid, OperationContext ctx, string newtoken)
+        {
+            //  MemberService MemberService = new MemberService(db);
+            try
+            {
+                // OperationContext ctx = OperationContext.Current;
+             
+
+                if (newtoken != null)
+                {
+                    //log the user logtime here so it is common to silverlight and MVC
+                    if (ctx.SessionId != null)
+                    {
+                        //Just for testing that it worked
+                        //TO DO remove when in prod                           
+                        Api.AsyncCalls.updateuserlogintimebyprofileidandsessionidasync(new ProfileModel { profileid = profileid, sessionid = ctx.SessionId, apikey = newtoken }).DoNotAwait();
+                        //  MemberService.
+                    }
+                    else
+                    {
+
+                        //  MemberService.updateuserlogintimebyprofileid(new ProfileModel { profileid = profileid });
+                        Api.AsyncCalls.updateuserlogintimeasync(new ProfileModel { profileid = profileid, apikey = newtoken }).DoNotAwait();
+                    }
                 }
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-          
-        
+
+
+        }
+
+        private void updateuserloggout(int profileid, OperationContext ctx, string newtoken)
+        {
+            //  MemberService MemberService = new MemberService(db);
+            try
+            {
+                // OperationContext ctx = OperationContext.Current;
+                // var apikey = WCFContextParser.GetAPIKey(ctx);
+                if (newtoken != null)
+                {
+                    //  MemberService.updateuserlogintimebyprofileid(new ProfileModel { profileid = profileid });
+                    Api.AsyncCalls.updateuserlogouttimebyprofileidasync(new ProfileModel { profileid = profileid, apikey = newtoken }).DoNotAwait();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+
         }
 
         //validate of api key only not profile id if its not passed
         private async Task<Guid> validateorgetapikeyasync(ApiKeyValidationModel model)
         {
 
-            Task<Guid> returnedTaskTResult =  Api.AsyncCalls.validateorgetapikeyasync(model);
+            Task<Guid> returnedTaskTResult = Api.AsyncCalls.validateorgetapikeyasync(model);
             Guid result = await returnedTaskTResult;
 
             return result;
 
-         
+
         }
 
         private async Task<bool> checkifmailboxfoldersarecreatedasync(ProfileModel model)
@@ -2385,6 +2424,6 @@ namespace Anewluv.Services.Authentication
 
 
     }
-    
-    
+
+
 }

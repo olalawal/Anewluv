@@ -23,7 +23,7 @@ using System.Threading.Tasks;
 using Nmedia.Infrastructure.Domain;
 using Nmedia.Infrastructure.Domain.Data.Apikey.DTOs;
 using Repository.Pattern.UnitOfWork;
-using Nmedia.Infrastructure.ExceptionHandling;
+//using Nmedia.Infrastructure.ExceptionHandling;
 //using Nmedia.Infrastructure.WCF;
 //using Anewluv.Lib;
 //using Anewluv.Lib;
@@ -561,7 +561,7 @@ namespace Nmedia.Services.Authorization
                         else if (application == null)
                         {
 
-                            throw new CustomExceptionTypes("Invalid application id");
+                             //CustomExceptionTypes("Invalid application id");
                         
                         }
                         else

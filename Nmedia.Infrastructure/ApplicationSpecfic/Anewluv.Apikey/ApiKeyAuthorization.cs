@@ -33,6 +33,7 @@ using System.ServiceModel.Dispatcher;
 //using Anewluv.Domain;
 //using Anewluv.Services.Authentication;
 
+
 namespace Anewluv.Apikey
 {
     //implement this using the api key servbice key service i.e , which is referenced in this API as well
@@ -43,7 +44,7 @@ namespace Anewluv.Apikey
 
         //TO do add this to web config as a key so each service that calls this can be granualry controlled.
         int MaxBuffersize = 2147483647;
-                 
+
         //public APIKeyAuthorization(IAPIkeyRepository apikeyrepository)
         //{
         //    _apikeyrepository = apikeyrepository;
@@ -52,7 +53,7 @@ namespace Anewluv.Apikey
         //its not too bad since this only seems to be called on the first instantiaion
         public ApikeyAuthorization()
         {
-         
+
 
         }
 
@@ -132,7 +133,11 @@ namespace Anewluv.Apikey
                 apikeyonlyURLS.Add("anewluv.web.services.authentication");                                  
                 apikeyonlyURLS.Add("anewluv.web.services.common");
                 apikeyonlyURLS.Add("anewluv.web.services.spatial");
-                apikeyonlyURLS.Add("/anewluv.web.services.media/photoservice.svc/rest/addphotos");  //everyone can call addphotos
+                apikeyonlyURLS.Add("/anewluv.web.services.media/photoservice.svc/rest/addphotos");  //TO DO remove from this since profile id is needed
+
+               // apikeyonlyURLS.Add("/anewluv.web.services.members/membersservice.svc/rest/addprofileactivities");
+                                   
+                //everyone can call addphotos
 
 
 
@@ -141,7 +146,13 @@ namespace Anewluv.Apikey
                 //to bypass userid and password auth
                 apikeyonlyURLS.Add("/anewluv.web.services.membermapper/membersmapperservice.svc/rest/getquicksearch");                                   
                 apikeyonlyURLS.Add("/anewluv.web.services.edit/searcheditservice.svc/rest/getbasicsearchsettings");
-                
+
+                //TO DO append profile id as well so we can remove these from that list?
+                //async calls for logout and login
+               // apikeyonlyURLS.Add("/anewluv.web.services.members/membersservice.svc/rest/updateuserlogintimebyprofileid");
+               // apikeyonlyURLS.Add("/anewluv.web.services.members/membersservice.svc/rest/updateuserlogintimebyprofileidandsessionid");
+               // apikeyonlyURLS.Add("/anewluv.web.services.members/membersservice.svc/rest/updateuserlogouttimebyprofileid"); 
+
                
 
                              
@@ -169,6 +180,7 @@ namespace Anewluv.Apikey
             
                 var segmentcount = urisegments.Count();
 
+
                 
                 //if last segment is rest or help dont do anything we are fine
                 if (urisegments[segmentcount - 1].ToLower().Contains(restsegment.ToLower()) || urisegments[segmentcount - 1].ToLower().Contains(helpsegment.ToLower()) || urisegments.ToList().Contains(operationssegment)) return true; 
@@ -179,7 +191,9 @@ namespace Anewluv.Apikey
                 //check if we are looking at the URLS or specific methods that allow Anonymoys access
                 //seecon part checks the end of the URL i.e updateuserlogintimebyprofileidandsessionid since it could be called from somehwere else
                 if (nonauthenticatedURLS.Contains(urisegments[1].ToLower().ToString().Replace("/", ""))) return true;
-                
+
+               
+
                 //flag the API key only auth URLS
                 if ((apikeyonlyURLS.Contains(urisegments[1].ToString().ToLower().Replace("/", "")) || apikeyonlyURLS.Contains(path.ToLower()))) apikeyauthonly = true; ;
                                 
@@ -187,13 +201,15 @@ namespace Anewluv.Apikey
                 //allows service to be discovereable with no api key
                 if (OperationContext.Current.IncomingMessageHeaders.To.Segments.Last().Replace("/", "") != "$metadata")
                 {
-                     Guid? key = WCFContextParser.GetAPIKey(operationContext);   
+                     Guid? key = WCFContextParser.GetAPIKey(operationContext); 
+  
               
                    // ProfileModel ProfileModel = new ProfileModel(); 
-                    //if there is no API key nothing happens
-                    if (key != null )
+                    //if there is no API key nothing happens OR if we are using profilemodel we can use embded apikey in body
+                    if (key != null | !apikeyauthonly )
                     {  
                       
+                           
                                 
                         //separate calls that need to verify the IPkey is tied to a profileID
                        if (!apikeyauthonly)
@@ -212,14 +228,44 @@ namespace Anewluv.Apikey
                            //    }
                            //    // msg.Close();  //kill this since we need it no more.
                            //}
-                        
-                           var ProfileModel = WCFMessageInpectors.getprofileidmodelfrombody(ref internalCopy);
 
-                           if (ProfileModel.profileid != null)
+                           //var ProfileModel = new ProfileModel();
+                          // var ActivityModel = new ActivityModel();
+                           var apikeyfrombody = "";
+                           int? profileid = null;
+                         
+                           //(path.ToLower() == "/anewluv.web.services.members/membersservice.svc/rest/addprofileactivities" |
+
+                           //profile activcities model is different
+                           if  (path.ToLower().Contains("addprofileactivities"))
                            {
+                               var  ActivityModels = WCFMessageInpectors.getactivitymodelsfrombody(ref internalCopy);
+                               profileid = (ActivityModels.Count() > 0) ? ActivityModels.FirstOrDefault().activitybase.profile_id :null;
+                               key = (key == null && ActivityModels.Count() > 0) ? ActivityModels.FirstOrDefault().activitybase.apikey : key;
+
+                               //if we are doing a quick search or other items that dont requre apikey just validate the apikey only
+                               if( ActivityModels.FirstOrDefault().activitybase.activitytype_id ==  (int)activitytypeEnum.quicksearch)
+                               {
+                                   validrequest = Api.AsyncCalls.isvalidapikeyasync(new apikey { keyvalue = key.Value, application_id = (int)applicationenum.anewluv }).Result;//; Utilities.ValidateApiKey(key).Result;
+                                   return validrequest;
+                               }
+
+                           }
+                           else 
+                           {
+                              var ProfileModel = WCFMessageInpectors.getprofilemodelfrombody(ref internalCopy);
+                              profileid = ProfileModel.profileid.Value;
+                              key = key == null ? new Guid(ProfileModel.apikey) : key;
+
+                           }
+
+
+                           if (profileid != null && key !=null)
+                           {
+                               //if (key == null && apikeyfrombody != "") key = new Guid(apikeyfrombody);
                                //check if the passed apikey matches the profile ID that was passed in and is also active on the apikservice side of things.
                                validrequest = Api.AsyncCalls.isvalidapikeyanduserasync(new
-                               apikey { application_id = (int)applicationenum.anewluv, keyvalue = key.Value, user = new user { useridentifier = ProfileModel.profileid.Value} }).Result;
+                               apikey { application_id = (int)applicationenum.anewluv,keyvalue = key.Value , user = new user { useridentifier = profileid.Value } }).Result;
                                //  (key, (int)applicationenum.anewluv, );
                                //log activity and geodata if it exists
                               // Utilities.LogProfileActivity(ProfileModel, path, apiKey);
@@ -230,8 +276,14 @@ namespace Anewluv.Apikey
                                validrequest = false; 
                            }
 
-                           if (!validrequest)  CreateAccsessExiredReply(operationContext, key.Value.ToString());
-
+                           if (!validrequest && key !=null)
+                           {                               
+                               CreateAccsessExiredReply(operationContext, key.Value.ToString());
+                           }
+                           else if (!validrequest && key == null)
+                           {
+                               CreateNoApikeyReply(operationContext);
+                           }
                        }
                        else
                        {
@@ -241,7 +293,13 @@ namespace Anewluv.Apikey
                            
                        }
                         //create well formatted reply for UI
-                       if (!validrequest) CreateApiKeyErrorReply(operationContext, key.Value.ToString());
+                       if (!validrequest && key !=null){
+                           CreateApiKeyErrorReply(operationContext, key.Value.ToString());
+                       }
+                       else if (!validrequest && key == null)
+                       {
+                           CreateNoApikeyReply(operationContext);
+                       }
                         //Api.DisposeApiKeyService();
                         //   return validrequest;                        
                     }
@@ -274,11 +332,11 @@ namespace Anewluv.Apikey
               // Api.DisposeAuthenticationService();
               //   Api.DisposeApiKeyService();
             }
-        }        
+        }
 
-        
 
-               
+
+
 
         private static void CreateApiKeyErrorReply(OperationContext operationContext, string key)
         {
@@ -394,10 +452,10 @@ namespace Anewluv.Apikey
                 {
                     HttpRequestMessageProperty httpRequestHeader = (HttpRequestMessageProperty)operationContext.RequestContext.RequestMessage.Properties[HttpRequestMessageProperty.Name];
                     HttpResponseMessageProperty responseProp = new HttpResponseMessageProperty() { StatusCode = HttpStatusCode.NoContent, StatusDescription = String.Format("AnewLuv Says :Preflightrequest allowed") };
-                   
+
                     //these are added via web config
                     //foreach (KeyValuePair<string, string> item in requiredHeaders)
-                   //     responseProp.Headers.Add(item.Key, item.Value);
+                    //     responseProp.Headers.Add(item.Key, item.Value);
                     responseProp.Headers[HttpResponseHeader.ContentType] = "text/html";
                     reply.Properties[HttpResponseMessageProperty.Name] = responseProp;
 
@@ -454,7 +512,7 @@ namespace Anewluv.Apikey
 ";
 
 
-     
+
         const string APIErrorHTML = @"
 <html>
 <head>

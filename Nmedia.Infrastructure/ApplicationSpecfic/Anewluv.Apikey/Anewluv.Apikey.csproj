@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="ApiKeyAuthorization.cs" />
     <Compile Include="MessageInspectors\Inspectors.cs" />
+    <Compile Include="MessageInspectors\WCFMessageInpectors.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="samplemessageinspector.cs" />
     <Compile Include="Utilities.cs" />

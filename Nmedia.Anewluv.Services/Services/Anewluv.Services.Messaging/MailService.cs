@@ -82,12 +82,9 @@ namespace Anewluv.Services.Messaging
                    var repo = _unitOfWorkAsync.Repository<mailboxfolder>();
                    var dd = mailextentions.getmailfolderdetails(repo, model,_unitOfWorkAsync);
 
-                   //Log the activity for history
-                   Api.AnewLuvLogging.LogProfileActivity
-                       (new ProfileModel { profileid = model.profileid.Value },
-                       (int)activitytypeEnum.updateprofile,
-                       _context);
-
+                 var activitylist = new List<ActivityModel>(); OperationContext ctx = OperationContext.Current;
+                 activitylist.Add(Api.AnewLuvLogging.CreateActivity(model.profileid.Value, null, (int)activitytypeEnum.viewedmail, ctx)); 
+                    Api.AnewLuvLogging.LogProfileActivities(activitylist);
 
                    return dd;
 
@@ -104,11 +101,11 @@ namespace Anewluv.Services.Messaging
                     var dd = mailextentions.getmailfilteredandpaged(repo, model,_unitOfWorkAsync);
 
 
-                    //Log the activity for history
-                    Api.AnewLuvLogging.LogProfileActivity
-                        (new ProfileModel { profileid = model.profileid.Value },
-                        (int)activitytypeEnum.updateprofile,
-                        _context);
+                  
+
+                    var activitylist = new List<ActivityModel>(); OperationContext ctx = OperationContext.Current;
+                    activitylist.Add(Api.AnewLuvLogging.CreateActivity(model.profileid.Value, null, (int)activitytypeEnum.viewedmail, ctx)); 
+                    Api.AnewLuvLogging.LogProfileActivities(activitylist);
                     
                     return dd;
 
@@ -127,10 +124,9 @@ namespace Anewluv.Services.Messaging
 
 
                //Log the activity for history
-               Api.AnewLuvLogging.LogProfileActivity
-                   (new ProfileModel { profileid = model.profileid.Value },
-                   (int)activitytypeEnum.updateprofile,
-                   _context);
+               var activitylist = new List<ActivityModel>(); OperationContext ctx = OperationContext.Current;
+               activitylist.Add(Api.AnewLuvLogging.CreateActivity(model.profileid.Value, null, (int)activitytypeEnum.viewedmail, ctx));
+               Api.AnewLuvLogging.LogProfileActivities(activitylist);
 
                return dd;
 
@@ -213,10 +209,9 @@ namespace Anewluv.Services.Messaging
 
 
                         //Log the activity for history
-                        Api.AnewLuvLogging.LogProfileActivity
-                            (new ProfileModel { profileid = model.profileid.Value },
-                            (int)activitytypeEnum.updateprofile,
-                            _context);
+                        var activitylist = new List<ActivityModel>(); OperationContext ctx = OperationContext.Current;
+                        activitylist.Add(Api.AnewLuvLogging.CreateActivity(model.profileid.Value, null, (int)activitytypeEnum.updateprofile, ctx));
+                        Api.AnewLuvLogging.LogProfileActivities(activitylist);
 
                         return AnewluvMessages;
                     });
@@ -347,10 +342,9 @@ namespace Anewluv.Services.Messaging
 
 
                                     //Log the activity for history
-                                    Api.AnewLuvLogging.LogProfileActivity
-                                        (new ProfileModel { profileid = model.profileid.Value },
-                                        (int)activitytypeEnum.sentmail,
-                                        _context);
+                                     var activitylist = new List<ActivityModel>(); OperationContext ctx = OperationContext.Current;
+                                     activitylist.Add(Api.AnewLuvLogging.CreateActivity(model.profileid.Value, null, (int)activitytypeEnum.sentmail, ctx));
+                                     Api.AnewLuvLogging.LogProfileActivities(activitylist);
                                 
                                 return AnewluvMessages;
                             });
@@ -569,10 +563,9 @@ namespace Anewluv.Services.Messaging
                             
 
                             //Log the activity for history
-                            Api.AnewLuvLogging.LogProfileActivity
-                                (new ProfileModel { profileid = model.profileid.Value },
-                                (int)activitytypeEnum.updateprofile,
-                                _context);
+                            var activitylist = new List<ActivityModel>(); OperationContext ctx = OperationContext.Current;
+                            activitylist.Add(Api.AnewLuvLogging.CreateActivity(model.profileid.Value, null, (int)activitytypeEnum.updateprofile, ctx));
+                            Api.AnewLuvLogging.LogProfileActivities(activitylist);
 
                             return AnewluvMessages;
                         });
@@ -658,10 +651,9 @@ namespace Anewluv.Services.Messaging
 
 
                             //Log the activity for history
-                            Api.AnewLuvLogging.LogProfileActivity
-                                (new ProfileModel { profileid = model.profileid.Value },
-                                (int)activitytypeEnum.updateprofile,
-                                _context);
+                            var activitylist = new List<ActivityModel>(); OperationContext ctx = OperationContext.Current;
+                            activitylist.Add(Api.AnewLuvLogging.CreateActivity(model.profileid.Value, null, (int)activitytypeEnum.updateprofile, ctx));
+                            Api.AnewLuvLogging.LogProfileActivities(activitylist);
 
                             return AnewluvMessages;
                         });

@@ -674,7 +674,7 @@ namespace Anewluv.Services.Edit
                         }
 
                         //log activity
-                        foreach (activitytypeEnum activity in AnewluvMessages.actvitytypes) { activitylist.Add(Api.AnewLuvLogging.CreateActivity(p.id, (int)activity, ctx)); }
+                        foreach (activitytypeEnum activity in AnewluvMessages.actvitytypes) { activitylist.Add(Api.AnewLuvLogging.CreateActivity(p.id,null, (int)activity, ctx)); }
                         Api.AnewLuvLogging.LogProfileActivities(activitylist);
 
                         AnewluvMessages.messages.Add("Edit Basic Settings Successful");
@@ -738,7 +738,7 @@ namespace Anewluv.Services.Edit
                         }
 
                         var activitylist = new List<ActivityModel>(); OperationContext ctx = OperationContext.Current;
-                        foreach (activitytypeEnum activity in AnewluvMessages.actvitytypes) { activitylist.Add(Api.AnewLuvLogging.CreateActivity(p.id, (int)activity, ctx)); }
+                        foreach (activitytypeEnum activity in AnewluvMessages.actvitytypes) { activitylist.Add(Api.AnewLuvLogging.CreateActivity(p.id,null, (int)activity, ctx)); }
                         Api.AnewLuvLogging.LogProfileActivities(activitylist);
 
                         AnewluvMessages.messages.Add("Edit Appearance Settings Successful");
@@ -807,7 +807,7 @@ namespace Anewluv.Services.Edit
                         }
 
                         var activitylist = new List<ActivityModel>(); OperationContext ctx = OperationContext.Current;
-                        foreach (activitytypeEnum activity in AnewluvMessages.actvitytypes) { activitylist.Add(Api.AnewLuvLogging.CreateActivity(p.id, (int)activity, ctx)); }
+                        foreach (activitytypeEnum activity in AnewluvMessages.actvitytypes) { activitylist.Add(Api.AnewLuvLogging.CreateActivity(p.id,null, (int)activity, ctx)); }
                         Api.AnewLuvLogging.LogProfileActivities(activitylist);
 
                         AnewluvMessages.messages.Add("Edit character Settings Successful");
@@ -876,7 +876,7 @@ namespace Anewluv.Services.Edit
                         }
 
                         var activitylist = new List<ActivityModel>(); OperationContext ctx = OperationContext.Current;
-                        foreach (activitytypeEnum activity in AnewluvMessages.actvitytypes) { activitylist.Add(Api.AnewLuvLogging.CreateActivity(p.id, (int)activity, ctx)); }
+                        foreach (activitytypeEnum activity in AnewluvMessages.actvitytypes) { activitylist.Add(Api.AnewLuvLogging.CreateActivity(p.id,null, (int)activity, ctx)); }
                         Api.AnewLuvLogging.LogProfileActivities(activitylist);
 
                         AnewluvMessages.messages.Add("Edit lifestyle Settings Successful");

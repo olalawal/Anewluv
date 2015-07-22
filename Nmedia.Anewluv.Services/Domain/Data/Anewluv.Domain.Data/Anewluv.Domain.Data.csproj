@@ -286,7 +286,7 @@
     <Compile Include="Chat\ViewModels\MessageViewModel.cs" />
     <Compile Include="Chat\ViewModels\RoomViewModel.cs" />
     <Compile Include="Chat\ViewModels\UserViewModel.cs" />
-    <Compile Include="Helpers\DataFormatingExtensions.cs" />
+    <Compile Include="Helpers\Generatedlists.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
