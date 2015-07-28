@@ -18,6 +18,9 @@ namespace Anewluv.Domain.Data
         public int id { get; set; }
        // public int profiledata_id { get; set; }
        // public int profilemeatadata_id  { get; set; }
+        public bool? isuseradmin { get; set; } //used to for admin profiles so we dont have to serch on role everytime
+        //this way we can hide admin profiles from searchs and not allow them to interact with users.
+        //it this is set you also have to add the admin role too.
         public string username { get; set; }
         public string emailaddress { get; set; }
         public string screenname { get; set; }
@@ -53,5 +56,6 @@ namespace Anewluv.Domain.Data
         public virtual profiledata profiledata { get; set; }
         public virtual profilemetadata profilemetadata { get; set; }
         public virtual ICollection<userlogtime> userlogtimes { get; set; }
+        public virtual ICollection<photo> adminmodfiedphotos { get; set; }  //lists photos the user has modfied in admin capcity
     }
 }

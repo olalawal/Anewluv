@@ -16,6 +16,8 @@ to migrate changes to the model open up package manager console and run the foll
 ***IMPORTANT if you keep getting and error saying the connection string does not eexist and it does take the Domain or target porject off
 the Startup deal.  Use another project or se it to multiple startup projects.
 
+ENABLING MIGRATIONS
+****************************************
 if only one contex:
 run only once !
 -base option 1
@@ -44,6 +46,7 @@ Add-Migration first -ConfigurationTypeName "Nmedia.Infrastructure.Domain.Logging
 
 
 adding another migration sample after this :
+********************************************************************
 
 Add-Migration MigrationFromJohn -f -ConfigurationTypeName "Anewluv.Domain.Migrations.Configuration" -verbose
 

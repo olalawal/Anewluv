@@ -14,10 +14,18 @@ namespace Anewluv.Domain.Data
             this.photophotoalbums = new List<photophotoalbum>();
         }
 
+
         public System.Guid id { get; set; }
+        //new flags added to see if a photo can show up on the landing page or be used for adds
+        //internal only avaiable to admins 
+        public bool? landingpagevisiblity { get; set; }
+        public DateTime? adminmodificationdate { get; set; }  //determines what admin changed something on the photo itself
+        public int? adminmodiferprofile_id { get; set; }  //determines what admin changed something on the photo itself
+
         public long size { get; set; }
         public int profile_id { get; set; }
         public Nullable<System.DateTime> creationdate { get; set; }
+        public DateTime? modificationdate { get; set; }  //to keep trackj of caption, name and other changes
         public string imagecaption { get; set; }
         public string imagename { get; set; }
         public string providername { get; set; }
@@ -33,6 +41,7 @@ namespace Anewluv.Domain.Data
         public virtual ICollection<photoconversion> photoconversions { get; set; }
         public virtual ICollection<photoreview> photoreviews { get; set; }
         public virtual profilemetadata profilemetadata { get; set; }
+        public virtual profile adminmodiferprofile { get; set; }
       //  public virtual ICollection<photoalbum> photoalbums { get; set; }
         public virtual ICollection<photophotoalbum> photophotoalbums { get; set; }
 

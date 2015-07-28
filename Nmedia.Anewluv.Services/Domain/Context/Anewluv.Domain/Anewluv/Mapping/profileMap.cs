@@ -38,6 +38,10 @@ namespace Anewluv.Domain.Data.Mapping
             this.Property(t => t.status_id).HasColumnName("status_id");
             this.Property(t => t.securityquestion_id).HasColumnName("securityquestion_id");
 
+            this.Property(t => t.isuseradmin).HasColumnName("isuseradmin");
+        
+
+
             // Relationships
             this.HasRequired(t => t.lu_profilestatus)
                 .WithMany(t => t.profiles)

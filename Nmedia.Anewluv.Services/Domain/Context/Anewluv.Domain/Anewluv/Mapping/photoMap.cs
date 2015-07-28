@@ -25,6 +25,14 @@ namespace Anewluv.Domain.Data.Mapping
             this.Property(t => t.approvalstatus_id).HasColumnName("approvalstatus_id");
             this.Property(t => t.imagetype_id).HasColumnName("imagetype_id");
 
+          
+             this.Property(t => t.landingpagevisiblity).HasColumnName("landingpagevisiblity");
+             this.Property(t => t.adminmodificationdate).HasColumnName("adminmodificationdate");
+             this.Property(t => t.adminmodiferprofile_id).HasColumnName("adminmodiferprofile_id");
+             this.Property(t => t.modificationdate).HasColumnName("modificationdate");
+     
+
+
             // Relationships
             this.HasOptional(t => t.lu_photoapprovalstatus)
                 .WithMany(t => t.photos)
@@ -42,6 +50,9 @@ namespace Anewluv.Domain.Data.Mapping
                 .WithMany(t => t.photos)
                 .HasForeignKey(d => d.profile_id);
 
+
+            this.HasOptional(t => t.adminmodiferprofile).WithMany(z=>z.adminmodfiedphotos).HasForeignKey(d=>d.adminmodiferprofile_id);
+               
 
 
 

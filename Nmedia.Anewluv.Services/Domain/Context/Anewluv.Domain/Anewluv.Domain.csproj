@@ -162,6 +162,10 @@
     <Compile Include="Migrations\201507161921194_ChangedProfileActivityProfileIdvalue.Designer.cs">
       <DependentUpon>201507161921194_ChangedProfileActivityProfileIdvalue.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201507280909430_newfeildstophotoandprofile.cs" />
+    <Compile Include="Migrations\201507280909430_newfeildstophotoandprofile.Designer.cs">
+      <DependentUpon>201507280909430_newfeildstophotoandprofile.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\AnewluvMigrations\201503080503290_first.cs" />
     <Compile Include="Migrations\AnewluvMigrations\201503080503290_first.Designer.cs">
       <DependentUpon>201503080503290_first.cs</DependentUpon>
@@ -194,6 +198,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201507161921194_ChangedProfileActivityProfileIdvalue.resx">
       <DependentUpon>201507161921194_ChangedProfileActivityProfileIdvalue.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201507280909430_newfeildstophotoandprofile.resx">
+      <DependentUpon>201507280909430_newfeildstophotoandprofile.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\AnewluvMigrations\201503080503290_first.resx">
       <DependentUpon>201503080503290_first.cs</DependentUpon>
