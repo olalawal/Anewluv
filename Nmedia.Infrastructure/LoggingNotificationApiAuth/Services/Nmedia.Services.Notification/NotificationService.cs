@@ -210,22 +210,24 @@ namespace Nmedia.Services.Notification
                         //parse the address type
                        
                         //Task that returns nothing
-                        await Task.Factory.StartNew (() =>
-                        {
+                     
                             
-                        //Id's messed up in DB use the first 
-                        dynamic systemsenderaddress = (from x in (_unitOfWorkAsync.Repository<systemaddress>().Queryable().ToList()) select x).FirstOrDefault();
+                        //npot sure what this line does ? remove ?
+                        var systemaddresstypeenum = (systemaddresstypeenum)Enum.Parse(typeof(systemaddresstypeenum), systemaddresstype);
+                       //TO DO cache
+                        var systemsenderaddress = await _unitOfWorkAsync.RepositoryAsync<systemaddress>().Query().SelectAsync();
                         message message = new message();
                         //11-29-2013 get the template path from web config
                         var TemplatePath = ConfigurationManager.AppSettings["razortemplatefilelocation"];
-                           
-                      
-                        lu_template template = (from x in (_unitOfWorkAsync.Repository<lu_template>().Queryable().ToList().Where(f => f.id == 1)) select x).FirstOrDefault(); 
 
+                        //TO DO cache all these 
+                        lu_template template = (from x in (_unitOfWorkAsync.Repository<lu_template>().Queryable().ToList().Where(f => f.id == (int)templateenum.GenericErrorMessage)) select x).FirstOrDefault(); 
                         lu_messagetype messagetype = (from x in (_unitOfWorkAsync.Repository<lu_messagetype>().Queryable().ToList().Where(f => f.id == (int)(messagetypeenum.DeveloperError))) select x).FirstOrDefault(); 
-                        var recipientemailaddresss = (from x in (_unitOfWorkAsync.Repository<address>().Queryable().ToList().Where(f => f.addresstype.id == (int)(addresstypeenum.Developer))) select x).ToList();
 
-                            //TO DO show the profile id 
+                        var recipientemailaddresss =  
+                        await _unitOfWorkAsync.RepositoryAsync<address>().Query(f=> f.addresstype.id == (int)(addresstypeenum.Developer)).SelectAsync();
+
+                        //TO DO show the profile id 
                         EmailViewModel returnmodel = new EmailViewModel
                         {
                             EmailModel  = new EmailModel { subject = template.subject.description, body = template.body.description }
@@ -240,17 +242,17 @@ namespace Nmedia.Services.Notification
                             c.messagetype = messagetype; //(int)messagetypeenum.DeveloperError;
                             c.body = TemplateParser.RazorFileTemplate(template.filename.description, ref returnmodel, TemplatePath); // c.template == null ? TemplateParser.RazorFileTemplate("", ref error) :                                                            
                             c.subject = returnmodel.EmailModel.subject;
-                            c.recipients = recipientemailaddresss;
+                            c.recipients = recipientemailaddresss.ToList(); ;
                             c.sendingapplication = "NotificationService";
                             c.systemaddress = systemsenderaddress;
+                            c.ObjectState = ObjectState.Added;
                         }));
 
                         message.sent = message.body != null ? sendemail(message) : false;//attempt to send the message
                         message.sendattempts = message.body != null ? 1 : 0;
                         _unitOfWorkAsync.Repository<message>().Insert(message);
-                        var j = _unitOfWorkAsync.SaveChanges();
-                       // transaction.Commit();
-                        });
+                        var j = _unitOfWorkAsync.SaveChangesAsync().DoNotAwait();
+                    
                        // return task ;
 
                         //return new CompletedAsyncResult<EmailModel>(returnmodel);
@@ -293,9 +295,6 @@ namespace Nmedia.Services.Notification
                         //11-29-2013 get the template path from web config
                         var TemplatePath = ConfigurationManager.AppSettings["razortemplatefilelocation"];
 
-                        //Task that returns nothing
-                        await Task.Factory.StartNew(() =>
-                        {
                              foreach(EmailModel model in models)
                              {
                                 try
@@ -330,6 +329,7 @@ namespace Nmedia.Services.Notification
                                             c.sendingapplication = "NotificationService";
                                             c.systemaddress_id = systemsenderaddress.id;
                                             c.systemaddress = systemsenderaddress;  //needed for the host info
+                                            c.ObjectState = ObjectState.Added;
                                         }));
 
                                     
@@ -337,9 +337,9 @@ namespace Nmedia.Services.Notification
                                         message.sendattempts = message.body != null ? 1 : 0;
                                         //  db.Add(message);
                                         // int j = db.Commit();
-                                        message.ObjectState = Repository.Pattern.Infrastructure.ObjectState.Added;
+                                       
                                         _unitOfWorkAsync.Repository<message>().Insert(message);
-                                        var j = _unitOfWorkAsync.SaveChanges();
+                                        var j = _unitOfWorkAsync.SaveChangesAsync().DoNotAwait();
                                     }                         
 
                                  }
@@ -351,7 +351,7 @@ namespace Nmedia.Services.Notification
                              }
 
                              return "true";
-                        });
+                      
                     }
                     catch (Exception ex)
                     {
@@ -363,10 +363,7 @@ namespace Nmedia.Services.Notification
                     }
 
                  return "false";
-      }
-       
-
-
+      }       
 
         #region "Private methods"
 
@@ -476,8 +473,6 @@ namespace Nmedia.Services.Notification
             return null;
 
         }
-
-
             
        //Private reusable internal functions 
         //TO DO this should be handled as a separate send for each so we can update the susccess individually
@@ -550,7 +545,7 @@ namespace Nmedia.Services.Notification
          //check to see if the recipeint address already exists if not add i
                         address current =
                         _unitOfWorkAsync.Repository<address>().Queryable().ToList()
-                        .Where(p => p.emailaddress.ToUpper() == Model.emailaddress.ToUpper() && p.addresstype_id == Model.addresstypeid).FirstOrDefault();
+                        .Where(p => string.Equals(p.emailaddress, Model.emailaddress, StringComparison.OrdinalIgnoreCase) && p.addresstype_id == Model.addresstypeid).FirstOrDefault();
                             //_unitOfWorkAsync.Repository<address>().Queryable().ToList().Where(p => p.emailaddress.ToUpper() == Model.EmailModel.to && Model.EmailModel.addresstypefrom == addresstypeenum.SiteUser).FirstOrDefault();
 
                          
