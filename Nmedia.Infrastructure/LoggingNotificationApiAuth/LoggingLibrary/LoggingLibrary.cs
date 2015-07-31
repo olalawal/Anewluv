@@ -25,34 +25,23 @@ using Nmedia.Infrastructure;
 using System.ServiceModel.Web;
 using System.Threading.Tasks;
 
+
 namespace LoggingLibrary
 {
+
+    /// <summary>
+    /// To do add a notification libaray that hosts all the calls for specific notificaiton types in all one place simmilar to thos
+    /// all VOID methods with async calls.
+    /// </summary>
     public class Logging : IDisposable
     {
         private int iApplicationID;
         //private int lLogEntryID = 0;
         private log oLogEntry = null;
-        // private List<LogMessage> lstMessages;
-        // private List<LogValue> lstValues;
-
-        //private ILoggingService LoggingServiceProxy;
-        //ChannelFactory<ILoggingService> ErrorLoggingfactory;
+      
         private bool disposed = false;
         private int errorpass = 0;
 
-        //chanle for notifications 
-        //private IInfoNotificationService InfoNotificationServiceProxy;
-        //ChannelFactory<IInfoNotificationService> InfoNotificationfactory;
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        //public LogSeverity Severity
-        //{
-        //    get { return oLogEntry.LogLevel; }
-        //    set { oLogEntry.LogLevel = value; }
-        //}
 
         public string ClientIP
         {
@@ -67,21 +56,7 @@ namespace LoggingLibrary
             //lstMessages = new List<LogMessage>();
             // lstValues = new List<LogValue>();
             iApplicationID = Convert.ToInt32(Application);
-            // var myendpoint  = CreateLoggingServiceEndpoint();
-            //Binding binding = new WSHttpBinding();
-            //EndpointAddress endpointAddress = new EndpointAddress("http://localhost/LoggingService/LoggingService.svc?wsdl");
-            //LoggingServiceClient mysClient = new LoggingServiceClient(binding, endpointAddress);
-
-            //mysClient.Test();
-            // LogClient = new Log;//LoggerSoapClient();
-            //oLogEntry = CreateLgEntryObject(null, null, logseverityEnum.Information);
-            // ErrorLoggingfactory = new ChannelFactory<ILoggingService>("webHttpBinding_ILoggingService");//(mysClient.Endpoint);
-            // LoggingServiceProxy = ErrorLoggingfactory.CreateChannel();
-
-            //create chanle for notifcaiton servierc
-            // InfoNotificationfactory = new ChannelFactory<IInfoNotificationService>("InfoNotificationService.soap");//(mysClient.Endpoint);
-            //InfoNotificationServiceProxy =InfoNotificationfactory.CreateChannel();
-
+           
             oLogEntry = new log();
 
 
@@ -93,21 +68,7 @@ namespace LoggingLibrary
             errorpass = 0;
             //lstMessages = new List<LogMessage>();
             // lstValues = new List<LogValue>();
-            iApplicationID = Applicationid;
-            // var myendpoint  = CreateLoggingServiceEndpoint();
-            //Binding binding = new WSHttpBinding();
-            //EndpointAddress endpointAddress = new EndpointAddress("http://localhost/LoggingService/LoggingService.svc?wsdl");
-            //LoggingServiceClient mysClient = new LoggingServiceClient(binding, endpointAddress);
-
-            //mysClient.Test();
-            // LogClient = new Log;//LoggerSoapClient();
-            //oLogEntry = CreateLgEntryObject(null, null, logseverityEnum.Information);
-            // ErrorLoggingfactory = new ChannelFactory<ILoggingService>("webHttpBinding_ILoggingService");//(mysClient.Endpoint);
-            // LoggingServiceProxy = ErrorLoggingfactory.CreateChannel();
-
-            //create chanle for notifcaiton servierc
-            // InfoNotificationfactory = new ChannelFactory<IInfoNotificationService>("InfoNotificationService.soap");//(mysClient.Endpoint);
-            //InfoNotificationServiceProxy =InfoNotificationfactory.CreateChannel();
+            iApplicationID = Applicationid;           
 
             oLogEntry = new log();
 
@@ -133,63 +94,17 @@ namespace LoggingLibrary
             // for (int i = 0; i <= 1; i++)
             //  {
             //        ' Attempt a maximum of 2 times if anything fails
-
+            oLogEntry = CreateErrorLog(severityLevelvalue, enviroment, referedexception, profileid, context);
             try
             {
 
-                //new LamdaProxyHelper<ILoggingService>().UseAsync(serviceProxy =>
-                //    {
-                //        serviceProxy.BeginWriteCompleteLogEntry(CreateErrorLog(severityLevelvalue, enviroment, referedexception, username, context), null, null);  
-                //    }, AsyncResultCallBack, Guid.NewGuid());
-
-
-                //first  write Initial Catalog= entry
-                //test of auth header info
-                //Channelfactoryhelper.Service<ILoggingService>.Use(d =>
-                //{
-                //   // errorlog dd = CreateErrorLog(severityLevelvalue, referedexception,username,null);                       
-                //    //AsyncCallback callback = result =>
-                //    //{
-                //    //    var endoflogging = d.EndWriteCompleteLogEntry(result);
-                //    //    //Debug.WriteLine("I Have Makes");
-                //    //}; 
-                //    d.WriteCompleteLogEntry(CreateErrorLog(severityLevelvalue, enviroment, referedexception, username, context)d);
-                //}
-                //);
-                //var test = LoggingServiceProxy.WriteCompleteLogEntry(oLogEntry);
-                //modified to log the error and send message in one stroke
-                //moved this to a separate call
-                //ErrorNotificationServiceProxy.SendErrorMessageToDevelopers(oLogEntry);
-                // Clear();
-                WebChannelFactory<ILoggingService> cflogging = new WebChannelFactory<ILoggingService>("webHttpBinding_ILoggingService");
-                ILoggingService channellogging = cflogging.CreateChannel();
-                channellogging.WriteCompleteLogEntry(oLogEntry);
-               // bool result = await returnedTaskTResult;
-                cflogging.Close();
+                Api.loggingService.WriteCompleteLogEntry(oLogEntry).DoNotAwait();               
             }
 
                 //if we had an error logging this error log this
             catch (Exception ex)
             {
-                ////we get an error trying to log log it here I guess i.e connecting or watatever
-                // //write error directly
-                //Channelfactoryhelper.Service<ILoggingService>.Use(d =>
-                // {
-                //    // var id = d.WriteCompleteLogEntry(CreateErrorLog(logseverityEnum.CriticalError, ex));
-                //   //  oLogEntry.id = id;
-                //     //AsyncCallback callback = result =>
-                //     //{
-                //     //    var endoflogging = d.EndWriteCompleteLogEntry(result);
-                //     //    //Debug.WriteLine("I Have Makes");
-                //     //};
-                //     d.WriteCompleteLogEntry(CreateErrorLog(logseverityEnum.CriticalError, enviroment, ex));
-
-                // });
-
-                //WebChannelFactory<ILoggingService> cflogging = new WebChannelFactory<ILoggingService>("webHttpBinding_ILoggingService");
-                //ILoggingService channellogging = cflogging.CreateChannel();
-                //channellogging.WriteCompleteLogEntry(CreateErrorLog(logseverityEnum.CriticalError, enviroment, ex));
-                //cflogging.Close();
+                
             }
 
             //Attempt to send the notification if we requested it
@@ -198,51 +113,68 @@ namespace LoggingLibrary
             {
                 try
                 {
-                    //now write the email and send it
-                    //add the auth header , later we will add API key
 
-                    //Channelfactoryhelper.UsingContract<INotificationService>(d =>
-                    //{
+                    Api.notificationService.senderrormessage(oLogEntry, systemaddresstypeenum.DoNotReplyAddress.ToString()).DoNotAwait();                   
+                  
+                }
+                catch (Exception ex)
+                {
+                    //do nada                   
+                }
+            }
 
-                    //    //AsyncCallback callback = result =>
-                    //    //{
-                    //    //     var value = d.Endsenderrormessage(result);
-                    //    //    //Debug.WriteLine("I Have Makes");
-                    //    //};
-                    //   // oLogEntry.id = d.Endsenderrormessage(result);
-                    //    //d.senderrormessage(oLogEntry, addresstypeenum.Developer.ToString());
+            Dispose();
 
-                    //    //TO DO get the systemaddress type from app.config 
-                    //    d.senderrormessage(oLogEntry, systemaddresstypeenum.Developmentrelay.ToString());
+        }
 
-                    //}
-                    //);
-                    WebChannelFactory<INotificationService> cfnotification = new WebChannelFactory<INotificationService>("webHttpBinding_INotificationService");
-                    INotificationService channel = cfnotification.CreateChannel();
-                    //TO DO get the systemaddress type from app.config 
-                    channel.senderrormessage(oLogEntry, systemaddresstypeenum.DoNotReplyAddress.ToString());
-                    cfnotification.Close();
+
+        public void WriteInfoentry(logseverityEnum severityLevelvalue, enviromentEnum enviroment, string InfoMessage,
+                                string username = null, HttpContext context = null, bool? sendnotification = false)
+        {
+
+            //set the error pass since this function can be used recursively
+            //errorpass = errorpass + 1;
+
+            // for (int i = 0; i <= 1; i++)
+            //  {
+            //        ' Attempt a maximum of 2 times if anything fails
+            oLogEntry = CreateInfoLog(severityLevelvalue, enviroment, InfoMessage, username, context);
+            try
+            {
+
+
+
+                Api.loggingService.WriteCompleteLogEntry(oLogEntry).DoNotAwait();
+
+
+
+            }
+
+                //if we had an error logging this error log this
+            catch (Exception ex)
+            {
+
+            }
+
+            //Attempt to send the notification if we requested it
+            //i.e if calling write log errror from the notification service its slef we should not be sending a notification !!! or its a loop
+            if (sendnotification == true)
+            {
+                try
+                {
+
+
+                    Api.notificationService.senderrormessage(oLogEntry, systemaddresstypeenum.DoNotReplyAddress.ToString()).DoNotAwait();
+
+
                 }
                 catch (Exception ex)
                 {
 
-                    //Errors are logged in notification service n
-                    //write error directly
-
-                    // Channelfactoryhelper.Service<ILoggingService>.Use(d =>
-                    // {
-                    //     //AsyncCallback callback = result =>
-                    //     //{
-                    //     //    var endoflogging = d.EndWriteCompleteLogEntry(result);
-                    //     //    //Debug.WriteLine("I Have Makes");
-                    //     //};
-                    //     d.WriteCompleteLogEntry(CreateErrorLog(logseverityEnum.Warning, enviroment, ex));
-                    // }
-                    //);
 
                 }
             }
-
+            this.Dispose();
         }
 
         static void AsyncResultCallBack(IAsyncResult ar)
@@ -335,6 +267,67 @@ namespace LoggingLibrary
             return oLogEntry;
         }
 
+
+        private log CreateInfoLog(logseverityEnum severityLevelvalue, enviromentEnum enviroment, string referedinfomessage, string profileid = null,
+                           HttpContext context = null)
+        {
+
+
+            //build the error object
+            oLogEntry = new log();
+
+
+            //build the error stuff
+            try
+            {
+                // if (referedexception.Message != null)
+
+
+
+                if (referedinfomessage != "")
+                {
+
+
+                    oLogEntry.message = referedinfomessage;
+
+
+                }
+
+                if (context != null & !object.ReferenceEquals(context, string.Empty))
+                {
+                    oLogEntry.loggeduser = context.User.Identity.Name;
+                    oLogEntry.ipaddress = context.Request.UserHostAddress;
+                    oLogEntry.errorpage = context.Request.Path;
+                    oLogEntry.sessionid = context.Session.SessionID;
+
+                    //
+                    oLogEntry.request = context.Request.Form.ToString();
+                    oLogEntry.querystring = context.Request.QueryString.ToString();
+                }
+
+                oLogEntry.application.id = this.iApplicationID;
+                oLogEntry.logseverity.id = (int)severityLevelvalue;
+                oLogEntry.enviroment = new lu_logenviroment { id = (int)enviroment, description = enviroment.ToDescription() };
+
+                //.id = (int)enviroment;
+
+                //replace with profile ID if we dont have it
+                if (profileid != null & !object.ReferenceEquals(profileid, string.Empty))
+                {
+                    oLogEntry.profileid = Convert.ToString(profileid);
+                }
+            }
+            catch (Exception ex)
+            {
+                var dd = ex.Message;
+            }
+            {
+
+
+            }
+            return oLogEntry;
+        }
+        
         /// <summary>
         /// Creates a new log entry and populate it with needed data.  This procedure does not write a log entry.
         /// </summary>

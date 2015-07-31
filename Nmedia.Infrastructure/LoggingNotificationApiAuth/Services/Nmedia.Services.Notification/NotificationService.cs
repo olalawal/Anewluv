@@ -25,6 +25,7 @@ using Nmedia.Infrastructure.Domain.Data;
 using Nmedia.Infrastructure.Mvc;
 using Repository.Pattern.UnitOfWork;
 using Nmedia.Infrastructure.DependencyInjection;
+using Repository.Pattern.Infrastructure;
 
 
 
@@ -244,14 +245,14 @@ namespace Nmedia.Services.Notification
                             c.subject = returnmodel.EmailModel.subject;
                             c.recipients = recipientemailaddresss.ToList(); ;
                             c.sendingapplication = "NotificationService";
-                            c.systemaddress = systemsenderaddress;
+                            c.systemaddress = systemsenderaddress.FirstOrDefault();
                             c.ObjectState = ObjectState.Added;
                         }));
 
                         message.sent = message.body != null ? sendemail(message) : false;//attempt to send the message
                         message.sendattempts = message.body != null ? 1 : 0;
                         _unitOfWorkAsync.Repository<message>().Insert(message);
-                        var j = _unitOfWorkAsync.SaveChangesAsync().DoNotAwait();
+                        _unitOfWorkAsync.SaveChangesAsync().DoNotAwait();
                     
                        // return task ;
 
@@ -339,7 +340,7 @@ namespace Nmedia.Services.Notification
                                         // int j = db.Commit();
                                        
                                         _unitOfWorkAsync.Repository<message>().Insert(message);
-                                        var j = _unitOfWorkAsync.SaveChangesAsync().DoNotAwait();
+                                        _unitOfWorkAsync.SaveChangesAsync().DoNotAwait();
                                     }                         
 
                                  }

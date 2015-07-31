@@ -76,7 +76,7 @@
     </ProjectReference>
     <ProjectReference Include="..\..\LoggingNotificationApiAuth\LoggingLibrary\LoggingLibrary.csproj">
       <Project>{ff7b929d-6086-4509-9095-396845569906}</Project>
-      <Name>LoggingLibrary %28Infrastructure\LoggingNotificationApiAuth\LoggingLibrary\LoggingLibrary%29</Name>
+      <Name>LoggingLibrary</Name>
     </ProjectReference>
     <ProjectReference Include="..\Anewluv.Api\Anewluv.Api.csproj">
       <Project>{1e78fd8f-5a46-4894-b7e9-9e572d558562}</Project>
