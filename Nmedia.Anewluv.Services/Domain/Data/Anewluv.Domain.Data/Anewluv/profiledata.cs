@@ -1,6 +1,7 @@
 using Repository.Pattern.Ef6;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Spatial;
 using System.Runtime.Serialization;
 
 namespace Anewluv.Domain.Data
@@ -22,6 +23,7 @@ namespace Anewluv.Domain.Data
         public string countryregion { get; set; }
         public string stateprovince { get; set; }
         public Nullable<int> countryid { get; set; }
+        public DbGeography location { get; set; }
         public Nullable<double> longitude { get; set; }
         public Nullable<double> latitude { get; set; }
         public string aboutme { get; set; }

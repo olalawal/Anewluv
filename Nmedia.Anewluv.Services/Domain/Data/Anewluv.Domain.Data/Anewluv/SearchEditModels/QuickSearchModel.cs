@@ -49,6 +49,7 @@ namespace Anewluv.Domain.Data.ViewModels
         //[DataMember]  public int? myselectedcurrentpage { get; set; }
         //add flag to let us know that the data comes from geocoinding ?
         public bool? geocodeddata { get; set; }
+        public bool? landingpagesearch { get; set; }  //use 
 
 
     }

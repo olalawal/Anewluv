@@ -1180,6 +1180,14 @@ namespace Anewluv.Services.Mapping
 
                         //****** end of visiblity test settings *****************************************
 
+
+                        var sourcePoint = spatialextentions.CreatePoint(myLattitude.Value, myLongitude.Value);
+                        // find any locations within 5 miles ordered by distance
+                        //first convert miles value to meters
+                        var MaxdistanceInMiles = spatialextentions.MilesToMeters(maxdistancefromme);
+
+
+
                         var MemberSearchViewmodels = (from x in db.Repository<profiledata>().Queryable().Where(p => p.birthdate > min && p.birthdate <= max &&
                               p.profile.profilemetadata.photos.Any(z => z.photostatus_id == (int)photostatusEnum.Gallery)
                               && LookingForGenderValues.Contains((int)p.gender_id)
@@ -1217,7 +1225,7 @@ namespace Anewluv.Services.Mapping
                                                           creationdate = f.creationdate,
                                                           // lastloggedonString = _datingcontext.fnGetLastLoggedOnTime(f.logindate),
                                                           lastlogindate = f.logindate,
-                                                          distancefromme = spatialextentions.getdistancebetweenmembers((double)x.latitude, (double)x.longitude, myLattitude.Value, myLongitude.Value, "Miles")
+                                                          distancefromme = x.location.Distance(sourcePoint), 
                                                           //TO DO look at this and explore
                                                           //  distancefromme = _datingcontext.fnGetDistance((double)x.latitude, (double)x.longitude,myLattitude.Value  , myLongitude.Value   , "Miles")
                                                           //       lookingforagefrom = x.profile.profilemetadata.searchsettings != null ? x.profile.profilemetadata.searchsettings.FirstOrDefault().agemin.ToString() : "25",
@@ -1380,6 +1388,14 @@ namespace Anewluv.Services.Mapping
                         //                           where (!otherblocks.Any(f => f.target_profile_id != m.mailboxmessage.sender_id))
                         //                           select m).AsQueryable();   
 
+
+
+
+                        var sourcePoint = spatialextentions.CreatePoint(myLattitude.Value, myLongitude.Value);
+                        // find any locations within 5 miles ordered by distance
+                        //first convert miles value to meters
+                        var MaxdistanceInMiles = spatialextentions.MilesToMeters(model.maxdistancefromme);
+
                         //basic search
                         var repo = db.Repository<profiledata>().Query(p => p.birthdate > min && p.birthdate <= max &&
                             p.profile.profilemetadata.photos.Any(z => z.photostatus_id == (int)photostatusEnum.Gallery)).Select();
@@ -1413,7 +1429,7 @@ namespace Anewluv.Services.Mapping
                                                           creationdate = f.creationdate,
                                                           // lastloggedonString = _datingcontext.fnGetLastLoggedOnTime(f.logindate),
                                                           lastlogindate = f.logindate,
-                                                          distancefromme = spatialextentions.getdistancebetweenmembers((double)x.latitude, (double)x.longitude, myLattitude.Value, myLongitude.Value, "Miles")
+                                                          distancefromme = x.location.Distance(sourcePoint), 
                                                           //TO DO look at this and explore
                                                           //distancefromme = _datingcontext.fnGetDistance((double)x.latitude, (double)x.longitude,myLattitude.Value  , myLongitude.Value   , "Miles")
                                                           //lookingforagefrom = x.profile.profilemetadata.searchsettings != null ? x.profile.profilemetadata.searchsettings.FirstOrDefault().agemin.ToString() : "25",
@@ -1570,7 +1586,10 @@ namespace Anewluv.Services.Mapping
 
 
 
-
+                        var sourcePoint = spatialextentions.CreatePoint(myLattitude.Value, myLongitude.Value);
+                        // find any locations within 5 miles ordered by distance
+                        //first convert miles value to meters
+                        var MaxdistanceInMiles = spatialextentions.MilesToMeters(maxdistancefromme);
 
 
                         //TO DO change the photostatus thing to where if maybe, based on HAS PHOTOS only matches
@@ -1600,7 +1619,7 @@ namespace Anewluv.Services.Mapping
                                                           creationdate = f.creationdate,
                                                           // lastloggedonString = _datingcontext.fnGetLastLoggedOnTime(f.logindate),
                                                           lastlogindate = f.logindate,
-                                                          distancefromme = spatialextentions.getdistancebetweenmembers((double)x.latitude, (double)x.longitude, myLattitude.Value, myLongitude.Value, "Miles")
+                                                          distancefromme = x.location.Distance(sourcePoint), 
                                                           //TO DO look at this and explore
                                                           //  distancefromme = _datingcontext.fnGetDistance((double)x.latitude, (double)x.longitude,myLattitude.Value  , myLongitude.Value   , "Miles")
                                                           //       lookingforagefrom = x.profile.profilemetadata.searchsettings != null ? x.profile.profilemetadata.searchsettings.FirstOrDefault().agemin.ToString() : "25",
@@ -1679,6 +1698,198 @@ namespace Anewluv.Services.Mapping
 
 
 
+
+        }
+
+
+        //search functions that should be moved to thier own service when time allows
+
+        //quick search for members in the same country for now, no more filters yet
+        //this needs to be updated to search based on the user's prefered setting i.e thier looking for settings
+        public async Task<SearchResultsViewModel> getipquicksearch(quicksearchmodel Model)
+        {
+
+
+           // var activitylist = new List<ActivityModel>(); OperationContext ctx = OperationContext.Current;
+            //            _unitOfWorkAsync.DisableProxyCreation = false;
+            var db = _unitOfWorkAsync;
+            {
+                try
+                {
+                    double currentdistance = Model.myselectedmaxdistancefromme ?? 200 ; 
+                    var matches = filtermatches(Model); 
+                    
+                    //get the number of values for male and female
+                    var divisor = Model.numberperpage / 2;
+                    var modulo = Model.numberperpage % 2;
+
+
+                    //check gender counts if they are good continue otherwise reun the query 
+                    while ((matches.Where(z=>z.genderid==(int)genderEnum.Male).Count())  < divisor && (matches.Where(z=>z.genderid==(int)genderEnum.Female).Count() < (divisor + modulo))) 
+                    {
+                        Model.myselectedmaxdistancefromme = currentdistance + 500;  //TO DO tune this down from 500 to 50 mile increments 
+                        matches = filtermatches(Model); 
+                    }
+
+
+
+                    var matchesarray = matches.ToArray();
+                    var matcheslist = matches.ToList();
+                    MemberSearchViewModel[] orderedmathes = new MemberSearchViewModel[matches.Count()];                 
+                    
+                    int index = 0;                   
+                    int activegender = 0;
+                    //foreach (MemberSearchViewModel dd in matches)
+                    
+                    //initlize                 
+                    orderedmathes[index] = matcheslist.First();
+
+                    matcheslist.Remove(orderedmathes[index]); //remove it from source list
+                    //save the current gender
+                    activegender = orderedmathes[index].genderid.GetValueOrDefault();
+
+                     while (index < Model.numberperpage)
+                     {
+                        //increment indexe for list we are building
+                        index = index + 1;                        
+                     
+
+                         //find the first item of opposite gender next
+                        var firstMatch = matcheslist.First(s => s.genderid != activegender);
+                        orderedmathes[index] = firstMatch;
+                        matcheslist.Remove(firstMatch);
+
+                        activegender = orderedmathes[index].genderid.Value;               
+                        
+                    }
+
+
+
+
+                     return GenerateSearchSearchResults(orderedmathes, Model.page, Model.numberperpage, db);
+
+
+
+
+
+
+                }
+                catch (Exception ex)
+                {
+
+                    //instantiate logger here so it does not break anything else.
+                    logger = new Logging(applicationEnum.MemberService);
+                    //int profileid = Convert.ToInt32(viewerprofileid);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in member mapper service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                    //throw convertedexcption;
+                }
+                finally
+                {
+                    //  Api.DisposeGeoService();
+                    //   Api.DisposeMemberService();
+                    //  Api.DisposePhotoService();
+
+                }
+
+            }
+
+
+
+
+
+        }
+
+        private IEnumerable<MemberSearchViewModel> filtermatches(quicksearchmodel Model)
+        {
+
+            // SearchResultsViewModel searchresults = new SearchResultsViewModel();
+            //get the  gender's from search settings
+            int genderid = Model.myselectedseekinggenderid.GetValueOrDefault();
+            int mygenderid = Model.myselectediamgenderid.GetValueOrDefault();
+
+
+            // int[,] courseIDs = new int[,] UserProfile.profiledata.searchsettings.FirstOrDefault().searchsettings_Genders.ToList();
+            int AgeTo = Model.myselectedtoage != null ? Model.myselectedtoage.GetValueOrDefault() : 99;
+            int AgeFrom = Model.myselectedfromage != null ? Model.myselectedfromage.GetValueOrDefault() : 18;
+            //Height
+            //int intheightmin = Model.h != null ? Model.heightmin.GetValueOrDefault() : 0;
+            // int intheightmax = Model.heightmax != null ? Model.heightmax.GetValueOrDefault() : 100;
+            //  bool blEvaluateHeights = intheightmin > 0 ? true : false;
+            //get the rest of the values if they are needed in calculations
+            //convert lattitudes from string (needed for JSON) to bool           
+            double? myLongitude = (Model.myselectedlongitude != null) ? Convert.ToDouble(Model.myselectedlongitude) : 0;
+            double? myLattitude = (Model.myselectedlatitude != null) ? Convert.ToDouble(Model.myselectedlatitude) : 0;
+
+
+            //set variables
+            //  List<MemberSearchViewModel> MemberSearchViewmodels;
+            DateTime today = DateTime.Today;
+            DateTime max = today.AddYears(-(AgeFrom + 1));
+            DateTime min = today.AddYears(-AgeTo);
+
+            //get country and city data
+            string countryname = Model.myselectedcountryname;
+            int countryid = Model.myselectedcountryid.GetValueOrDefault();
+            // myselectedcountryid 
+            string stringpostalcode = Model.myselectedpostalcode;
+
+            //added 10/17/20011 so we can toggle postalcode box similar to register 
+            string city = Model.myselectedcity;
+            int photostatus = (Model.myselectedphotostatus != null) ? (int)photostatusEnum.Gallery : (int)photostatusEnum.Nostatus;
+            string stateprovince = Model.myselectedstateprovince;
+            double? maxdistancefromme = Model.myselectedmaxdistancefromme ?? 500;
+
+
+
+            //skip these
+            //get values from the collections to test for , this should already be done in the viewmodel mapper but juts incase they made changes that were not updated
+            //requery all the has tbls
+            HashSet<int> LookingForGenderValues = new HashSet<int>();
+            LookingForGenderValues.Add(genderid);  //add the gender id being searched for
+
+
+
+            var sourcePoint = spatialextentions.CreatePoint(myLattitude.Value, myLongitude.Value);
+            // find any locations within 5 miles ordered by distance
+            //first convert miles value to meters
+            var MaxdistanceInMiles = spatialextentions.MilesToMeters(maxdistancefromme);
+
+            //TO DO needs filter for the profile ranking as well , and photo quality etc
+            var matches = _unitOfWorkAsync.Repository<profiledata>()
+                         .Query(z => z.profile.profilemetadata.photos.Any(m => m.photostatus_id == (int)photostatusEnum.Gallery
+                          && z.location.Distance(sourcePoint) <= MaxdistanceInMiles)).Include(z => z.profile).Select()
+                         .OrderBy(y => y.location.Distance(sourcePoint))
+                        .Select
+                        (x => new MemberSearchViewModel
+                        {
+                            //populate values server side to be used later                                                        
+
+                            id = x.profile_id,
+                            creationdate = x.profile.creationdate,
+                            profile = x.profile,
+                            distancefromme = x.location.Distance(sourcePoint),
+                            stateprovince = x.stateprovince,
+                            city = x.city,
+                            postalcode = x.postalcode,
+                            countryid = x.countryid,
+                            genderid = x.gender_id,
+                            birthdate = x.birthdate,
+
+                            screenname = x.profile.screenname,
+                            longitude = x.longitude ?? 0,
+                            latitude = x.latitude ?? 0,
+                            lastlogindate = x.profile.logindate
+
+                        }).Take(100);
+
+
+            return matches;
 
         }
 
@@ -1930,9 +2141,16 @@ namespace Anewluv.Services.Mapping
                 LookingForGenderValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.details.Where(p => p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.gender).Select(c => c.value)) : LookingForGenderValues;
 
 
+
+
                 //basic search
                 var repo = db.Repository<profiledata>().Query(p => p.birthdate > min && p.birthdate <= max &&
                     p.profile.profilemetadata.photos.Any(z => z.photostatus_id == (int)photostatusEnum.Gallery)).Select();
+
+                var sourcePoint = spatialextentions.CreatePoint(myLattitude.Value, myLongitude.Value);
+                // find any locations within 5 miles ordered by distance
+                //first convert miles value to meters
+                var MaxdistanceInMiles = spatialextentions.MilesToMeters(model.maxdistancefromme);
 
                 //  where (LookingForGenderValues.Count !=null || LookingForGenderValues.Contains(x.GenderID)) 
                 //  where (LookingForGenderValues.Count == null || x.GenderID == UserProfile.MyQuickSearch.MySelectedSeekingGenderID )   //this should not run if we have no gender in searchsettings
@@ -1964,7 +2182,7 @@ namespace Anewluv.Services.Mapping
                                                   hasgalleryphoto = true,  //set inthe above query 
                                                   creationdate = f.creationdate,
                                                   lastlogindate = f.logindate,
-                                                  distancefromme = spatialextentions.getdistancebetweenmembers((double)x.latitude, (double)x.longitude, myLattitude.Value, myLongitude.Value, "Miles")
+                                                  distancefromme = x.location.Distance(sourcePoint), 
 
 
                                               }).OrderBy(p => p.distancefromme).ThenByDescending(p => p.creationdate);//.OrderBy(p=>p.creationdate ).Take(maxwebmatches).ToList();
@@ -2042,8 +2260,8 @@ namespace Anewluv.Services.Mapping
                     creationdate = x.creationdate,
                     city = Extensions.Chop(x.city, 11),
                     lastloggedonstring = profileextentionmethods.getlastloggedinstring(x.lastlogindate.GetValueOrDefault()),
-                    lastlogindate = x.lastlogindate,
-                    distancefromme = x.distancefromme,
+                    lastlogindate =  x.lastlogindate,
+                    distancefromme = spatialextentions.MetersToMiles(x.distancefromme), //TO DO toggle based on country of viewwe i.e globalize
                     galleryphoto = db.Repository<photoconversion>().getgalleryphotomodelbyprofileid(x.id, (int)photoformatEnum.Medium),
                     lookingforagefrom = x.lookingforagefrom,
                     lookingForageto = x.lookingForageto,

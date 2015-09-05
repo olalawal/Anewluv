@@ -5,7 +5,9 @@ using Repository.Pattern.UnitOfWork;
 //using Nmedia.DataAccess.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Spatial;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -17,6 +19,42 @@ namespace Anewluv.DataExtentionMethods
     {
 
         #region "Spatial Functions"
+
+
+        /// 
+        /// Convert meters to miles
+        /// 
+        /// 
+        /// 
+        public static double MetersToMiles(double? meters)
+        {
+            if (meters == null)
+                return 0F;
+
+            return meters.Value * 0.000621371192;
+        }
+
+        /// 
+        /// Convert miles to meters
+        /// 
+        /// 
+        /// 
+        public static double MilesToMeters(double? miles)
+        {
+            if (miles == null)
+                return 0;
+
+            return miles.Value * 1609.344;
+        }
+
+        public static DbGeography CreatePoint(double latitude, double longitude)
+        {
+            var text = string.Format(CultureInfo.InvariantCulture.NumberFormat,
+                                        "POINT({0} {1})", longitude, latitude);
+            // 4326 is most common coordinate system used by GPS/Maps
+            return DbGeography.PointFromText(text, 4326);
+        }
+        
 
 
         public static List<countrypostalcode> getcountryandpostalcodestatuslist(IGeoDataStoredProcedures _storedProcedures)

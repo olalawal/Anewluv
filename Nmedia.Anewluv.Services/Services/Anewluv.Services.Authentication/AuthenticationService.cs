@@ -39,6 +39,7 @@ using Nmedia.Infrastructure.Domain.Data.Notification;
 using Nmedia.Infrastructure.Helpers;
 using Repository.Pattern.Infrastructure;
 using Nmedia.Infrastructure.Utils;
+using System.Data.Entity.Spatial;
 
 
 
@@ -717,6 +718,14 @@ namespace Anewluv.Services.Authentication
                         //objprofileDataEntity.profile.emailaddress = email;
                         objprofileDataEntity.latitude = Convert.ToDouble(latitude);
                         objprofileDataEntity.longitude = Convert.ToDouble(longitude); //_GpsData.longitude;
+
+                      
+                            // Create a point using native DbGeography Factory method
+                        objprofileDataEntity.location = DbGeography.PointFromText(
+                                        string.Format("POINT({0} {1})", latitude, longitude)
+                                        , 4326);
+                       
+                       // objprofileDataEntity.location =   DbGeography.FromText("POINT(" + latitude + " "  + longitude   + ")"); 
                         objprofileDataEntity.city = city;
                         objprofileDataEntity.countryregion = "NA";
 

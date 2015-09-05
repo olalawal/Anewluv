@@ -36,6 +36,10 @@
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>..\..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.SqlServer.Types, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\..\..\packages\Microsoft.SqlServer.Types.11.0.2\lib\net20\Microsoft.SqlServer.Types.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -166,6 +170,10 @@
     <Compile Include="Migrations\201507280909430_newfeildstophotoandprofile.Designer.cs">
       <DependentUpon>201507280909430_newfeildstophotoandprofile.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201509050637415_Addedlocationdatatype.cs" />
+    <Compile Include="Migrations\201509050637415_Addedlocationdatatype.Designer.cs">
+      <DependentUpon>201509050637415_Addedlocationdatatype.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\AnewluvMigrations\201503080503290_first.cs" />
     <Compile Include="Migrations\AnewluvMigrations\201503080503290_first.Designer.cs">
       <DependentUpon>201503080503290_first.cs</DependentUpon>
@@ -177,11 +185,29 @@
     <Compile Include="Migrations\AnewluvMigrations\Configuration.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="Utils\DebugUtils.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\..\..\packages\Microsoft.SqlServer.Types.11.0.2\nativeBinaries\x64\msvcr100.dll">
+      <Link>SqlServerTypes\x64\msvcr100.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\packages\Microsoft.SqlServer.Types.11.0.2\nativeBinaries\x64\SqlServerSpatial110.dll">
+      <Link>SqlServerTypes\x64\SqlServerSpatial110.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\packages\Microsoft.SqlServer.Types.11.0.2\nativeBinaries\x86\msvcr100.dll">
+      <Link>SqlServerTypes\x86\msvcr100.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\packages\Microsoft.SqlServer.Types.11.0.2\nativeBinaries\x86\SqlServerSpatial110.dll">
+      <Link>SqlServerTypes\x86\SqlServerSpatial110.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Documentation\Migration Instructions.txt" />
     <Content Include="Migrations\Documentation\Migration Instructions.txt" />
+    <Content Include="SqlServerTypes\readme.htm" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201503260904285_first.resx">
@@ -201,6 +227,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201507280909430_newfeildstophotoandprofile.resx">
       <DependentUpon>201507280909430_newfeildstophotoandprofile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509050637415_Addedlocationdatatype.resx">
+      <DependentUpon>201509050637415_Addedlocationdatatype.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\AnewluvMigrations\201503080503290_first.resx">
       <DependentUpon>201503080503290_first.cs</DependentUpon>

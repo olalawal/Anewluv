@@ -144,7 +144,8 @@ namespace Anewluv.Apikey
                 //TO DO add special handling to the service side to disallow the pulling on anyones basic search settings even tho it cant be changed.
                 //added quick search to this apikey only to allow for quick search to 
                 //to bypass userid and password auth
-                apikeyonlyURLS.Add("/anewluv.web.services.membermapper/membersmapperservice.svc/rest/getquicksearch");                                   
+                apikeyonlyURLS.Add("/anewluv.web.services.membermapper/membersmapperservice.svc/rest/getquicksearch");
+                apikeyonlyURLS.Add("/anewluv.web.services.membermapper/membersmapperservice.svc/rest/getipquicksearch");                   
                 apikeyonlyURLS.Add("/anewluv.web.services.edit/searcheditservice.svc/rest/getbasicsearchsettings");
 
                 //TO DO append profile id as well so we can remove these from that list?

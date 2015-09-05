@@ -1,0 +1,6 @@
+
+UPDATE
+    profiledatas
+SET location = geography::Point(latitude,longitude , 4326)
+WHERE
+ (longitude IS NOT NULL AND lattitude IS NOT NULL)
