@@ -115,6 +115,8 @@ namespace Anewluv.Apikey
                 nonauthenticatedURLS.Add("Nmedia.Infrastructure.Web.Services.Notification");
                 nonauthenticatedURLS.Add("Nmedia.Infrastructure.Web.Services.Authorization");
                 nonauthenticatedURLS.Add("membersservice.svc/rest/updateuserlogintimebyprofileid");
+                //notifcaiton
+               
 
                 //for testing non auth on this
                // nonauthenticatedURLS.Add("Anewluv.Web.Services.Members");

@@ -280,7 +280,6 @@ namespace Nmedia.Services.Notification
 
         }
 
-
         public async Task<string> sendmessagesbytemplate(List<EmailModel> models)
         {
             //parse the address type
@@ -305,8 +304,11 @@ namespace Nmedia.Services.Notification
                                     {
                                         EmailViewModel currentEmailViewModel = new EmailViewModel();
                                         message message = new message();
-                                        ICollection<address> addresses = new List<address>();
 
+                                        //get or set addresstype
+                                        model.addresstypeid = getorverifyaddresstype(model);
+
+                                        ICollection<address> addresses = new List<address>();
 
                                        //TO DO load from cache
                                       //  var template = _unitOfWorkAsync.Repository<lu_template>().Query(f => f.id == model.templateid)
@@ -380,7 +382,7 @@ namespace Nmedia.Services.Notification
                 string body = ((templatebodyenum)model.templateid).ToDescription();
                 templateenum selectedtemplate = (templateenum)model.templateid;
 
-                //custom model stuff
+                              //custom model stuff
                 switch (selectedtemplate)
                 {
                     case templateenum.GenericErrorMessage:
@@ -396,7 +398,18 @@ namespace Nmedia.Services.Notification
                         model.body = string.Format(body, model.username, model.activationcode);
                         emaildetail.EmailModel = model;  //add the new updated model
                         break;
-                    default:
+                    case templateenum.MemberContactUsMemberMesage:
+                        model.subject = subject;
+                        model.body = string.Format(body, model.from, model.activationcode);                 
+                        emaildetail.EmailModel = model;  //add the new updated model
+                        break;
+                        //non templated body for admin
+                    case templateenum.MemberContactUsAdminMessage:
+                        model.subject = subject;
+                        model.body = model.body;
+                        emaildetail.EmailModel = model;  //add the new updated model
+                        break;
+                    default: //admin message ?
                         model.subject = subject;
                         model.body = string.Format(body, model.screenname, model.username);
                         emaildetail.EmailModel = model;  //add the new updated model
@@ -420,6 +433,37 @@ namespace Nmedia.Services.Notification
             }
             return null;
 
+        }
+
+        private int getorverifyaddresstype(EmailModel model)
+        {
+            int? addrestypeid = 0;
+            if (model.addresstypeid == 0 | model.addresstypeid ==null)
+            {
+                messagetypeenum messagetype = (messagetypeenum)model.messagetypeid;
+                if (messagetype.ToDescription().ToLower().Contains("Member"))
+                {
+                    addrestypeid = (int)addresstypeenum.SiteUser;
+                }
+
+            }
+            else{
+            //make sure we have a valid addresstype
+               var addresstype = (addresstypeenum)model.addresstypeid;
+               
+                if (addresstype != null)
+                {
+                    addrestypeid = model.addresstypeid;
+                }
+             }
+
+            //set the default to user if we dont know
+            if (addrestypeid != null | addrestypeid == 0)
+            {
+                addrestypeid = (int)addresstypeenum.SiteUser;
+            }
+           
+            return addrestypeid.Value;
         }
 
         private EmailViewModel getemailVMbyEmailModelFromDB(EmailModel model, lu_template template)
@@ -542,39 +586,49 @@ namespace Nmedia.Services.Notification
        //TO do might want to be able to send multiple emails at once instead instead of verifiying each 
         private address getorcreateaddaddress(EmailModel Model, IUnitOfWorkAsync db)
        {
-       
-         //check to see if the recipeint address already exists if not add i
-                        address current =
-                        _unitOfWorkAsync.Repository<address>().Queryable().ToList()
-                        .Where(p => string.Equals(p.emailaddress, Model.emailaddress, StringComparison.OrdinalIgnoreCase) && p.addresstype_id == Model.addresstypeid).FirstOrDefault();
-                            //_unitOfWorkAsync.Repository<address>().Queryable().ToList().Where(p => p.emailaddress.ToUpper() == Model.EmailModel.to && Model.EmailModel.addresstypefrom == addresstypeenum.SiteUser).FirstOrDefault();
 
-                         
-                        if (current == null)
-                        {
-                            current = new address();
-                           // var addresstype = new lu_addresstype();
-                         //   current.addresstype = addresstype;
-                            //add the email address                         
-                            current.addresstype_id = Model.addresstypeid;//:  (int)Model.EmailModel.addresstypefrom;
-                            current.username = Model.username;
-                            current.emailaddress = Model.emailaddress;  //IsToAddress == true? Model.EmailModel.to:Model.EmailModel.from;
-                            current.active = true;
-                            current.creationdate = DateTime.Now;
-                            _unitOfWorkAsync.Repository<address>().Insert(current); 
-                            var i = db.SaveChanges();
-                        }
-                      
-                        //get the ID since it is required either way , got to be a betetr way to do this than to query twice
-                       // var currentaddress = _unitOfWorkAsync.Repository<address>().Queryable().Where(p => p.emailaddress.ToUpper() == model.to.ToUpper() && p.addresstype_id == (int)addresstypeenum.PromotionUser).FirstOrDefault();
+           try
+           {
 
-                       //ICollection<address> addresses = new List<address>();
-                        //add the address 
-                       // addresses.Add(current);
+               //check to see if the recipeint address already exists if not add i
+               address current =
+               _unitOfWorkAsync.Repository<address>().Queryable().ToList()
+               .Where(p => string.Equals(p.emailaddress, Model.emailaddress, StringComparison.OrdinalIgnoreCase) && p.addresstype_id == Model.addresstypeid).FirstOrDefault();
+               //_unitOfWorkAsync.Repository<address>().Queryable().ToList().Where(p => p.emailaddress.ToUpper() == Model.EmailModel.to && Model.EmailModel.addresstypefrom == addresstypeenum.SiteUser).FirstOrDefault();
 
-                    
-                        message message = new message();
-                        return current;
+
+               if (current == null)
+               {
+                   current = new address();
+                   // var addresstype = new lu_addresstype();
+                   //   current.addresstype = addresstype;
+                   //add the email address                         
+                   current.addresstype_id = Model.addresstypeid;//:  (int)Model.EmailModel.addresstypefrom;
+                   current.username = Model.username;
+                   current.emailaddress = Model.emailaddress;  //IsToAddress == true? Model.EmailModel.to:Model.EmailModel.from;
+                   current.active = true;
+                   current.creationdate = DateTime.Now;
+                   _unitOfWorkAsync.Repository<address>().Insert(current);
+                   var i = db.SaveChanges();
+               }
+
+               //get the ID since it is required either way , got to be a betetr way to do this than to query twice
+               // var currentaddress = _unitOfWorkAsync.Repository<address>().Queryable().Where(p => p.emailaddress.ToUpper() == model.to.ToUpper() && p.addresstype_id == (int)addresstypeenum.PromotionUser).FirstOrDefault();
+
+               //ICollection<address> addresses = new List<address>();
+               //add the address 
+               // addresses.Add(current);
+
+
+               message message = new message();
+               return current;
+           }
+           catch (Exception ex)
+           {
+               throw ex;           
+           }
+         
+
        
        }              
        
