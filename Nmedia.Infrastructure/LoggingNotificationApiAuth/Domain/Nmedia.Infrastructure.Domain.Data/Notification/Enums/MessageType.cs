@@ -44,7 +44,7 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
         UserContactUsnotification = 12,
         [Description("Member Contract us")]
         [EnumMember]
-        MemberContactUsNotification = 13,
+         MemberContactUsNotification = 13,
 
     }
 

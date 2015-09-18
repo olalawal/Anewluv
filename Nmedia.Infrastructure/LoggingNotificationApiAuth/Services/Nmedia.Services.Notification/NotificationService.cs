@@ -285,91 +285,167 @@ namespace Nmedia.Services.Notification
             //parse the address type
             //determine if we are sending a To or From email.
 
-                 try
-                 {
-                        // var templateenum = (templateenum)Enum.Parse(typeof(templateenum), model.templateid);
-                        //Id's messed up in DB use the first 
-                        //6	1	Anewluv@sendmail.com	NULL	smtp.sendgrid.net	olawal	azure_b5dd8d41de89841c3093bbb13c07425d@azure.com	kw8LHWnK9rnH7zQ	True	2015-04-20 00:00:00.000	NULL               
-                        var result = await _unitOfWorkAsync.RepositoryAsync<systemaddress>().Query(a=>a.id == (int)systemaddresseenum.SendGridSMTPrelay).SelectAsync();
-                        var systemsenderaddress = result.FirstOrDefault();
-                        //11-29-2013 get the template path from web config
-                        var TemplatePath = ConfigurationManager.AppSettings["razortemplatefilelocation"];
+            try
+            {
 
-                             foreach(EmailModel model in models)
-                             {
-                                try
-                                 {
+                var task = Task.Factory.StartNew(() =>
+                {
 
-                                    if (model != null)
-                                    {
-                                        EmailViewModel currentEmailViewModel = new EmailViewModel();
-                                        message message = new message();
+                    // var templateenum = (templateenum)Enum.Parse(typeof(templateenum), model.templateid);
+                    //Id's messed up in DB use the first 
+                    //6	1	Anewluv@sendmail.com	NULL	smtp.sendgrid.net	olawal	azure_b5dd8d41de89841c3093bbb13c07425d@azure.com	kw8LHWnK9rnH7zQ	True	2015-04-20 00:00:00.000	NULL               
+                    var result = _unitOfWorkAsync.Repository<systemaddress>().Query(a => a.id == (int)systemaddresseenum.SendGridSMTPrelay).Select();
+                    var systemsenderaddress = result.FirstOrDefault();
+                    //11-29-2013 get the template path from web config
+                    var TemplatePath = ConfigurationManager.AppSettings["razortemplatefilelocation"];
 
-                                        //get or set addresstype
-                                        model.addresstypeid = getorverifyaddresstype(model);
-
-                                        ICollection<address> addresses = new List<address>();
-
-                                       //TO DO load from cache
-                                      //  var template = _unitOfWorkAsync.Repository<lu_template>().Query(f => f.id == model.templateid)
-                                        //    .Include(z => z.filename).Include(z => z.body).Include(z => z.subject).Select().FirstOrDefault();
-                                        var templatefilename = (templatefilenameenum)model.templateid;
-
-                                        currentEmailViewModel = getemailVMbyEmailModelFromEnums(model);
-                                       // currentEmailViewModel = getemailVMbyEmailModel(model, template);
-                                        //model.memberEmailViewModel = currentEmailModel;
-                                        //create the user address
-                                        addresses.Add(getorcreateaddaddress(model, _unitOfWorkAsync));
-
-                                        //the member message created and sent here
-                                        message = (message.Create(c =>
-                                        {
-                                            c.template_id = model.templateid;
-                                            c.messagetype_id = currentEmailViewModel.EmailModel.messagetypeid;
-                                            c.body = TemplateParser.RazorFileTemplate(templatefilename.ToDescription() + ".cshtml", ref currentEmailViewModel, TemplatePath); // c.template == null ? TemplateParser.RazorFileTemplate("", ref error) :                                                            
-                                            c.subject = currentEmailViewModel.EmailModel.subject;
-                                            c.recipients = addresses;
-                                            c.sendingapplication = "NotificationService";
-                                            c.systemaddress_id = systemsenderaddress.id;
-                                            c.systemaddress = systemsenderaddress;  //needed for the host info
-                                            c.ObjectState = ObjectState.Added;
-                                        }));
-
-                                    
-                                        message.sent = message.body != null ? sendemail(message) : false;//attempt to send the message
-                                        message.sendattempts = message.body != null ? 1 : 0;
-                                        //  db.Add(message);
-                                        // int j = db.Commit();
-                                       
-                                        _unitOfWorkAsync.Repository<message>().Insert(message);
-                                        _unitOfWorkAsync.SaveChangesAsync().DoNotAwait();
-                                    }                         
-
-                                 }
-                                 catch (Exception ex)
-                                 {
-                                     //log individual error for this email and move to next
-                                     var dd = ex.Message;
-                                 }
-                             }
-
-                             return "true";
-                      
-                    }
-                    catch (Exception ex)
+                    foreach (EmailModel model in models)
                     {
-                        //to do log error
-                        //thow service error
-                        var dd = ex.Message;
-                        throw ex;
+                        try
+                        {
 
+                            if (model != null)
+                            {
+                                EmailViewModel currentEmailViewModel = new EmailViewModel();
+                                message message = new message();
+
+                                //get or set addresstype
+                                model.addresstypeid = getorverifyaddresstypebytemplate(model);
+
+                             
+
+                                //TO DO load from cache
+                                //  var template = _unitOfWorkAsync.Repository<lu_template>().Query(f => f.id == model.templateid)
+                                //    .Include(z => z.filename).Include(z => z.body).Include(z => z.subject).Select().FirstOrDefault();
+                                var templatefilename = (templatefilenameenum)model.templateid;
+
+                                currentEmailViewModel = getemailVMbyEmailModelFromEnums(model);
+                                // currentEmailViewModel = getemailVMbyEmailModel(model, template);
+                                //model.memberEmailViewModel = currentEmailModel;
+                                //create the user address
+                               var addresses = getorcreateaddaddress(model).Result;
+                              
+
+                                //the member message created and sent here
+                                message = (message.Create(c =>
+                                {
+                                    c.template_id = model.templateid;
+                                    c.messagetype_id = currentEmailViewModel.EmailModel.messagetypeid;
+                                    c.body = TemplateParser.RazorFileTemplate(templatefilename.ToDescription() + ".cshtml", ref currentEmailViewModel, TemplatePath); // c.template == null ? TemplateParser.RazorFileTemplate("", ref error) :                                                            
+                                    c.subject = currentEmailViewModel.EmailModel.subject;
+                                    c.recipients = addresses;
+                                    c.sendingapplication = "NotificationService";
+                                    c.systemaddress_id = systemsenderaddress.id;
+                                    c.systemaddress = systemsenderaddress;  //needed for the host info
+                                    c.ObjectState = ObjectState.Added;
+                                }));
+
+
+                                message.sent = message.body != null ? sendemail(message) : false;//attempt to send the message
+                                message.sendattempts = message.body != null ? 1 : 0;
+                                //  db.Add(message);
+                                // int j = db.Commit();
+
+                                _unitOfWorkAsync.Repository<message>().Insert(message);
+                                _unitOfWorkAsync.SaveChangesAsync().DoNotAwait();
+                            }
+
+                        }
+                        catch (Exception ex)
+                        {
+                            //log individual error for this email and move to next
+                            var dd = ex.Message;
+                        }
                     }
 
-                 return "false";
-      }       
+                    return "true";
 
+
+                });
+                return await task.ConfigureAwait(false);
+
+
+
+            }
+            catch (Exception ex)
+            {
+                //to do log error
+                //thow service error
+                var dd = ex.Message;
+                throw ex;
+
+            }
+
+
+        }       
         #region "Private methods"
 
+
+        //TO do might want to be able to send multiple emails at once instead instead of verifiying each 
+        private async Task<List<address>> getorcreateaddaddress(EmailModel Model)
+        {
+
+            try
+            {
+                var listofaddresses = new List<address>();
+                //if its a user its a single address
+                if (Model.addresstypeid == (int)addresstypeenum.SiteUser)
+                {
+                    //check to see if the recipeint address already exists if not add i
+                    address current =
+                    _unitOfWorkAsync.Repository<address>().Queryable()
+                    .Where(p => string.Equals(p.emailaddress, Model.emailaddress, StringComparison.OrdinalIgnoreCase) && p.addresstype_id == Model.addresstypeid).FirstOrDefault();
+                    //_unitOfWorkAsync.Repository<address>().Queryable().ToList().Where(p => p.emailaddress.ToUpper() == Model.EmailModel.to && Model.EmailModel.addresstypefrom == addresstypeenum.SiteUser).FirstOrDefault();
+
+
+                    if (current == null)
+                    {
+                        current = new address();
+                        // var addresstype = new lu_addresstype();
+                        //   current.addresstype = addresstype;
+                        //add the email address                         
+                        current.addresstype_id = Model.addresstypeid;//:  (int)Model.EmailModel.addresstypefrom;
+                        current.username = Model.username;
+                        current.emailaddress = Model.emailaddress;  //IsToAddress == true? Model.EmailModel.to:Model.EmailModel.from;
+                        current.active = true;
+                        current.creationdate = DateTime.Now;
+
+                        _unitOfWorkAsync.RepositoryAsync<address>().Insert(current);
+                        await _unitOfWorkAsync.SaveChangesAsync();
+                    }
+
+                    listofaddresses.Add(current);
+                    return listofaddresses;
+                }
+                else
+                {
+                    //just get all the address types that match
+                  var addresses =     _unitOfWorkAsync.Repository<address>().Queryable()
+                  .Where(p => p.addresstype_id == Model.addresstypeid && p.active == true).ToList();
+
+                  return addresses;
+
+                }
+
+                //get the ID since it is required either way , got to be a betetr way to do this than to query twice
+                // var currentaddress = _unitOfWorkAsync.Repository<address>().Queryable().Where(p => p.emailaddress.ToUpper() == model.to.ToUpper() && p.addresstype_id == (int)addresstypeenum.PromotionUser).FirstOrDefault();
+
+                //ICollection<address> addresses = new List<address>();
+                //add the address 
+                // addresses.Add(current);
+
+
+               
+               
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+
+
+        }              
 
         private EmailViewModel getemailVMbyEmailModelFromEnums(EmailModel model)
         {
@@ -435,15 +511,43 @@ namespace Nmedia.Services.Notification
 
         }
 
-        private int getorverifyaddresstype(EmailModel model)
+
+       /// <summary>
+       /// other option use the messagetype to determine the address type this is the option only as last resought
+       /// </summary>
+       /// <param name="model"></param>
+       /// <returns></returns>
+        private int getorverifyaddresstypebymessagetype(EmailModel model)
         {
             int? addrestypeid = 0;
             if (model.addresstypeid == 0 | model.addresstypeid ==null)
             {
+                string[] memberaddressstrings = new[] { "member", "user", "profile" };
+                string [] developeraddressstring = new[] { "developer","QA","projectlead" };
+                string[] supportaddressstring = new[] { "support", "supportadmin"};
+                string[] adminaddressstrings = new[] { "admin","systemadmin", };
+                
+
                 messagetypeenum messagetype = (messagetypeenum)model.messagetypeid;
-                if (messagetype.ToDescription().ToLower().Contains("Member"))
+               //user email address
+                if (memberaddressstrings.Any(messagetype.ToDescription().ToLower().Contains))
                 {
                     addrestypeid = (int)addresstypeenum.SiteUser;
+                }
+                //admin emails 
+                if (adminaddressstrings.Any(messagetype.ToDescription().ToLower().Contains))
+                {
+                    addrestypeid = (int)addresstypeenum.SystemAdmin;
+                }
+                //support emails
+                else if (supportaddressstring.Any(messagetype.ToDescription().ToLower().Contains))
+                {
+                    addrestypeid = (int)addresstypeenum.SiteSupportAdmin;
+                }
+                //developer emails
+                else if (developeraddressstring.Any(messagetype.ToDescription().ToLower().Contains))
+                {
+                    addrestypeid = (int)addresstypeenum.Developer;
                 }
 
             }
@@ -463,6 +567,69 @@ namespace Nmedia.Services.Notification
                 addrestypeid = (int)addresstypeenum.SiteUser;
             }
            
+            return addrestypeid.Value;
+        }
+
+       /// <summary>
+       /// user the template id to and the template name to determine the address type if its not passed
+       /// </summary>
+       /// <param name="model"></param>
+       /// <returns></returns>
+        private int getorverifyaddresstypebytemplate(EmailModel model)
+        {
+            int? addrestypeid = 0;
+            if (model.addresstypeid == 0 | model.addresstypeid == null)
+            {
+               
+                //if its an admin email it will have admin in it 
+                string[] admintemplatestrings = new[] { "admin", "systemadmin", };
+                //if its a support email it will have support in it
+                string[] supporttemplatestrings = new[] { "support", "supportadmin", };
+                //if its a developer email it should have developer in the message or error.
+                string[] developertemplatestrings = new[] { "error", "developer", };
+
+
+                templateenum templatetype = (templateenum)model.templateid;
+                //user email address
+                
+                //admin emails 
+                if (admintemplatestrings.Any(templatetype.ToDescription().ToLower().Contains))
+                {
+                    addrestypeid = (int)addresstypeenum.SystemAdmin;
+                }
+                //support emails
+                else if (supporttemplatestrings.Any(templatetype.ToDescription().ToLower().Contains))
+                {
+                    addrestypeid = (int)addresstypeenum.SiteSupportAdmin;
+                }
+                //developer emails
+                else if (developertemplatestrings.Any(templatetype.ToDescription().ToLower().Contains))
+                {
+                    addrestypeid = (int)addresstypeenum.Developer;
+                }
+                else  //default case is its a member email
+                {
+                    addrestypeid = (int)addresstypeenum.SiteUser; 
+                }
+
+            }
+            else
+            {
+                //make sure we have a valid addresstype
+                var addresstype = (addresstypeenum)model.addresstypeid;
+
+                if (addresstype != null)
+                {
+                    addrestypeid = model.addresstypeid;
+                }
+            }
+
+            //set the default to user if we dont know
+            if (addrestypeid != null | addrestypeid == 0)
+            {
+                addrestypeid = (int)addresstypeenum.SiteUser;
+            }
+
             return addrestypeid.Value;
         }
 
@@ -546,7 +713,7 @@ namespace Nmedia.Services.Notification
                     mailMessage.Body = message.body;
                    // SmtpClient smtp = new SmtpClient();
                     //using GO Daddy btw from address should be a godaddy address too
-                    var smtp = new SmtpClient("relay-hosting.secureserver.net");
+                    var smtp = new SmtpClient();  // go daddy sender   var smtp = new SmtpClient("relay-hosting.secureserver.net");
                    /// http://stackoverflow.com/questions/8554567/godaddy-send-email
                     /// http://vandelayweb.com/sending-asp-net-emails-godaddy-gmail-godaddy-hosted/
                    /// 
@@ -582,55 +749,10 @@ namespace Nmedia.Services.Notification
 
             return isEmailSendSuccessfully;
         }
-       
-       //TO do might want to be able to send multiple emails at once instead instead of verifiying each 
-        private address getorcreateaddaddress(EmailModel Model, IUnitOfWorkAsync db)
-       {
 
-           try
-           {
+     
 
-               //check to see if the recipeint address already exists if not add i
-               address current =
-               _unitOfWorkAsync.Repository<address>().Queryable().ToList()
-               .Where(p => string.Equals(p.emailaddress, Model.emailaddress, StringComparison.OrdinalIgnoreCase) && p.addresstype_id == Model.addresstypeid).FirstOrDefault();
-               //_unitOfWorkAsync.Repository<address>().Queryable().ToList().Where(p => p.emailaddress.ToUpper() == Model.EmailModel.to && Model.EmailModel.addresstypefrom == addresstypeenum.SiteUser).FirstOrDefault();
-
-
-               if (current == null)
-               {
-                   current = new address();
-                   // var addresstype = new lu_addresstype();
-                   //   current.addresstype = addresstype;
-                   //add the email address                         
-                   current.addresstype_id = Model.addresstypeid;//:  (int)Model.EmailModel.addresstypefrom;
-                   current.username = Model.username;
-                   current.emailaddress = Model.emailaddress;  //IsToAddress == true? Model.EmailModel.to:Model.EmailModel.from;
-                   current.active = true;
-                   current.creationdate = DateTime.Now;
-                   _unitOfWorkAsync.Repository<address>().Insert(current);
-                   var i = db.SaveChanges();
-               }
-
-               //get the ID since it is required either way , got to be a betetr way to do this than to query twice
-               // var currentaddress = _unitOfWorkAsync.Repository<address>().Queryable().Where(p => p.emailaddress.ToUpper() == model.to.ToUpper() && p.addresstype_id == (int)addresstypeenum.PromotionUser).FirstOrDefault();
-
-               //ICollection<address> addresses = new List<address>();
-               //add the address 
-               // addresses.Add(current);
-
-
-               message message = new message();
-               return current;
-           }
-           catch (Exception ex)
-           {
-               throw ex;           
-           }
-         
-
-       
-       }              
+      
        
         //Private reusable internal functions  
         private message sendemailtemplateinfo(templateenum template, IUnitOfWorkAsync db)
