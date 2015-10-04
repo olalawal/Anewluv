@@ -34,6 +34,8 @@ namespace Anewluv.Domain.Data
             string _openidIdentifer;
             string _openidProvidername;
 
+            string _phonenumber;
+
             [DataMember]
             public profile thisprofile
             {
@@ -130,6 +132,13 @@ namespace Anewluv.Domain.Data
                 set { _password = value; }
             }
 
+            [DataMember]
+            public string phonenumber
+            {
+                get { return _phonenumber; }
+                set { _phonenumber = value; }
+            }
+
             /// <summary>
             ///  used for SSO like jainrain
             /// </summary>
@@ -199,6 +208,7 @@ namespace Anewluv.Domain.Data
                 this.password = password;
                 this.openidIdentifer = openidIdentifer;
                 this.openidProvidername = openidProvidername;
+                this.phonenumber = phonenumber;
 
 
 

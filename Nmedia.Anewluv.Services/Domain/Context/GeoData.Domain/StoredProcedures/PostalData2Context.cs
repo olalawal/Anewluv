@@ -55,6 +55,36 @@ namespace GeoData.Domain.Models
 
     }
 
+
+          public async Task<int> GetCountryCountryIDByCountryName(string countryname)
+    {
+        string query = "sp_GetCountryIDByCountryName";
+        SqlParameter parameter = new SqlParameter("@CountryName", countryname);
+        parameter.ParameterName = "@CountryName";
+        parameter.SqlDbType = System.Data.SqlDbType.VarChar;
+        parameter.Size = 40;
+        //Procedure or function 'usp_GetHudFeeReviewLoanDetails' expects parameter '@LoanNbr', which was not supplied.
+        //parameter.TypeName 
+        var parameters = new object[] { parameter };
+
+        //object params                      
+      //  countryname = geodb.ExecuteStoredProcedure<string>().Select().FirstOrDefault();
+
+
+       // var dd = Database.SqlQuery(query + " @countryCode" + " ", parameters);
+
+        return await Database.SqlQuery<int>(query + " @CountryName ", parameters).FirstAsync();
+    
+      //  var data = myquery.ToListAsync();
+      //  return data.First();
+        //return data.Result.ToString();
+
+
+    }
+
+        
+
+
      public IEnumerable<CityList> CityListbycountryNamePostalcodeandCity(string countryname, string filter, string PostalCodeList)
     {
    

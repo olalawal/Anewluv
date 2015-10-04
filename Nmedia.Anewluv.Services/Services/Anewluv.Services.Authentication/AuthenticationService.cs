@@ -103,7 +103,7 @@ namespace Anewluv.Services.Authentication
                     var membershipprovider = CreateUserCustom(model.username, model.password, model.openidIdentifer,
                        model.openidProvidername,
                      model.email,
-                   model.birthdate, model.genderid, model.country, model.countryid, model.city, model.stateprovince, model.longitude, model.latitude,
+                   model.birthdate.Value, model.genderid, model.country, model.countryid, model.city, model.stateprovince, model.longitude, model.latitude,
                     model.screenname, model.zippostalcode, model.activationcode, false, model.providerUserKey,
                      out status);
 
@@ -162,7 +162,7 @@ namespace Anewluv.Services.Authentication
             return CreateUserCustom(model.username,
                         model.password, model.openidIdentifer, model.openidProvidername,
                        model.email,
-                       model.birthdate, model.genderid, model.country, model.countryid, model.city, model.stateprovince,
+                       model.birthdate.Value, model.genderid, model.country, model.countryid, model.city, model.stateprovince,
                        model.longitude, model.latitude, model.screenname, model.zippostalcode, model.activationcode,
                        model.isApproved,
                        model.providerUserKey, out status);
@@ -987,88 +987,7 @@ namespace Anewluv.Services.Authentication
 
         }
 
-        //updates the profile with a password that is presumed to be already encyrpted
-        private bool updatepassword(ProfileModel model, string encryptedpassword)
-        {
-
-            //// 
-            {
-                // ////do not audit on adds
-                //   using (var transaction = db.BeginTransaction())
-                {
-                    try
-                    {
-                        var profilerepo = _unitOfWorkAsync.Repository<profile>();
-                        var myProfile = profilerepo.getprofilebyprofileid(model);
-                        //update the profile status to 2
-                        myProfile.password = encryptedpassword;
-                        myProfile.modificationdate = DateTime.Now;
-                        myProfile.passwordChangeddate = DateTime.Now;
-                        myProfile.passwordchangecount = (myProfile.passwordchangecount == null) ? 1 : myProfile.passwordchangecount + 1;
-                        //handele the update using EF
-                        //  _unitOfWorkAsync.Repository<Country_PostalCode_List>().profiles.AttachAsModified(myProfile, this.ChangeSet.GetOriginal(myProfile));
-                        profilerepo.Update(myProfile);
-                        var i = _unitOfWorkAsync.SaveChanges();
-                        // transaction.Commit();
-
-                        return true;
-                    }
-                    catch (Exception ex)
-                    {
-
-                        throw ex;
-
-                        //throw convertedexcption;
-                    }
-                }
-            }
-
-        }
-
-        //updates the profile with a password that is presumed to be already encyrpted
-        private bool enablepasswordreset(ProfileModel model, ShortGuid shortguid)
-        {
-
-            //// 
-            {
-                // ////do not audit on adds
-                //   using (var transaction = db.BeginTransaction())
-                {
-                    try
-                    {
-
-
-                        var profilerepo = _unitOfWorkAsync.Repository<profile>();
-                        var myProfile = profilerepo.getprofilebyprofileid(model);
-                        //update the profile status to 2
-                        myProfile.status_id = (int)profilestatusEnum.ResetingPassword;
-                        myProfile.passwordresettoken = shortguid;
-                        myProfile.passwordresetwindow = DateTime.Now.AddMinutes(30);
-                        myProfile.passwordchangeattempts = myProfile.passwordchangeattempts + 1;
-                        myProfile.modificationdate = DateTime.Now;
-                        // myProfile.passwordChangeddate = DateTime.Now;
-                        // myProfile.passwordchangecount = (myProfile.passwordchangecount == null) ? 1 : myProfile.passwordchangecount + 1;
-                        //handele the update using EF
-                        //  _unitOfWorkAsync.Repository<Country_PostalCode_List>().profiles.AttachAsModified(myProfile, this.ChangeSet.GetOriginal(myProfile));
-                        profilerepo.Update(myProfile);
-                        var i = _unitOfWorkAsync.SaveChanges();
-                        // transaction.Commit();
-
-                        return true;
-                    }
-                    catch (Exception ex)
-                    {
-
-                        throw ex;
-
-                        //throw convertedexcption;
-                    }
-                }
-            }
-
-        }
-
-
+ 
         public string resetpassword(string profileid, string answer)
         {
             return ResetPassword(profileid, answer);
@@ -2020,7 +1939,7 @@ namespace Anewluv.Services.Authentication
                                 currenttoken.Apikey = guid;
 
                             //updated activity // TO Do we migght use to replace logtimes below ?
-                            activitylist.Add(Api.AnewLuvLogging.CreateActivity(profile.id,guid, (int)activitytypeEnum.login, ctx));
+                            activitylist.Add(Api.AnewLuvLogging.CreateActivity(profile.id, guid, (int)activitytypeEnum.login, ctx));
                             Anewluv.Api.AsyncCalls.addprofileactivities(activitylist).DoNotAwait();
 
 
@@ -2063,7 +1982,6 @@ namespace Anewluv.Services.Authentication
             }
         }
 
-
         public async Task<Boolean> logoutuserandinvalidatetoken(ProfileModel profile)
         {
 
@@ -2104,7 +2022,7 @@ namespace Anewluv.Services.Authentication
                             //updated logout time
                             updateuserloggout(myQuery.id, ctx, profile.apikey);
 
-                            activitylist.Add(Api.AnewLuvLogging.CreateActivity(profile.profileid,new Guid(profile.apikey), (int)activitytypeEnum.changebirthdate, ctx));
+                            activitylist.Add(Api.AnewLuvLogging.CreateActivity(profile.profileid, new Guid(profile.apikey), (int)activitytypeEnum.changebirthdate, ctx));
                             Anewluv.Api.AsyncCalls.addprofileactivities(activitylist).DoNotAwait();
 
 
@@ -2142,6 +2060,274 @@ namespace Anewluv.Services.Authentication
             }
         }
 
+
+        /// <summary>
+        /// used to update all proile stuff that is changable , including password
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public async Task updateuser(MembershipUserViewModel user)
+        {
+
+
+
+            //  AnewLuvMembershipUser u = (AnewLuvMembershipUser)user;
+            //  using (var db = _unitOfWorkAsync)
+            {
+                //db.IsAuditEnabled = false; //do not audit on adds
+                //   using (var transaction = db.BeginTransaction())
+                {
+                    try
+                    {
+
+                        bool profileupdated = false;
+                        bool profiledataupdated = false;
+                        //get profile and profile datas
+                        var profilerepo = _unitOfWorkAsync.Repository<profile>();
+                        var profiledatarepo = _unitOfWorkAsync.Repository<profiledata>();
+
+                        var ObjProfileEntityresult = await _unitOfWorkAsync.RepositoryAsync<profile>().Query(p => p.id == Convert.ToInt16(user.profileid)).SelectAsync();
+                        profile ObjProfileEntity = ObjProfileEntityresult.FirstOrDefault();
+                        var objprofileDateEntityresult = await _unitOfWorkAsync.RepositoryAsync<profiledata>().Query(p => p.profile_id == Convert.ToInt16(user.profileid)).SelectAsync();
+                        profiledata objprofileDateEntity = objprofileDateEntityresult.FirstOrDefault();
+
+                        // new gpsdata;
+
+                        //string[] tempCityAndStateProvince = user.city.Split(',');
+                        Random objRandom = new Random();
+                        int intStart = objRandom.Next(1, 9);
+                        int intLastTwo = objRandom.Next(10, 99);
+                        //convert the string values to byte as needed
+                        //NumberFormatInfo provider = new NumberFormatInfo();
+                        // These properties affect the conversion.
+                        //provider.PositiveSign = "pos";
+                        gpsdata _GpsData = null;
+                        //int? countryID = null;
+                        string matchedcontryname = "";
+                        int? matchedcountryid = null;
+
+                        //conver the unquiqe coountry Name to an ID
+                        //store country ID for use later 
+                        // PostalData2Context GeoContext = new PostalData2Context();
+                        //    using (var tempdb = GeoContext)
+                        // {
+                        // GeoService GeoService = new GeoService(tempdb);
+                        //  countryID = GeoService.getcountryidbycountryname(country);
+
+
+                        //verify the country 
+                        if (user.country == "" && user.countryid != null)
+                        {
+                            matchedcountryid = spatialextentions.getcountrycountryidbycountryname(new GeoModel { country = user.country }, _storedProcedures).Result;
+                            matchedcontryname = user.country;
+                        }
+                        else if (user.country != "")
+                        {
+                            matchedcontryname = spatialextentions.getcountrynamebycountryid(new GeoModel { countryid = user.countryid.ToString() }, _storedProcedures);
+                            matchedcountryid = user.countryid;
+                        }
+
+
+
+                        //to do validate city as well
+
+                        //verify all the spatial data
+                        if (matchedcontryname != "")
+                            _GpsData = spatialextentions.getgpsdatabycitycountrypostalcode(new GeoModel { country = user.country, city = user.city, postalcode = user.zippostalcode }, _storedProcedures);
+                        //  }
+
+                        //  int countryID = Api.GeoService.getcountryidbycountryname(user.country);
+
+                        //get the longidtue and latttude 
+                        //   gpsdata _GpsData = Api.GeoService.getgpsdatabycitycountrypostalcode(user.country, tempCityAndStateProvince[0], user.ziporpostalcode);
+
+
+
+                        //split up the city from state province
+                        //Build the profile data table                   
+                        if (_GpsData != null) { objprofileDateEntity.latitude = Convert.ToDouble(_GpsData.latitude); profiledataupdated = true; }
+                        if (_GpsData != null) { objprofileDateEntity.longitude = Convert.ToDouble(_GpsData.longitude); profiledataupdated = true; }
+                        if (_GpsData != null && user.city != "") { objprofileDateEntity.city = user.city; profiledataupdated = true; }
+                        if (_GpsData != null && user.stateprovince != "") { objprofileDateEntity.stateprovince = user.stateprovince; profiledataupdated = true; }
+                        //if (_GpsData != null && (user.region != "" && user.stateprovince =="")) objprofileDateEntity.stateprovince = user.region;
+
+
+
+                        if (_GpsData != null && user.country != "") { objprofileDateEntity.countryid = matchedcountryid; profiledataupdated = true; }
+                        if (_GpsData != null && user.zippostalcode != "") { objprofileDateEntity.postalcode = user.zippostalcode; profiledataupdated = true; }
+                        if (user.genderid != "") { objprofileDateEntity.gender_id = Convert.ToInt16(user.genderid); profiledataupdated = true; }
+                        if (user.birthdate != null) { objprofileDateEntity.birthdate = Convert.ToDateTime(user.birthdate); profiledataupdated = true; }
+                        if (user.phonenumber != "") { objprofileDateEntity.phone = user.phonenumber; profiledataupdated = true; }
+                        //objprofileDateEntity.AboutMe = "Hello";
+
+
+
+                        //set all the entity values
+                        // ObjProfileEntity.username = username;
+                        //changed the encryption to something stronger
+
+                        //only update password if it changed
+                        if (user.verificationcode == user.verificationcode && user.password != null | user.password != "")
+                        {
+                            this.updatepasswordbyprofileid(ObjProfileEntity, Encryption.encryptString(user.password));
+                            profileupdated = true;
+                        }
+                        // ObjProfileEntity.ProfileID = email;
+                        // ObjProfileEntity.ScreenName = screenname;
+                        //need to add a new feild
+                        // ObjProfileEntity.ActivationCode = Common.Encryption.EncodeString(email + screenname);
+                        //Mid(intStart, intStart, 14) & CStr(intLastTwo) 'need to beef this up with the session variable
+                        //ObjProfileEntity.creationdate = System.DateTime.Now;
+
+                        if (profiledataupdated) profiledatarepo.Update(objprofileDateEntity);
+
+
+                        if (profileupdated)
+                        {
+
+
+                            profilerepo.Update(ObjProfileEntity);
+                            ObjProfileEntity.modificationdate = System.DateTime.Now;
+                            //save all changes bro                         
+                            //                        _unitOfWorkAsync
+
+                        }
+                        // ObjProfileEntity.LoginDate = System.DateTime.Now;
+                        // fix this to null
+                        //ObjProfileEntity.ForwardMessages = 1;
+                        //  ObjProfileEntity.SecurityQuestionID = System.Convert.ToByte(user.securityquestion );
+                        //   ObjProfileEntity.SecurityAnswer = user.securityanswer;
+                        //ObjProfileEntity.ProfileStatusID = 1;
+
+
+                        if (profiledataupdated | profileupdated) _unitOfWorkAsync.SaveChangesAsync().DoNotAwait();
+                        //dbContext.AddToprofiledatas(objprofileDateEntity);
+                        // dbContext.AddToprofiles(ObjProfileEntity);
+
+                        // transaction.Commit();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        // transaction.Rollback();
+                        using (var logger = new Logging(applicationEnum.UserAuthorizationService))
+                        {
+
+                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null);
+                        }
+
+                        FaultReason faultreason = new FaultReason("Error in User Authentication service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+
+                        //throw convertedexcption;
+                    }
+                    finally
+                    {
+                        //Api.DisposeGeoService();
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// puts user account in password reset mode and sets a GUID to the user's email that is needed to allow reset of password
+        /// </summary>
+        /// <param name="emailaddress"></param>
+        /// <returns></returns>
+        public async Task<string> resetpassword(MembershipUserViewModel user)
+        {
+
+
+            try
+            {
+                var task = Task.Factory.StartNew(() =>
+                {
+                    // var username = datingService.ValidateSecurityAnswerIsCorrect(profileid, securityquestionID.GetValueOrDefault(), answer);
+                    var profile = _unitOfWorkAsync.Repository<profile>().getprofilebyemailaddress(new ProfileModel { email = user.email });
+                    if (profile != null)
+                    {
+                        //we have the generated password now update the user's account with new password
+
+                        //generatedpassword = GeneratePassword();
+                        //AnewluvContext AnewluvContext  = new AnewluvContext();
+                        Guid guid = Guid.NewGuid();
+                        ShortGuid sguid1 = guid; // implicitly cast the guid as a shortguid
+
+
+                        if (profile.status_id != (int)profilestatusEnum.ResetingPassword && (profile.passwordresetwindow != null && profile.passwordresetwindow > DateTime.Now))
+                        {
+                            bool dd = enablepasswordreset(new ProfileModel { profileid = profile.id }, sguid1);
+                        }
+                        else
+                        {
+
+                            //  return "password is already in reset satatus";
+                            return "Already reset check your email address for the reset link";
+
+                        }
+
+
+                        var EmailModels = new List<EmailModel>();
+
+                        EmailModels.Add(new EmailModel
+                        {
+                            templateid = (int)templateenum.MemberPasswordChangeMemberNotification,
+                            messagetypeid = (int)messagetypeenum.UserUpdate,
+                            addresstypeid = (int)addresstypeenum.SiteUser,
+                            emailaddress = profile.emailaddress,
+                            screenname = profile.screenname,
+                            username = profile.username,
+                            passwordtoken = sguid1
+                        });
+                        EmailModels.Add(new EmailModel
+                        {
+                            templateid = (int)templateenum.MemberPasswordChangedAdminNotification,
+                            messagetypeid = (int)messagetypeenum.SysAdminUpdate,
+                            addresstypeid = (int)addresstypeenum.SystemAdmin,
+                        });
+                        //this sends both admin and user emails  
+                        Api.AsyncCalls.sendmessagesbytemplate(EmailModels);
+
+
+                        return "true";
+                    }
+                    // throw new NotImplementedException();
+
+                    return "false";
+
+                });
+                return await task.ConfigureAwait(false);
+
+            }
+            catch (Exception ex)
+            {
+                using (var logger = new Logging(applicationEnum.UserAuthorizationService))
+                {
+
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null);
+                }
+
+                //log error mesasge
+                //handle logging here
+                FaultReason faultreason = new FaultReason("Error in member service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
+            finally
+            {
+                // Api.DisposeMemberService();
+            }
+
+
+        }
+
+
+
+        #endregion
 
         #region "private methods for reuse or other async calls"
 
@@ -2189,7 +2375,7 @@ namespace Anewluv.Services.Authentication
             try
             {
                 // OperationContext ctx = OperationContext.Current;
-             
+
 
                 if (newtoken != null)
                 {
@@ -2272,8 +2458,85 @@ namespace Anewluv.Services.Authentication
             return result;
         }
 
+        private profile updatepasswordbyprofileid(profile profile, string encryptedpassword)
+        {
 
-        #endregion
+            //// 
+            {
+                // ////do not audit on adds
+                //   using (var transaction = db.BeginTransaction())
+                {
+                    try
+                    {
+                        // var profilerepo = _unitOfWorkAsync.Repository<profile>();
+                        //var myProfile = profilerepo.getprofilebyprofileid(model);
+                        //update the profile status to 2
+                        profile.password = encryptedpassword;
+                        profile.passwordChangeddate = DateTime.Now;
+                        profile.passwordchangecount = (profile.passwordchangecount == null) ? 1 : profile.passwordchangecount + 1;
+                        //handele the update using EF
+                        //  _unitOfWorkAsync.Repository<Country_PostalCode_List>().profiles.AttachAsModified(myProfile, this.ChangeSet.GetOriginal(myProfile));
+                        //profilerepo.Update(myProfile);
+                        //  var i = _unitOfWorkAsync.SaveChanges();
+                        // transaction.Commit();
+
+                        return profile;
+                    }
+                    catch (Exception ex)
+                    {
+
+                        throw ex;
+
+                        //throw convertedexcption;
+                    }
+                }
+            }
+
+        }
+
+        //updates the profile with a password that is presumed to be already encyrpted
+        private bool enablepasswordreset(ProfileModel model, ShortGuid shortguid)
+        {
+
+            //// 
+            {
+                // ////do not audit on adds
+                //   using (var transaction = db.BeginTransaction())
+                {
+                    try
+                    {
+
+
+                        var profilerepo = _unitOfWorkAsync.Repository<profile>();
+                        var myProfile = profilerepo.getprofilebyprofileid(model);
+                        //update the profile status to 2
+                        myProfile.status_id = (int)profilestatusEnum.ResetingPassword;
+                        myProfile.passwordresettoken = shortguid;
+                        myProfile.passwordresetwindow = DateTime.Now.AddMinutes(30);
+                        myProfile.passwordchangeattempts = myProfile.passwordchangeattempts + 1;
+                        myProfile.modificationdate = DateTime.Now;
+                        // myProfile.passwordChangeddate = DateTime.Now;
+                        // myProfile.passwordchangecount = (myProfile.passwordchangecount == null) ? 1 : myProfile.passwordchangecount + 1;
+                        //handele the update using EF
+                        //  _unitOfWorkAsync.Repository<Country_PostalCode_List>().profiles.AttachAsModified(myProfile, this.ChangeSet.GetOriginal(myProfile));
+                        profilerepo.Update(myProfile);
+                        var i = _unitOfWorkAsync.SaveChanges();
+                        // transaction.Commit();
+
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+
+                        throw ex;
+
+                        //throw convertedexcption;
+                    }
+                }
+            }
+
+        }
+
 
         #endregion
 

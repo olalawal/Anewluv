@@ -10,6 +10,8 @@ public interface IGeoDataStoredProcedures
 
     string GetCountryNameByCountryID(string countryid);
 
+    Task<int> GetCountryCountryIDByCountryName(string countryname);
+
     IEnumerable<Country_PostalCode_List> GetCountryPostalCodeList();
 
 

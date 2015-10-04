@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Web.Security;
 using System.Runtime.Serialization;
+using Nmedia.Infrastructure.Helpers;
 
 namespace Anewluv.Domain.Data.ViewModels
 {
@@ -11,9 +12,18 @@ namespace Anewluv.Domain.Data.ViewModels
    public class MembershipUserViewModel
     {
        [DataMember]
+        public string profileid { get; set; } 
+
+       [DataMember]
        public  string username { get; set; } 
        [DataMember]
        public   string password { get; set; }
+
+       [DataMember]
+       public ShortGuid verificationcode { get; set; }
+       [DataMember]
+       public string phonenumber { get; set; }
+
        [DataMember]
        public string openidIdentifer { get; set; }
        [DataMember]
@@ -25,7 +35,7 @@ namespace Anewluv.Domain.Data.ViewModels
        [DataMember]
        public string securityAnswer { get; set; }
        [DataMember]
-       public DateTime birthdate { get; set; }
+       public DateTime? birthdate { get; set; }
        [DataMember]
        public string genderid { get; set; }
        [DataMember]
@@ -33,7 +43,7 @@ namespace Anewluv.Domain.Data.ViewModels
        [DataMember]
        public string country { get; set; }
        [DataMember]
-       public int countryid { get; set; }
+       public int? countryid { get; set; }
        [DataMember]
        public string city { get; set; }
        [DataMember]

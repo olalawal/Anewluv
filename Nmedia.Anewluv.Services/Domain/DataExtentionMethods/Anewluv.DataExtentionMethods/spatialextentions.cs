@@ -10,6 +10,7 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Anewluv.DataExtentionMethods
 {
@@ -95,6 +96,35 @@ namespace Anewluv.DataExtentionMethods
             }
 
            
+        }
+
+
+        public static  async Task<int?> getcountrycountryidbycountryname(GeoModel model, IGeoDataStoredProcedures _storedProcedures)
+        {
+
+            int? countryid = null;
+            //geodb.DisableProxyCreation = true;
+
+            try
+            {
+                //  List<Country_PostalCode_List> myQuery = default(List<Country_PostalCode_List>);
+                //Dim ctx As New Entities()
+                 var result = await _storedProcedures.GetCountryCountryIDByCountryName(model.country);
+
+                 countryid = result;
+                //object params                      
+                // countryname = geodb.ExecuteStoredProcedure<string>(query + " @CountryID ", parameters).Select().FirstOrDefault();
+                 return countryid;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+                //throw convertedexcption;
+            }
+
+           // return countryname;
         }
 
            public static string getcountrynamebycountryid(GeoModel model,IGeoDataStoredProcedures _storedProcedures)
