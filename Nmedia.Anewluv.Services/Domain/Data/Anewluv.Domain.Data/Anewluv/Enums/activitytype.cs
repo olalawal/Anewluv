@@ -94,7 +94,9 @@ namespace Anewluv.Domain.Data
          [Description("create advanced search")]
          createadvancedsearch=26  ,
          [Description("updated profile match settings")]
-         updatedprofilematchsettings = 27  
+         updatedprofilematchsettings = 27  ,
+         [Description("created profile")]
+         newprofile = 28  
 
 
     }

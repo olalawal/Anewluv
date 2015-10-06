@@ -722,7 +722,7 @@ namespace Anewluv.Services.Authentication
                       
                             // Create a point using native DbGeography Factory method
                         objprofileDataEntity.location = DbGeography.PointFromText(
-                                        string.Format("POINT({0} {1})", latitude, longitude)
+                                        string.Format("POINT({0} {1})", longitude,latitude)
                                         , 4326);
                        
                        // objprofileDataEntity.location =   DbGeography.FromText("POINT(" + latitude + " "  + longitude   + ")"); 
@@ -770,10 +770,17 @@ namespace Anewluv.Services.Authentication
                         var i = _unitOfWorkAsync.SaveChanges();
                         // transaction.Commit();
 
+                        //add profile activites
+                        var activitylist = new List<ActivityModel>();
+                        activitylist.Add(Api.AnewLuvLogging.CreateActivity(ObjProfileEntity.id, null, (int)activitytypeEnum.newprofile, OperationContext.Current));
+                        Anewluv.Api.AsyncCalls.addprofileactivities(activitylist).DoNotAwait();
+
+
                         //send the emails
                         //**************************************
                         var EmailModels = new List<EmailModel>();
 
+                        
                         EmailModels.Add(new EmailModel
                         {
                             templateid = (int)templateenum.MemberCreatedMemberNotification,
@@ -1109,6 +1116,11 @@ namespace Anewluv.Services.Authentication
                         //                        _unitOfWorkAsync
                         var i = _unitOfWorkAsync.SaveChanges();
                         // transaction.Commit();
+
+
+                        var activitylist = new List<ActivityModel>();
+                        activitylist.Add(Api.AnewLuvLogging.CreateActivity(ObjProfileEntity.id, null, (int)activitytypeEnum.updateprofile, OperationContext.Current));
+                        Anewluv.Api.AsyncCalls.addprofileactivities(activitylist).DoNotAwait();
 
                     }
                     catch (Exception ex)
@@ -1843,8 +1855,8 @@ namespace Anewluv.Services.Authentication
             var profile = new profile();
             var currenttoken = new NmediaToken();
 
-            var activitylist = new List<ActivityModel>();
-            OperationContext ctx = OperationContext.Current;
+            
+         
 
             if (model == null | model.username == null) return currenttoken;
             // _unitOfWorkAsync.DisableProxyCreation = true;
@@ -1939,12 +1951,13 @@ namespace Anewluv.Services.Authentication
                                 currenttoken.Apikey = guid;
 
                             //updated activity // TO Do we migght use to replace logtimes below ?
-                            activitylist.Add(Api.AnewLuvLogging.CreateActivity(profile.id, guid, (int)activitytypeEnum.login, ctx));
+                            var activitylist = new List<ActivityModel>(); 
+                            activitylist.Add(Api.AnewLuvLogging.CreateActivity(profile.id, guid, (int)activitytypeEnum.login,  OperationContext.Current));
                             Anewluv.Api.AsyncCalls.addprofileactivities(activitylist).DoNotAwait();
 
 
                             //login time updated here
-                            updateuserlogintime(profile.id, ctx, guid.ToString());
+                            updateuserlogintime(profile.id, OperationContext.Current, guid.ToString());
                             return currenttoken;
                             //get the token here
 
@@ -2369,7 +2382,7 @@ namespace Anewluv.Services.Authentication
             }
         }
 
-        private void updateuserlogintime(int profileid, OperationContext ctx, string newtoken)
+        private async Task updateuserlogintime(int profileid, OperationContext ctx, string newtoken)
         {
             //  MemberService MemberService = new MemberService(db);
             try
@@ -2384,14 +2397,13 @@ namespace Anewluv.Services.Authentication
                     {
                         //Just for testing that it worked
                         //TO DO remove when in prod                           
-                        Api.AsyncCalls.updateuserlogintimebyprofileidandsessionidasync(new ProfileModel { profileid = profileid, sessionid = ctx.SessionId, apikey = newtoken }).DoNotAwait();
+                       await Api.AsyncCalls.updateuserlogintimebyprofileidandsessionidasync(new ProfileModel { profileid = profileid, sessionid = ctx.SessionId, apikey = newtoken });
                         //  MemberService.
                     }
                     else
                     {
-
                         //  MemberService.updateuserlogintimebyprofileid(new ProfileModel { profileid = profileid });
-                        Api.AsyncCalls.updateuserlogintimeasync(new ProfileModel { profileid = profileid, apikey = newtoken }).DoNotAwait();
+                        await Api.AsyncCalls.updateuserlogintimeasync(new ProfileModel { profileid = profileid, apikey = newtoken });
                     }
                 }
             }
