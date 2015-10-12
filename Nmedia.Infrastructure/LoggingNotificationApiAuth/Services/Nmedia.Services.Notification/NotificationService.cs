@@ -252,7 +252,7 @@ namespace Nmedia.Services.Notification
                         message.sent = message.body != null ? sendemail(message) : false;//attempt to send the message
                         message.sendattempts = message.body != null ? 1 : 0;
                         _unitOfWorkAsync.Repository<message>().Insert(message);
-                        _unitOfWorkAsync.SaveChangesAsync().DoNotAwait();
+                      await  _unitOfWorkAsync.SaveChangesAsync();
                     
                        // return task ;
 
@@ -288,8 +288,8 @@ namespace Nmedia.Services.Notification
             try
             {
 
-                var task = Task.Factory.StartNew(() =>
-                {
+              //  var task = Task.Factory.StartNew(() =>
+              //  {
 
                     // var templateenum = (templateenum)Enum.Parse(typeof(templateenum), model.templateid);
                     //Id's messed up in DB use the first 
@@ -323,7 +323,9 @@ namespace Nmedia.Services.Notification
                                 // currentEmailViewModel = getemailVMbyEmailModel(model, template);
                                 //model.memberEmailViewModel = currentEmailModel;
                                 //create the user address
-                               var addresses = getorcreateaddaddress(model).Result;
+                               var  addressresult = await getorcreateaddaddress(model);
+
+                               var addresses = addressresult.ToList();
                               
 
                                 //the member message created and sent here
@@ -347,7 +349,7 @@ namespace Nmedia.Services.Notification
                                 // int j = db.Commit();
 
                                 _unitOfWorkAsync.Repository<message>().Insert(message);
-                                _unitOfWorkAsync.SaveChangesAsync().DoNotAwait();
+                                await _unitOfWorkAsync.SaveChangesAsync();
                             }
 
                         }
@@ -361,8 +363,8 @@ namespace Nmedia.Services.Notification
                     return "true";
 
 
-                });
-                return await task.ConfigureAwait(false);
+               // });
+               // return await task.ConfigureAwait(false);
 
 
 
@@ -392,9 +394,10 @@ namespace Nmedia.Services.Notification
                 if (Model.addresstypeid == (int)addresstypeenum.SiteUser)
                 {
                     //check to see if the recipeint address already exists if not add i
-                    address current =
-                    _unitOfWorkAsync.Repository<address>().Queryable()
-                    .Where(p => string.Equals(p.emailaddress, Model.emailaddress, StringComparison.OrdinalIgnoreCase) && p.addresstype_id == Model.addresstypeid).FirstOrDefault();
+                    var result = await
+                     _unitOfWorkAsync.RepositoryAsync<address>().Query(p => p.emailaddress.ToLower() == Model.emailaddress.ToLower() && p.addresstype_id == Model.addresstypeid).SelectAsync();
+
+                    address current = result.FirstOrDefault();
                     //_unitOfWorkAsync.Repository<address>().Queryable().ToList().Where(p => p.emailaddress.ToUpper() == Model.EmailModel.to && Model.EmailModel.addresstypefrom == addresstypeenum.SiteUser).FirstOrDefault();
 
 
@@ -471,20 +474,46 @@ namespace Nmedia.Services.Notification
                         break;
                     case templateenum.MemberCreatedMemberNotification:
                         model.subject = subject;
-                        model.body = string.Format(body, model.username, model.activationcode);
+                        model.body = string.Format(body, model.screenname,model.activationcode);
+                        emaildetail.EmailModel = model;  //add the new updated model
+                        break;
+                    case templateenum.MemberCreatedAdminNotification | templateenum.MemberCreatedJainRanOrOpenIDAdminNotification
+                      | templateenum.MemberActivationCodeRecoveredMemberNotification | templateenum.MemberPasswordChangedAdminNotification: 
+                        model.subject = subject;
+                        model.body = string.Format(body, model.username,model.emailaddress,model.openidprovidername);
+                        emaildetail.EmailModel = model;  //add the new updated model
+                        break;
+                    case templateenum.MemberCreatedJianRainOrOPenIDMemberNotification:
+                        model.subject = subject;
+                        model.body = string.Format(body, model.screenname);
                         emaildetail.EmailModel = model;  //add the new updated model
                         break;
                     case templateenum.MemberContactUsMemberMesage:
                         model.subject = subject;
-                        model.body = string.Format(body, model.from, model.activationcode);                 
+                        model.body = string.Format(body, model.from);                 
                         emaildetail.EmailModel = model;  //add the new updated model
                         break;
                         //non templated body for admin
                     case templateenum.MemberContactUsAdminMessage:
                         model.subject = subject;
-                        model.body = model.body;
+                        model.body = String.Format(body,model.from,model.emailaddress,model.subject,model.body);
                         emaildetail.EmailModel = model;  //add the new updated model
                         break;
+                    case templateenum.MemberActivatedMemberNotification:
+                        model.subject = subject;
+                        model.body = String.Format(body, model.screenname);
+                        emaildetail.EmailModel = model;  //add the new updated model
+                        break;
+                        
+                    //peeks, interestes and othere actions all combined
+                    case templateenum.MemberRecivedPeekMemberNotification:
+                        model.subject = subject;
+                        model.body = String.Format(body, model.screenname);
+                        emaildetail.EmailModel = model;  //add the new updated model
+                        break;
+
+
+
                     default: //admin message ?
                         model.subject = subject;
                         model.body = string.Format(body, model.screenname, model.username);

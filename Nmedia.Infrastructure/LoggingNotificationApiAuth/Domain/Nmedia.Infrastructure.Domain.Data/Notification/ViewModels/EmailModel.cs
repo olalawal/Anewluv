@@ -42,7 +42,8 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
      public string passwordtoken { get; set; }  //Personal user updates strored here
      [DataMember]
      public string activationcode { get; set; }  //Personal user updates strored here
-        
+     [DataMember]
+     public string openidprovidername { get; set; }  //tells the admins what provider i,e facebook, IG etc was used to validte this user
      //[DataMember]
     // public int? addresstypeid { get; set; }  //Personal user updates strored here
 

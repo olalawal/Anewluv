@@ -1866,8 +1866,8 @@ namespace Anewluv.Services.Authentication
                 {
 
 
-                    var task = Task.Factory.StartNew(() =>
-                    {
+                   // var task = Task.Factory.StartNew(() =>
+                  //  {
 
 
                         // return _unitOfWorkAsync.Repository<profiledata>().getprofiledatabyprofileid(model);
@@ -1886,9 +1886,9 @@ namespace Anewluv.Services.Authentication
                         //Dim ctx As New Entities()
                         //TO DO add an inactive count login to track how many times a user logs in before they active profile default max should be = 3
                         //added profile status ID validation as well i.e 2 for activated and is not banned 
-                        profile = _unitOfWorkAsync.Repository<profile>().Queryable().Where(p => p.username == model.username &&
+                        var profileresult = await _unitOfWorkAsync.RepositoryAsync<profile>().Query(p => p.username == model.username &&
                             (p.status_id != (int)profilestatusEnum.Banned | p.status_id != (int)profilestatusEnum.Inactive | p.status_id != (int)profilestatusEnum.ResetingPassword)
-                             ).FirstOrDefault();
+                             ).Include(z => z.profileactivities).SelectAsync();
 
 
 
@@ -1957,7 +1957,7 @@ namespace Anewluv.Services.Authentication
 
 
                             //login time updated here
-                            updateuserlogintime(profile.id, OperationContext.Current, guid.ToString());
+                            updateuserlogintime(profile.id, OperationContext.Current, guid.ToString()).DoNotAwait();
                             return currenttoken;
                             //get the token here
 
@@ -1966,8 +1966,8 @@ namespace Anewluv.Services.Authentication
                         {
                             return currenttoken;
                         }
-                    });
-                    return await task.ConfigureAwait(false);
+                   // });
+                 //   return await task.ConfigureAwait(false);
 
 
 
