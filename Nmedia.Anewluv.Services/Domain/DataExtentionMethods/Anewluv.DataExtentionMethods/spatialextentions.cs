@@ -186,7 +186,7 @@ namespace Anewluv.DataExtentionMethods
            }
          
 
-           public static gpsdata getgpsdatabycitycountrypostalcode(GeoModel model, IGeoDataStoredProcedures _storedProcedures)
+          public static gpsdata getgpsdatabycitycountrypostalcode(GeoModel model, IGeoDataStoredProcedures _storedProcedures)
            {
 
                //_unitOfWorkAsync.DisableProxyCreation = true;
@@ -226,6 +226,46 @@ namespace Anewluv.DataExtentionMethods
            
            }
 
+
+          public static async Task<CityList> getcityinfobycountryandlonglat(GeoModel model, IGeoDataStoredProcedures _storedProcedures)
+           {
+
+               //_unitOfWorkAsync.DisableProxyCreation = true;
+               //  //using (var db = _unitOfWorkAsync)
+               //  {
+               try
+               {
+
+
+                   if (model.country == null | model.lattitude == null | model.longitude ==null ) return null;
+
+                   //IQueryable<GpsData> functionReturnValue = default(IQueryable<GpsData>);
+
+                   List<citystateprovince> _citystateprovince = new List<citystateprovince>();
+                   model.country = string.Format(model.country.Replace(" ", ""));
+                   // fix country names if theres a space
+                   // strCity = String.Format("{0}%", strCity) '11/13/2009 addded wild ca
+
+
+                   var cityinfo = await _storedProcedures.GetcityInfobycountryandlonglat(model.country, model.lattitude, model.longitude);
+                   return cityinfo;
+                   //var s = _postalcontext.GetGpsDataSingleByCityCountryAndPostalCode(countryname, postalcode, city);
+                   //if (gpsdata != null)
+                   //{
+                   //    return new gpsdata { lattitude = s.Latitude, longitude = s.Longitude, stateprovince = s.State_Province };
+                   //}
+                   //return gpsdata;
+
+               }
+               catch (Exception ex)
+               {
+
+                   throw ex;
+
+                   //throw convertedexcption;
+               }
+
+           }
 
         // probbaly won't use this, lets add lat long and other stuff to model
         //public Nullable<double> DistBTWMembersByLatLon(string profileid1, string profileid2)

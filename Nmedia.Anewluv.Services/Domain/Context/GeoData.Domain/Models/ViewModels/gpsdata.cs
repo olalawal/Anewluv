@@ -11,9 +11,9 @@ namespace GeoData.Domain.Models.ViewModels
     {
         [DataMember]
         public string latitude { get; set; }
-         [DataMember]
+        [DataMember]
         public string longitude { get; set; }
-         [DataMember]
+        [DataMember]
         public string state_province { get; set; }
         [DataMember]
         public string postalcode { get; set; }       

@@ -586,6 +586,44 @@ namespace Anewluv.Services.Spatial
             }
 
 
+             /// <summary>
+             /// TO DO make sure we get defaults for every country , write the sproc this way
+             /// </summary>
+             /// <param name="model"></param>
+             /// <returns></returns>
+            public async Task<CityList> getcityinfobycountryandlatlong(GeoModel model)
+            {
+                //_unitOfWorkAsync.DisableProxyCreation = true;
+                //using (var db = _unitOfWorkAsync)
+                {
+                    try
+                    {
+
+
+                        
+
+                            return await spatialextentions.getcityinfobycountryandlonglat(model, _storedProcedures);
+
+
+                      
+                    }
+                    catch (Exception ex)
+                    {
+
+                        Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(model.country.ToString(), "", "", ex.Message, ex.InnerException);
+                        new Logging(applicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, convertedexcption);
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in GeoService service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                        //throw convertedexcption;
+                    }
+                }
+
+            }
+
             public async Task<bool> validatepostalcodebycountrycitypostalcode(GeoModel model)
             {
                 
