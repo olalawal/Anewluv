@@ -591,7 +591,7 @@ namespace Anewluv.Services.Spatial
              /// </summary>
              /// <param name="model"></param>
              /// <returns></returns>
-            public async Task<CityList> getcityinfobycountryandlatlong(GeoModel model)
+            public async Task<CityList> getcitystateprovincelbycountrylatlong(GeoModel model)
             {
                 //_unitOfWorkAsync.DisableProxyCreation = true;
                 //using (var db = _unitOfWorkAsync)
@@ -600,9 +600,9 @@ namespace Anewluv.Services.Spatial
                     {
 
 
-                        
 
-                            return await spatialextentions.getcityinfobycountryandlonglat(model, _storedProcedures);
+
+                        return await spatialextentions.getcitystateprovincebycountrylatlong(model, _storedProcedures);
 
 
                       

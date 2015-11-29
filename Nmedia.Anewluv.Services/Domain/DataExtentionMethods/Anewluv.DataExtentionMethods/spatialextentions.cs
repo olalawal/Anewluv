@@ -227,7 +227,7 @@ namespace Anewluv.DataExtentionMethods
            }
 
 
-          public static async Task<CityList> getcityinfobycountryandlonglat(GeoModel model, IGeoDataStoredProcedures _storedProcedures)
+          public static async Task<CityList> getcitystateprovincebycountrylatlong(GeoModel model, IGeoDataStoredProcedures _storedProcedures)
            {
 
                //_unitOfWorkAsync.DisableProxyCreation = true;
@@ -247,7 +247,7 @@ namespace Anewluv.DataExtentionMethods
                    // strCity = String.Format("{0}%", strCity) '11/13/2009 addded wild ca
 
 
-                   var cityinfo = await _storedProcedures.GetcityInfobycountryandlonglat(model.country, model.lattitude, model.longitude);
+                   var cityinfo = await _storedProcedures.GetCityStateprovinceBycountryandlatlong(model.country, model.lattitude, model.longitude);
                    return cityinfo;
                    //var s = _postalcontext.GetGpsDataSingleByCityCountryAndPostalCode(countryname, postalcode, city);
                    //if (gpsdata != null)

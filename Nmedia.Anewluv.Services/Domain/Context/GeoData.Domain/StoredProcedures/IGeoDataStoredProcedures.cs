@@ -45,8 +45,8 @@ public interface IGeoDataStoredProcedures
 
      bool  GetPostalCodeStatusBycountryName(string countryname);
 
-  
-     Task<CityList> GetcityInfobycountryandlonglat(string countryname, string lattitude, string longitude);
+
+     Task<CityList> GetCityStateprovinceBycountryandlatlong(string countryname, string lattitude, string longitude);
    
 }
 }

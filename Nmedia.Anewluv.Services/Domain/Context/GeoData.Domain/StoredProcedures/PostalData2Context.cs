@@ -464,9 +464,9 @@ namespace GeoData.Domain.Models
     }
 
 
-   public async Task<CityList> GetcityInfobycountryandlonglat(string countryname, string lattitude, string longitude)
+    public async Task<CityList> GetCityStateprovinceBycountryandlatlong(string countryname, string lattitude, string longitude)
     {
-        string query = "sp_GetPostalCodesByCountryAndLatLong";
+        string query = "GetCityStateprovinceBycountryandlatlong";
 
         SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", countryname);
         parameter.ParameterName = "@StrcountryDatabaseName";
