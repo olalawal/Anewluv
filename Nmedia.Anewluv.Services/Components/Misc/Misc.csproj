@@ -300,10 +300,6 @@
       <Project>{8e3079e3-2244-47b1-ab1f-ee171398666e}</Project>
       <Name>Anewluv.Domain.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Domain\Data\GeoData.Domain.Data\GeoData.Domain.Data.csproj">
-      <Project>{a7d35636-9574-4344-a761-138c3ff171bc}</Project>
-      <Name>GeoData.Domain.Data</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Frameworks\GenericUnitOfWork\Repository.Pattern.Ef6\Repository.Pattern.Ef6.csproj">
       <Project>{f68a1d19-93fb-47c1-a22b-42bea3e4fd8c}</Project>
       <Name>Repository.Pattern.Ef6</Name>
