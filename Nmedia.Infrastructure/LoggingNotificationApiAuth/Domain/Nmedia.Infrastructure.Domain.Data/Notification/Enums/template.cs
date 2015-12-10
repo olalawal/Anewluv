@@ -47,13 +47,13 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
         [EnumMember]
         MemberCreatedJainRanOrOpenIDAdminNotification = 7,
 
-        [Description("Account Recovered/Password Change Member Notification")]
+        [Description("Account Recovered/Password Reset Member Notification")]
         [EnumMember]
-        MemberPasswordChangeMemberNotification = 8,
+        MemberPasswordResetMemberNotification = 8,
 
-        [Description("Account Recovered/Password Change Admin Notification")]
+        [Description("Account Recovered/Password Reset Admin Notification")]
         [EnumMember]
-        MemberPasswordChangedAdminNotification = 9,
+        MemberPasswordResetAdminNotification = 9,
 
         [Description("Profile Activated Member Notification")]
         [EnumMember]
@@ -159,7 +159,14 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
 
         [Description("Friend Request Recived Admin Notification")]
         [EnumMember]
-        MemberFriendRequestRecivedAdminNotification = 36
+        MemberFriendRequestRecivedAdminNotification = 36,
+        [Description("Password Change Member Notification")]
+        [EnumMember]
+        MemberPasswordChangeMemberNotification = 37,
+
+        [Description("Password Change Admin Notification")]
+        [EnumMember]
+        MemberPasswordChangedAdminNotification = 38,
 
     }
 

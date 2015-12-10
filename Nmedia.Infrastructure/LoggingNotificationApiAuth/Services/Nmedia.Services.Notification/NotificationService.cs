@@ -467,9 +467,14 @@ namespace Nmedia.Services.Notification
                     case templateenum.GenericErrorMessage:
                         // Console.WriteLine("Case 1");
                         break;
-                    case templateenum.MemberPasswordChangeMemberNotification:
+                    case templateenum.MemberPasswordResetMemberNotification:
                         model.subject = subject;
                         model.body = string.Format(body, model.screenname, model.username, model.passwordtoken);
+                        emaildetail.EmailModel = model;  //add the new updated model
+                        break;
+                    case templateenum.MemberPasswordChangeMemberNotification:  
+                        model.subject = subject;
+                        model.body = string.Format(body, model.screenname, model.username);
                         emaildetail.EmailModel = model;  //add the new updated model
                         break;
                     case templateenum.MemberCreatedMemberNotification:
@@ -514,7 +519,7 @@ namespace Nmedia.Services.Notification
 
 
 
-                    default: //admin message ?
+                    default: //admin message ? //also alot of user messages only pass the  screen anme or userame and dont need special formatting
                         model.subject = subject;
                         model.body = string.Format(body, model.screenname, model.username);
                         emaildetail.EmailModel = model;  //add the new updated model

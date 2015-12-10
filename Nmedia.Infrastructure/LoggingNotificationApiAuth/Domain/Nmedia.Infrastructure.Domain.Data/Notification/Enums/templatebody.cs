@@ -49,12 +49,12 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
         MemberCreatedJainRanOrOpenIDAdminNotification = 7,
 
         //member password change notificaion
-        [Description( "Dear {0} ,<p></p> You have initated an Account recovery on AnewLuv.com , Your Username is <b> {1} </b> You can reset your password within the next 30 minutes by clicking this reset link <br><a href=\'http://www.AnewLuv.com/Account/LandingSPA/?token={2}/'>Reset your password on www.Anewluv.com</a>")]
+        [Description( "Dear {0} ,<p></p> You have initated an Account recovery on AnewLuv.com , Your Username is <b> {1} </b> You must reset your password within the next 30 minutes by clicking this reset link <br><a href=\'http://www.AnewLuv.com/Account/LandingSPA/?token={2}/'>Reset your password on www.Anewluv.com</a>")]
         [EnumMember]
-        MemberPasswordChangeMemberNotification = 8,
+        MemberPasswordResetMemberNotification = 8,
         [Description("An Account has been recovered on Anewluv.com by the user <b>{0}</b> with email :<b>{1}</b>")]
         [EnumMember]
-        MemberPasswordChangedAdminNotification = 9,
+        MemberPasswordResetAdminNotification = 9,
 
         //profile activated 
         [Description("Dear {0} ,<p></p>  Your account has been activated on AnewLuv.com , You can now log in to your account at <p></p> <a href=\"http://www.AnewLuv.com/Members/Home \">Login to AnewLuv.com</a>  <p></p><a href=\"http://www.anewluv.com \">Anewluv.com </a>")]
@@ -149,7 +149,15 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
 
         [Description("The Member {0} has received an Interest from the Member, {1}")]
         [EnumMember]
-        MemberFriendRequestRecivedAdminNotification = 36
+        MemberFriendRequestRecivedAdminNotification = 36,
+
+         //member password change notificaion
+        [Description("Dear {0} ,<p></p> Your password has been changed on AnewLuv.com, if this is an error or you did not initiate this activity please contact us imediately at  <b><a href=\"http://www.AnewLuv.com/ContactUs \">Contact Us</a></b>")]
+        [EnumMember]
+        MemberPasswordChangeMemberNotification = 37,
+        [Description("An Password has been changed for on Anewluv.com by the user <b>{0}</b> with email :<b>{1}</b>")]
+        [EnumMember]
+        MemberPasswordChangedAdminNotification = 38,
 
     }
 

@@ -41,8 +41,147 @@ namespace Anewluv.Caching.RedisCaching
 
         
 
+
+
         public static class SharedObjectHelper
         {
+
+            /// <summary>
+            /// This class helps us determine what pages use what styles etc - comes from a appsettings file
+            /// </summary>
+            public static class CssStyleSelector
+            {
+
+                public static string getbodycssbypagename(string pagename, IUnitOfWorkAsync context)
+                {
+
+
+                    IDatabase dataCache;
+                    //DataCacheFactory dataCacheFactory = new DataCacheFactory();
+                    //dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
+                    dataCache = GetCache();  // dataCacheFactory.GetDefaultCache();
+
+                    //TO DO put in cache or something ? or return from shared object deal
+                    string CssSyle = "StandardWhiteBackground";  //default
+                    List<systempagesetting> pages = null;
+
+
+                    //if we still have no datacahe do tis
+                    try
+                    {
+
+                        if (dataCache != null) pages = dataCache.Get("SystemPageSettingsList") as List<systempagesetting>;
+
+
+                        if (pages == null)
+                        {
+                            //context context = new context();
+                            //remafill the ages list from the repositry and exit
+                            // Ages =  context.Repository<AgesSelectList;
+                            // Datings context = new modelContext();
+                            // model =  context.Repository<models.Single(c => c.Id == id);
+
+                            //if we still have no datacahe no need to do the put
+                            // if (dataCache == null) return Ages;
+                            //pages =  context.systempagesettings.Where(p => p.bodycssstylename != "").ToList();
+                            if (dataCache != null)
+                                dataCache.Set("SystemPageSettingsList", pages);
+                        }
+
+
+                        //TO DO 
+                        //finde the matchv
+
+                        var results = from item in pages
+                                      where (item.title == pagename.Trim())
+                                      select item;
+
+                        //return the default white background if none found
+                        if (results.Count() == 0) return CssSyle;
+
+                        //else return the value from cache or database
+                        return results.FirstOrDefault().bodycssstylename.Trim();
+                    }
+                    catch (RedisCommandException ex)
+                    {
+                        // throw new InvalidOperationException();
+                        //Log error
+                        //logger = new Logging(applicationEnum.AppfabricCaching);
+                        // logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null);
+                        //throw new InvalidOperationException();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        // throw;
+                    }
+
+                    return CssSyle;
+
+                }
+
+                public static List<systempagesetting> getsystempagesettingslist(IUnitOfWorkAsync context)
+                {
+
+
+                    IDatabase dataCache;
+                    //DataCacheFactory dataCacheFactory = new DataCacheFactory();
+                    //dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
+                    dataCache = GetCache();  // dataCacheFactory.GetDefaultCache();
+
+                    //TO DO put in cache or something ? or return from shared object deal
+
+                    List<systempagesetting> pages = null;
+
+
+                    //if we still have no datacahe do tis
+                    try
+                    {
+
+                        if (dataCache != null) pages = dataCache.Get("SystemPageSettingsList") as List<systempagesetting>;
+
+
+                        if (pages == null)
+                        {
+                            //context context = new context();
+                            //remafill the ages list from the repositry and exit
+                            // Ages =  context.Repository<AgesSelectList;
+                            // Datings context = new modelContext();
+                            // model =  context.Repository<models.Single(c => c.Id == id);
+
+                            //if we still have no datacahe no need to do the put
+                            // if (dataCache == null) return Ages;
+                            pages = context.Repository<systempagesetting>().Queryable().Where(p => p.bodycssstylename != "").ToList();
+                            if (dataCache != null)
+                                dataCache.Set("SystemPageSettingsList", pages);
+                        }
+
+
+                        return pages;
+                    }              
+                    catch (RedisCommandException ex)
+                    {
+                        // throw new InvalidOperationException();
+                        //Log error
+                        //logger = new Logging(applicationEnum.AppfabricCaching);
+                       // logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null);
+                        //throw new InvalidOperationException();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        // throw;
+                    }
+
+                    return pages;
+
+
+
+                }
+            }
+
             //Photo based functions 
             public static List<lu_photoformat> getphotoformatlist(IUnitOfWorkAsync context)
             {

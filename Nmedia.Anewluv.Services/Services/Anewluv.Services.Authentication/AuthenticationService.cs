@@ -154,8 +154,6 @@ namespace Anewluv.Services.Authentication
             //return null;
         }
 
-
-
         public AnewLuvMembershipUser createusercustom(MembershipUserViewModel model)
         {
             MembershipCreateStatus status;
@@ -839,167 +837,9 @@ namespace Anewluv.Services.Authentication
             return membershipprovider;
         }
 
-        public override string ResetPassword(string emailaddress, string answer)
-        {
-
-            try
-            {
-
-                throw new NotImplementedException();
-
-                // return this.ResetPasswordCustom(model.profileid.Value, model.securityanswer).Result;
-
-            }
-            catch (Exception ex)
-            {
-                using (var logger = new Logging(applicationEnum.UserAuthorizationService))
-                {
-
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null);
-                }
-
-
-                //log error mesasge
-                //handle logging here
-                var message = ex.Message;
-                // status = MembershipCreateStatus.ProviderError;
-                // newUser = null;
-                FaultReason faultreason = new FaultReason("Error in member service");
-                string ErrorMessage = "";
-                string ErrorDetail = "ErrorMessage: " + ex.Message;
-                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-            }
-
-        }
-
-
-        public string resetpasswordcustom(ProfileModel model)
-        {
-            try
-            {
-                return this.ResetPasswordCustom(model.email, model.securityanswer).Result;
-
-            }
-            catch (Exception ex)
-            {
-                using (var logger = new Logging(applicationEnum.UserAuthorizationService))
-                {
-
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null);
-                }
-
-
-                //log error mesasge
-                //handle logging here
-                var message = ex.Message;
-                // status = MembershipCreateStatus.ProviderError;
-                // newUser = null;
-                FaultReason faultreason = new FaultReason("Error in member service");
-                string ErrorMessage = "";
-                string ErrorDetail = "ErrorMessage: " + ex.Message;
-                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-            }
-
-        }
-
-
-        //TO DO validate security answer maybe
-        //handles reseting password duties.  First verifys that security uqestion was correct for the profile ID, the generated a password
-        // using the local generatepassword method the send the encyrpted passwoerd and profile ID to the dating service so it can be updated in the DB
-        //finally returns the new password to the calling functon or an empty string if failure.
-        public async Task<string> ResetPasswordCustom(string emailaddress, string securityanswer)
-        {
-
-
-            try
-            {
-                var task = Task.Factory.StartNew(() =>
-                {
-                    // var username = datingService.ValidateSecurityAnswerIsCorrect(profileid, securityquestionID.GetValueOrDefault(), answer);
-                    var profile = _unitOfWorkAsync.Repository<profile>().getprofilebyemailaddress(new ProfileModel { email = emailaddress });
-                    if (profile != null)
-                    {
-                        //we have the generated password now update the user's account with new password
-
-                        //generatedpassword = GeneratePassword();
-                        //AnewluvContext AnewluvContext  = new AnewluvContext();
-                        Guid guid = Guid.NewGuid();
-                        ShortGuid sguid1 = guid; // implicitly cast the guid as a shortguid
-
-
-                        if (profile.status_id != (int)profilestatusEnum.ResetingPassword && (profile.passwordresetwindow != null && profile.passwordresetwindow > DateTime.Now))
-                        {
-                            bool dd = enablepasswordreset(new ProfileModel { profileid = profile.id }, sguid1);
-                        }
-                        else
-                        {
-
-                            //  return "password is already in reset satatus";
-
-                        }
-
-
-                        var EmailModels = new List<EmailModel>();
-
-                        EmailModels.Add(new EmailModel
-                        {
-                            templateid = (int)templateenum.MemberPasswordChangeMemberNotification,
-                            messagetypeid = (int)messagetypeenum.UserUpdate,
-                            addresstypeid = (int)addresstypeenum.SiteUser,
-                            emailaddress = profile.emailaddress,
-                            screenname = profile.screenname,
-                            username = profile.username,
-                            passwordtoken = sguid1
-                        });
-                        EmailModels.Add(new EmailModel
-                        {
-                            templateid = (int)templateenum.MemberPasswordChangedAdminNotification,
-                            messagetypeid = (int)messagetypeenum.SysAdminUpdate,
-                            addresstypeid = (int)addresstypeenum.SystemAdmin,
-                        });
-                        //this sends both admin and user emails  
-                        Api.AsyncCalls.sendmessagesbytemplate(EmailModels);
-
-
-                        return "true";
-                    }
-                    // throw new NotImplementedException();
-
-                    return "false";
-
-                });
-                return await task.ConfigureAwait(false);
-
-            }
-            catch (Exception ex)
-            {
-                using (var logger = new Logging(applicationEnum.UserAuthorizationService))
-                {
-
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null);
-                }
-
-                //log error mesasge
-                //handle logging here
-                FaultReason faultreason = new FaultReason("Error in member service");
-                string ErrorMessage = "";
-                string ErrorDetail = "ErrorMessage: " + ex.Message;
-                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-            }
-            finally
-            {
-                // Api.DisposeMemberService();
-            }
-
-
-        }
-
+       
  
-        public string resetpassword(string profileid, string answer)
-        {
-            return ResetPassword(profileid, answer);
-        }
-
+     
         public override void UpdateUser(MembershipUser user)
         {
 
@@ -2258,58 +2098,10 @@ namespace Anewluv.Services.Authentication
             {
                 var task = Task.Factory.StartNew(() =>
                 {
-                    // var username = datingService.ValidateSecurityAnswerIsCorrect(profileid, securityquestionID.GetValueOrDefault(), answer);
-                    var profile = _unitOfWorkAsync.Repository<profile>().getprofilebyemailaddress(new ProfileModel { email = user.email });
-                    if (profile != null)
-                    {
-                        //we have the generated password now update the user's account with new password
+                     var dd = this.ResetPassword(user.email, user.securityAnswer);
 
-                        //generatedpassword = GeneratePassword();
-                        //AnewluvContext AnewluvContext  = new AnewluvContext();
-                        Guid guid = Guid.NewGuid();
-                        ShortGuid sguid1 = guid; // implicitly cast the guid as a shortguid
-
-
-                        if (profile.status_id != (int)profilestatusEnum.ResetingPassword && (profile.passwordresetwindow != null && profile.passwordresetwindow > DateTime.Now))
-                        {
-                            bool dd = enablepasswordreset(new ProfileModel { profileid = profile.id }, sguid1);
-                        }
-                        else
-                        {
-
-                            //  return "password is already in reset satatus";
-                            return "Already reset check your email address for the reset link";
-
-                        }
-
-
-                        var EmailModels = new List<EmailModel>();
-
-                        EmailModels.Add(new EmailModel
-                        {
-                            templateid = (int)templateenum.MemberPasswordChangeMemberNotification,
-                            messagetypeid = (int)messagetypeenum.UserUpdate,
-                            addresstypeid = (int)addresstypeenum.SiteUser,
-                            emailaddress = profile.emailaddress,
-                            screenname = profile.screenname,
-                            username = profile.username,
-                            passwordtoken = sguid1
-                        });
-                        EmailModels.Add(new EmailModel
-                        {
-                            templateid = (int)templateenum.MemberPasswordChangedAdminNotification,
-                            messagetypeid = (int)messagetypeenum.SysAdminUpdate,
-                            addresstypeid = (int)addresstypeenum.SystemAdmin,
-                        });
-                        //this sends both admin and user emails  
-                        Api.AsyncCalls.sendmessagesbytemplate(EmailModels);
-
-
-                        return "true";
-                    }
-                    // throw new NotImplementedException();
-
-                    return "false";
+                     return dd;
+                  
 
                 });
                 return await task.ConfigureAwait(false);
@@ -2338,6 +2130,56 @@ namespace Anewluv.Services.Authentication
 
         }
 
+
+        public async Task<string> changepassword(MembershipUserViewModel user)
+        {
+            
+            try
+            {
+
+                var task = Task.Factory.StartNew(() =>
+                {
+
+               
+                    var result = this.ChangePassword(user.username,user.verificationcode, user.password);
+
+                    if (result)
+                    {
+                        return "Password changed sucessfully";
+                    }
+                    else
+                    {
+                        return "Unable to change password at this time please contact support";
+                    }
+
+
+                   
+                
+                });
+                 return await task.ConfigureAwait(false);
+
+            }
+            
+            catch (Exception ex)
+            {
+                using (var logger = new Logging(applicationEnum.UserAuthorizationService))
+                {
+
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null);
+                }
+
+                //log error mesasge
+                //handle logging here
+                FaultReason faultreason = new FaultReason("Error in member service, unable to change password");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
+            finally
+            {
+                // Api.DisposeMemberService();
+            }
+        }
 
 
         #endregion
@@ -2550,15 +2392,176 @@ namespace Anewluv.Services.Authentication
         }
 
 
+
+
         #endregion
 
+
+
+        #region "overrides implemented"
+
+        public override string ResetPassword(string emailaddress, string answer)
+        {
+
+            try
+            {
+
+                bool accountreset = false;
+                // var username = datingService.ValidateSecurityAnswerIsCorrect(profileid, securityquestionID.GetValueOrDefault(), answer);
+                var profile = _unitOfWorkAsync.Repository<profile>().getprofilebyemailaddress(new ProfileModel { email = emailaddress });
+                if (profile != null)
+                {
+                    //we have the generated password now update the user's account with new password
+
+                    //generatedpassword = GeneratePassword();
+                    //AnewluvContext AnewluvContext  = new AnewluvContext();
+                    Guid guid = Guid.NewGuid();
+                    ShortGuid sguid1 = guid; // implicitly cast the guid as a shortguid
+
+
+                    if (profile.status_id != (int)profilestatusEnum.ResetingPassword && (profile.passwordresetwindow != null && profile.passwordresetwindow > DateTime.Now))
+                    {
+                        accountreset = enablepasswordreset(new ProfileModel { profileid = profile.id }, sguid1);
+                    }
+                    else
+                    {
+
+                        //  return "password is already in reset satatus";
+                        accountreset = false;
+                        return "Already reset check your email address for the reset link";
+
+                    }
+
+                    if (accountreset)
+                    {
+                        var EmailModels = new List<EmailModel>();
+
+                        EmailModels.Add(new EmailModel
+                        {
+                            templateid = (int)templateenum.MemberPasswordResetMemberNotification,
+                            messagetypeid = (int)messagetypeenum.UserUpdate,
+                            addresstypeid = (int)addresstypeenum.SiteUser,
+                            emailaddress = profile.emailaddress,
+                            screenname = profile.screenname,
+                            username = profile.username,
+                            passwordtoken = sguid1
+                        });
+                        EmailModels.Add(new EmailModel
+                        {
+                            templateid = (int)templateenum.MemberPasswordResetAdminNotification,
+                            messagetypeid = (int)messagetypeenum.SysAdminUpdate,
+                            addresstypeid = (int)addresstypeenum.SystemAdmin,
+                        });
+                        //this sends both admin and user emails  
+                        Api.AsyncCalls.sendmessagesbytemplate(EmailModels);
+
+
+                        return "Account Reset";
+                    }
+                    // throw new NotImplementedException();
+
+                    return "Unable to Reset your Account please contact support";
+                }
+
+                return "Unable to Reset your Account please contact support";
+
+            }
+            catch (Exception ex)
+            {
+                using (var logger = new Logging(applicationEnum.UserAuthorizationService))
+                {
+
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null);
+                }
+
+
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                // status = MembershipCreateStatus.ProviderError;
+                // newUser = null;
+                FaultReason faultreason = new FaultReason("Error in member service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
+
+        }
+
+
+        public override bool ChangePassword(string username, string VerificationCode, string newPassword)
+        {
+            //make username upper so that we can get actual mateches withoute user having to type in a case sensitive username
+            bool success = false;
+            try
+            {
+
+                // var username = datingService.ValidateSecurityAnswerIsCorrect(profileid, securityquestionID.GetValueOrDefault(), answer);
+                var profile = _unitOfWorkAsync.RepositoryAsync<profile>().getprofilebyusername(new ProfileModel { username = username });
+
+                if (profile != null && profile.passwordresettoken == VerificationCode)
+                {
+                    //
+
+                    profile.password = Encryption.encryptString(newPassword);
+                    _unitOfWorkAsync.Repository<profile>().Update(profile);
+
+                    _unitOfWorkAsync.SaveChanges();
+
+                    success = true;
+
+                    if (profile !=null)
+                    {
+                        var EmailModels = new List<EmailModel>();
+
+                        EmailModels.Add(new EmailModel
+                        {
+                            templateid = (int)templateenum.MemberPasswordChangeMemberNotification,
+                            messagetypeid = (int)messagetypeenum.UserUpdate,
+                            addresstypeid = (int)addresstypeenum.SiteUser,
+                            emailaddress = profile.emailaddress,
+                            screenname = profile.screenname,
+                            username = profile.username
+
+                        });
+                        EmailModels.Add(new EmailModel
+                        {
+                            templateid = (int)templateenum.MemberPasswordChangedAdminNotification,
+                            messagetypeid = (int)messagetypeenum.SysAdminUpdate,
+                            addresstypeid = (int)addresstypeenum.SystemAdmin,
+                        });
+                        //this sends both admin and user emails  
+                        Api.AsyncCalls.sendmessagesbytemplate(EmailModels);
+
+                    }
+                    else
+                    {
+                        using (var logger = new Logging(applicationEnum.UserAuthorizationService))
+                        {
+                            var dd = new Exception("User password change failed for user");
+                            logger.WriteSingleEntry(logseverityEnum.Warning, globals.getenviroment, dd, profile.id, null);
+                        }
+                    }
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                success = false;
+                throw ex;
+
+            }
+
+
+            return success;
+        }
+
+        #endregion
         // Other overrides not implemented
         #region "Other overrides not implemented"
 
-        public override bool ChangePassword(string username, string oldPassword, string newPassword)
-        {
-            throw new NotImplementedException();
-        }
+
 
         public override bool ChangePasswordQuestionAndAnswer(string username, string password, string newPasswordQuestion, string newPasswordAnswer)
         {
@@ -2700,7 +2703,17 @@ namespace Anewluv.Services.Authentication
 
 
 
-
+        [Serializable]
+        public class MyException : Exception
+        {
+            public MyException() { }
+            public MyException(string message) : base(message) { }
+            public MyException(string message, Exception inner) : base(message, inner) { }
+            protected MyException(
+              System.Runtime.Serialization.SerializationInfo info,
+              System.Runtime.Serialization.StreamingContext context)
+                : base(info, context) { }
+        }
 
 
 

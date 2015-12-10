@@ -862,7 +862,7 @@ namespace Anewluv.Services.Common
                             return temp;
 
 #else  //load list from database
-                    temp = CachingFactory.CssStyleSelector.getsystempagesettingslist(_unitOfWorkAsync);
+                    temp = RedisCacheFactory.SharedObjectHelper.CssStyleSelector.getsystempagesettingslist(_unitOfWorkAsync);
                     return temp;
 #endif
                 }
@@ -900,7 +900,8 @@ namespace Anewluv.Services.Common
                 try
                 {
 
-                    return CachingFactory.CssStyleSelector.getbodycssbypagename(pagename, _unitOfWorkAsync).ToString();
+                    var temp = RedisCacheFactory.SharedObjectHelper.CssStyleSelector.getbodycssbypagename(pagename, _unitOfWorkAsync).ToString();
+                    return temp;
 
 
                 }
