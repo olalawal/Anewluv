@@ -467,6 +467,7 @@ namespace GeoData.Domain.Models
     public async Task<CityList> GetCityStateprovinceBycountryandlatlong(string countryname, string lattitude, string longitude)
     {
         string query = "GetCityStateprovinceBycountryandlatlong";
+                      //  GetCityStateprovinceBycountryandlatlong
 
         SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", countryname);
         parameter.ParameterName = "@StrcountryDatabaseName";
@@ -476,21 +477,23 @@ namespace GeoData.Domain.Models
         SqlParameter parameter2 = new SqlParameter("@StrLattitude", lattitude);
         parameter2.ParameterName = "@StrLattitude";
         parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
-        parameter2.Size = 25;
+        parameter2.Size = 50;
 
         SqlParameter parameter3 = new SqlParameter("@StrLongitude", longitude);
         parameter3.ParameterName = "@StrLongitude";
         parameter3.SqlDbType = System.Data.SqlDbType.VarChar;
-        parameter3.Size = 25;
+        parameter3.Size = 50;
 
 
         var parameters = new object[] { parameter, parameter2, parameter3 };
 
 
-      var dd = await Database.SqlQuery<PostalCodeList>(query + " @StrcountryDatabaseName.@StrLattitude,@StrLongitude", parameters).FirstOrDefaultAsync(); ;
+      var dd = await Database.SqlQuery<PostalCodeList>(query + " @StrcountryDatabaseName,@StrLattitude,@StrLongitude", parameters).FirstOrDefaultAsync(); 
 
-      return new CityList { City = dd.PostalCode };
+        if (dd != null)
+        return new CityList { City = dd.PostalCode };
 
+        return new CityList();
     }
 	
 	

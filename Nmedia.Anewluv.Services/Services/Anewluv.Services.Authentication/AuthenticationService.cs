@@ -1730,9 +1730,9 @@ namespace Anewluv.Services.Authentication
                             (p.status_id != (int)profilestatusEnum.Banned | p.status_id != (int)profilestatusEnum.Inactive | p.status_id != (int)profilestatusEnum.ResetingPassword)
                              ).Include(z => z.profileactivities).SelectAsync();
 
+                        profile = profileresult.FirstOrDefault();
 
-
-                        if (profile != null)
+                        if (profile.id != 0)
                         {
 
                             //retirve encypted password

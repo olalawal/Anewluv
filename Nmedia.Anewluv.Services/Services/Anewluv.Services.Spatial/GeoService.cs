@@ -613,7 +613,7 @@ namespace Anewluv.Services.Spatial
                         Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(model.country.ToString(), "", "", ex.Message, ex.InnerException);
                         new Logging(applicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, convertedexcption);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
-                        FaultReason faultreason = new FaultReason("Error in GeoService service");
+                        FaultReason faultreason = new FaultReason("Error in GeoService service method - getcitystateprovincelbycountrylatlong ");
                         string ErrorMessage = "";
                         string ErrorDetail = "ErrorMessage: " + ex.Message;
                         throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
