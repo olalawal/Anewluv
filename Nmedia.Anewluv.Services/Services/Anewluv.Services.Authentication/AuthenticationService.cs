@@ -795,6 +795,9 @@ namespace Anewluv.Services.Authentication
                             templateid = (int)templateenum.MemberCreatedAdminNotification,
                             messagetypeid = (int)messagetypeenum.SysAdminUpdate,
                             addresstypeid = (int)addresstypeenum.SystemAdmin,
+                            emailaddress = email,
+                            screenname = screenname,
+                            username = username
                         });
                         //this sends both admin and user emails  
                         Api.AsyncCalls.sendmessagesbytemplate(EmailModels);
@@ -1359,9 +1362,9 @@ namespace Anewluv.Services.Authentication
         {
             AnewluvMessages messages = new AnewluvMessages();
             // messages.message = "";
-            messages.errormessages = null;
+            // //messages.errormessages = null;
             profile profile = new profile();
-            AnewluvResponse response = new AnewluvResponse();
+           // AnewluvResponse response = new AnewluvResponse();
 
 
             {
@@ -1562,7 +1565,7 @@ namespace Anewluv.Services.Authentication
         {
 
             profile profile = new profile();
-            AnewluvResponse response = new AnewluvResponse();
+          //  AnewluvResponse response = new AnewluvResponse();
 
 
             //  using (var db = _unitOfWorkAsync)
@@ -1578,7 +1581,7 @@ namespace Anewluv.Services.Authentication
 
                             AnewluvMessages messages = new AnewluvMessages();
                             // messages.messages = "";
-                            messages.errormessages = null;
+                           //  //messages.errormessages = null;
                             var isprofileactivated = false;
 
                             //Clear any errors kinda redundant tho  
@@ -1624,6 +1627,7 @@ namespace Anewluv.Services.Authentication
                                         emailaddress = profile.emailaddress,
                                         screenname = profile.screenname,
                                         username = profile.username,
+                                        activationcode = profile.activationcode
 
                                     });
 
@@ -1631,8 +1635,12 @@ namespace Anewluv.Services.Authentication
                                     EmailModels.Add(new EmailModel
                                     {
                                         templateid = (int)templateenum.MemberActivationCodeRecoveredAdminNotification,
+
                                         messagetypeid = (int)messagetypeenum.SysAdminUpdate,
                                         addresstypeid = (int)addresstypeenum.SystemAdmin,
+                                        emailaddress = profile.emailaddress,
+                                        screenname = profile.screenname,
+                                        username = profile.username,
                                     });
                                     //this sends both admin and user emails  
                                     Api.AsyncCalls.sendmessagesbytemplate(EmailModels);
@@ -2450,7 +2458,10 @@ namespace Anewluv.Services.Authentication
                         {
                             templateid = (int)templateenum.MemberPasswordResetAdminNotification,
                             messagetypeid = (int)messagetypeenum.SysAdminUpdate,
-                            addresstypeid = (int)addresstypeenum.SystemAdmin,
+                            addresstypeid = (int)addresstypeenum.SystemAdmin,                            
+                            emailaddress = profile.emailaddress,
+                            screenname = profile.screenname,
+                            username = profile.username,
                         });
                         //this sends both admin and user emails  
                         Api.AsyncCalls.sendmessagesbytemplate(EmailModels);
@@ -2529,6 +2540,9 @@ namespace Anewluv.Services.Authentication
                             templateid = (int)templateenum.MemberPasswordChangedAdminNotification,
                             messagetypeid = (int)messagetypeenum.SysAdminUpdate,
                             addresstypeid = (int)addresstypeenum.SystemAdmin,
+                            emailaddress = profile.emailaddress,
+                            screenname = profile.screenname,
+                            username = profile.username,
                         });
                         //this sends both admin and user emails  
                         Api.AsyncCalls.sendmessagesbytemplate(EmailModels);

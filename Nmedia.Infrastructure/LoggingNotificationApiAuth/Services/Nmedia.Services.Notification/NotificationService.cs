@@ -509,6 +509,11 @@ namespace Nmedia.Services.Notification
                         model.body = String.Format(body, model.screenname);
                         emaildetail.EmailModel = model;  //add the new updated model
                         break;
+                    case templateenum.MemberActivationCodeRecoveredMemberNotification:
+                        model.subject = subject;
+                        model.body = String.Format(body, model.screenname,model.activationcode);
+                        emaildetail.EmailModel = model;  //add the new updated model
+                        break;
                         
                     //peeks, interestes and othere actions all combined
                     case templateenum.MemberRecivedPeekMemberNotification:

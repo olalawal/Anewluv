@@ -1062,6 +1062,10 @@ namespace Anewluv.Services.Media
                                     templateid = (int)templateenum.MemberPhotoRejectedAdminNotification,
                                     messagetypeid = (int)messagetypeenum.SysAdminUpdate,
                                     addresstypeid = (int)addresstypeenum.SystemAdmin,
+                                    emailaddress = PhotoModify.profilemetadata.profile.emailaddress,
+                                    screenname = PhotoModify.profilemetadata.profile.screenname,
+                                    username = PhotoModify.profilemetadata.profile.username,
+
                                 });
 
 
@@ -1104,6 +1108,9 @@ namespace Anewluv.Services.Media
                                     templateid = (int)templateenum.MemberPhotoApprovedAdminNotification,
                                     messagetypeid = (int)messagetypeenum.SysAdminUpdate,
                                     addresstypeid = (int)addresstypeenum.SystemAdmin,
+                                    emailaddress = PhotoModify.profilemetadata.profile.emailaddress,
+                                    screenname = PhotoModify.profilemetadata.profile.screenname,
+                                    username = PhotoModify.profilemetadata.profile.username
                                     // subject = templatesubjectenum.MemberPhotoApprovedAdminNotification.ToDescription()
                                 });
 
