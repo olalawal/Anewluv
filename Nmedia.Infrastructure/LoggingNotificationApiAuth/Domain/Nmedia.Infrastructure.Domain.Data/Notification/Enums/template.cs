@@ -163,7 +163,6 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
         [Description("Password Change Member Notification")]
         [EnumMember]
         MemberPasswordChangeMemberNotification = 37,
-
         [Description("Password Change Admin Notification")]
         [EnumMember]
         MemberPasswordChangedAdminNotification = 38,

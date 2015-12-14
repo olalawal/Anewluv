@@ -663,10 +663,10 @@ namespace Nmedia.Services.Notification
                 }
             }
 
-            //set the default to user if we dont know
-            if (addrestypeid != null | addrestypeid == 0)
+            //set the default admins so at least they get it if we dont know
+            if (addrestypeid == null | addrestypeid == 0)
             {
-                addrestypeid = (int)addresstypeenum.SiteUser;
+                addrestypeid = (int)addresstypeenum.SystemAdmin;
             }
 
             return addrestypeid.Value;

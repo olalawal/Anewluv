@@ -159,7 +159,16 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
 
         [Description("MemberFriendRequestRecivedAdminNotification")]
         [EnumMember]
-        MemberFriendRequestRecivedAdminNotification = 36
+        MemberFriendRequestRecivedAdminNotification = 36,
+
+        [Description("MemberPasswordChangeMemberNotification")]
+        [EnumMember]
+        MemberPasswordChangeMemberNotification = 37,
+
+        [Description("MemberPasswordChangedAdminNotification")]
+        [EnumMember]
+        MemberPasswordChangedAdminNotification = 38,
+
 
     }
 

@@ -20,6 +20,9 @@ namespace Anewluv.Domain.Data.ViewModels
        public   string password { get; set; }
 
        [DataMember]
+       public string passwordtoken { get; set; }
+
+       [DataMember]
        public ShortGuid verificationcode { get; set; }
        [DataMember]
        public string phonenumber { get; set; }

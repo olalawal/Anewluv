@@ -49,11 +49,11 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
 
         [Description("Your Account has been Recovered on AnewLuv.com, *Action required*")]
         [EnumMember]
-        MemberPasswordChangeMemberNotification = 8,
+        MemberPasswordResetMemberNotification = 8,
 
         [Description("An Account has been recovered on Anewluv.com")]
         [EnumMember]
-        MemberPasswordChangedAdminNotification = 9,
+        MemberPasswordResetAdminNotification = 9,
 
         [Description("Your Profile has been Activated on AnewLuv.com")]
         [EnumMember]
@@ -159,7 +159,15 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
 
         [Description("A member has sent a Friend Request to another member")]
         [EnumMember]
-        MemberFriendRequestRecivedAdminNotification = 36
+        MemberFriendRequestRecivedAdminNotification = 36,
+
+        [Description("Your password has been succsefully changed!")]
+        [EnumMember]
+        MemberPasswordChangeMemberNotification = 37,
+
+        [Description("A member has changed thier password!")]
+        [EnumMember]
+        MemberPasswordChangeAdminNotification = 38
     }
 
 

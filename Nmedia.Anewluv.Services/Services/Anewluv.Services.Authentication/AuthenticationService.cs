@@ -1635,7 +1635,6 @@ namespace Anewluv.Services.Authentication
                                     EmailModels.Add(new EmailModel
                                     {
                                         templateid = (int)templateenum.MemberActivationCodeRecoveredAdminNotification,
-
                                         messagetypeid = (int)messagetypeenum.SysAdminUpdate,
                                         addresstypeid = (int)addresstypeenum.SystemAdmin,
                                         emailaddress = profile.emailaddress,
@@ -2148,8 +2147,8 @@ namespace Anewluv.Services.Authentication
                 var task = Task.Factory.StartNew(() =>
                 {
 
-               
-                    var result = this.ChangePassword(user.username,user.verificationcode, user.password);
+
+                    var result = this.ChangePassword(user.username, user.passwordtoken, user.password);
 
                     if (result)
                     {
@@ -2157,7 +2156,7 @@ namespace Anewluv.Services.Authentication
                     }
                     else
                     {
-                        return "Unable to change password at this time please contact support";
+                        return "Unable to change password at this time: either a bad token or your 30 minute timer has expired, please request a new password link if that does not work contact support";
                     }
 
 
@@ -2427,18 +2426,23 @@ namespace Anewluv.Services.Authentication
                     ShortGuid sguid1 = guid; // implicitly cast the guid as a shortguid
 
 
-                    if (profile.status_id != (int)profilestatusEnum.ResetingPassword && (profile.passwordresetwindow != null && profile.passwordresetwindow > DateTime.Now))
+                    if (profile.status_id == (int)profilestatusEnum.ResetingPassword)
                     {
-                        accountreset = enablepasswordreset(new ProfileModel { profileid = profile.id }, sguid1);
-                    }
-                    else
-                    {
+                        //if the reset window is expired re-set it again
+                        if (profile.passwordresetwindow != null && DateTime.Now < profile.passwordresetwindow.GetValueOrDefault().AddMinutes(30))
+                        {
 
-                        //  return "password is already in reset satatus";
-                        accountreset = false;
-                        return "Already reset check your email address for the reset link";
+                            System.TimeSpan diff1 = profile.passwordresetwindow.GetValueOrDefault().Subtract(DateTime.Now);
+
+                            accountreset = false;
+                            return "has allready been reset you still have " + diff1.TotalMinutes.ToString() + " before you can request a new change password link";
+                        }
 
                     }
+                        
+                    //if we get here we want to reset the password
+                    accountreset = enablepasswordreset(new ProfileModel { profileid = profile.id }, sguid1);
+                                      
 
                     if (accountreset)
                     {
@@ -2500,7 +2504,7 @@ namespace Anewluv.Services.Authentication
         }
 
 
-        public override bool ChangePassword(string username, string VerificationCode, string newPassword)
+        public override bool ChangePassword(string username, string passwordtoken, string newPassword)
         {
             //make username upper so that we can get actual mateches withoute user having to type in a case sensitive username
             bool success = false;
@@ -2510,7 +2514,7 @@ namespace Anewluv.Services.Authentication
                 // var username = datingService.ValidateSecurityAnswerIsCorrect(profileid, securityquestionID.GetValueOrDefault(), answer);
                 var profile = _unitOfWorkAsync.RepositoryAsync<profile>().getprofilebyusername(new ProfileModel { username = username });
 
-                if (profile != null && profile.passwordresettoken == VerificationCode)
+                if (profile != null && profile.passwordresettoken == passwordtoken && DateTime.Now < profile.passwordresetwindow.GetValueOrDefault())
                 {
                     //
 
@@ -2558,6 +2562,7 @@ namespace Anewluv.Services.Authentication
                     }
 
                 }
+
 
             }
             catch (Exception ex)

@@ -32,7 +32,7 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
         MemberContactUsAdminMessage = 3,
        
         //profile created
-        [Description("Thank you for creating a profile at <a href=\"www.anewluv.com\">Anewluv.com </a> <p></p><a href=\"www.anewluv.com\">Anewluv.com </a>   provides a new and refereshing way to  meet people from all walks of life.  <p></p> You have <b> FREE </b> access to our exclusive geo-targeting system to link up with members from all around the world! <p></p>  you can easily search for members any distance from you and you will always get acurate REAL results unlike some other websites.  <p></p> Our system spans  hundreds of countries all around the world.  <p></p> We are also adding new features every month <p></p> So get started today! Please click on the link below to activate your profile. <b>If you are unable to activate your profile with the provided link, try copying the activation code directly from this email and pasting it into the activation code box on our activation page</br> Your username is : <b>{0}</>  and  Your activation code is:  <b>  {1} </b> <p></p><a href=\'http://www.AnewLuv.com/Account/LandingSPA/?username={0}?activationcode={1}'>Activiate your account on www.Anewluv.com</a><p></p> ")]
+        [Description("Thank you for creating a profile at <a href=\"www.anewluv.com\">Anewluv.com </a> <p></p><a href=\"www.anewluv.com\">Anewluv.com </a>   provides a new and refereshing way to  meet people from all walks of life.  <p></p> You have <b> FREE </b> access to our exclusive geo-targeting system to link up with members from all around the world! <p></p>  you can easily search for members any distance from you and you will always get acurate REAL results unlike some other websites.  <p></p> Our system spans  hundreds of countries all around the world.  <p></p> We are also adding new features every month <p></p> So get started today! Please click on the link below to activate your profile. <b>If you are unable to activate your profile with the provided link, try copying the activation code directly from this email and pasting it into the activation code box on our activation page</br> Your username is : <b>{0}</>  and  Your activation code is:  <b>  {1} </b> <p></p><a href='http://www.AnewLuv.com/Account/LandingSPA/?username={0}?activationcode={1}'>Activiate your account on www.Anewluv.com</a><p></p> ")]
         [EnumMember]
         MemberCreatedMemberNotification = 4,
 
@@ -49,7 +49,7 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
         MemberCreatedJainRanOrOpenIDAdminNotification = 7,
 
         //member password change notificaion
-        [Description( "Dear {0} ,<p></p> You have initated an Account recovery on AnewLuv.com , Your Username is <b> {1} </b> You must reset your password within the next 30 minutes by clicking this reset link <br><a href=\'http://www.AnewLuv.com/Account/LandingSPA/?usernamme={1}?token={2}/'>Reset your password on www.Anewluv.com</a>")]
+        [Description( "Dear {0} ,<p></p> You have initated an Account recovery on AnewLuv.com , Your Username is <b> {1} </b> You must reset your password within the next 30 minutes by clicking this reset link <br><a href='http://www.AnewLuv.com/Account/LandingSPA/?username={1}?token={2}'>Reset your password on www.Anewluv.com</a>")]
         [EnumMember]
         MemberPasswordResetMemberNotification = 8,
         [Description("An Account has been recovered on Anewluv.com by the user <b>{0}</b> with email :<b>{1}</b>")]
@@ -57,7 +57,7 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
         MemberPasswordResetAdminNotification = 9,
 
         //profile activated 
-        [Description("Dear {0} ,<p></p>  Your account has been activated on AnewLuv.com , You can now log in to your account at <p></p> <a href=\"http://www.AnewLuv.com/Members/Home \">Login to AnewLuv.com</a>  <p></p><a href=\"http://www.anewluv.com \">Anewluv.com </a>")]
+        [Description("Dear {0} ,<p></p>  Your account has been activated on AnewLuv.com , You can now log in to your account at <p></p> <a href='http://www.AnewLuv.com/Members/Home '>Login to AnewLuv.com</a>  <p></p><a href=\"http://www.anewluv.com \">Anewluv.com </a>")]
         [EnumMember]
         MemberActivatedMemberNotification = 10,
 
@@ -75,7 +75,7 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
         MemberActivationCodeRecoveredAdminNotification = 13,
 
         //Sent member message 
-        [Description("Dear {0}, <p></p>The member {1} has sent you an Email message on AnewLuv.com, Please log into your account to view {2}'s Email message </br><p></p> <b><a href=\"http://www.AnewLuv.com/Members/Home  \">Log on to your Account on www.Anewluv.com</a></b>")]
+        [Description("Dear {0}, <p></p>The member {1} has sent you an Email message on AnewLuv.com, Please log into your account to view {2}'s Email message </br><p></p> <b><a href='http://www.AnewLuv.com/Members/Home'>Log on to your Account on www.Anewluv.com</a></b>")]
         [EnumMember]
         MemberRecivedEmailMessageMemberNotification = 14,
         [Description("The Member {0} has received an Email Message from the member {1}")]
@@ -83,7 +83,7 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
         MemberRecivedEmailMessageAdminNotification = 15,
 
         //Peek recived message
-        [Description("Dear {0}, <p></p> <p></p>The member {1} has peeked at your profile on AnewLuv.com, Please log into your account to view {2}'s details </br><p></p> <b><a href=\"http://www.AnewLuv.com/Members/Home \">Log on to your Account on www.Anewluv.com</a></b>")]
+        [Description("Dear {0}, <p></p> <p></p>The member {1} has peeked at your profile on AnewLuv.com, Please log into your account to view {2}'s details </br><p></p> <b><a href='http://www.AnewLuv.com/Members/Home'>Log on to your Account on www.Anewluv.com</a></b>")]
         [EnumMember]
         MemberRecivedPeekMemberNotification = 16,
         [Description("The  Member {0} has received a Peek from the member {1}")]
@@ -91,25 +91,25 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
         MemberRecivedPeekAdminNotification = 17,
 
 
-        [Description("Dear {0}, <p></p>The member {1} has likes you on AnewLuv.com, Please log into your account to view {2}'s details </br><p></p> <b><a href=\"http://www.AnewLuv.com/Members/Home \">Log on to your Account on www.Anewluv.com</a></b>")]
+        [Description("Dear {0}, <p></p>The member {1} has likes you on AnewLuv.com, Please log into your account to view {2}'s details </br><p></p> <b><a href='http://www.AnewLuv.com/Members/Home '>Log on to your Account on www.Anewluv.com</a></b>")]
         [EnumMember]
         MemberRecivedLikeMemberNotification = 18,
         [Description("The Member {0} has received a Like from the member {1}")]
         [EnumMember]
         MemberRecivedLikeAdminNotification = 19,
-        [Description("Dear {0}, <p></p>The member {1} has expressed interest your profile on AnewLuv.com, Please log into your account and to view {2}'s details </br><p></p> <b><a href=\"http://www.AnewLuv.com/Members/Home  \">Log on to your Account on www.Anewluv.com</a></b>")]
+        [Description("Dear {0}, <p></p>The member {1} has expressed interest your profile on AnewLuv.com, Please log into your account and to view {2}'s details </br><p></p> <b><a href='http://www.AnewLuv.com/Members/Home  '>Log on to your Account on www.Anewluv.com</a></b>")]
         [EnumMember]
         MemberRecivedInterestMemberNotification = 20,
         [Description("The Member {0} has received an Interest from the Member, {1}")]
         [EnumMember]
         MemberRecivedInterestAdminNotification = 21,
-        [Description("Dear {0}, <p></p>The member {1} has wants to chat with you on AnewLuv.com, Please log into your account and check your chat requests to respond</br><p></p> <b><a href=\"http://www.AnewLuv.com/Members/Home\">Log on to your Account on www.Anewluv.com</a></b>")]
+        [Description("Dear {0}, <p></p>The member {1} has wants to chat with you on AnewLuv.com, Please log into your account and check your chat requests to respond</br><p></p> <b><a href='http://www.AnewLuv.com/Members/Home'>Log on to your Account on www.Anewluv.com</a></b>")]
         [EnumMember]
         MemberRecivedChatRequestMemberNotification = 22,
         [Description("The Member {0} has received a chat request from the Member, {1}")]
         [EnumMember]
         MemberRecivedChatRequestAdminNotification = 23,
-        [Description("Dear {0}, <p></p>The member {1} has sent you an offline Chat message on AnewLuv.com, Please log into your account to view {2}'s Chat message </br><p></p> <b><a href=\"http://www.AnewLuv.com/Members/Home  \">Log on to your Account on www.Anewluv.com</a></b>")]
+        [Description("Dear {0}, <p></p>The member {1} has sent you an offline Chat message on AnewLuv.com, Please log into your account to view {2}'s Chat message </br><p></p> <b><a href='http://www.AnewLuv.com/Members/Home  '>Log on to your Account on www.Anewluv.com</a></b>")]
         [EnumMember]
         MemberRecivedOfflineChatMessageMemberNotification = 24,
         [Description("The Member {0} has received an offline chat request from the Member, {1}")]
@@ -127,7 +127,7 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
         [Description("A new photo for the user {0} with email address : {1}  has been uploaded to AnewLuv.com")]
         [EnumMember]
         MemberPhotoUploadedAdminNotification = 29,
-        [Description("Dear {0} , <p></p>Here are your {1} new matches for date : {2}  </br><p></p> <b><a href=\"http://www.AnewLuv.com/Members/Home \">Log on to your Account on www.Anewluv.com</a></b>")]
+        [Description("Dear {0} , <p></p>Here are your {1} new matches for date : {2}  </br><p></p> <b><a href='http://www.AnewLuv.com/Members/Home'>Log on to your Account on www.Anewluv.com</a></b>")]
         [EnumMember]
         MemberMatchesSentMemberNotification = 30,
         [Description("The member {0} with email address {1} has received {2} matches for the date : {2}")]
@@ -143,7 +143,7 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
         MemberPhotoApprovedAdminNotification = 34,
 
         //friend request recived
-        [Description("Dear {0}, <p></p>The member {1} has sent you a friend request on AnewLuv.com, Please log into your account and to view {1}'s details </br><p></p> <b><a href=\"http://www.AnewLuv.com/Members/Home  \">Log on to your Account on www.Anewluv.com</a></b>")]
+        [Description("Dear {0}, <p></p>The member {1} has sent you a friend request on AnewLuv.com, Please log into your account and to view {1}'s details </br><p></p> <b><a href='http://www.AnewLuv.com/Members/Home '>Log on to your Account on www.Anewluv.com</a></b>")]
         [EnumMember]
         MemberFriendRequestRecivedMemberNotification = 35,
 
@@ -152,7 +152,7 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
         MemberFriendRequestRecivedAdminNotification = 36,
 
          //member password change notificaion
-        [Description("Dear {0} ,<p></p> Your password has been changed on AnewLuv.com, if this is an error or you did not initiate this activity please contact us imediately at  <b><a href=\"http://www.AnewLuv.com/ContactUs \">Contact Us</a></b>")]
+        [Description("Dear {0} ,<p></p> Your password has been changed on AnewLuv.com, if this is an error or you did not initiate this activity please contact us imediately at  <b><a href='http://www.AnewLuv.com/ContactUs'>Contact Us</a></b>")]
         [EnumMember]
         MemberPasswordChangeMemberNotification = 37,
         [Description("An Password has been changed for on Anewluv.com by the user <b>{0}</b> with email :<b>{1}</b>")]
