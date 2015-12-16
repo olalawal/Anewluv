@@ -1273,7 +1273,7 @@ namespace Anewluv.Services.Media
 
                                         EmailModels.Add ( new EmailModel {
                                               templateid = (int)templateenum.MemberPhotoUploadedAdminNotification,
-                                            messagetypeid = (int)messagetypeenum.SysAdminUpdate,
+                                            messagetypeid = (int)messagetypeenum.SysAdminUpdate, 
                                             addresstypeid = (int)addresstypeenum.SystemAdmin//,
                                            });
 

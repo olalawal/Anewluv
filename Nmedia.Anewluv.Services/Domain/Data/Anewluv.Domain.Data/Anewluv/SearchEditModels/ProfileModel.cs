@@ -84,19 +84,19 @@ namespace Anewluv.Domain.Data.ViewModels
     
 
         //added abitlity to add notes 
-  //      [DataMember]
+        [DataMember]
         public string note { get; set; }
         //acdded action to the body
-   //     [DataMember]
+        [DataMember]
         public int? actiontypeid { get; set; }
         
   
 
 
         //search stuff for mail
-      //  [DataMember]
+         [DataMember]
         public int? mailboxfoldertypeid { get; set; }  //folder types to retrive , only one folder per call for now
-     //   [DataMember]
+        [DataMember]
         public MailViewModel mailviewmodel { get; set; } //mail being sent along with all relevant data 
        
 
