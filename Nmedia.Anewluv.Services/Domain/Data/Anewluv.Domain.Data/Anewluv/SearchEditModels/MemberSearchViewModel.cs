@@ -66,7 +66,11 @@ namespace Anewluv.Domain.Data.ViewModels
          [DataMember]
          public string lastloggedonstring { get; set; } //display value of last logged in          
          [DataMember]
-         public bool? online { get; set; } //not filled in yet          
+         public bool? online { get; set; } //not filled in yet  
+
+         [DataMember]
+         public int photocount { get; set; }
+
          [DataMember]
          public bool hasgalleryphoto { get; set; }        
         [DataMember]
@@ -115,7 +119,8 @@ namespace Anewluv.Domain.Data.ViewModels
 
         //4-28-1added normalized screen name that replaces special chars , for now it just trims out spaces, update it to do more later
         //TO DO this is how we synch up the screen name with what is in chat since screen names can have spaces and UserNames and Identity can't
-        
+        [DataMember]
+        public MemberToMemberActionsModel ViewerActionsToProfile { get; set; }
        
         public string screennamenormalized
         {

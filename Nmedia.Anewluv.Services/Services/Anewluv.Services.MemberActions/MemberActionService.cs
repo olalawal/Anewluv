@@ -609,12 +609,12 @@ namespace Anewluv.Services.MemberActions
         }
 
         /// <summary>
-        /// Adds a New interest
+        /// Adds a new action for any user this is the only ADD function
         /// </summary>
         public async Task addmyaction(ProfileModel model)
         {
 
-
+            bool updated = false;
             //update method code
              var db = _unitOfWorkAsync;
             {
@@ -638,22 +638,25 @@ namespace Anewluv.Services.MemberActions
                             .Where (r => r.id == model.targetprofileid).FirstOrDefault();
 
                            
-
+                            //only update undleted peeks to keep the view date fresh
                             //just  update it if we have one already
-                            if (existinginterest != null)
+                            //only change the view date since we changed only that and modify date
+                            if (existinginterest != null && model.actiontypeid ==  (int)actiontypeEnum.Peek)
                             {
                                 //get the actual action
                                var action =  db.Repository<action>().Queryable()
                                    .Where(z=>z.creator_profile_id == model.profileid && z.target_profile_id == existinginterest.id).FirstOrDefault();
 
-                                action.deletedbycreatordate = null; ;
+                                //action.deletedbycreatordate = null; ;
                                 action.modificationdate = DateTime.Now;
-                                action.viewdate = null;  //REST view ?
+                                action.viewdate = DateTime.Now;  //REST view ?
+                                updated = true;
                                 db.Repository<action>().Update(action);
 
                             }
                             else
                             {
+                                updated = true;
                                 var newaction = new action();
                                 var newnote = new note();
 
@@ -703,7 +706,8 @@ namespace Anewluv.Services.MemberActions
 
                             }
 
-                               var i =db.SaveChanges();
+                            if (updated)
+                              db.SaveChanges();
                            // transaction.Commit();
 
                           //  return true;
@@ -770,7 +774,7 @@ namespace Anewluv.Services.MemberActions
                                var action =  db.Repository<action>().Queryable()
                                    .Where(z=>z.creator_profile_id == model.profileid && z.target_profile_id == interest.id).FirstOrDefault();
 
-                                action.deletedbycreatordate = null; ;
+                                action.deletedbycreatordate = DateTime.Now; ;
                                 action.modificationdate = DateTime.Now;
                                 action.viewdate = null;  //REST view ?
                                 db.Repository<action>().Update(action);
@@ -978,7 +982,7 @@ namespace Anewluv.Services.MemberActions
 
                                 action.deletedbytargetdate =null; ;
                                 action.modificationdate = DateTime.Now;
-                                action.viewdate = null;  //REST view ?
+                                action.viewdate = null;  //RESeT view ?
                                 action.active = true;
                                 db.Repository<action>().Update(action);
 
@@ -1024,59 +1028,6 @@ namespace Anewluv.Services.MemberActions
         ///  //not inmplemented
         /// </summary 
      
-
-        /// <summary>
-        /// NOT IMPLEMENTED YET
-        ///  //Removes an iterest i.e makes you not interested in that person anymore
-        ///  //removed multiples 
-        /// </summary 
-         public async Task removeactionsbyprofileidandscreennames(ProfileModel model)
-        {
-
-            //update method code
-             var db = _unitOfWorkAsync;
-            {
-              // //do not audit on adds
-             //   using (var transaction = db.BeginTransaction())
-                {
-                    try
-                    {
-
-                        var task = Task.Factory.StartNew(() =>
-                        {
-
-                           
-
-                           
-                          //var i =db.SaveChanges();
-                           // transaction.Commit();
-
-
-                        });
-
-                      await task.ConfigureAwait(false);
-
-                     
-
-                      //  return true;
-                    }
-                    catch (Exception ex)
-                    {
-                       // transaction.Rollback();
-                       new  Logging(applicationEnum.MemberActionsService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
-                        //can parse the error to build a more custom error mssage and populate fualt faultreason
-                        FaultReason faultreason = new FaultReason("Error in member actions service");
-                        string ErrorMessage = "";
-                        string ErrorDetail = "ErrorMessage: " + ex.Message;
-                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-                    }
-
-                }
-            }
-
-       
-        }
 
         /// <summary>
         ///  //Removes an iterest i.e makes you not interested in that person anymore
@@ -1147,10 +1098,161 @@ namespace Anewluv.Services.MemberActions
       
         #endregion
 
+         #region "bulk operations"
+
+
+         /// <summary>
+         ///  bulk removeal of the users actions towards other users. i.e mypeeks , myinterests i.e
+         /// </summary 
+         public async Task removemyactionbyprofileidbulk(ProfileModel model)
+         {
+
+             bool updated = false;
+             //update method code  return awa
+             var db = _unitOfWorkAsync;
+             {
+                 // //do not audit on adds
+                 //   using (var transaction = db.BeginTransaction())
+                 {
+                     try
+                     {
+                         var task = Task.Factory.StartNew(() =>
+                         {
+
+                             //dont allow regular members to rmove peeks they made maybe later gold or plat members can
+                             if ((model.actiontypeid == (int)actiontypeEnum.Peek)) return;
+
+
+                             foreach (string id in model.profileids)
+                             {
+
+                              int profileid = Convert.ToInt32(id);
+                              var result = memberactionsextentions.getmyactionbyprofileidandactiontype(model, db, model.actiontypeid.Value).Where(p => p.id == profileid).FirstOrDefault();
+                             //update the profile status to 2
+
+                              if (result != null)
+                             {
+                                 updated = true;
+                                 //get the actual action
+                                 var action = db.Repository<action>().Queryable()
+                                     .Where(z => z.creator_profile_id == model.profileid && z.target_profile_id == result.id).FirstOrDefault();
+
+                                 action.deletedbycreatordate = DateTime.Now; ;
+                                 action.modificationdate = DateTime.Now;
+                                 action.viewdate = null;  //REST view ?                                
+                                 db.Repository<action>().Update(action);
+
+                             }
+
+
+                             if (updated)
+                             db.SaveChanges();
+                             // transaction.Commit();
+                             }
+                         });
+
+                         await task.ConfigureAwait(false);
 
 
 
-        //end of basica action methods
+
+                     }
+                     catch (Exception ex)
+                     {
+                         // transaction.Rollback();
+                         new Logging(applicationEnum.MemberActionsService);
+                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                         //can parse the error to build a more custom error mssage and populate fualt faultreason
+                         FaultReason faultreason = new FaultReason("Error in member actions service");
+                         string ErrorMessage = "";
+                         string ErrorDetail = "ErrorMessage: " + ex.Message;
+                         throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                     }
+
+                 }
+             }
+
+
+         }
+
+
+         public async Task removeothersactionnbyprofileidbulk(ProfileModel model)
+         {
+
+
+             //update method code
+             var db = _unitOfWorkAsync;
+             {
+                 // //do not audit on adds
+                 //   using (var transaction = db.BeginTransaction())
+                 {
+                     try
+                     {
+
+                         var task = Task.Factory.StartNew(() =>
+                         {
+                             //DO not allow to remove blocks
+                             if ((model.actiontypeid == (int)actiontypeEnum.Block)) return;
+
+
+                             foreach (string id in model.profileids)
+                             {
+
+                                 int profileid = Convert.ToInt32(id);
+                                 //FILTER happens here i.e we get the full list of other actions and finally filter out the profile id here TO DO refacor 
+                                 var result = memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, model.actiontypeid.Value).Where(p => p.id == profileid).FirstOrDefault();
+                                 //update the profile status to 2
+
+                                 if (result != null)
+                                 {
+                                     //get the actual action
+                                     var action = db.Repository<action>().Queryable()
+                                         .Where(z => z.creator_profile_id == result.id && z.target_profile_id == model.profileid).FirstOrDefault();
+
+                                     action.deletedbytargetdate = DateTime.Now; ;
+                                     action.modificationdate = DateTime.Now;
+                                     action.viewdate = null;  //REST view ?
+                                     action.active = false;
+                                     db.Repository<action>().Update(action);
+
+                                 }
+                             }
+
+                             var i = db.SaveChanges();
+                             // transaction.Commit();
+
+                             //  return true;
+
+                         });
+
+                         await task.ConfigureAwait(false);
+
+
+
+
+                     }
+                     catch (Exception ex)
+                     {
+                         // transaction.Rollback();
+                         new Logging(applicationEnum.MemberActionsService);
+                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                         //can parse the error to build a more custom error mssage and populate fualt faultreason
+                         FaultReason faultreason = new FaultReason("Error in member actions service");
+                         string ErrorMessage = "";
+                         string ErrorDetail = "ErrorMessage: " + ex.Message;
+                         throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                     }
+
+                 }
+             }
+
+
+         }
+
+        #endregion
+
+
+         //end of basica action methods
         //********************************************************
 
        

@@ -67,7 +67,8 @@ namespace Anewluv.Domain.Data.ViewModels
         [DataMember]
         public int likedviewercount { get; set; }  //if you have already sent a like to this member
         [DataMember]
-        public DateTime? likedbyviewerdate { get; set; }  //if you have already sent a like to this member        [DataMember]
+        public DateTime? likedbyviewerdate { get; set; }  //if you have already sent a like to this member        
+        [DataMember]
         public int likedbyviewercount { get; set; }  //if you have already sent a like to this member
         [DataMember]
         public DateTime? blockedviewerdate { get; set; }  // if this user has blocked you

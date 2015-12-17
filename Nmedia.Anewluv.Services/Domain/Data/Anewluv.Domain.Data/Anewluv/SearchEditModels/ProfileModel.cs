@@ -43,7 +43,7 @@ namespace Anewluv.Domain.Data.ViewModels
         public string openididentifier { get; set; }
         [DataMember]
         public string openidprovider { get; set; }
-
+         [DataMember]
         public List<String> targetscreennames { get; set; }
 
         //added items for stuff like geodata which we want to require maybe at some point

@@ -24,6 +24,13 @@ namespace Anewluv.DataExtentionMethods
         }
 
 
+        public static int getapprovedphotocountbyprofileid(this IRepository<photo> repo, ProfileModel model)
+        {
+            return repo.Query(o => o.profilemetadata.profile.id == model.profileid
+                                    && o.lu_photoapprovalstatus.id == (int)photoapprovalstatusEnum.Approved).Select().Count();
+
+        }
+
         public static PhotosSortedCountsViewModel getphotossortedcountsbyprofileid(this IRepository<photo> repo, PhotoModel model)
         {
 

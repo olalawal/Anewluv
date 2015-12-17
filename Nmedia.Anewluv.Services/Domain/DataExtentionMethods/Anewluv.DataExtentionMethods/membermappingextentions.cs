@@ -150,37 +150,70 @@ namespace Anewluv.DataExtentionMethods
                 
                 //get the viwers actions to this member first :
                 var vieweractionstoprofile = db.Repository<action>().getmyactionbyprofileid(viewerprofileid).Where(z => z.target_profile_id == profileid).ToList();
+                //now get the actions that user has performed to the viewer
                 var profileactionstoviewer = db.Repository<action>().getmyactionbyprofileid(profileid).Where(z => z.target_profile_id == viewerprofileid).ToList();
 
 
-                actions.peekedataviewerdate = profileactionstoviewer.Count() > 0 ? profileactionstoviewer.Where(z => z.actiontype_id == (int)actiontypeEnum.Peek).OrderByDescending(p => p.creationdate).FirstOrDefault().creationdate : null;              
-                actions.peekedataviewercount =  profileactionstoviewer.Count() > 0? profileactionstoviewer.Where(z => z.actiontype_id == (int)actiontypeEnum.Peek).Count():0;
+                //Thier Peeeks
+                actions.peekedatbyviewerdate = profileactionstoviewer.Where(z => z.actiontype_id == (int)actiontypeEnum.Peek).OrderByDescending(p => p.creationdate)
+                   .Select(x => x.creationdate)
+                   .FirstOrDefault() ?? (DateTime?)null;
+                actions.peekedataviewercount = profileactionstoviewer.Where(z => z.actiontype_id == (int)actiontypeEnum.Peek).Count();
+
+                //THier Likes 
+                actions.likedviewerdate = profileactionstoviewer.Where(z => z.actiontype_id == (int)actiontypeEnum.Like).OrderByDescending(p => p.creationdate)
+                   .Select(x => x.creationdate)
+                   .FirstOrDefault() ?? (DateTime?)null;
+                actions.likedviewercount = profileactionstoviewer.Where(z => z.actiontype_id == (int)actiontypeEnum.Like).Count();
+
+
+                //Thier Interests in me
+                actions.intrestsenttoviewerDate = profileactionstoviewer.Where(z => z.actiontype_id == (int)actiontypeEnum.Interest).OrderByDescending(p => p.creationdate)
+                   .Select(x => x.creationdate)
+                   .FirstOrDefault() ?? (DateTime?)null;
+
+                actions.intrestsenttoviewercount = profileactionstoviewer.Where(z => z.actiontype_id == (int)actiontypeEnum.Interest).Count();
+
+                //Thier blocks on me
+                actions.blockedviewerdate = profileactionstoviewer.Where(z => z.actiontype_id == (int)actiontypeEnum.Block).OrderByDescending(p => p.creationdate)
+                   .Select(x => x.creationdate)
+                   .FirstOrDefault() ?? (DateTime?)null;
+
+                actions.blockedviewercount = profileactionstoviewer.Where(z => z.actiontype_id == (int)actiontypeEnum.Block).Count();
 
 
 
-                actions.likedviewerdate =  profileactionstoviewer.Count() > 0?  profileactionstoviewer.Where(z => z.actiontype_id == (int)actiontypeEnum.Like).OrderByDescending(p => p.creationdate).FirstOrDefault().creationdate:null;
-                actions.likedviewercount =  profileactionstoviewer.Count() > 0?  profileactionstoviewer.Where(z => z.actiontype_id == (int)actiontypeEnum.Like).Count():0;
 
-                actions.blockedviewerdate = profileactionstoviewer.Count() > 0? profileactionstoviewer.Where(z => z.actiontype_id == (int)actiontypeEnum.Block).OrderByDescending(p => p.creationdate).FirstOrDefault().creationdate:null;
-                actions.blockedviewercount = profileactionstoviewer.Count() > 0? profileactionstoviewer.Where(z => z.actiontype_id == (int)actiontypeEnum.Block).Count():0;
 
-              
+                //My Peeeks
+                actions.peekedatbyviewerdate = vieweractionstoprofile.Where(z => z.actiontype_id == (int)actiontypeEnum.Peek).OrderByDescending(p => p.creationdate)
+                   .Select(x => x.creationdate)
+                   .FirstOrDefault() ?? (DateTime?)null;
 
-                actions.intrestsenttoviewerDate = profileactionstoviewer.Count() > 0?  profileactionstoviewer.Where(z => z.actiontype_id == (int)actiontypeEnum.Interest).OrderByDescending(p => p.creationdate).FirstOrDefault().creationdate:null;
-                actions.intrestsenttoviewercount =  profileactionstoviewer.Count() > 0?  profileactionstoviewer.Where(z => z.actiontype_id == (int)actiontypeEnum.Interest).Count():0;
+                actions.peekedatbyviewercount = vieweractionstoprofile.Where(z => z.actiontype_id == (int)actiontypeEnum.Peek).Count();
 
-                
-                actions.peekedatbyviewerdate =  vieweractionstoprofile.Count() > 0?  vieweractionstoprofile.Where(z => z.actiontype_id == (int)actiontypeEnum.Peek).OrderByDescending(p => p.creationdate).FirstOrDefault().creationdate:null;
-                actions.peekedatbyviewercount = vieweractionstoprofile.Count() > 0? vieweractionstoprofile.Where(z => z.actiontype_id == (int)actiontypeEnum.Peek).Count():0;
 
-                actions.likedbyviewerdate =  vieweractionstoprofile.Count() > 0?vieweractionstoprofile.Where(z => z.actiontype_id == (int)actiontypeEnum.Like).OrderByDescending(p => p.creationdate).FirstOrDefault().creationdate:null;
-                actions.likedbyviewercount = vieweractionstoprofile.Count() > 0? vieweractionstoprofile.Where(z => z.actiontype_id == (int)actiontypeEnum.Like).Count():0;
-                
-                actions.interestsentbyviewerDate =  vieweractionstoprofile.Count() > 0?vieweractionstoprofile.Where(z => z.actiontype_id == (int)actiontypeEnum.Interest).OrderByDescending(p => p.creationdate).FirstOrDefault().creationdate:null;
-                actions.interestsentbyviewercount =  vieweractionstoprofile.Count() > 0?vieweractionstoprofile.Where(z => z.actiontype_id == (int)actiontypeEnum.Interest).Count():0;
+                //My likes
+              actions.likedbyviewerdate = vieweractionstoprofile.Where(z => z.actiontype_id == (int)actiontypeEnum.Like).OrderByDescending(p => p.creationdate)
+                .Select(x => x.creationdate)
+                .FirstOrDefault() ?? (DateTime?)null;
 
-                actions.blockedbyviewerdate = vieweractionstoprofile.Count() > 0? vieweractionstoprofile.Where(z => z.actiontype_id == (int)actiontypeEnum.Block).OrderByDescending(p => p.creationdate).FirstOrDefault().creationdate:null;
-                actions.blockedbyviewecount = vieweractionstoprofile.Count() > 0? vieweractionstoprofile.Where(z => z.actiontype_id == (int)actiontypeEnum.Block).Count():0;
+              actions.likedbyviewercount = vieweractionstoprofile.Where(z => z.actiontype_id == (int)actiontypeEnum.Like).Count();
+
+                //my interests
+              actions.interestsentbyviewerDate = vieweractionstoprofile.Where(z => z.actiontype_id == (int)actiontypeEnum.Interest).OrderByDescending(p => p.creationdate)
+                .Select(x => x.creationdate)
+                .FirstOrDefault() ?? (DateTime?)null;
+
+              actions.interestsentbyviewercount = vieweractionstoprofile.Where(z => z.actiontype_id == (int)actiontypeEnum.Interest).Count();
+
+                //my blocks
+               actions.blockedbyviewerdate= vieweractionstoprofile.Where(z => z.actiontype_id == (int)actiontypeEnum.Block).OrderByDescending(p => p.creationdate)
+                .Select(x => x.creationdate)
+                .FirstOrDefault() ?? (DateTime?)null;
+
+               actions.blockedbyviewecount = vieweractionstoprofile.Where(z => z.actiontype_id == (int)actiontypeEnum.Block).Count();               
+               
 
                 return actions;
             }
@@ -190,7 +223,7 @@ namespace Anewluv.DataExtentionMethods
                 throw ex;
             }
 
-            return actions;
+           
         }
 
 
@@ -307,6 +340,10 @@ namespace Anewluv.DataExtentionMethods
                     //}// approvedphotos = photorepository.
                     //else
                     //{
+
+                    model.photocount = db.Repository<photo>().getapprovedphotocountbyprofileid(new ProfileModel { profileid = profile.id });
+
+
                         // model.profilephotos.SingleProfilePhoto = photorepository.getphotomodelbyprofileid(profile.id, photoformatEnum.Thumbnail);
                     model.galleryphoto = db.Repository<photoconversion>().getgalleryphotomodelbyprofileid(profile.id, (int)photoformatEnum.Medium);
 
@@ -314,6 +351,14 @@ namespace Anewluv.DataExtentionMethods
 
                     model.hasgalleryphoto = model.galleryphoto != null ? true : false;
                     // Api.DisposeGeoService();
+
+                    //Also add code here to get the current members actions to this member 
+
+                    if (veiwerpeofileid != profile.id)
+                    {
+                        model.ViewerActionsToProfile = new MemberToMemberActionsModel();
+                        model.ViewerActionsToProfile = membermappingextentions.mapmemberactionsrelationships(profile.id, veiwerpeofileid.GetValueOrDefault(), db);
+                    }
 
                     return model;
 

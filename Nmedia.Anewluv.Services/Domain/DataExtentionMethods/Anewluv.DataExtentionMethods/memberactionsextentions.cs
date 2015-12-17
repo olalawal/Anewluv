@@ -33,6 +33,7 @@ namespace Anewluv.DataExtentionMethods
         }
 
 
+        //this query should skipp items that were deleted so we can keep track of how many times a member added/removed others
         public static IQueryable<action> getothersactiontomebyprofileidandactiontype(this IRepository<action> repo, int profileid, int action)
         {
             return repo.Query(p => (p.actiontype_id == (int)action & p.active == true & p.deletedbycreatordate == null)
