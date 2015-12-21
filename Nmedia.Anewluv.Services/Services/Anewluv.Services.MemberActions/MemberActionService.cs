@@ -634,28 +634,28 @@ namespace Anewluv.Services.MemberActions
 
                             //check  interest first  
                             //if this was a interest being restored just do that part
-                            var existinginterest =  memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, model.actiontypeid.Value)
-                            .Where (r => r.id == model.targetprofileid).FirstOrDefault();
+                            //var existinginterest =  memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, model.actiontypeid.Value)
+                            //.Where (r => r.id == model.targetprofileid).FirstOrDefault();
 
                            
                             //only update undleted peeks to keep the view date fresh
                             //just  update it if we have one already
                             //only change the view date since we changed only that and modify date
-                            if (existinginterest != null && model.actiontypeid ==  (int)actiontypeEnum.Peek)
-                            {
-                                //get the actual action
-                               var action =  db.Repository<action>().Queryable()
-                                   .Where(z=>z.creator_profile_id == model.profileid && z.target_profile_id == existinginterest.id).FirstOrDefault();
+                            //if (existinginterest != null && model.actiontypeid ==  (int)actiontypeEnum.Peek)
+                            //{
+                            //    //get the actual action
+                            //   var action =  db.Repository<action>().Queryable()
+                            //       .Where(z=>z.creator_profile_id == model.profileid && z.target_profile_id == existinginterest.id).FirstOrDefault();
 
-                                //action.deletedbycreatordate = null; ;
-                                action.modificationdate = DateTime.Now;
-                                action.viewdate = DateTime.Now;  //REST view ?
-                                updated = true;
-                                db.Repository<action>().Update(action);
+                            //    //action.deletedbycreatordate = null; ;
+                            //    action.modificationdate = DateTime.Now;
+                            //    action.viewdate = DateTime.Now;  //REST view ?
+                            //    updated = true;
+                            //    db.Repository<action>().Update(action);
 
-                            }
-                            else
-                            {
+                            //}
+                            //else
+                            //{
                                 updated = true;
                                 var newaction = new action();
                                 var newnote = new note();
@@ -704,7 +704,7 @@ namespace Anewluv.Services.MemberActions
 
                                 // activitylist.Add(Api.AnewLuvLogging.CreateActivity(model.profileid.GetValueOrDefault(), currentactivitytype,ctx));}
 
-                            }
+                          //  }
 
                             if (updated)
                               db.SaveChanges();
@@ -749,7 +749,7 @@ namespace Anewluv.Services.MemberActions
         public async Task removemyactionbyprofileid(ProfileModel model)
         {
 
-
+            bool updated = false;
             //update method code  return awa
              var db = _unitOfWorkAsync;
             {
@@ -765,25 +765,28 @@ namespace Anewluv.Services.MemberActions
 
                          //   var targetid = Convert.ToInt32(interestprofile_id);
 
-                            var interest = memberactionsextentions.getmyactionbyprofileidandactiontype(model,db,model.actiontypeid.Value).Where(p => p.id == model.targetprofileid).FirstOrDefault();
+                            var results = db.Repository<action>().getmyactionbyprofileidandactiontype(model.profileid.Value, model.actiontypeid.Value).Where(p => p.id == model.viewingprofileid);
+                            // memberactionsextentions.getmyactionbyprofileidandactiontype(model, db, model.actiontypeid.Value).Where(p => p.id == profileid); //.FirstOrDefault();
                             //update the profile status to 2
 
-                              if (interest != null)
+                            if (results != null)
                             {
-                                //get the actual action
-                               var action =  db.Repository<action>().Queryable()
-                                   .Where(z=>z.creator_profile_id == model.profileid && z.target_profile_id == interest.id).FirstOrDefault();
-
-                                action.deletedbycreatordate = DateTime.Now; ;
-                                action.modificationdate = DateTime.Now;
-                                action.viewdate = null;  //REST view ?
-                                db.Repository<action>().Update(action);
-
+                                //find all new ones to disable
+                                foreach (action action in results)
+                                {
+                                    updated = true;
+                                    //get the actual action                                      
+                                    action.deletedbycreatordate = DateTime.Now; ;
+                                    action.modificationdate = DateTime.Now;
+                                    action.active = false;
+                                    db.Repository<action>().Update(action);
+                                }
                             }
 
-                         
 
-                          var i =db.SaveChanges();
+
+                            if (updated)
+                                db.SaveChangesAsync();
                            // transaction.Commit();
 
                         });
@@ -813,7 +816,7 @@ namespace Anewluv.Services.MemberActions
         }
 
         /// <summary>
-        ///  Update interest with a view     
+        ///  Update action with view , basically profile views ,i.e if somone is your interest and they viewed your profile update this view type if they come from a specific page
         /// </summary 
         public async Task updateotheractionviewstatus(ProfileModel model)
         {
@@ -828,7 +831,6 @@ namespace Anewluv.Services.MemberActions
 
                         var task = Task.Factory.StartNew(() =>
                         {
-
 
                             var interest = memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, model.actiontypeid.Value).Where(p => p.id == model.targetprofileid).FirstOrDefault();
                             //update the profile status to 2
@@ -879,10 +881,10 @@ namespace Anewluv.Services.MemberActions
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can interest u
         ///  //not inmplemented
         /// </summary 
-         public async Task removeothersactionnbyprofileid(ProfileModel model)
+         public async Task removeothersactionbyprofileid(ProfileModel model)
         {
 
-
+             bool updated = false;
             //update method code
              var db = _unitOfWorkAsync;
             {
@@ -898,32 +900,28 @@ namespace Anewluv.Services.MemberActions
                             if ((model.actiontypeid  == (int)actiontypeEnum.Block)) return;
 
 
-                            //  var targetid = Convert.ToInt32(interestprofile_id);
+                            var results = db.Repository<action>().getothersactiontomebyprofileid(model.profileid.Value).Where(p => p.actiontype_id == (int)model.actiontypeid.Value && p.creator_profile_id == model.viewingprofileid ).ToList() ;
+                                 // memberactionsextentions.getmyactionbyprofileidandactiontype(model, db, model.actiontypeid.Value).Where(p => p.id == profileid); //.FirstOrDefault();
+                                 //update the profile status to 2
 
-                            var interest = memberactionsextentions.getotheractionbyprofileidandactiontype(model,db,model.actiontypeid.Value).Where(p => p.id == model.targetprofileid ).FirstOrDefault();
-                            //update the profile status to 2
+                                 if (results != null)
+                                 {
+                                     //find all new ones to disable
+                                     foreach (action action in results)
+                                     {
+                                         updated = true;
+                                         action.deletedbytargetdate = DateTime.Now; ;
+                                         action.modificationdate = DateTime.Now;
+                                         action.active = false;
+                                         db.Repository<action>().Update(action);
 
-                            if (interest != null)
-                            {
-                                //get the actual action
-                                var action = db.Repository<action>().Queryable()
-                                    .Where(z => z.creator_profile_id == interest.id && z.target_profile_id == model.profileid).FirstOrDefault();
-
-                                action.deletedbytargetdate = DateTime.Now; ;
-                                action.modificationdate = DateTime.Now;
-                                action.viewdate = null;  //REST view ?
-                                action.active = false;
-                                db.Repository<action>().Update(action);
-
-                            }
-                           
-                           var i =db.SaveChanges();
-                           // transaction.Commit();
-
-                          //  return true;
+                                     }
+                                 }
+                             
+                             if (updated)
+                            db.SaveChangesAsync();
 
                         });
-
                       await task.ConfigureAwait(false);
 
                        
@@ -1127,26 +1125,29 @@ namespace Anewluv.Services.MemberActions
                              {
 
                               int profileid = Convert.ToInt32(id);
-                              var result = memberactionsextentions.getmyactionbyprofileidandactiontype(model, db, model.actiontypeid.Value).Where(p => p.id == profileid).FirstOrDefault();
+                                 //changed to allow adding constantly new items so we need to reset all the others
+                              //get your actions to this specfic profile ID of this action type
+                              var results = db.Repository<action>().getmyactionbyprofileidandactiontype(model.profileid.Value, model.actiontypeid.Value); // Where(p => p.id == profileid).ToList();
+                             // memberactionsextentions.getmyactionbyprofileidandactiontype(model, db, model.actiontypeid.Value).Where(p => p.id == profileid); //.FirstOrDefault();
                              //update the profile status to 2
 
-                              if (result != null)
+                              if (results != null)
                              {
-                                 updated = true;
-                                 //get the actual action
-                                 var action = db.Repository<action>().Queryable()
-                                     .Where(z => z.creator_profile_id == model.profileid && z.target_profile_id == result.id).FirstOrDefault();
-
-                                 action.deletedbycreatordate = DateTime.Now; ;
-                                 action.modificationdate = DateTime.Now;
-                                 action.viewdate = null;  //REST view ?                                
-                                 db.Repository<action>().Update(action);
-
+                                  //find all new ones to disable
+                                  foreach (action action in results )
+                                  {
+                                      updated = true;
+                                      //get the actual action                                      
+                                      action.deletedbycreatordate = DateTime.Now; ;
+                                      action.modificationdate = DateTime.Now;
+                                      action.active = false;                                
+                                      db.Repository<action>().Update(action);
+                                  }
                              }
 
 
                              if (updated)
-                             db.SaveChanges();
+                             db.SaveChangesAsync();
                              // transaction.Commit();
                              }
                          });
@@ -1179,7 +1180,7 @@ namespace Anewluv.Services.MemberActions
          public async Task removeothersactionnbyprofileidbulk(ProfileModel model)
          {
 
-
+              bool updated = false;
              //update method code
              var db = _unitOfWorkAsync;
              {
@@ -1198,33 +1199,33 @@ namespace Anewluv.Services.MemberActions
                              foreach (string id in model.profileids)
                              {
 
-                                 int profileid = Convert.ToInt32(id);
-                                 //FILTER happens here i.e we get the full list of other actions and finally filter out the profile id here TO DO refacor 
-                                 var result = memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, model.actiontypeid.Value).Where(p => p.id == profileid).FirstOrDefault();
+                                 var otherprofileid =  Convert.ToInt32(id);
+                                 //get all this users matching actions to the 
+                                 var results = db.Repository<action>().getothersactiontomebyprofileid(model.profileid.Value).Where(p => p.actiontype_id == (int)model.actiontypeid.Value && p.creator_profile_id == otherprofileid ).ToList() ;
+                                 // memberactionsextentions.getmyactionbyprofileidandactiontype(model, db, model.actiontypeid.Value).Where(p => p.id == profileid); //.FirstOrDefault();
                                  //update the profile status to 2
 
-                                 if (result != null)
+                                 if (results != null)
                                  {
-                                     //get the actual action
-                                     var action = db.Repository<action>().Queryable()
-                                         .Where(z => z.creator_profile_id == result.id && z.target_profile_id == model.profileid).FirstOrDefault();
+                                     //find all new ones to disable
+                                     foreach (action action in results)
+                                     {
+                                         updated = true;
+                                         action.deletedbytargetdate = DateTime.Now; ;
+                                         action.modificationdate = DateTime.Now;
+                                         action.active = false;
+                                         db.Repository<action>().Update(action);
 
-                                     action.deletedbytargetdate = DateTime.Now; ;
-                                     action.modificationdate = DateTime.Now;
-                                     action.viewdate = null;  //REST view ?
-                                     action.active = false;
-                                     db.Repository<action>().Update(action);
-
+                                     }
                                  }
                              }
-
-                             var i = db.SaveChanges();
+                             if (updated)
+                            db.SaveChangesAsync();
                              // transaction.Commit();
 
                              //  return true;
 
                          });
-
                          await task.ConfigureAwait(false);
 
 

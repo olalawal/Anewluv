@@ -20,30 +20,45 @@ namespace Anewluv.DataExtentionMethods
 
         #region " standard queryable extentions actions to me and actions i made to others i.e whoipeekedat would be actiontype peek and creator would me me"
 
-        public static  IQueryable<action> getmyactionbyprofileidandactiontype(this IRepository<action> repo, int profileid, int action)
+
+        //My actions
+        public static  IQueryable<action> getmyactiveactionsbyprofileidandactiontype(this IRepository<action> repo, int profileid, int action)
         {
             return repo.Query(p => (p.actiontype_id == (int)action & p.active == true & p.deletedbycreatordate == null)
                   && p.creator_profile_id == profileid).Include(z => z.targetprofilemetadata.profile).Select().AsQueryable();
         }
 
-        public static IQueryable<action> getmyactionbyprofileid(this IRepository<action> repo, int profileid)
+        public static IQueryable<action> getallmyactiveactionsbyprofileid(this IRepository<action> repo, int profileid)
         {
             return repo.Query(p => (p.active == true & p.deletedbycreatordate == null)
                   && p.creator_profile_id == profileid).Include(z => z.targetprofilemetadata.profile).Select().AsQueryable();
         }
 
+        public static IQueryable<action> getallmyactionsbyprofileid(this IRepository<action> repo, int profileid)
+        {
+            return repo.Query(p=>p.creator_profile_id == profileid)
+                .Include(z => z.targetprofilemetadata.profile).Select().AsQueryable();
+        }
 
+
+        //others actions 
         //this query should skipp items that were deleted so we can keep track of how many times a member added/removed others
-        public static IQueryable<action> getothersactiontomebyprofileidandactiontype(this IRepository<action> repo, int profileid, int action)
+        public static IQueryable<action> getothersactiveactionstoviewerbyprofileidandactiontype(this IRepository<action> repo, int profileid, int action)
         {
             return repo.Query(p => (p.actiontype_id == (int)action & p.active == true & p.deletedbycreatordate == null)
                    && p.target_profile_id == profileid).Include(z => z.creatorprofilemetadata.profile).Select().AsQueryable();
         }
 
-        public static IQueryable<action> getothersactiontomebyprofileid(this IRepository<action> repo, int profileid)
+        public static IQueryable<action> getallothersactiveactionstoviewerbyprofileid(this IRepository<action> repo, int profileid)
         {
             return repo.Query(p => (p.active == true & p.deletedbycreatordate == null)
                    && p.target_profile_id == profileid).Include(z => z.creatorprofilemetadata.profile).Select().AsQueryable();
+        }
+
+        public static IQueryable<action> getallothersactiontoviewerbyprofileid(this IRepository<action> repo, int profileid)
+        {
+            return repo.Query(p => 
+                    p.target_profile_id == profileid).Include(z => z.creatorprofilemetadata.profile).Select().AsQueryable();
         }
 
         #endregion
