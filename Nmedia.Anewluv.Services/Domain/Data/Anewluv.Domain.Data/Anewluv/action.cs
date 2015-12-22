@@ -14,6 +14,7 @@ namespace Anewluv.Domain.Data
           //  this.targetprofilemetadata = new profilemetadata();
           //  this.creatorprofilemetadata = new profilemetadata();
             this.notes = new List<note>();
+           
         }
 
         [DataMember]  

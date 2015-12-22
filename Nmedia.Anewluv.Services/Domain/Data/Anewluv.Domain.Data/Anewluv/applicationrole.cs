@@ -1,10 +1,12 @@
+using Repository.Pattern.Ef6;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace Anewluv.Domain.Data
 {
-   [DataContract]  public partial class applicationrole
+    [DataContract]
+    public partial class applicationrole : Entity
     {
 
        public applicationrole()

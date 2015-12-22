@@ -29,7 +29,7 @@ namespace Anewluv.DataExtentionMethods
             {
                 //get blocked profiles , and filter any profiles on left or right side, i.e if a member blocked me or i blocked them
                 //var myblocks = db.Repository<action>().getmyactionbyprofileidandactiontype(model.profileid.Value, (int)actiontypeEnum.Block);
-                var otherblocks = db.Repository<action>().getothersactiontomebyprofileidandactiontype(model.profileid.Value, (int)actiontypeEnum.Block);
+                var otherblocks = db.Repository<action>().getothersactiveactionstoviewerbyprofileidandactiontype(model.profileid.Value, (int)actiontypeEnum.Block);
                 //added roles
 
                 IQueryable<mailboxmessagefolder> mailboxmessagefolderlist = repo.Query(z => z.mailboxfolder.profile_id  == model.profileid.Value )
@@ -87,7 +87,7 @@ namespace Anewluv.DataExtentionMethods
             {
                 //TO DO figure out if we will add stuff where the the profile id  blocked members , maybe add to profile visiblity setings
                 //get blocked profiles
-                var otherblocks = db.Repository<action>().getothersactiontomebyprofileidandactiontype(model.profileid.Value, (int)actiontypeEnum.Block);
+                var otherblocks = db.Repository<action>().getothersactiveactionstoviewerbyprofileidandactiontype(model.profileid.Value, (int)actiontypeEnum.Block);
                 
 
 

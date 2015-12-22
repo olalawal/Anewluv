@@ -89,7 +89,8 @@ namespace Anewluv.Domain.Data.ViewModels
         //acdded action to the body
         [DataMember]
         public int? actiontypeid { get; set; }
-        
+        [DataMember]
+        public bool? unviewedactions { get; set; }
   
 
 

@@ -1173,7 +1173,7 @@ namespace Anewluv.Services.Mapping
 
 
                         //TO DO add code to filter out blocked members
-                        var otherblocks = db.Repository<action>().getothersactiontomebyprofileidandactiontype(model.profile_id, (int)actiontypeEnum.Block);
+                        var otherblocks = db.Repository<action>().getothersactiveactionstoviewerbyprofileidandactiontype(model.profile_id, (int)actiontypeEnum.Block);
                         //mailboxmessagefolderlist = (from m in mailboxmessagefolderlist.Where(a => a.mailboxmessage.sender_id == model.profileid.Value)
                         //                           where (!otherblocks.Any(f => f.target_profile_id != m.mailboxmessage.sender_id))
                         //                           select m).AsQueryable();     
@@ -1383,7 +1383,7 @@ namespace Anewluv.Services.Mapping
                         // var photostest = _datingcontext.profiles.Where(p => (p.profilemetadata.photos.Any(z => z.photostatus != null && z.photostatus.id != (int)photostatusEnum.Gallery)));
 
                         //TO DO add code to filter out blocked members
-                        var otherblocks = db.Repository<action>().getothersactiontomebyprofileidandactiontype(model.profile_id, (int)actiontypeEnum.Block);
+                        var otherblocks = db.Repository<action>().getothersactiveactionstoviewerbyprofileidandactiontype(model.profile_id, (int)actiontypeEnum.Block);
                         //mailboxmessagefolderlist = (from m in mailboxmessagefolderlist.Where(a => a.mailboxmessage.sender_id == model.profileid.Value)
                         //                           where (!otherblocks.Any(f => f.target_profile_id != m.mailboxmessage.sender_id))
                         //                           select m).AsQueryable();   
@@ -1979,7 +1979,7 @@ namespace Anewluv.Services.Mapping
 
 
                         //TO DO add code to filter out blocked members
-                        var otherblocks = db.Repository<action>().getothersactiontomebyprofileidandactiontype(model.profileid.Value, (int)actiontypeEnum.Block);
+                        var otherblocks = db.Repository<action>().getothersactiveactionstoviewerbyprofileidandactiontype(model.profileid.Value, (int)actiontypeEnum.Block);
                         //mailboxmessagefolderlist = (from m in mailboxmessagefolderlist.Where(a => a.mailboxmessage.sender_id == model.profileid.Value)
                         //                           where (!otherblocks.Any(f => f.target_profile_id != m.mailboxmessage.sender_id))
                         //                           select m).AsQueryable();   
