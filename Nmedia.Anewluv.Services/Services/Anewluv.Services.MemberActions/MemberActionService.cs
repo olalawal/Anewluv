@@ -155,7 +155,7 @@ namespace Anewluv.Services.MemberActions
                  {
 
                      //return memberactionsextentions.getmyactionbyprofileidandactiontype(model, db, model.actiontypeid.Value).Count();
-                     return db.Repository<action>().getmyactiveactionsbyprofileidandactiontype(model.profileid.Value, model.actiontypeid.Value).Count();
+                     return db.Repository<action>().getmyactionsbyprofileidandactiontype(model.profileid.Value, model.actiontypeid.Value).Select(f => f.target_profile_id).Distinct().Count();
 
                  });
 
@@ -183,7 +183,7 @@ namespace Anewluv.Services.MemberActions
 
         //count methods first
         /// <summary>
-        /// count all total interests
+        /// count all total interests , this is distinct count , for premuim we can do non distinct
         /// </summary>       
         public async Task<int> getothersactioncount(ProfileModel model)
         {
@@ -193,11 +193,11 @@ namespace Anewluv.Services.MemberActions
          {
              try
              {
-
+                 //distinct counts 
                  var task = Task.Factory.StartNew(() =>
                  {
 
-                     return db.Repository<action>().getothersactiveactionstoviewerbyprofileidandactiontype(model.profileid.Value, model.actiontypeid.Value).Count();
+                     return db.Repository<action>().getothersactionsbyprofileidandactiontype(model.profileid.Value, model.actiontypeid.Value).Select(f=>f.creator_profile_id).Distinct().Count();
                  });
 
                 return await task.ConfigureAwait(false);
@@ -232,7 +232,7 @@ namespace Anewluv.Services.MemberActions
              {
                  var task = Task.Factory.StartNew(() =>
                  {
-                     return db.Repository<action>().getothersactiveactionstoviewerbyprofileidandactiontype(model.profileid.Value, model.actiontypeid.Value).Where(p => p.viewdate != null).Count();    
+                     return db.Repository<action>().getothersactionsbyprofileidandactiontype(model.profileid.Value, model.actiontypeid.Value).Where(p => p.viewdate != null).Select(f=>f.creator_profile_id).Distinct().Count();    
 
                  });
 
@@ -266,7 +266,7 @@ namespace Anewluv.Services.MemberActions
         public async Task<SearchResultsViewModel> getmyaction(ProfileModel model)
         {
 
-            ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+            
            
              var db = _unitOfWorkAsync;
             {
@@ -291,8 +291,8 @@ namespace Anewluv.Services.MemberActions
                         int? pageint = model.page;
                         int? numberperpageint = model.numberperpage;
 
-                        bool allowpaging = (interests.Count >= (pageint * numberperpageint) ? true : false);
-                        var pageData = pageint > 1 & allowpaging ?
+                        bool allowpaging = (interests.Count > numberperpageint) ? true : false;
+                        var pageData = pageint >= 1 & allowpaging ?
                             new PaginatedList<MemberSearchViewModel>().GetCurrentPages(interests, pageint ?? 1, numberperpageint ?? 4) : interests.Take(numberperpageint.GetValueOrDefault());
                         //this.AddRange(pageData.ToList());
                         // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
@@ -378,8 +378,8 @@ namespace Anewluv.Services.MemberActions
                      int? pageint = Convert.ToInt32(model.page);
                      int? numberperpageint = Convert.ToInt32(model.numberperpage);
 
-                     bool allowpaging = (whoisinterestedinme.Count >= (pageint * numberperpageint) ? true : false);
-                     var pageData = pageint > 1 & allowpaging ?
+                     bool allowpaging = (whoisinterestedinme.Count >  numberperpageint) ? true : false;
+                     var pageData = pageint >= 1 & allowpaging ?
                          new PaginatedList<MemberSearchViewModel>().GetCurrentPages(whoisinterestedinme, pageint ?? 1, numberperpageint ?? 4) : whoisinterestedinme.Take(numberperpageint.GetValueOrDefault());
                      //this.AddRange(pageData.ToList());
                      // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
@@ -452,8 +452,8 @@ namespace Anewluv.Services.MemberActions
 
 
 
-                     bool allowpaging = (whoisinterestedinmenew.Count >= (pageint * numberperpageint) ? true : false);
-                     var pageData = pageint > 1 & allowpaging ?
+                     bool allowpaging = (whoisinterestedinmenew.Count > numberperpageint) ? true : false;
+                     var pageData = pageint >= 1 & allowpaging ?
                          new PaginatedList<MemberSearchViewModel>().GetCurrentPages(whoisinterestedinmenew, pageint ?? 1, numberperpageint ?? 4) : whoisinterestedinmenew.Take(numberperpageint.GetValueOrDefault());
                      //this.AddRange(pageData.ToList());
                      // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
@@ -520,8 +520,8 @@ namespace Anewluv.Services.MemberActions
                      if (model.page == null || model.page == 0) model.page = 1;
                      if (model.numberperpage == null || model.numberperpage == 0) model.numberperpage = 4;
 
-                     bool allowpaging = (source.Count() >= (model.page * model.numberperpage) ? true : false);
-                     var pageData = model.page > 1 & allowpaging ?
+                     bool allowpaging = (source.Count() >  model.numberperpage) ? true : false;
+                     var pageData = model.page >= 1 & allowpaging ?
                          new PaginatedList<MemberSearchViewModel>().GetCurrentPages(source.ToList(), model.page ?? 1, model.numberperpage ?? 20) : source.Take(model.numberperpage.GetValueOrDefault());
 
                      //TO do pagge this
@@ -568,7 +568,7 @@ namespace Anewluv.Services.MemberActions
                  var task = Task.Factory.StartNew(() =>
                  {
 
-                  return db.Repository<action>().getmyactiveactionsbyprofileidandactiontype(model.profileid.GetValueOrDefault(),model.actiontypeid.Value) 
+                  return db.Repository<action>().getmyactionsbyprofileidandactiontype(model.profileid.GetValueOrDefault(),model.actiontypeid.Value) 
                          .Any(r => r.id == model.targetprofileid);
 
                  });
@@ -752,7 +752,7 @@ namespace Anewluv.Services.MemberActions
 
                          //   var targetid = Convert.ToInt32(interestprofile_id);
 
-                            var results = db.Repository<action>().getmyactiveactionsbyprofileidandactiontype(model.profileid.Value, model.actiontypeid.Value).Where(p => p.creator_profile_id == model.targetprofileid);
+                            var results = db.Repository<action>().getmyactionsbyprofileidandactiontype(model.profileid.Value, model.actiontypeid.Value).Where(p => p.creator_profile_id == model.targetprofileid);
                             // memberactionsextentions.getmyactionbyprofileidandactiontype(model, db, model.actiontypeid.Value).Where(p => p.id == profileid); //.FirstOrDefault();
                             //update the profile status to 2
 
@@ -819,7 +819,7 @@ namespace Anewluv.Services.MemberActions
                         var task = Task.Factory.StartNew(() =>
                         {
 
-                            var action =  db.Repository<action>().getothersactiveactionstoviewerbyprofileidandactiontype(model.profileid.Value,model.actiontypeid.Value).Where(p => p.target_profile_id == model.targetprofileid.Value).FirstOrDefault();
+                            var action =  db.Repository<action>().getothersactionsbyprofileidandactiontype(model.profileid.Value,model.actiontypeid.Value).Where(p => p.target_profile_id == model.targetprofileid.Value).FirstOrDefault();
                             //update the profile status to 2
 
                             //if (interest != null)
@@ -887,7 +887,7 @@ namespace Anewluv.Services.MemberActions
                             if ((model.actiontypeid  == (int)actiontypeEnum.Block)) return;
 
 
-                            var results = db.Repository<action>().getothersactiveactionstoviewerbyprofileidandactiontype(model.profileid.Value,(int)model.actiontypeid.Value).Where(p=>p.creator_profile_id == model.targetprofileid ).ToList();
+                            var results = db.Repository<action>().getothersactionsbyprofileidandactiontype(model.profileid.Value,(int)model.actiontypeid.Value).Where(p=>p.creator_profile_id == model.targetprofileid ).ToList();
                                  // memberactionsextentions.getmyactionbyprofileidandactiontype(model, db, model.actiontypeid.Value).Where(p => p.id == profileid); //.FirstOrDefault();
                                  //update the profile status to 2
 
@@ -1040,7 +1040,7 @@ namespace Anewluv.Services.MemberActions
                               int profileid = Convert.ToInt32(id);
                                  //changed to allow adding constantly new items so we need to reset all the others
                               //get your actions to this specfic profile ID of this action type
-                              var results = db.Repository<action>().getmyactiveactionsbyprofileidandactiontype(model.profileid.Value, model.actiontypeid.Value).Where(p => p.target_profile_id == profileid).ToList();
+                              var results = db.Repository<action>().getmyactionsbyprofileidandactiontype(model.profileid.Value, model.actiontypeid.Value).Where(p => p.target_profile_id == profileid).ToList();
 
                              // memberactionsextentions.getmyactionbyprofileidandactiontype(model, db, model.actiontypeid.Value).Where(p => p.id == profileid); //.FirstOrDefault();
                              //update the profile status to 2
@@ -1119,7 +1119,7 @@ namespace Anewluv.Services.MemberActions
 
                                  var otherprofileid =  Convert.ToInt32(id);
                                  //get all this users matching actions to the 
-                                 var results = db.Repository<action>().getothersactiveactionstoviewerbyprofileidandactiontype(model.profileid.Value,model.actiontypeid.Value).Where(p => p.creator_profile_id == otherprofileid ).ToList() ;
+                                 var results = db.Repository<action>().getothersactionsbyprofileidandactiontype(model.profileid.Value,model.actiontypeid.Value).Where(p => p.creator_profile_id == otherprofileid ).ToList() ;
 
                                  // memberactionsextentions.getmyactionbyprofileidandactiontype(model, db, model.actiontypeid.Value).Where(p => p.id == profileid); //.FirstOrDefault();
                                  //update the profile status to 2
@@ -1201,22 +1201,22 @@ namespace Anewluv.Services.MemberActions
                     {
 
                         //interest
-                        MemberActions.whoiaminterestedintcount = db.Repository<action>().getmyactiveactionsbyprofileidandactiontype(model.profileid.Value,(int)actiontypeEnum.Interest).Select(f=>f.target_profile_id).Distinct().Count();
-                        MemberActions.interestcount = db.Repository<action>().getothersactiveactionstoviewerbyprofileidandactiontype(model.profileid.Value, (int)actiontypeEnum.Interest).Count();
-                        MemberActions.interestnewcount = db.Repository<action>().getothersactiveactionstoviewerbyprofileidandactiontype(model.profileid.Value, (int)actiontypeEnum.Interest).Where(z => z.viewdate == null).Count();
+                        MemberActions.whoiaminterestedintcount = db.Repository<action>().getmyactionsbyprofileidandactiontype(model.profileid.Value,(int)actiontypeEnum.Interest).Select(f=>f.target_profile_id).Distinct().Count();
+                        MemberActions.interestcount = db.Repository<action>().getothersactionsbyprofileidandactiontype(model.profileid.Value, (int)actiontypeEnum.Interest).Count();
+                        MemberActions.interestnewcount = db.Repository<action>().getothersactionsbyprofileidandactiontype(model.profileid.Value, (int)actiontypeEnum.Interest).Where(z => z.viewdate == null).Count();
 
                         //peek
-                        MemberActions.whoipeekedatcount = db.Repository<action>().getmyactiveactionsbyprofileidandactiontype(model.profileid.Value, (int)actiontypeEnum.Peek).Select(f => f.target_profile_id).Distinct().Count();
-                        MemberActions.peekcount = db.Repository<action>().getothersactiveactionstoviewerbyprofileidandactiontype(model.profileid.Value, (int)actiontypeEnum.Peek).Count();
-                        MemberActions.peeknewcount = db.Repository<action>().getothersactiveactionstoviewerbyprofileidandactiontype(model.profileid.Value, (int)actiontypeEnum.Peek).Where(z => z.viewdate == null).Count();
+                        MemberActions.whoipeekedatcount = db.Repository<action>().getmyactionsbyprofileidandactiontype(model.profileid.Value, (int)actiontypeEnum.Peek).Select(f => f.target_profile_id).Distinct().Count();
+                        MemberActions.peekcount = db.Repository<action>().getothersactionsbyprofileidandactiontype(model.profileid.Value, (int)actiontypeEnum.Peek).Count();
+                        MemberActions.peeknewcount = db.Repository<action>().getothersactionsbyprofileidandactiontype(model.profileid.Value, (int)actiontypeEnum.Peek).Where(z => z.viewdate == null).Count();
 
                         //like
-                        MemberActions.whoilikecount = db.Repository<action>().getmyactiveactionsbyprofileidandactiontype(model.profileid.Value, (int)actiontypeEnum.Like).Select(f => f.target_profile_id).Distinct().Count();
-                        MemberActions.likecount = db.Repository<action>().getothersactiveactionstoviewerbyprofileidandactiontype(model.profileid.Value, (int)actiontypeEnum.Like).Count();
-                        MemberActions.likenewcount = db.Repository<action>().getothersactiveactionstoviewerbyprofileidandactiontype(model.profileid.Value, (int)actiontypeEnum.Like).Where(z=>z.viewdate ==null).Count();
+                        MemberActions.whoilikecount = db.Repository<action>().getmyactionsbyprofileidandactiontype(model.profileid.Value, (int)actiontypeEnum.Like).Select(f => f.target_profile_id).Distinct().Count();
+                        MemberActions.likecount = db.Repository<action>().getothersactionsbyprofileidandactiontype(model.profileid.Value, (int)actiontypeEnum.Like).Count();
+                        MemberActions.likenewcount = db.Repository<action>().getothersactionsbyprofileidandactiontype(model.profileid.Value, (int)actiontypeEnum.Like).Where(z=>z.viewdate ==null).Count();
 
                         //block
-                        MemberActions.blockcount = db.Repository<action>().getothersactiveactionstoviewerbyprofileidandactiontype(model.profileid.Value, (int)actiontypeEnum.Block).Select(f => f.target_profile_id).Distinct().Count();
+                        MemberActions.blockcount = db.Repository<action>().getothersactionsbyprofileidandactiontype(model.profileid.Value, (int)actiontypeEnum.Block).Select(f => f.target_profile_id).Distinct().Count();
                
 
                         //TO do add this to the mail service as a separate call

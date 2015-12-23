@@ -149,9 +149,9 @@ namespace Anewluv.DataExtentionMethods
 
                 
                 //get the viwers actions to this member first :
-                var vieweractionstoprofile = db.Repository<action>().getallmyactiveactionsbyprofileid(viewerprofileid).Where(z => z.target_profile_id == profileid).ToList();
+                var vieweractionstoprofile = db.Repository<action>().getmyactionsbyprofileid(viewerprofileid).Where(z => z.target_profile_id == profileid).ToList();
                 //now get the actions that user has performed to the viewer
-                var profileactionstoviewer = db.Repository<action>().getallothersactiontoviewerbyprofileid(profileid).Where(z => z.target_profile_id == viewerprofileid).ToList();
+                var profileactionstoviewer = db.Repository<action>().getothersctionsbyprofileid(profileid).Where(z => z.target_profile_id == viewerprofileid).ToList();
 
 
                 //Thier Peeeks
