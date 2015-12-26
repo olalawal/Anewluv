@@ -75,6 +75,7 @@ namespace Anewluv.Services.Messaging
         
         public async Task<MailFoldersViewModel> getmailfolderdetails(MailModel model)
            {
+               OperationContext ctx = OperationContext.Current;
                var task = Task.Factory.StartNew(() =>
                {
 
@@ -82,7 +83,7 @@ namespace Anewluv.Services.Messaging
                    var repo = _unitOfWorkAsync.Repository<mailboxfolder>();
                    var dd = mailextentions.getmailfolderdetails(repo, model,_unitOfWorkAsync);
 
-                 var activitylist = new List<ActivityModel>(); OperationContext ctx = OperationContext.Current;
+                 var activitylist = new List<ActivityModel>(); 
                  activitylist.Add(Api.AnewLuvLogging.CreateActivity(model.profileid.Value, null, (int)activitytypeEnum.viewedmail, ctx)); 
                     Api.AnewLuvLogging.LogProfileActivities(activitylist);
 
@@ -95,6 +96,7 @@ namespace Anewluv.Services.Messaging
           
        public async Task<MailSearchResultsViewModel> getmailfilteredandpaged(MailModel model)
             {
+                OperationContext ctx = OperationContext.Current;
                 var task = Task.Factory.StartNew(() =>
                 {
                     var repo = _unitOfWorkAsync.Repository<mailboxmessagefolder>();
@@ -103,7 +105,7 @@ namespace Anewluv.Services.Messaging
 
                   
 
-                    var activitylist = new List<ActivityModel>(); OperationContext ctx = OperationContext.Current;
+                    var activitylist = new List<ActivityModel>();
                     activitylist.Add(Api.AnewLuvLogging.CreateActivity(model.profileid.Value, null, (int)activitytypeEnum.viewedmail, ctx)); 
                     Api.AnewLuvLogging.LogProfileActivities(activitylist);
                     
@@ -117,6 +119,7 @@ namespace Anewluv.Services.Messaging
        //TO DO create the conversation list all mails in order 
        public async Task<MailSearchResultsViewModel> getorderedconversations(MailModel model)
        {
+           OperationContext ctx = OperationContext.Current;
            var task = Task.Factory.StartNew(() =>
            {
                var repo = _unitOfWorkAsync.Repository<mailboxmessagefolder>();
@@ -124,7 +127,7 @@ namespace Anewluv.Services.Messaging
 
 
                //Log the activity for history
-               var activitylist = new List<ActivityModel>(); OperationContext ctx = OperationContext.Current;
+               var activitylist = new List<ActivityModel>(); 
                activitylist.Add(Api.AnewLuvLogging.CreateActivity(model.profileid.Value, null, (int)activitytypeEnum.viewedmail, ctx));
                Api.AnewLuvLogging.LogProfileActivities(activitylist);
 
@@ -142,6 +145,7 @@ namespace Anewluv.Services.Messaging
         {
 
             //do not audit on adds
+            OperationContext ctx = OperationContext.Current;
             AnewluvMessages AnewluvMessages = new AnewluvMessages();
             //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
             {
@@ -150,10 +154,26 @@ namespace Anewluv.Services.Messaging
                 {
                     var task = Task.Factory.StartNew(() =>
                     {
-                      
+                        mailboxfolder mailboxfolder = new mailboxfolder();
                         // get the folderr details
-                        mailboxfolder mailboxfolder = _unitOfWorkAsync.Repository<mailboxfolder>().Queryable().Where(u => u.id == model.mailboxfolderid && u.profile_id == model.profileid.Value).FirstOrDefault();
-                        mailboxmessage mailboxmessage = _unitOfWorkAsync.Repository<mailboxmessage>().Queryable().Where(u => u.id == model.mailboxfolderid).FirstOrDefault();
+                        if (model.mailboxfolderid != null && model.mailboxfolderid != 0)
+                        {
+                             mailboxfolder = _unitOfWorkAsync.Repository<mailboxfolder>().Queryable().Where(u => u.id == model.mailboxfolderid && u.profile_id == model.profileid.Value).FirstOrDefault();
+                   
+                        }
+                        else if (model.mailboxfoldername != "")
+                        {
+                             mailboxfolder = _unitOfWorkAsync.Repository<mailboxfolder>().Queryable().Where(u => u.displayname.ToUpper() == model.mailboxfoldername.ToUpper() && u.profile_id == model.profileid.Value).FirstOrDefault();
+                   
+                        }
+                        else
+                        {
+                            AnewluvMessages.errormessages.Add("No mailbox folder ID or folder name to update");
+                            return AnewluvMessages;
+                        }
+
+
+                        mailboxmessage mailboxmessage = _unitOfWorkAsync.Repository<mailboxmessage>().Queryable().Where(u => u.id == model.mailboxmessageid).FirstOrDefault();
 
 
                         if (mailboxfolder != null && mailboxmessage != null)
@@ -165,7 +185,7 @@ namespace Anewluv.Services.Messaging
                             {
                                 bool messageupdated = false;
 
-                                if(model.readmessage !=null)
+                                if(model.readmessage !=null )
                                 {
                                     mailboxmessagefolder.read =model.readmessage ;
                                     mailboxmessagefolder.readdate = DateTime.Now;
@@ -209,7 +229,7 @@ namespace Anewluv.Services.Messaging
 
 
                         //Log the activity for history
-                        var activitylist = new List<ActivityModel>(); OperationContext ctx = OperationContext.Current;
+                        var activitylist = new List<ActivityModel>(); 
                         activitylist.Add(Api.AnewLuvLogging.CreateActivity(model.profileid.Value, null, (int)activitytypeEnum.updateprofile, ctx));
                         Api.AnewLuvLogging.LogProfileActivities(activitylist);
 
@@ -248,7 +268,7 @@ namespace Anewluv.Services.Messaging
 
                         try
                         {
-
+                            OperationContext ctx = OperationContext.Current;
 
                             var task = Task.Factory.StartNew(() =>
                             {
@@ -291,15 +311,15 @@ namespace Anewluv.Services.Messaging
                                            mailboxfolder_id = sendermailboxfolder.id
 
                                        };
-                                       _unitOfWorkAsync.Repository<mailboxmessagefolder>().Insert(newmailboxmessagesfolder);
+                                       _unitOfWorkAsync.Repository<mailboxmessagefolder>().InsertOrUpdateGraph(newmailboxmessagesfolder);
                                         //add it to recipients inbox
                                        newmailboxmessagesfolder = new mailboxmessagefolder
                                        {
                                            mailboxmessage_id = newmailboxmessage.id,
                                            mailboxfolder_id = recipientmailboxfolder.id
 
-                                       };                                     
-                                       _unitOfWorkAsync.Repository<mailboxmessagefolder>().Insert(newmailboxmessagesfolder);
+                                       };
+                                       _unitOfWorkAsync.Repository<mailboxmessagefolder>().InsertOrUpdateGraph(newmailboxmessagesfolder);
 
                                        // Update database
                                        // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
@@ -342,7 +362,7 @@ namespace Anewluv.Services.Messaging
 
 
                                     //Log the activity for history
-                                     var activitylist = new List<ActivityModel>(); OperationContext ctx = OperationContext.Current;
+                                     var activitylist = new List<ActivityModel>();
                                      activitylist.Add(Api.AnewLuvLogging.CreateActivity(model.profileid.Value, null, (int)activitytypeEnum.sentmail, ctx));
                                      Api.AnewLuvLogging.LogProfileActivities(activitylist);
                                 
@@ -518,6 +538,7 @@ namespace Anewluv.Services.Messaging
             {
                 //do not audit on adds
                 AnewluvMessages AnewluvMessages = new AnewluvMessages();
+                OperationContext ctx = OperationContext.Current;
                 //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
                 {
 
@@ -563,7 +584,7 @@ namespace Anewluv.Services.Messaging
                             
 
                             //Log the activity for history
-                            var activitylist = new List<ActivityModel>(); OperationContext ctx = OperationContext.Current;
+                            var activitylist = new List<ActivityModel>(); 
                             activitylist.Add(Api.AnewLuvLogging.CreateActivity(model.profileid.Value, null, (int)activitytypeEnum.updateprofile, ctx));
                             Api.AnewLuvLogging.LogProfileActivities(activitylist);
 
@@ -601,7 +622,7 @@ namespace Anewluv.Services.Messaging
 
                     try
                     {
-
+                        OperationContext ctx = OperationContext.Current;
 
                         var task = Task.Factory.StartNew(() =>
                         {
@@ -651,7 +672,7 @@ namespace Anewluv.Services.Messaging
 
 
                             //Log the activity for history
-                            var activitylist = new List<ActivityModel>(); OperationContext ctx = OperationContext.Current;
+                            var activitylist = new List<ActivityModel>();
                             activitylist.Add(Api.AnewLuvLogging.CreateActivity(model.profileid.Value, null, (int)activitytypeEnum.updateprofile, ctx));
                             Api.AnewLuvLogging.LogProfileActivities(activitylist);
 

@@ -2236,8 +2236,8 @@ namespace Anewluv.Services.Mapping
                 if (page == null || page == 0) page = 1;
                 if (numberperpage == null || numberperpage == 0) numberperpage = 4;
 
-                bool allowpaging = (source.Count() >= (page * numberperpage) ? true : false);
-                var pageData = page > 1 & allowpaging ?
+                bool allowpaging = (source.Count() >  numberperpage ? true : false);
+                var pageData = page >= 1 & allowpaging ?
                     new PaginatedList<MemberSearchViewModel>().GetCurrentPages(source.ToList(), page ?? 1, numberperpage ?? 20) : source.Take(numberperpage.GetValueOrDefault());
 
 

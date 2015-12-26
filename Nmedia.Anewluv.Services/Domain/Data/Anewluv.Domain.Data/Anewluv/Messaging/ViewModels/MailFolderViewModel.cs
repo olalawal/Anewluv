@@ -20,6 +20,8 @@ namespace Anewluv.Domain.Data.ViewModels
          [DataMember]
          public int? undreadmessagecount { get; set; }
          [DataMember]
+         public int? readmessagecount { get; set; }
+         [DataMember]
          public bool active { get; set; }
     }
 }

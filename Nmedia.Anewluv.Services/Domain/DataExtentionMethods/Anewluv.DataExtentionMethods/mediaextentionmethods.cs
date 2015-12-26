@@ -602,8 +602,8 @@ namespace Anewluv.DataExtentionMethods
 
             if (page == null || page == 0) page = 1;
             if (numberperpage == null || numberperpage == 0) numberperpage = 4;
-            bool allowpaging = (photomodel.Count() >= (page * numberperpage) ? true : false);
-            var pageData = page > 1 & allowpaging ?
+            bool allowpaging = (photomodel.Count() > numberperpage ? true : false);
+            var pageData = page >= 1 & allowpaging ?
                 new PaginatedList<PhotoViewModel>().GetCurrentPages(photomodel.ToList(), page ?? 1, numberperpage ?? 20) : photomodel.ToList().Take(numberperpage.Value);
             return new PhotoSearchResultsViewModel { results = pageData.ToList(), totalresults = pageData.Count() };
 
@@ -642,8 +642,8 @@ namespace Anewluv.DataExtentionMethods
 
             if (page == null || page == 0) page = 1;
             if (numberperpage == null || numberperpage == 0) numberperpage = 4;
-            bool allowpaging = (photomodel.Count() >= (page * numberperpage) ? true : false);
-            var pageData = page > 1 & allowpaging ?
+            bool allowpaging = (photomodel.Count() > numberperpage ? true : false);
+            var pageData = page >= 1 & allowpaging ?
                 new PaginatedList<PhotoViewModel>().GetCurrentPages(photomodel.ToList(), page ?? 1, numberperpage ?? 20) : photomodel.ToList().Take(numberperpage.Value);
             return new PhotoSearchResultsViewModel { results = pageData.ToList(), totalresults = pageData.Count() };
 
@@ -669,8 +669,8 @@ namespace Anewluv.DataExtentionMethods
 
             if (page == null || page == 0) page = 1;
             if (numberperpage == null || numberperpage == 0) numberperpage = 4;
-            bool allowpaging = (photomodel.Count() >= (page * numberperpage) ? true : false);
-            var pageData = page > 1 & allowpaging ?
+            bool allowpaging = (photomodel.Count() >  numberperpage ? true : false);
+            var pageData = page >= 1 & allowpaging ?
                 new PaginatedList<PhotoViewModel>().GetCurrentPages(photomodel.ToList(), page ?? 1, numberperpage ?? 20) : photomodel.ToList().Take(numberperpage.Value);
             return new PhotoSearchResultsViewModel { results = pageData.ToList(), totalresults = pageData.Count() };
 
@@ -685,8 +685,8 @@ namespace Anewluv.DataExtentionMethods
             //handle zero and null paging values
             if (page == null || page == 0) page = 1;
             if (numberperpage == null || numberperpage == 0) numberperpage = 4;
-            bool allowpaging = (source.Count() >= (page * numberperpage) ? true : false);
-            var pageData = page > 1 & allowpaging ?
+            bool allowpaging = (source.Count() >=  numberperpage ? true : false);
+            var pageData = page >= 1 & allowpaging ?
                 new PaginatedList<photoconversion>().GetCurrentPages(source.ToList(), page ?? 1, numberperpage ?? 20) : source.Take(numberperpage.GetValueOrDefault());
 
 

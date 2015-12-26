@@ -48,10 +48,10 @@ namespace Anewluv.DataExtentionMethods
                 //to do roles ? allowing what photos they can view i.e the high rez stuff or more than 2 -3 etc
 
                 //folder id
-                if (model.mailboxfolderid != null)
+                if (model.mailboxfolderid != null )
                     mailboxmessagefolderlist = mailboxmessagefolderlist.Where(p => p.mailboxfolder.id == model.mailboxfolderid.Value);
                 //folder name filter
-                if (model.mailboxfoldername != null)
+                if (model.mailboxfoldername != null && model.mailboxfoldername != "")
                     mailboxmessagefolderlist = mailboxmessagefolderlist.Where(p => p.mailboxfolder.displayname == model.mailboxfoldername);
                 
                    //filter out blockedp messages here
@@ -109,7 +109,7 @@ namespace Anewluv.DataExtentionMethods
                 if (model.mailboxfolderid != null)
                     mailboxfolderlist = mailboxfolderlist.Where(a => a.mailboxmessagefolders.Any((p => p.mailboxfolder.id == model.mailboxfolderid)));
                 //folder name filter
-                if (model.mailboxfoldername != null)
+                if (model.mailboxfoldername != null && model.mailboxfoldername != "")
                     mailboxfolderlist = mailboxfolderlist.Where(a => a.mailboxmessagefolders.Any((p => p.mailboxfolder.displayname == model.mailboxfoldername)));
 
                 return mailboxfolderlist;
@@ -128,12 +128,19 @@ namespace Anewluv.DataExtentionMethods
 
         //TO DO Premuim roles get all
         //TO DO needs code to check roles to see how many photos can be viewd etc
+        /// <summary>
+        /// gets the mail for a folder using the folder id or folder name
+        /// </summary>
+        /// <param name="repo"></param>
+        /// <param name="model"></param>
+        /// <param name="db"></param>
+        /// <returns></returns>
         public static MailSearchResultsViewModel getmailfilteredandpaged(this IRepository<mailboxmessagefolder> repo, MailModel model,IUnitOfWorkAsync db)
         {
 
             try
             {
-                var dd = filtermailboxmessagefolders(repo, model,db);
+                var dd = filtermailboxmessagefolders(repo, model,db).OrderByDescending(z=>z.mailboxmessage.creationdate).ThenBy(f=>f.read );
                 return pagemail(dd.ToList(), model.page, model.numberperpage, db);
 
 
@@ -154,16 +161,35 @@ namespace Anewluv.DataExtentionMethods
 
             try
             {
-                var folders = filtermailboxfolders(repo, model,db).Select(p => new MailFolderViewModel
+                var dd = new MailFoldersViewModel();
+
+                var d2 = filtermailboxfolders(repo, model, db).ToList();
+
+                foreach (mailboxfolder folder in d2)
                 {
-                    active = p.active ==1? true:false, folderid = p.id, foldername = p.displayname ,
-                    totalmessagecount = p.mailboxmessagefolders.Select(z=>z.mailboxmessage).Count(),
-                    undreadmessagecount = p.mailboxmessagefolders.Select(z => z.mailboxmessage.mailboxmessagefolders.Where(m=>m.readdate == null)).Count()
-                }).ToList();
+                    var viewmodel = new MailFolderViewModel();
+                    viewmodel.totalmessagecount = folder.mailboxmessagefolders.Count();
+                    viewmodel.undreadmessagecount = folder.mailboxmessagefolders.Where(m => m.readdate == null).Count();
+                    viewmodel.active = folder.active == 1 ? true : false;
+                    viewmodel.readmessagecount = folder.mailboxmessagefolders.Where(m => m.readdate != null).Count();
+                    viewmodel.folderid = folder.id;
+                    viewmodel.foldername = folder.displayname;
+                    dd.folders.Add(viewmodel);
+                }
 
-                return new MailFoldersViewModel { folders = folders };
 
 
+                //var folders = filtermailboxfolders(repo, model,db).Select(p => new MailFolderViewModel
+                //{
+                //    active = p.active ==1? true:false, folderid = p.id, foldername = p.displayname ,
+                //    totalmessagecount = p.mailboxmessagefolders.Select(z=>z.mailboxmessage).Count(), 
+                //    readmessagecount = p.mailboxmessagefolders.Where(m=>m.read == true).Count(),
+                //    undreadmessagecount = p.mailboxmessagefolders.Where(m=>m.read == false ).Count()
+                //}).ToList();
+
+                //return new MailFoldersViewModel { folders = folders };
+
+                return dd;
             }
             catch (Exception ex)
             {
@@ -188,9 +214,9 @@ namespace Anewluv.DataExtentionMethods
                 //handle zero and null paging values
                 if (page == null || page == 0) page = 1;
                 if (numberperpage == null || numberperpage == 0) numberperpage = 4;
-                bool allowpaging = (source.Count() >= (page * numberperpage) ? true : false);
-                var pageData = page > 1 & allowpaging ?
-                    new PaginatedList<mailboxmessagefolder>().GetCurrentPages(source.ToList(), page ?? 1, numberperpage ?? 20) : source.Take(numberperpage.GetValueOrDefault());
+                bool allowpaging = (source.Count() > numberperpage ? true : false);
+                var pageData = page >= 1 & allowpaging ?
+                    new PaginatedList<mailboxmessagefolder>().GetCurrentPages(source.ToList(), page ?? 1, numberperpage ?? 5) : source.Take(numberperpage.GetValueOrDefault());
 
 
                 var results = pageData.Select(p => new MailViewModel
@@ -221,6 +247,7 @@ namespace Anewluv.DataExtentionMethods
                     recipientcountry = p.mailboxmessage.recipientprofilemetadata.profile.profiledata.countryid.ToString(),
 
                     creationdate = p.mailboxmessage.creationdate,
+                    readdate = p.readdate,
                     read = p.read,
                     replieddate = p.replieddate,
                     sendergenderid = p.mailboxmessage.senderprofilemetadata.profile.profiledata.gender_id.Value,
@@ -245,10 +272,6 @@ namespace Anewluv.DataExtentionMethods
 
         }
 
-
-
-
-    
 
         //public static List<mailviewmodel> getallmailbyprofileid(ProfileModel model, IUnitOfWorkAsync db)
         //{
