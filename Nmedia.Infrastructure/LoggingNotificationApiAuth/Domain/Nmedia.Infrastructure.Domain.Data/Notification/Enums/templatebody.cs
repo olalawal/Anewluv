@@ -75,7 +75,7 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
         MemberActivationCodeRecoveredAdminNotification = 13,
 
         //Sent member message 
-        [Description("Dear {0}, <p></p>The member {1} has sent you an Email message on AnewLuv.com, Please log into your account to view {2}'s Email message </br><p></p> <b><a href='http://www.AnewLuv.com/Members/Home'>Log on to your Account on www.Anewluv.com</a></b>")]
+        [Description("Dear {10}, <p></p>The member {1} has sent you an Email message on AnewLuv.com, Please log into your account to view {1}'s Email message </br><p></p> <b><a href='http://www.AnewLuv.com/Members/Home'>Log on to your Account on www.Anewluv.com</a></b>")]
         [EnumMember]
         MemberRecivedEmailMessageMemberNotification = 14,
         [Description("The Member {0} has received an Email Message from the member {1}")]

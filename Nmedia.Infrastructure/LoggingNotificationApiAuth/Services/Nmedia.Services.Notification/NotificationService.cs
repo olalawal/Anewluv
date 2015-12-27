@@ -522,7 +522,12 @@ namespace Nmedia.Services.Notification
                         emaildetail.EmailModel = model;  //add the new updated model
                         break;
 
-
+                    //send message for recpient and admin
+                    case templateenum.MemberRecivedEmailMessageMemberNotification | templateenum.MemberRecivedEmailMessageAdminNotification:
+                        model.subject = subject;
+                        model.body = String.Format(body, model.screenname,model.targetscreenname);
+                        emaildetail.EmailModel = model;  //add the new updated model
+                        break;
 
                     default: //admin message ? //also alot of user messages only pass the  screen anme or userame and dont need special formatting
                         model.subject = subject;

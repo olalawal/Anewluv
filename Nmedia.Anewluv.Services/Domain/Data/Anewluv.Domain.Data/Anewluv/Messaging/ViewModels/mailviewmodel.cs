@@ -53,14 +53,17 @@ namespace Anewluv.Domain.Data.ViewModels
         public string recipientstate { get; set; }
         [DataMember]
         public string recipientcountry { get; set; }
-
-
+       
        [DataMember]   public DateTime? creationdate { get; set; }
         
        [DataMember]   public DateTime? readdate { get; set; }
         [DataMember]  public bool? read { get; set; }
        [DataMember]   public DateTime? replieddate { get; set; }
-       
+
+       [DataMember] 
+       public bool? readbyrecipient { get; set; }
+      
+
         
         [DataMember]
         public int sendergenderid { get; set; }

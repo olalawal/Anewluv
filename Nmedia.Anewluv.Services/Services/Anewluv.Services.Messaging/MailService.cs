@@ -30,6 +30,8 @@ using Nmedia.Infrastructure.Domain.Data.Notification;
 
 using Nmedia.Infrastructure;
 using Nmedia.Infrastructure.Utils;
+using GeoData.Domain.Models;
+
 
        
 namespace Anewluv.Services.Messaging
@@ -45,6 +47,8 @@ namespace Anewluv.Services.Messaging
         //private IPromotionRepository  promotionrepository;
 
         private readonly IUnitOfWorkAsync _unitOfWorkAsync;
+        private readonly IGeoDataStoredProcedures _storedProcedures;
+
         //&&&&&  used for activity logging 
         private readonly OperationContext _context;
         private LoggingLibrary.Logging logger;
@@ -52,7 +56,7 @@ namespace Anewluv.Services.Messaging
         //  private IMemberActionsRepository  _memberactionsrepository;
         // private string _apikey;
 
-        public MailService(IUnitOfWorkAsync unitOfWork)
+        public MailService(IUnitOfWorkAsync unitOfWork, IGeoDataStoredProcedures storedProcedures)
         {
 
             if (unitOfWork == null)
@@ -66,6 +70,7 @@ namespace Anewluv.Services.Messaging
             }
 
             _context = OperationContext.Current;
+            _storedProcedures = storedProcedures;
             _unitOfWorkAsync = unitOfWork;
          
 
@@ -100,10 +105,7 @@ namespace Anewluv.Services.Messaging
                 var task = Task.Factory.StartNew(() =>
                 {
                     var repo = _unitOfWorkAsync.Repository<mailboxmessagefolder>();
-                    var dd = mailextentions.getmailfilteredandpaged(repo, model,_unitOfWorkAsync);
-
-
-                  
+                    var dd = mailextentions.getmailfilteredandpaged(repo, model,_unitOfWorkAsync,_storedProcedures);
 
                     var activitylist = new List<ActivityModel>();
                     activitylist.Add(Api.AnewLuvLogging.CreateActivity(model.profileid.Value, null, (int)activitytypeEnum.viewedmail, ctx)); 
@@ -123,7 +125,7 @@ namespace Anewluv.Services.Messaging
            var task = Task.Factory.StartNew(() =>
            {
                var repo = _unitOfWorkAsync.Repository<mailboxmessagefolder>();
-               var dd = mailextentions.getmailfilteredandpaged(repo, model, _unitOfWorkAsync);
+               var dd = mailextentions.getmailfilteredandpaged(repo, model, _unitOfWorkAsync,_storedProcedures);
 
 
                //Log the activity for history
@@ -345,10 +347,14 @@ namespace Anewluv.Services.Messaging
                                          EmailModels.Add ( new EmailModel {
                                                templateid = (int)templateenum.MemberRecivedEmailMessageAdminNotification,
                                                messagetypeid = (int)messagetypeenum.SysAdminUpdate,
-                                               addresstypeid = (int)addresstypeenum.SystemAdmin
+                                               addresstypeid = (int)addresstypeenum.SystemAdmin, 
+                                               targetscreenname = newmailboxmessage.recipientprofilemetadata.profile.screenname,
+                                               screenname  = profile.screenname,
+                                               emailaddress = profile.emailaddress
+
                                            });
                                       
-                                       
+                                                                          
                                        //this sends both admin and user emails  
                                        Api.AsyncCalls.sendmessagesbytemplate(EmailModels);    
                                        AnewluvMessages.messages.Add("Email was sent Succesfully");

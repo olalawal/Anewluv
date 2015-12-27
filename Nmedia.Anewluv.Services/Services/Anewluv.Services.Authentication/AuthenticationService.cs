@@ -24,11 +24,8 @@ using GeoData.Domain.Models;
 using GeoData.Domain.ViewModels;
 using GeoData.Domain.Models.ViewModels;
 using Anewluv.Services.Contracts.ServiceResponse;
-
 using Nmedia.Infrastructure;
-
 using Anewluv.DataExtentionMethods;
-
 using System.Threading.Tasks;
 
 using Nmedia.Infrastructure.Domain.Data.CustomClaimToken;
@@ -886,7 +883,7 @@ namespace Anewluv.Services.Authentication
                         // GeoService GeoService = new GeoService(tempdb);
                         //  countryID = GeoService.getcountryidbycountryname(country);
 
-                        var value = spatialextentions.getcountrynamebycountryid(new GeoModel { country = u.country }, _storedProcedures);
+                        var value = spatialextentions.getcountrynamebycountryid(new GeoModel { countryid = u.country }, _storedProcedures);
 
                         //get the longidtue and latttude 
                         _GpsData = spatialextentions.getgpsdatabycitycountrypostalcode(new GeoModel { country = u.country, city = tempCityAndStateProvince[0], postalcode = u.ziporpostalcode }, _storedProcedures);

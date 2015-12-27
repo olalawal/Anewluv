@@ -87,6 +87,10 @@
       <Project>{88d4508e-7ced-49cc-b43a-e3af99470d35}</Project>
       <Name>Nmedia.WCFHelpers</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Domain\Context\GeoData.Domain\GeoData.Domain.csproj">
+      <Project>{01a79dcc-39ca-447e-a668-dd4206a8e5aa}</Project>
+      <Name>GeoData.Domain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Domain\DataExtentionMethods\Anewluv.DataExtentionMethods\Anewluv.DataExtentionMethods.csproj">
       <Project>{3cbb8d0a-5ea5-4336-aeaf-6717d2a09a45}</Project>
       <Name>Anewluv.DataExtentionMethods</Name>

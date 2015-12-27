@@ -41,8 +41,9 @@ namespace Anewluv.Services.DependencyResolution.Ninject.Modules
 		public override void Load()
 		{
             
-            this.Bind<IDataContextAsync>().To<AnewluvContext>().InRequestScope();
-            this.Bind<IUnitOfWorkAsync>().To<UnitOfWork>().InRequestScope();
+            Bind<IDataContextAsync>().To<AnewluvContext>().InRequestScope();
+            Bind<IUnitOfWorkAsync>().To<UnitOfWork>().InRequestScope();
+            Bind<IGeoDataStoredProcedures>().To<PostalData2Context>().InRequestScope(); ;
          
         }
 

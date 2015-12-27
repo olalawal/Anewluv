@@ -540,7 +540,7 @@ namespace Anewluv.Services.Mapping
                         //  {
                         // GeoService GeoService = new GeoService(tempdb);
 
-                        model.myquicksearch.myselectedcountryname = spatialextentions.getcountrynamebycountryid(new GeoModel { country = Model.Countryname }, _geodatastoredProcedures) == "" ? "United States" : Model.Countryname; //use same country for now
+                        model.myquicksearch.myselectedcountryname = spatialextentions.getcountrynamebycountryid(new GeoModel { countryid = Model.Countryid }, _geodatastoredProcedures) == "" ? "United States" : Model.Countryname; //use same country for now
                         // }
                     }
                     else

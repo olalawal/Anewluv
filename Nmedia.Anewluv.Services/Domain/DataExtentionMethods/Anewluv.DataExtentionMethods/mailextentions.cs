@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using Repository.Pattern.Repositories;
 using Nmedia.Infrastructure.Helpers;
+using GeoData.Domain.Models;
 
 
 namespace Anewluv.DataExtentionMethods
@@ -135,13 +136,13 @@ namespace Anewluv.DataExtentionMethods
         /// <param name="model"></param>
         /// <param name="db"></param>
         /// <returns></returns>
-        public static MailSearchResultsViewModel getmailfilteredandpaged(this IRepository<mailboxmessagefolder> repo, MailModel model,IUnitOfWorkAsync db)
+        public static MailSearchResultsViewModel getmailfilteredandpaged(this IRepository<mailboxmessagefolder> repo, MailModel model,IUnitOfWorkAsync db,IGeoDataStoredProcedures _storedProcedures)
         {
 
             try
             {
                 var dd = filtermailboxmessagefolders(repo, model,db).OrderByDescending(z=>z.mailboxmessage.creationdate).ThenBy(f=>f.read );
-                return pagemail(dd.ToList(), model.page, model.numberperpage, db);
+                return pagemail(dd.ToList(),model, db,_storedProcedures);
 
 
             }
@@ -203,8 +204,8 @@ namespace Anewluv.DataExtentionMethods
       
 
         //TO DO determine what side we are looking at sender or recipeint so we dont always double load both sides 
-        public static MailSearchResultsViewModel pagemail(List<mailboxmessagefolder> source,
-                                                                  int? page, int? numberperpage,IUnitOfWorkAsync db)
+        public static MailSearchResultsViewModel pagemail(List<mailboxmessagefolder> source, MailModel model,
+                                                                 IUnitOfWorkAsync db, IGeoDataStoredProcedures _storedProcedures)
         {
 
 
@@ -212,13 +213,13 @@ namespace Anewluv.DataExtentionMethods
             {
                 // int? totalrecordcount = MemberSearchViewmodels.Count;
                 //handle zero and null paging values
-                if (page == null || page == 0) page = 1;
-                if (numberperpage == null || numberperpage == 0) numberperpage = 4;
-                bool allowpaging = (source.Count() > numberperpage ? true : false);
-                var pageData = page >= 1 & allowpaging ?
-                    new PaginatedList<mailboxmessagefolder>().GetCurrentPages(source.ToList(), page ?? 1, numberperpage ?? 5) : source.Take(numberperpage.GetValueOrDefault());
+                if (model.page == null ||model.page == 0) model.page = 1;
+                if (model.numberperpage == null || model.numberperpage == 0) model.numberperpage = 4;
+                bool allowpaging = (source.Count() > model.numberperpage ? true : false);
+                var pageData = model.page >= 1 & allowpaging ?
+                    new PaginatedList<mailboxmessagefolder>().GetCurrentPages(source.ToList(),model.page ?? 1, model.numberperpage ?? 5) : source.Take(model.numberperpage.GetValueOrDefault());
 
-
+           
                 var results = pageData.Select(p => new MailViewModel
                 {
                     senderprofile_id = p.mailboxmessage.senderprofilemetadata.profile_id,
@@ -239,14 +240,15 @@ namespace Anewluv.DataExtentionMethods
                     sendercity = p.mailboxmessage.senderprofilemetadata.profile.profiledata.city,
                     senderstate = p.mailboxmessage.senderprofilemetadata.profile.profiledata.stateprovince,
                     //TOD DO hard code country list from common and get it from cached version to filter , skipping for now
-                    sendercountry = p.mailboxmessage.senderprofilemetadata.profile.profiledata.countryid.ToString(),
-
+                    sendercountry =  spatialextentions.getcountrynamebycountryid(new GeoModel { countryid = p.mailboxmessage.senderprofilemetadata.profile.profiledata.countryid.ToString() }, _storedProcedures),
                     recipientcity = p.mailboxmessage.recipientprofilemetadata.profile.profiledata.city,
                     recipientstate = p.mailboxmessage.recipientprofilemetadata.profile.profiledata.stateprovince,
                     //TOD DO hard code country list from common and get it from cached version to filter , skipping for now
-                    recipientcountry = p.mailboxmessage.recipientprofilemetadata.profile.profiledata.countryid.ToString(),
+                    recipientcountry = spatialextentions.getcountrynamebycountryid(new GeoModel { countryid = p.mailboxmessage.recipientprofilemetadata.profile.profiledata.countryid.ToString()}, _storedProcedures),
 
                     creationdate = p.mailboxmessage.creationdate,
+                    //for paid members after a while
+                    readbyrecipient = p.mailboxmessage.sender_id == model.profileid && p.read == true ? true : false,
                     readdate = p.readdate,
                     read = p.read,
                     replieddate = p.replieddate,

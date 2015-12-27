@@ -54,6 +54,8 @@ namespace Anewluv.Domain.Data.ViewModels
         [DataMember]
         public string Countryname { get; set; }
         [DataMember]
+        public string Countryid { get; set; }
+        [DataMember]
         public double? lattitude { get; set; }
         [DataMember]
         public double? longitude { get; set; }
