@@ -101,7 +101,11 @@ namespace Anewluv.Domain.Data.ViewModels
         public int? mailboxfoldertypeid { get; set; }  //folder types to retrive , only one folder per call for now
         [DataMember]
         public MailViewModel mailviewmodel { get; set; } //mail being sent along with all relevant data 
-       
+
+        //added stuff to get browsemodel data, since we only want that data pulled when we are getting a single profile
+
+        [DataMember]
+        public bool?  getbrowsemodel { get; set; }  //folder types to retrive , only one folder per call for now
 
 
 

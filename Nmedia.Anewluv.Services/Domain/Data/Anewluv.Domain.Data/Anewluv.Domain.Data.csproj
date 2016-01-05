@@ -202,6 +202,7 @@
     <Compile Include="Anewluv\SearchEditModels\PhotoSearchResultsViewModel.cs" />
     <Compile Include="Anewluv\SearchEditModels\ProfileModel.cs" />
     <Compile Include="Anewluv\SearchEditModels\QuickSearchModel.cs" />
+    <Compile Include="Anewluv\SearchEditModels\SearchResult.cs" />
     <Compile Include="Anewluv\SearchEditModels\SearchResultsViewModel.cs" />
     <Compile Include="Anewluv\searchsetting.cs" />
     <Compile Include="Anewluv\searchsettingdetail.cs" />

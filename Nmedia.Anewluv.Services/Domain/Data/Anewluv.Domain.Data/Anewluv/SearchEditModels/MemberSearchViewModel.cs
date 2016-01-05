@@ -17,6 +17,7 @@ namespace Anewluv.Domain.Data.ViewModels
   [DataContract]
     public class MemberSearchViewModel
     {
+        
         //added stuff for photo VMS
           [DataMember]
         public PhotoViewModel profilephotos { get; set; }

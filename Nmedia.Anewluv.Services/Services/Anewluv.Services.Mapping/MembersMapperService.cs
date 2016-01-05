@@ -226,7 +226,10 @@ namespace Anewluv.Services.Mapping
                             //profile of the person being viewed
                             ProfileDetails = membermappingextentions.mapmembersearchviewmodel(model.profileid.Value, new MemberSearchViewModel { id = model.viewingprofileid.GetValueOrDefault() }, db, geodb),
                             ProfileCriteria = membermappingextentions.getprofilecriteriamodel(model.viewingprofileid.GetValueOrDefault(), db),
+                            ViewerProfileDetails = membermappingextentions.mapmembersearchviewmodel(model.profileid.Value, new MemberSearchViewModel { id = model.profileid.Value }, db, geodb),
+                            ViewerProfileCriteria = membermappingextentions.getprofilecriteriamodel(model.profileid.Value, db),
                             ViewActionsToProfile = membermappingextentions.mapmemberactionsrelationships(model.profileid.Value, model.viewingprofileid.Value, db)
+
                         };
 
                         //TO DO add a cache object for the profilebrowesemodel and Memberseachmodel of the currently logged in user
@@ -1186,7 +1189,7 @@ namespace Anewluv.Services.Mapping
                         //first convert miles value to meters
                         var MaxdistanceInMiles = spatialextentions.MilesToMeters(maxdistancefromme);
 
-
+                     
 
                         var MemberSearchViewmodels = (from x in db.Repository<profiledata>().Queryable().Where(p => p.birthdate > min && p.birthdate <= max &&
                               p.profile.profilemetadata.photos.Any(z => z.photostatus_id == (int)photostatusEnum.Gallery)
@@ -1210,6 +1213,7 @@ namespace Anewluv.Services.Mapping
                                                       join f in db.Repository<profile>().Queryable() on x.profile_id equals f.id
                                                       select new MemberSearchViewModel
                                                       {
+                                                          
                                                           // MyCatchyIntroLineQuickSearch = x.AboutMe,
                                                           id = x.profile_id,
                                                           stateprovince = x.stateprovince,
@@ -1396,6 +1400,8 @@ namespace Anewluv.Services.Mapping
                         //first convert miles value to meters
                         var MaxdistanceInMiles = spatialextentions.MilesToMeters(model.maxdistancefromme);
 
+                     
+
                         //basic search
                         var repo = db.Repository<profiledata>().Query(p => p.birthdate > min && p.birthdate <= max &&
                             p.profile.profilemetadata.photos.Any(z => z.photostatus_id == (int)photostatusEnum.Gallery)).Select();
@@ -1414,6 +1420,7 @@ namespace Anewluv.Services.Mapping
                                                       join f in db.Repository<profile>().Queryable() on x.profile_id equals f.id
                                                       select new MemberSearchViewModel
                                                       {
+                                                          
                                                           // MyCatchyIntroLineQuickSearch = x.AboutMe,
                                                           id = x.profile_id,
                                                           stateprovince = x.stateprovince,
@@ -1592,6 +1599,8 @@ namespace Anewluv.Services.Mapping
                         var MaxdistanceInMiles = spatialextentions.MilesToMeters(maxdistancefromme);
 
 
+                     
+
                         //TO DO change the photostatus thing to where if maybe, based on HAS PHOTOS only matches
                         var MemberSearchViewmodels = (from x in db.Repository<profiledata>().Queryable().Where(p => p.birthdate > min && p.birthdate <= max &&
                          p.countryid == countryid && p.city == city && p.stateprovince == stateprovince)
@@ -1604,6 +1613,7 @@ namespace Anewluv.Services.Mapping
                                                       join f in db.Repository<profile>().Queryable() on x.profile_id equals f.id
                                                       select new MemberSearchViewModel
                                                       {
+                                                          
                                                           // MyCatchyIntroLineQuickSearch = x.AboutMe,
                                                           id = x.profile_id,
                                                           stateprovince = x.stateprovince,
@@ -1722,6 +1732,7 @@ namespace Anewluv.Services.Mapping
                     //get the number of values for male and female
                     var divisor = Model.numberperpage / 2;
                     var modulo = Model.numberperpage % 2;
+
 
 
                     //check gender counts if they are good continue otherwise reun the query 
@@ -1860,6 +1871,8 @@ namespace Anewluv.Services.Mapping
             //first convert miles value to meters
             var MaxdistanceInMiles = spatialextentions.MilesToMeters(maxdistancefromme);
 
+         
+
             //TO DO needs filter for the profile ranking as well , and photo quality etc
             var matches = _unitOfWorkAsync.Repository<profiledata>()
                          .Query(z => z.profile.profilemetadata.photos.Any(m => m.photostatus_id == (int)photostatusEnum.Gallery
@@ -1869,7 +1882,7 @@ namespace Anewluv.Services.Mapping
                         (x => new MemberSearchViewModel
                         {
                             //populate values server side to be used later                                                        
-
+                            
                             id = x.profile_id,
                             creationdate = x.profile.creationdate,
                             profile = x.profile,
@@ -2152,6 +2165,8 @@ namespace Anewluv.Services.Mapping
                 //first convert miles value to meters
                 var MaxdistanceInMiles = spatialextentions.MilesToMeters(model.maxdistancefromme);
 
+              
+
                 //  where (LookingForGenderValues.Count !=null || LookingForGenderValues.Contains(x.GenderID)) 
                 //  where (LookingForGenderValues.Count == null || x.GenderID == UserProfile.MyQuickSearch.MySelectedSeekingGenderID )   //this should not run if we have no gender in searchsettings
                 //add more values as we get more members 
@@ -2168,6 +2183,7 @@ namespace Anewluv.Services.Mapping
                                               join f in db.Repository<profile>().Queryable() on x.profile_id equals f.id
                                               select new MemberSearchViewModel
                                               {
+                                                
                                                   city = x.city,
                                                   id = x.profile_id,
                                                   stateprovince = x.stateprovince,
@@ -2231,6 +2247,17 @@ namespace Anewluv.Services.Mapping
 
             try
             {
+
+               
+
+                //create the ordered list for use on client for paging withoute th eentire model passed down  
+                var counter =0;
+                
+                //ADDED  code to skip the nulls if any from a search
+                var dd = source.Where(item => item != null).                
+                Select(z=> new SearchResult { id=z.id, searchindex = counter++, selected = false}).ToList();
+
+
                 // int? totalrecordcount = MemberSearchViewmodels.Count;
                 //handle zero and null paging values
                 if (page == null || page == 0) page = 1;
@@ -2244,6 +2271,7 @@ namespace Anewluv.Services.Mapping
                 //do any conversions and calcs here
                 var test = pageData.Select(x => new MemberSearchViewModel
                 {
+                    //resultsindex = x.resultsindex,
                     MyCatchyIntroLineQuickSearch = x.aboutme,
                     id = x.id,
                     stateprovince = x.stateprovince,
@@ -2271,7 +2299,7 @@ namespace Anewluv.Services.Mapping
                 }).ToList();
 
 
-                return new SearchResultsViewModel { results = test, totalresults = source.Count() };
+                return new SearchResultsViewModel { results = test, totalresults = source.Count() , orderedresultids = dd};
 
             }
             catch (Exception ex)
