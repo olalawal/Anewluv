@@ -506,6 +506,8 @@ namespace Anewluv.DataExtentionMethods
                         CriteriaModel.Ethnicity.Add(item.lu_ethnicity.description);
                     }
 
+                  
+                    
                     foreach (var item in metadata.profiledata_hobby)
                     {
                         //hack for duplicate ethnicity data tesst and apply to all

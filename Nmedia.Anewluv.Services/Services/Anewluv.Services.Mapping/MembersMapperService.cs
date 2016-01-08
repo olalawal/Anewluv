@@ -226,10 +226,12 @@ namespace Anewluv.Services.Mapping
                             //profile of the person being viewed
                             ProfileDetails = membermappingextentions.mapmembersearchviewmodel(model.profileid.Value, new MemberSearchViewModel { id = model.viewingprofileid.GetValueOrDefault() }, db, geodb),
                             ProfileCriteria = membermappingextentions.getprofilecriteriamodel(model.viewingprofileid.GetValueOrDefault(), db),
-                            ViewerProfileDetails = membermappingextentions.mapmembersearchviewmodel(model.profileid.Value, new MemberSearchViewModel { id = model.profileid.Value }, db, geodb),
-                            ViewerProfileCriteria = membermappingextentions.getprofilecriteriamodel(model.profileid.Value, db),
                             ViewActionsToProfile = membermappingextentions.mapmemberactionsrelationships(model.profileid.Value, model.viewingprofileid.Value, db)
 
+                            //we dont need the viewer data since we just displya the current users profile along with thier search settings
+                            // ViewerProfileDetails = membermappingextentions.mapmembersearchviewmodel(model.profileid.Value, new MemberSearchViewModel { id = model.profileid.Value }, db, geodb),
+                          //  ViewerProfileCriteria = membermappingextentions.getprofilecriteriamodel(model.profileid.Value, db),
+                           
                         };
 
                         //TO DO add a cache object for the profilebrowesemodel and Memberseachmodel of the currently logged in user
