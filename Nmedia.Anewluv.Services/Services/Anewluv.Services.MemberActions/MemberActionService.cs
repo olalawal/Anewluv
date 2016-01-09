@@ -279,7 +279,9 @@ namespace Anewluv.Services.MemberActions
                         if (model.page == null | model.page == 0) model.page = 1;
                         if (model.numberperpage == null | model.numberperpage == 0) model.numberperpage = 4;
 
-                        var interests = memberactionsextentions.getmyactiveactionprofilesbyprofileidandactiontype(model, db, model.actiontypeid.Value, model.unviewedactions.GetValueOrDefault()).Select
+                        var interests = memberactionsextentions.getmyactiveactionprofilesbyprofileidandactiontype(model, db, model.actiontypeid.Value, model.unviewedactions.GetValueOrDefault())
+                            .OrderByDescending(z => z.creationdate)
+                            .Select
                          (f => new MemberSearchViewModel
                                              {
                                                  interestdate = f.creationdate,
@@ -366,7 +368,9 @@ namespace Anewluv.Services.MemberActions
                      if (model.numberperpage == null | model.numberperpage == 0) model.numberperpage = 4;
 
 
-                     var whoisinterestedinme = memberactionsextentions.getactiveotheractionprofilesbyprofileidandactiontype(model, db, model.actiontypeid.Value,model.unviewedactions.GetValueOrDefault()).Select
+                     var whoisinterestedinme = memberactionsextentions.getactiveotheractionprofilesbyprofileidandactiontype(model, db, model.actiontypeid.Value,model.unviewedactions.GetValueOrDefault())
+                           .OrderByDescending(z => z.creationdate)
+                            .Select
                          (f => new MemberSearchViewModel
                          {
                              interestdate = f.creationdate,
@@ -442,7 +446,9 @@ namespace Anewluv.Services.MemberActions
                      int? pageint = model.page;
                      int? numberperpageint = model.numberperpage;
 
-                     var whoisinterestedinmenew = memberactionsextentions.getactiveotheractionprofilesbyprofileidandactiontype(model, db, model.actiontypeid.Value, true).Select
+                     var whoisinterestedinmenew = memberactionsextentions.getactiveotheractionprofilesbyprofileidandactiontype(model, db, model.actiontypeid.Value, true)
+                          .OrderByDescending(z => z.creationdate)
+                            .Select
                       (f => new MemberSearchViewModel
                       {
                           interestdate = f.creationdate,
