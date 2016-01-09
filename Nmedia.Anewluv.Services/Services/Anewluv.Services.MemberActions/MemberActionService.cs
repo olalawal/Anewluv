@@ -651,7 +651,7 @@ namespace Anewluv.Services.MemberActions
                                 newaction.actiontype_id = (int)model.actiontypeid;
                                 newaction.active = true;
                                 //TO DO add notes if posible
-                                if (model.note !="")
+                                if (model.note != null &&  model.note !="" )
                                 {
                                     newaction.notes.Add(new note { action_id = newaction.id, notedetail = model.note, creationdate = DateTime.Now, notetype_id = (int)notetypeEnum.UserActionAttachment, ObjectState = ObjectState.Added });
                                 }

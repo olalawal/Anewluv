@@ -139,7 +139,7 @@ namespace Anewluv.DataExtentionMethods
         /// <param name="viewerprofileid"></param>
         /// <param name="db"></param>
         /// <returns></returns>
-        public static MemberToMemberActionsModel mapmemberactionsrelationships(int profileid, int viewerprofileid,IUnitOfWorkAsync db)
+        public static MemberToMemberActionsModel mapmemberactionsrelationships(int profileid, int viewingprofileid,IUnitOfWorkAsync db)
         {
 
             MemberToMemberActionsModel actions = new MemberToMemberActionsModel();
@@ -149,9 +149,10 @@ namespace Anewluv.DataExtentionMethods
 
                 
                 //get the viwers actions to this member first :
-                var vieweractionstoprofile = db.Repository<action>().getmyactionsbyprofileid(viewerprofileid).Where(z => z.target_profile_id == profileid).ToList();
-                //now get the actions that user has performed to the viewer
-                var profileactionstoviewer = db.Repository<action>().getothersctionsbyprofileid(profileid).Where(z => z.target_profile_id == viewerprofileid).ToList();
+                //get all actions created by the viewer and filter by the profile id we are viewing - all the actions to the profileid from the viewer
+                var vieweractionstoprofile = db.Repository<action>().getmyactionsbyprofileid(profileid).Where(z => z.target_profile_id == viewingprofileid).ToList();
+                //get all the actions created  by the person being viewed and filter by the veiwers profile.
+                var profileactionstoviewer = db.Repository<action>().getmyactionsbyprofileid(viewingprofileid).Where(z => z.target_profile_id == profileid).ToList();
 
 
                 //Thier Peeeks
