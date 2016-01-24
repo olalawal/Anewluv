@@ -29,7 +29,7 @@ namespace Anewluv.DataExtentionMethods
                 List<searchsetting> allsearchsettings = new List<searchsetting>();
                
 
-                if (searchmodel.profileid  ==null || searchmodel.profileid !=0 ) return p;
+                if (searchmodel.profileid == null || searchmodel.profileid == 0 ) return p;
 
                 //default handling for empty profile ID and other search data
                // if (searchmodel == null) return p;
@@ -65,9 +65,10 @@ namespace Anewluv.DataExtentionMethods
                 return p;
             }
             catch (Exception ex)
-            {// throw ex; 
+            {
+                throw ex; 
                 //to do log
-                return p;
+               // return p;
             }
         }
 
