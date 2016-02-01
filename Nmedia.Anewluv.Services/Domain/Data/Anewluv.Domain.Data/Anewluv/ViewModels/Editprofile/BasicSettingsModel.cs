@@ -48,6 +48,8 @@ namespace Anewluv.Domain.Data.ViewModels
         [DataMember]
         public List<listitem> genderlist { get; set; }
 
+        //added new feilds for profile data editing 1-29-2016
+
 
       
 
