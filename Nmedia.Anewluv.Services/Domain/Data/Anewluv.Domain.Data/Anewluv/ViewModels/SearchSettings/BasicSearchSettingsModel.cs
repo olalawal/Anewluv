@@ -42,9 +42,7 @@ namespace Anewluv.Domain.Data.ViewModels
         public int? distancefromme { get; set; }
         //Moved to appearabnce settings
         //[DataMember]
-        //public int? heightmax { get; set; }
-        //[DataMember]
-        //public int? heightmin { get; set; }
+        
         [DataMember]
         public DateTime? lastupdatedate { get; set; }
         [DataMember]
@@ -66,5 +64,28 @@ namespace Anewluv.Domain.Data.ViewModels
         //Viewmodel only feild for lisitng locations 
         [DataMember]
         public List<searchsetting_location> locationlist { get; set; }
+
+        //TO DO build location object maybe
+        //used for search
+        [DataMember]
+        public string countryname { get; set; }
+        [DataMember]
+        public int? countryid { get; set; }
+        [DataMember]
+        public string stateprovince { get; set; }
+        [DataMember]
+        public string city { get; set; }
+        [DataMember]
+        public string postalcode { get; set; }
+
+        [DataMember]
+        [DataMember]
+        public double? mobilelattitude { get; set; }
+        [DataMember]      
+        public double? mobilelongitude { get; set; }
+
+       
+
+
     }
 }

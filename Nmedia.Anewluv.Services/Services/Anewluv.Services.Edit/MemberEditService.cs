@@ -123,23 +123,14 @@ namespace Anewluv.Services.Edit
                          var genderlist = RedisCacheFactory.SharedObjectHelper.getgenderlist(_unitOfWorkAsync);
                          var sortbylist = RedisCacheFactory.SharedObjectHelper.getsortbytypelist(_unitOfWorkAsync);
                          var agelist = RedisCacheFactory.SharedObjectHelper.getagelist();
+                         var rolelist = RedisCacheFactory.SharedObjectHelper.getrolelist(_unitOfWorkAsync);
 
                          //populate values here ok ?
                          if (p != null)
 
 
-                        // model. = p.searchname == null ? "Unamed Search" : p.searchname;
-                        //model.di = p.distancefromme == null ? 500 : p.distancefromme.GetValueOrDefault();
-                        // model.searchrank = p.searchrank == null ? 0 : p.searchrank.GetValueOrDefault();
 
-                        //populate ages select list here I guess
-                        //TODO get from app fabric
-                        // SharedRepository sharedrepository = new SharedRepository();
-                        //Ages = sharedrepository.AgesSelectList;
-
-                          model.birthdate = p.profiledata.birthdate; //== null ? null :  p.profiledata.lu_birthdate;
-                         //  model.agemin = p.agemin == null ? 18 : p.agemin.GetValueOrDefault();
-                        
+                         model.birthdate = p.profiledata.birthdate;                        
                          model.countryid = p.profiledata.countryid == null ? null : p.profiledata.countryid;
                          model.city = p.profiledata.city == null ? null : p.profiledata.city;
                          model.postalcode = p.profiledata.postalcode == null ? null : p.profiledata.postalcode;
@@ -147,10 +138,36 @@ namespace Anewluv.Services.Edit
                          model.phonenumber = p.profiledata.phone == null ? null : p.profiledata.phone;
                          model.catchyintroline = p.profiledata.mycatchyintroLine;
                          model.aboutme = p.profiledata.aboutme;
+
+                        //added values  for account settings
+                         model.gender = p.profiledata.lu_gender;
+                         model.screenname = p.screenname;
+                         model.city = p.profiledata.city;
+                         model.countryid = p.profiledata.countryid;
+                         model.postalcode = p.profiledata.postalcode;
+                         model.stateprovince = p.profiledata.stateprovince;
+                         model.phonenumber = p.profiledata.phone;
+                         model.emailaddress = p.emailaddress;
+                         model.forwardmessages = Convert.ToBoolean(p.forwardmessages);
+
+
+
+
+                        //also add the account roles when user tries to change .. force to account payment sceeen
+                         //set default values
+                         model.suscriptions = Extensions.getDeepCopy<List<listitem>>(rolelist);
+
+                         //get all the roles the user is associated with
+                         //grab all the active roles for now , down the line we can show history 
+                         foreach (membersinrole role in  p.membersinroles.Where(z=>z.roleexpiredate == null && z.active == true).ToList())
+                         {
+                             model.suscriptions.First(d => d.id == role.id).selected = true;
+                         }
+                      
+
+                        
+
                         //set default values
-                        // model.genderlist. (genderlist); 
-                        //new List<listitem>(genderlist);
-                    
                          model.genderlist = Extensions.getDeepCopy<List<listitem>>(genderlist);                    
 
                          //update the value as checked here on the list i.e select the body type in the list

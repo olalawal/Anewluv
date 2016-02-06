@@ -24,25 +24,8 @@ namespace Anewluv.Domain.Data
         Closest,
         [Description("Farthest")]
         [EnumMember]
-        Farthest,
-        [Description("Ethnicty")]
-        [EnumMember]
-        Ethnicty,
-        [Description("BodyType")]
-        [EnumMember]
-        BodyType,
-        [Description("EyeColor")]
-        [EnumMember]
-        EyeColor,
-        [Description("HairColor")]
-        [EnumMember]
-        HairColor,
-        [Description("Big and Beautiful")]
-        [EnumMember]
-        BigandBeautiful,
-        [Description("Height")]
-        [EnumMember]
-        Height
+        Farthest         
+      
     }
 
 

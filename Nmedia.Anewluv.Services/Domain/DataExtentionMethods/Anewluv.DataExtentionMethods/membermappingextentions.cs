@@ -378,7 +378,6 @@ namespace Anewluv.DataExtentionMethods
 
         }
 
-
         public static List<MemberSearchViewModel> mapmembersearchviewmodels(ProfileModel model, IUnitOfWorkAsync db, IGeoDataStoredProcedures geodb)
         {
 
@@ -412,15 +411,14 @@ namespace Anewluv.DataExtentionMethods
 
         }
 
-
-
-
         //IMPORTINNYT !
 
+        //No photo data is handled here since it does not filter based on viewer etc and its a separate service call in any case
         //THIS NEEDS TO ALSO MAP THE MEMEBERS VIEWMODEL WHEN WE GET TIME
         //constructor
         //4-12-2012 added screen name
         //4-18-2012 added search settings
+
         public static ProfileCriteriaModel getprofilecriteriamodel(int profileid, IUnitOfWorkAsync db)
         {
 
@@ -835,8 +833,302 @@ namespace Anewluv.DataExtentionMethods
 
 
 
+
         #endregion
 
+
+        #region "Search based Mappinng functions"
+
+
+        public static IQueryable<MemberSearchViewModel> filterquicksearchmatches(quicksearchmodel Model, IUnitOfWorkAsync db)
+        {
+
+            // SearchResultsViewModel searchresults = new SearchResultsViewModel();
+            //get the  gender's from search settings
+            int genderid = Model.myselectedseekinggenderid.GetValueOrDefault();
+            int mygenderid = Model.myselectediamgenderid.GetValueOrDefault();
+
+
+            // int[,] courseIDs = new int[,] UserProfile.profiledata.searchsettings.FirstOrDefault().searchsettings_Genders.ToList();
+            int AgeTo = Model.myselectedtoage != null ? Model.myselectedtoage.GetValueOrDefault() : 99;
+            int AgeFrom = Model.myselectedfromage != null ? Model.myselectedfromage.GetValueOrDefault() : 18;
+            //Height
+            //int intheightmin = Model.h != null ? Model.heightmin.GetValueOrDefault() : 0;
+            // int intheightmax = Model.heightmax != null ? Model.heightmax.GetValueOrDefault() : 100;
+            //  bool blEvaluateHeights = intheightmin > 0 ? true : false;
+            //get the rest of the values if they are needed in calculations
+            //convert lattitudes from string (needed for JSON) to bool           
+            double? myLongitude = (Model.myselectedlongitude != null) ? Convert.ToDouble(Model.myselectedlongitude) : 0;
+            double? myLattitude = (Model.myselectedlatitude != null) ? Convert.ToDouble(Model.myselectedlatitude) : 0;
+
+
+            //set variables
+            //  List<MemberSearchViewModel> MemberSearchViewmodels;
+            DateTime today = DateTime.Today;
+            DateTime max = today.AddYears(-(AgeFrom + 1));
+            DateTime min = today.AddYears(-AgeTo);
+
+            //get country and city data
+            string countryname = Model.myselectedcountryname;
+            int countryid = Model.myselectedcountryid.GetValueOrDefault();
+            // myselectedcountryid 
+            string stringpostalcode = Model.myselectedpostalcode;
+
+            //added 10/17/20011 so we can toggle postalcode box similar to register 
+            string city = Model.myselectedcity;
+            int photostatus = (Model.myselectedphotostatus != null) ? (int)photostatusEnum.Gallery : (int)photostatusEnum.Nostatus;
+            string stateprovince = Model.myselectedstateprovince;
+            double? maxdistancefromme = Model.myselectedmaxdistancefromme ?? 500;
+
+
+
+            //skip these
+            //get values from the collections to test for , this should already be done in the viewmodel mapper but juts incase they made changes that were not updated
+            //requery all the has tbls
+            HashSet<int> LookingForGenderValues = new HashSet<int>();
+            LookingForGenderValues.Add(genderid);  //add the gender id being searched for
+
+
+
+            var sourcePoint = spatialextentions.CreatePoint(myLattitude.Value, myLongitude.Value);
+            // find any locations within 5 miles ordered by distance
+            //first convert miles value to meters
+            var MaxdistanceInMiles = spatialextentions.MilesToMeters(maxdistancefromme);
+
+
+
+            //TO DO needs filter for the profile ranking as well , and photo quality etc
+            IQueryable<MemberSearchViewModel> matches = db.Repository<profiledata>()
+                         .Query(z => z.profile.profilemetadata.photos.Any(m => m.photostatus_id == (int)photostatusEnum.Gallery
+                          && z.location.Distance(sourcePoint) <= MaxdistanceInMiles)).Include(z => z.profile).Select()
+                         .OrderBy(y => y.location.Distance(sourcePoint))
+                        .Select
+                        (x => new MemberSearchViewModel
+                        {
+                            //populate values server side to be used later                                                        
+
+                            id = x.profile_id,
+                            creationdate = x.profile.creationdate,
+                            profile = x.profile,
+                            distancefromme = x.location.Distance(sourcePoint),
+                            stateprovince = x.stateprovince,
+                            city = x.city,
+                            postalcode = x.postalcode,
+                            countryid = x.countryid,
+                            genderid = x.gender_id,
+                            birthdate = x.birthdate,
+
+                            screenname = x.profile.screenname,
+                            longitude = x.longitude ?? 0,
+                            latitude = x.latitude ?? 0,
+                            lastlogindate = x.profile.logindate
+
+                        }).AsQueryable();
+
+
+            return matches;
+
+        }
+
+        public static IQueryable<MemberSearchViewModel> filteradvancedsearchmatches(SearchSettingsModel Model,IUnitOfWorkAsync db)
+        {
+
+            //get lat and long in case passed from mobile device
+            double? myLongitude = (Model.basicsearchsettings.mobilelattitude != null) ? Convert.ToDouble(Model.basicsearchsettings.mobilelattitude) : 0;
+            double? myLattitude = (Model.basicsearchsettings.mobilelongitude != null) ? Convert.ToDouble(Model.basicsearchsettings.mobilelongitude) : 0;
+
+            //get the long lat for use in range mapping if its not passed. 
+            if (myLattitude == 0 && myLongitude == 0)
+            {
+                var p = db.Repository<profiledata>().getprofiledatabyprofileid(new ProfileModel { profileid = Model.profileid });
+                myLattitude = Convert.ToDouble(p.latitude);
+                myLongitude = Convert.ToDouble(p.longitude);
+            }
+            //get the profile information of the searcher for thier lattitude and longitude, do not use from GPS unless user requests this somehow
+            //we need
+
+
+            // int[,] courseIDs = new int[,] UserProfile.profiledata.searchsettings.FirstOrDefault().searchsettings_Genders.ToList();
+            int AgeTo = Model.basicsearchsettings.agemax != null ? Model.basicsearchsettings.agemax.GetValueOrDefault() : 99;
+            int AgeFrom = Model.basicsearchsettings.agemin != null ? Model.basicsearchsettings.agemin.GetValueOrDefault() : 18;
+
+
+
+            //set variables
+            //  List<MemberSearchViewModel> MemberSearchViewmodels;
+            DateTime today = DateTime.Today;
+            DateTime max = today.AddYears(-(AgeFrom + 1));
+            DateTime min = today.AddYears(-AgeTo);
+
+            //get country and city data
+            string countryname = Model.basicsearchsettings.countryname;
+            int countryid = Model.basicsearchsettings.countryid.GetValueOrDefault();
+            // myselectedcountryid 
+            string stringpostalcode = Model.basicsearchsettings.postalcode;
+
+            //added 10/17/20011 so we can toggle postalcode box similar to register 
+            string city = Model.basicsearchsettings.city;
+
+            string stateprovince = Model.basicsearchsettings.stateprovince;
+            double? maxdistancefromme = Model.basicsearchsettings.distancefromme.GetValueOrDefault();
+
+            //add the values for 
+
+            //skip these
+            //get values from the collections to test for , this should already be done in the viewmodel mapper but juts incase they made changes that were not updated
+            //requery all the has tbls
+
+            //create all the hash sets of items the user is trying to filter for
+
+            //basic settings
+            HashSet<int> LookingForGenderValues = new HashSet<int>();
+            LookingForGenderValues = (Model.basicsearchsettings != null) ? new HashSet<int>(Model.basicsearchsettings.genderlist.Select(c => c.id)) : LookingForGenderValues;
+
+
+
+            ////Appearacnce seache settings values         
+
+            //set a value to determine weather to evaluate hights i.e if this user has not height values whats the point ?
+
+            int heightmin = Model.appearancesearchsettings.heightmin != null ? Model.appearancesearchsettings.heightmin.GetValueOrDefault() : 1;
+            int heightmax = Model.appearancesearchsettings.heightmax != null ? Model.appearancesearchsettings.heightmax.GetValueOrDefault() : 999;
+
+
+            //TO DO maybe use same types and instersect
+            HashSet<int> LookingForBodyTypesValues = new HashSet<int>();
+            LookingForBodyTypesValues = (Model != null) ? new HashSet<int>(Model.appearancesearchsettings.bodytypelist.Select(c => c.id)) : LookingForBodyTypesValues;
+            HashSet<int> LookingForEthnicityValues = new HashSet<int>();
+            LookingForEthnicityValues = (Model != null) ? new HashSet<int>(Model.appearancesearchsettings.ethnicitylist.Select(c => c.id)) : LookingForEthnicityValues;
+            HashSet<int> LookingForEyeColorValues = new HashSet<int>();
+            LookingForEyeColorValues = (Model != null) ? new HashSet<int>(Model.appearancesearchsettings.eyecolorlist.Select(c => c.id)) : LookingForEyeColorValues;
+            HashSet<int> LookingForHairColorValues = new HashSet<int>();
+            LookingForHairColorValues = (Model != null) ? new HashSet<int>(Model.appearancesearchsettings.haircolorlist.Select(c => c.id)) : LookingForHairColorValues;
+            HashSet<int> LookingForHotFeatureValues = new HashSet<int>();
+            LookingForHotFeatureValues = (Model != null) ? new HashSet<int>(Model.appearancesearchsettings.hotfeaturelist.Select(c => c.id)) : LookingForHotFeatureValues;
+
+            ////lifestylesearchsettings search values   
+
+            ////charactersearchsettings seach  values   
+
+
+
+
+
+            //distance handling if that was set
+
+            var sourcePoint = spatialextentions.CreatePoint(myLattitude.Value, myLongitude.Value);
+            // find any locations within 5 miles ordered by distance
+            //first convert miles value to meters
+            var MaxdistanceInMiles = spatialextentions.MilesToMeters(maxdistancefromme);
+
+
+            //TOD DO optimize this somehow uings REDIS
+            //now get the emtire database list 
+            // removed pprofile this user has blocked as well as inactive and banned profiles          
+            var blocks = db.Repository<action>().getmyactionsbyprofileidandactiontype(Model.profileid.Value, (int)actiontypeEnum.Block);
+
+            //filter out blocked profiles 
+            //******************************
+            var MyActiveblocks = from c in blocks
+                                 select new
+                                 {
+                                     ProfilesBlockedId = c.target_profile_id
+                                 };
+
+
+            IQueryable<profiledata> profiles = db.Repository<profiledata>().Query()
+                .Include
+                 (z => z.profile.profilemetadata)
+                .Select().Where(f => f.profile.status_id != (int)profilestatusEnum.Banned | f.profile.status_id != (int)profilestatusEnum.Inactive && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile.id)).AsQueryable();
+
+            //seccond  filter profiles that have blocked me or i them           
+            var othersblocks = memberactionsextentions.
+                getactiveotheractionprofilesbyprofileidandactiontype(new ProfileModel { profileid = Model.profileid }, db, (int)actiontypeEnum.Block);
+
+            //filter out all profiles that have blocked this user 
+            //*****************
+            profiles = profiles.Where(z => !othersblocks.Any(b => b.id == z.profile.id));
+
+
+            //Show me's filtering done here , for now only by photo
+            //*********************************************************
+
+            //photos only show me
+            if (Model.basicsearchsettings.showmelist.Any(z => z.id == (int)showmeEnum.MembersWithPhotos))
+                profiles = profiles.Where(z => z.profile.profilemetadata.photos.Any(m => m.photostatus_id == (int)photostatusEnum.Gallery));
+
+            //likes only show me
+
+            //Distance next filter 
+            //***************************************************
+            if (maxdistancefromme != null)
+                profiles = profiles.Where(z => z.location.Distance(sourcePoint) <= MaxdistanceInMiles);
+
+
+            //apperanec hash set filters next 
+            //******************************************
+            if (LookingForBodyTypesValues.Count > 0)
+                profiles = profiles.Where(x => x.profile.profilemetadata.profiledata_ethnicity.All(s => LookingForBodyTypesValues.Contains(s.ethnicty_id.GetValueOrDefault()))); ;
+
+
+            //test to here before figurin
+            //****end of appperance filtering ****
+
+            //Character hash set filters next 
+            //******************************************
+
+            //****end of Character filtering ****
+
+            //Lifestyle hash set filters next 
+            //******************************************
+
+            //****end of Lifestyle filtering ****
+
+
+
+            //order bys here 
+            //***************************************
+            //furtherest
+            if (Model.basicsearchsettings.sortbylist.Any(z => z.id == (int)sortbytypeEnum.Farthest))
+                profiles = profiles.OrderBy(y => y.location.Distance(sourcePoint));
+            //nearest
+            if (Model.basicsearchsettings.sortbylist.Any(z => z.id == (int)sortbytypeEnum.Closest))
+                profiles = profiles.OrderByDescending(y => y.location.Distance(sourcePoint));
+
+
+            //TO DO needs filter for the profile ranking as well , and photo quality etc
+            IQueryable<MemberSearchViewModel> matches = profiles
+
+                         .OrderBy(y => y.location.Distance(sourcePoint))
+                        .Select
+                        (x => new MemberSearchViewModel
+                        {
+                            //populate values server side to be used later                                                        
+
+                            id = x.profile_id,
+                            creationdate = x.profile.creationdate,
+                            profile = x.profile,
+                            distancefromme = x.location.Distance(sourcePoint),
+                            stateprovince = x.stateprovince,
+                            city = x.city,
+                            postalcode = x.postalcode,
+                            countryid = x.countryid,
+                            genderid = x.gender_id,
+                            birthdate = x.birthdate,
+
+                            screenname = x.profile.screenname,
+                            longitude = x.longitude ?? 0,
+                            latitude = x.latitude ?? 0,
+                            lastlogindate = x.profile.logindate
+
+                        }).AsQueryable();
+
+
+            return matches;
+
+        }
+
+        #endregion
     }
 
 }

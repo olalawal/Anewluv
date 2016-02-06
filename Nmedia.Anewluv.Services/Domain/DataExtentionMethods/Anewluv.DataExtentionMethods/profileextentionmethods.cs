@@ -34,7 +34,7 @@ namespace Anewluv.DataExtentionMethods
             return repo.Query(p => p.profile.screenname == model.screenname).Select().FirstOrDefault();
         }
 
-        //TO DO add photos and photo conversions maybe ? so we dont need the profile viewmodel
+        //removed photo conversions until it can be filtered on other end and no gunarntee on this ?
         public static profilemetadata getprofilemetadatabyprofileid(this IRepository<profilemetadata> repo, ProfileModel model)
         {
 
@@ -43,7 +43,8 @@ namespace Anewluv.DataExtentionMethods
                 return repo.Query(p => p.profile_id == model.profileid.Value)
 
                     .Include(x => x.profile)
-                       .Include(z => z.photos.Select(s => s.photoconversions))
+                    // potos are filtered by other calls based on roles and blocks actions etc
+                    //.Include(z => z.photos.Select(s => s.photoconversions))
                           .Include(z => z.profiledata_ethnicity.Select(s => s.lu_ethnicity))
                              .Include(z => z.profiledata_hobby.Select(s => s.lu_hobby))
                                 .Include(z => z.profiledata_hotfeature.Select(s => s.lu_hotfeature))
@@ -51,9 +52,13 @@ namespace Anewluv.DataExtentionMethods
                         .Include(z => z.rateeratingvalues)
                         .Include(z => z.createdactions)
                         .Include(z => z.targetofactions)
-                        .Include(z => z.applications)
+                    // .Include(z => z.applications)
 
                         .Include(x => x.profile.profiledata)
+
+                         //added visibility settings
+                      .Include(x => x.profile.profiledata.visiblitysettings)
+
                          .Include(x => x.profile.profiledata.lu_bodytype)
                          .Include(x => x.profile.profiledata.lu_diet)
                      .Include(x => x.profile.profiledata.lu_drinks)
@@ -79,12 +84,8 @@ namespace Anewluv.DataExtentionMethods
 
 
 
-                           //searchsettings
-                           .Include(x => x.searchsettings.Select(s => s.details))
-                              .Include(x => x.searchsettings.Select(s => s.locations))
-
-
-                    .Select().FirstOrDefault();
+                           //first search searchsettings since its created when user account is 
+                           .Include(x => x.searchsettings.Select(s => s.details)).Include(x => x.searchsettings.Select(s => s.locations)).Select().FirstOrDefault();
             }
             catch (Exception ex)
             {
@@ -95,6 +96,7 @@ namespace Anewluv.DataExtentionMethods
 
         /// <summary>
         /// added roles
+        /// This method is for internal use i.e we do not return this data to UI
         /// </summary>
         /// <param name="repo"></param>
         /// <param name="model"></param>
@@ -102,9 +104,20 @@ namespace Anewluv.DataExtentionMethods
         public static profile getprofilebyprofileid(this IRepository<profile> repo, ProfileModel model)
         {
 
-            return repo.Query(p => p.id == model.profileid.Value).Include(x => x.profiledata)
+            return repo.Query(p => p.id == model.profileid.Value)
+
+
+                .Include(x => x.profiledata)
+
+                     //added visibility settings
+                 .Include(x => x.profiledata.visiblitysettings)
+
+                
               
+                 //do not expose roles to UI i.e inetrnal service only
+                 //the select includes the role object 
                 .Include(p => p.membersinroles.Select(z => z.lu_role))
+
                     .Include(x => x.profiledata)
                      .Include(x => x.profiledata.lu_bodytype)
                      .Include(x => x.profiledata.lu_diet)
@@ -131,6 +144,13 @@ namespace Anewluv.DataExtentionMethods
                         .Include(x => x.profilemetadata.profiledata_hobby)
                        .Include(x => x.profilemetadata.profiledata_hotfeature)
                        .Include(x => x.profilemetadata.profiledata_lookingfor)
+
+                       //added profile metata data stuff
+                .Include(x => x.profilemetadata)
+                   .Include(z => z.profilemetadata.rateeratingvalues)
+                        .Include(z => z.profilemetadata.createdactions)
+                        .Include(z => z.profilemetadata.targetofactions)
+                 .Include(z => z.profilemetadata.applications)
 
 
                 .Include(i => i.profilemetadata.searchsettings.Select(s => s.details)).Select().FirstOrDefault();

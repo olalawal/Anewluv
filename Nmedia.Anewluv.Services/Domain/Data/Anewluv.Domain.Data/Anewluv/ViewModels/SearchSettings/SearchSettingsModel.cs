@@ -47,5 +47,13 @@ namespace Anewluv.Domain.Data.ViewModels
         public bool? isfullediting { get; set; }
 
         public  List<string> currenterrors = new List<string>();
+
+        //for searching
+        [DataMember]
+        public int page { get; set; }
+        [DataMember]
+        public int numberperpage { get; set; }
+
+
     }
 }
