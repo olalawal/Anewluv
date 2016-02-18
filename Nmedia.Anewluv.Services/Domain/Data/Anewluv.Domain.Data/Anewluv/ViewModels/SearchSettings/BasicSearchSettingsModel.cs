@@ -78,7 +78,7 @@ namespace Anewluv.Domain.Data.ViewModels
         [DataMember]
         public string postalcode { get; set; }
 
-        [DataMember]
+
         [DataMember]
         public double? mobilelattitude { get; set; }
         [DataMember]      
