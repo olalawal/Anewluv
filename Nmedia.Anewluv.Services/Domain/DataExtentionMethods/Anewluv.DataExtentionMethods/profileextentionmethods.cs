@@ -9,6 +9,7 @@ using Anewluv.Domain.Data.ViewModels;
 using Repository.Pattern.Repositories;
 using Repository.Pattern.UnitOfWork;
 using Nmedia.Infrastructure.Utils;
+using Repository.Pattern.Infrastructure;
 
 
 
@@ -230,11 +231,11 @@ namespace Anewluv.DataExtentionMethods
             //MembersRepository membersrepository = new MembersRepository();
             //get the correct value from DB
             //lazy loading needed
-            var profile = repo.Query(p => p.emailaddress == model.email)
+            var profile = repo.Query(p => p.openids.Any(z=>z.lu_openidprovider.description.ToUpper() == model.openidprovider.ToUpper() && z.openididentifier == model.openididentifier))
                 .Include(x => x.profiledata)
+                .Include(m=>m.openids)
                 .Include(p => p.membersinroles.Select(z => z.lu_role))   
                 .Include(z=>z.profilemetadata).Select().FirstOrDefault();
-
 
             //if we have an active cache we store the current value 
             if (profile != null && profile.openids.Any(p => p.lu_openidprovider.description == model.openidprovider))
@@ -249,6 +250,15 @@ namespace Anewluv.DataExtentionMethods
             //MembersRepository membersrepository = new MembersRepository();
             //get the correct value from DB
             return (repo.Query(p => p.emailaddress == model.email).Select().FirstOrDefault() != null);
+
+
+        }
+
+        public static bool checkifopenidalreadyexists(this IRepository<profile> repo, ProfileModel model)
+        {
+            //MembersRepository membersrepository = new MembersRepository();
+            //get the correct value from DB
+            return (repo.Query(p =>p.emailaddress == model.email &&  p.openids.Any(z=>z.lu_openidprovider.description == model.openidprovider && z.openididentifier == model.openididentifier)).Select().FirstOrDefault() != null);
 
 
         }
@@ -517,8 +527,26 @@ namespace Anewluv.DataExtentionMethods
                 }
          }
 
-        
-    
+
+        public static int createopenid(ProfileModel model, IUnitOfWorkAsync db)
+        {
+
+            var profileOpenIDStore = new openid
+            {
+                active = true,
+                creationdate = DateTime.UtcNow,
+                profile_id = model.profileid.Value,
+                lu_openidprovider = db.Repository<lu_openidprovider>().Queryable().ToList().Where(p => (p.description).ToUpper() == model.openidprovider.ToUpper()).FirstOrDefault(),
+                openididentifier = model.openididentifier,
+                ObjectState = ObjectState.Added
+            };
+
+            db.Repository<openid>().Insert(profileOpenIDStore);
+            var i = db.SaveChanges();
+
+            return profileOpenIDStore.id;
+
+        }
 
     
     
