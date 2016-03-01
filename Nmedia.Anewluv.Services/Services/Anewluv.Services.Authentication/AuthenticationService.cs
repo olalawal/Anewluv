@@ -1730,7 +1730,7 @@ namespace Anewluv.Services.Authentication
                             // var existingguid = getcurrentapikeybyprofileid(myQuery.id, db);
                             
                             //existing guid has to come from client
-                            var existingguid = model.apikey != "" ? new Guid(model.apikey) : (Guid?)null;
+                            var existingguid = !String.IsNullOrEmpty(model.apikey) ? new Guid(model.apikey) : (Guid?)null;
 
                             var guid = Api.AsyncCalls.validateorgetapikeyasync(new ApiKeyValidationModel
                             {
@@ -1818,7 +1818,7 @@ namespace Anewluv.Services.Authentication
 
                              profile = getprofilebybyopenid(model.email, model.openididentifier, model.openidprovider);
 
-
+                            
 
                             //TO DO change this to use activity not log time since its a better measure for the data we need 
                             //FIX the logtime code
@@ -1833,7 +1833,7 @@ namespace Anewluv.Services.Authentication
 
                                 //for now have it generate a new GUID each time to test 
                                 //var existingguid = getcurrentapikeybyprofileid(profile.id, _unitOfWorkAsync );
-                                var existingguid = model.apikey != null ? new Guid(model.apikey) : (Guid?)null;
+                                var existingguid = !String.IsNullOrEmpty(model.apikey) ? new Guid(model.apikey) : (Guid?)null;
 
 
                                 var guid = Api.AsyncCalls.validateorgetapikeyasync(new ApiKeyValidationModel
@@ -1863,8 +1863,7 @@ namespace Anewluv.Services.Authentication
                             {
                                 activitylist.Add(Api.AnewLuvLogging.CreateActivity(profile.id, null, (int)activitytypeEnum.failedopenidloginattempt, OperationContext.Current));
                                 Anewluv.Api.AsyncCalls.addprofileactivities(activitylist).DoNotAwait();
-                                return null;
-
+                                currenttoken.message = "no matching email adress";
                                 return currenttoken;
                             }
                             // });
@@ -2476,7 +2475,14 @@ namespace Anewluv.Services.Authentication
                          ).Include(f => f.openids)
                      .SelectAsync();
 
+                  
+                 
+
                     myprofile = profileresult.Result.FirstOrDefault();
+
+                    //no profile found that matches provider id and provider email
+                    if (myprofile == null) return null;
+
                     //get the openid providoer
                     lu_openidprovider provider = _unitOfWorkAsync.Repository<lu_openidprovider>().Queryable().Where(p => (p.description).ToUpper() == openidProvidername.ToUpper()).FirstOrDefault();
                     if (provider == null) return null;
@@ -2501,9 +2507,6 @@ namespace Anewluv.Services.Authentication
                             validprofile = true;
                         }
 
-                      
-
-                        
                     }
 
 

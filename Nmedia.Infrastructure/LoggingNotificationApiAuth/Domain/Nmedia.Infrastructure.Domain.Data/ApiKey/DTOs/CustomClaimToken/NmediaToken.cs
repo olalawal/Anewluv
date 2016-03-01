@@ -21,7 +21,9 @@ namespace Nmedia.Infrastructure.Domain.Data.CustomClaimToken
         [DataMember]
         public Guid Apikey { get; set; }
         [DataMember]
-        public DateTime? timestamp { get; set; }     
+        public DateTime? timestamp { get; set; }
+        [DataMember]
+        public string message { get; set; } 
 
     }
 }
