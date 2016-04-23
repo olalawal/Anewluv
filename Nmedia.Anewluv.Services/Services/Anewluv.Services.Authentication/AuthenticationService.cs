@@ -893,10 +893,344 @@ namespace Anewluv.Services.Authentication
                 }
             }
         }
+         
 
-        public void updateuser(MembershipUser user)
+        public async Task updateuser(MembershipUserViewModel user)        {
+
+             await UpdateUserCustom(user);
+        }
+
+        /// <summary>
+        /// used to update all proile stuff that is changable , including password
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public async Task UpdateUserCustom(MembershipUserViewModel user)
         {
-            UpdateUser(user);
+
+
+
+            //  AnewLuvMembershipUser u = (AnewLuvMembershipUser)user;
+            //  using (var db = _unitOfWorkAsync)
+            {
+                //db.IsAuditEnabled = false; //do not audit on adds
+                //   using (var transaction = db.BeginTransaction())
+                {
+                    try
+                    {
+
+                        bool profileupdated = false;
+                        bool profiledataupdated = false;
+                        //get profile and profile datas
+                        var profilerepo = _unitOfWorkAsync.Repository<profile>();
+                        var profiledatarepo = _unitOfWorkAsync.Repository<profiledata>();
+
+                        var ObjProfileEntityresult = await _unitOfWorkAsync.RepositoryAsync<profile>().Query(p => p.id == Convert.ToInt16(user.profileid)).SelectAsync();
+                        profile ObjProfileEntity = ObjProfileEntityresult.FirstOrDefault();
+                        var objprofileDateEntityresult = await _unitOfWorkAsync.RepositoryAsync<profiledata>().Query(p => p.profile_id == Convert.ToInt16(user.profileid)).SelectAsync();
+                        profiledata objprofileDateEntity = objprofileDateEntityresult.FirstOrDefault();
+
+                        // new gpsdata;
+
+                        //string[] tempCityAndStateProvince = user.city.Split(',');
+                        Random objRandom = new Random();
+                        int intStart = objRandom.Next(1, 9);
+                        int intLastTwo = objRandom.Next(10, 99);
+                        //convert the string values to byte as needed
+                        //NumberFormatInfo provider = new NumberFormatInfo();
+                        // These properties affect the conversion.
+                        //provider.PositiveSign = "pos";
+                        gpsdata _GpsData = null;
+                        //int? countryID = null;
+                        string matchedcontryname = "";
+                        int? matchedcountryid = null;
+
+                        //conver the unquiqe coountry Name to an ID
+                        //store country ID for use later 
+                        // PostalData2Context GeoContext = new PostalData2Context();
+                        //    using (var tempdb = GeoContext)
+                        // {
+                        // GeoService GeoService = new GeoService(tempdb);
+                        //  countryID = GeoService.getcountryidbycountryname(country);
+
+
+                        //verify the country 
+                        if (user.country == "" && user.countryid != null)
+                        {
+                            matchedcountryid = spatialextentions.getcountrycountryidbycountryname(new GeoModel { country = user.country }, _storedProcedures).Result;
+                            matchedcontryname = user.country;
+                        }
+                        else if (user.country != "")
+                        {
+                            matchedcontryname = spatialextentions.getcountrynamebycountryid(new GeoModel { countryid = user.countryid.ToString() }, _storedProcedures);
+                            matchedcountryid = user.countryid;
+                        }
+
+
+
+                        //to do validate city as well
+
+                        //verify all the spatial data
+                        if (matchedcontryname != "")
+                            _GpsData = spatialextentions.getgpsdatabycitycountrypostalcode(new GeoModel { country = user.country, city = user.city, postalcode = user.zippostalcode }, _storedProcedures);
+                        //  }
+
+                        //  int countryID = Api.GeoService.getcountryidbycountryname(user.country);
+
+                        //get the longidtue and latttude 
+                        //   gpsdata _GpsData = Api.GeoService.getgpsdatabycitycountrypostalcode(user.country, tempCityAndStateProvince[0], user.ziporpostalcode);
+
+
+
+                        //split up the city from state province
+                        //Build the profile data table                   
+                        if (_GpsData != null) { objprofileDateEntity.latitude = Convert.ToDouble(_GpsData.latitude); profiledataupdated = true; }
+                        if (_GpsData != null) { objprofileDateEntity.longitude = Convert.ToDouble(_GpsData.longitude); profiledataupdated = true; }
+                        if (_GpsData != null && user.city != "") { objprofileDateEntity.city = user.city; profiledataupdated = true; }
+                        if (_GpsData != null && user.stateprovince != "") { objprofileDateEntity.stateprovince = user.stateprovince; profiledataupdated = true; }
+                        //if (_GpsData != null && (user.region != "" && user.stateprovince =="")) objprofileDateEntity.stateprovince = user.region;
+
+
+
+                        if (_GpsData != null && user.country != "") { objprofileDateEntity.countryid = matchedcountryid; profiledataupdated = true; }
+                        if (_GpsData != null && user.zippostalcode != "") { objprofileDateEntity.postalcode = user.zippostalcode; profiledataupdated = true; }
+                        if (user.genderid != "") { objprofileDateEntity.gender_id = Convert.ToInt16(user.genderid); profiledataupdated = true; }
+                        if (user.birthdate != null) { objprofileDateEntity.birthdate = Convert.ToDateTime(user.birthdate); profiledataupdated = true; }
+                        if (user.phonenumber != "") { objprofileDateEntity.phone = user.phonenumber; profiledataupdated = true; }
+                        //objprofileDateEntity.AboutMe = "Hello";
+
+
+
+                        //set all the entity values
+                        // ObjProfileEntity.username = username;
+                        //changed the encryption to something stronger
+
+                        //only update password if it changed
+                        if (user.verificationcode == user.verificationcode && user.password != null | user.password != "")
+                        {
+                            this.updatepasswordbyprofileid(ObjProfileEntity, Encryption.encryptString(user.password));
+                            profileupdated = true;
+                        }
+                        // ObjProfileEntity.ProfileID = email;
+                        // ObjProfileEntity.ScreenName = screenname;
+                        //need to add a new feild
+                        // ObjProfileEntity.ActivationCode = Common.Encryption.EncodeString(email + screenname);
+                        //Mid(intStart, intStart, 14) & CStr(intLastTwo) 'need to beef this up with the session variable
+                        //ObjProfileEntity.creationdate = System.DateTime.Now;
+
+                        if (profiledataupdated) profiledatarepo.Update(objprofileDateEntity);
+
+
+                        if (profileupdated)
+                        {
+
+
+                            profilerepo.Update(ObjProfileEntity);
+                            ObjProfileEntity.modificationdate = System.DateTime.Now;
+                            //save all changes bro                         
+                            //                        _unitOfWorkAsync
+
+                        }
+                        // ObjProfileEntity.LoginDate = System.DateTime.Now;
+                        // fix this to null
+                        //ObjProfileEntity.ForwardMessages = 1;
+                        //  ObjProfileEntity.SecurityQuestionID = System.Convert.ToByte(user.securityquestion );
+                        //   ObjProfileEntity.SecurityAnswer = user.securityanswer;
+                        //ObjProfileEntity.ProfileStatusID = 1;
+
+
+                        if (profiledataupdated | profileupdated)
+                            _unitOfWorkAsync.SaveChangesAsync().DoNotAwait();
+
+
+                        //dbContext.AddToprofiledatas(objprofileDateEntity);
+                        // dbContext.AddToprofiles(ObjProfileEntity);
+
+                        // transaction.Commit();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        // transaction.Rollback();
+                        using (var logger = new Logging(applicationEnum.UserAuthorizationService))
+                        {
+
+                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null);
+                        }
+
+                        FaultReason faultreason = new FaultReason("Error in User Authentication service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+
+                        //throw convertedexcption;
+                    }
+                    finally
+                    {
+                        //Api.DisposeGeoService();
+                    }
+                }
+            }
+        }
+        
+        public async Task UpdateUserCustomNew(MembershipUserViewModel user)
+        {
+
+
+
+            //  AnewLuvMembershipUser u = (AnewLuvMembershipUser)user;
+            //  using (var db = _unitOfWorkAsync)
+            {
+                //db.IsAuditEnabled = false; //do not audit on adds
+                //   using (var transaction = db.BeginTransaction())
+                {
+                    try
+                    {
+
+                        bool updated = false;
+
+                        //get profile and profile datas
+                        // var profilereporesult = await _unitOfWorkAsync.RepositoryAsync<profile>().Query().SelectAsync();
+                        // var profilerepo = profilereporesult.ToList();
+
+                        // var profiledatareporesult = await _unitOfWorkAsync.RepositoryAsync<profiledata>().Query().SelectAsync();
+                        //  var profiledatarepo = profiledatareporesult.ToList();
+
+                        var ObjProfileEntityresult = await _unitOfWorkAsync.RepositoryAsync<profile>().Query(p => p.id == Convert.ToInt16(user.profileid)).SelectAsync();
+                        profile ObjProfileEntity = ObjProfileEntityresult.FirstOrDefault();
+
+                        var objprofileDateEntityresult = await _unitOfWorkAsync.RepositoryAsync<profiledata>().Query(p => p.profile_id == Convert.ToInt16(user.profileid)).SelectAsync();
+
+                        profiledata objprofileDateEntity = objprofileDateEntityresult.FirstOrDefault();
+                        // new gpsdata;
+
+                        string[] tempCityAndStateProvince = user.city.Split(',');
+                        Random objRandom = new Random();
+                        int intStart = objRandom.Next(1, 9);
+                        int intLastTwo = objRandom.Next(10, 99);
+                        //convert the string values to byte as needed
+                        //NumberFormatInfo provider = new NumberFormatInfo();
+                        // These properties affect the conversion.
+                        //provider.PositiveSign = "pos";
+                        gpsdata _GpsData = null;
+                        int? countryID = null;
+
+                        //conver the unquiqe coountry Name to an ID
+                        //store country ID for use later 
+                        // PostalData2Context GeoContext = new PostalData2Context();
+                        //    using (var tempdb = GeoContext)
+                        // {
+                        // GeoService GeoService = new GeoService(tempdb);
+                        //  countryID = GeoService.getcountryidbycountryname(country);
+
+                        var value = spatialextentions.getcountrynamebycountryid(new GeoModel { countryid = user.country }, _storedProcedures);
+
+                        //get the longidtue and latttude 
+                        _GpsData = spatialextentions.getgpsdatabycitycountrypostalcode(new GeoModel { country = user.country, city = tempCityAndStateProvince[0], postalcode = user.zippostalcode }, _storedProcedures);
+                        //  }
+
+                        //  int countryID = Api.GeoService.getcountryidbycountryname(u.country);
+
+                        //get the longidtue and latttude 
+                        //   gpsdata _GpsData = Api.GeoService.getgpsdatabycitycountrypostalcode(u.country, tempCityAndStateProvince[0], u.ziporpostalcode);
+
+
+
+                        //split up the city from state province
+                        //Build the profile data table                   
+                        objprofileDateEntity.latitude = Convert.ToDouble(_GpsData.latitude);
+                        objprofileDateEntity.longitude = Convert.ToDouble(_GpsData.longitude);
+                        objprofileDateEntity.city = tempCityAndStateProvince[0];
+                        objprofileDateEntity.countryregion = "NA";
+
+                        if (tempCityAndStateProvince.Count() == 2)
+                        {
+                            objprofileDateEntity.stateprovince = (string.IsNullOrEmpty(tempCityAndStateProvince[1])) ? "NA" : tempCityAndStateProvince[1];
+                        }
+                        else
+                        {
+                            objprofileDateEntity.stateprovince = "NA";
+                        }
+
+                        objprofileDateEntity.countryid = countryID;
+                        objprofileDateEntity.postalcode = user.zippostalcode;
+                        objprofileDateEntity.gender_id = Int32.Parse(user.genderid);
+                        objprofileDateEntity.birthdate = user.birthdate;
+                        objprofileDateEntity.phone = "NA";
+                        //objprofileDateEntity.AboutMe = "Hello";
+
+
+
+                        //set all the entity values
+                        // ObjProfileEntity.username = username;
+                        //changed the encryption to something stronger
+
+                        //only update password if it changed
+                        if (user.password != null)
+                        {
+                            ObjProfileEntity.password = Encryption.encryptString(user.password);
+                            ObjProfileEntity.passwordChangeddate = DateTime.Now;
+                            ObjProfileEntity.passwordchangecount = (ObjProfileEntity.passwordchangecount == null) ? 1 : ObjProfileEntity.passwordchangecount + 1;
+                        }
+                        // ObjProfileEntity.ProfileID = email;
+                        // ObjProfileEntity.ScreenName = screenname;
+                        //need to add a new feild
+                        // ObjProfileEntity.ActivationCode = Common.Encryption.EncodeString(email + screenname);
+                        //Mid(intStart, intStart, 14) & CStr(intLastTwo) 'need to beef this up with the session variable
+                        //ObjProfileEntity.creationdate = System.DateTime.Now;
+                        ObjProfileEntity.modificationdate = System.DateTime.Now;
+                        // ObjProfileEntity.LoginDate = System.DateTime.Now;
+                        // fix this to null
+                        //ObjProfileEntity.ForwardMessages = 1;
+                        //  ObjProfileEntity.SecurityQuestionID = System.Convert.ToByte(u.securityquestion );
+                        //   ObjProfileEntity.SecurityAnswer = u.securityanswer;
+                        //ObjProfileEntity.ProfileStatusID = 1;
+
+
+
+                        ObjProfileEntity.ObjectState = ObjectState.Modified;
+                        objprofileDateEntity.ObjectState = ObjectState.Modified;
+                        //dbContext.AddToprofiledatas(objprofileDateEntity);
+                        // dbContext.AddToprofiles(ObjProfileEntity);
+                        //  ObjProfileEntity);
+                        //  profiledatarepo.Update(objprofileDateEntity);
+                        //save all changes bro                         
+                        //                        _unitOfWorkAsync
+
+
+                        var i = _unitOfWorkAsync.SaveChanges();
+                        // transaction.Commit();
+
+
+                        var activitylist = new List<ActivityModel>();
+                        activitylist.Add(Api.AnewLuvLogging.CreateActivity(ObjProfileEntity.id, null, (int)activitytypeEnum.updateprofile, OperationContext.Current));
+                        Anewluv.Api.AsyncCalls.addprofileactivities(activitylist).DoNotAwait();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        // transaction.Rollback();
+                        using (var logger = new Logging(applicationEnum.UserAuthorizationService))
+                        {
+
+                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null);
+                        }
+
+                        FaultReason faultreason = new FaultReason("Error in User Authentication service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+
+                        //throw convertedexcption;
+                    }
+                    finally
+                    {
+                        //Api.DisposeGeoService();
+                    }
+                }
+            }
         }
 
         public override MembershipUser GetUser(string username, bool userIsOnline)
@@ -1975,176 +2309,7 @@ namespace Anewluv.Services.Authentication
         }
 
 
-        /// <summary>
-        /// used to update all proile stuff that is changable , including password
-        /// </summary>
-        /// <param name="user"></param>
-        /// <returns></returns>
-        public async Task updateuser(MembershipUserViewModel user)
-        {
-
-
-
-            //  AnewLuvMembershipUser u = (AnewLuvMembershipUser)user;
-            //  using (var db = _unitOfWorkAsync)
-            {
-                //db.IsAuditEnabled = false; //do not audit on adds
-                //   using (var transaction = db.BeginTransaction())
-                {
-                    try
-                    {
-
-                        bool profileupdated = false;
-                        bool profiledataupdated = false;
-                        //get profile and profile datas
-                        var profilerepo = _unitOfWorkAsync.Repository<profile>();
-                        var profiledatarepo = _unitOfWorkAsync.Repository<profiledata>();
-
-                        var ObjProfileEntityresult = await _unitOfWorkAsync.RepositoryAsync<profile>().Query(p => p.id == Convert.ToInt16(user.profileid)).SelectAsync();
-                        profile ObjProfileEntity = ObjProfileEntityresult.FirstOrDefault();
-                        var objprofileDateEntityresult = await _unitOfWorkAsync.RepositoryAsync<profiledata>().Query(p => p.profile_id == Convert.ToInt16(user.profileid)).SelectAsync();
-                        profiledata objprofileDateEntity = objprofileDateEntityresult.FirstOrDefault();
-
-                        // new gpsdata;
-
-                        //string[] tempCityAndStateProvince = user.city.Split(',');
-                        Random objRandom = new Random();
-                        int intStart = objRandom.Next(1, 9);
-                        int intLastTwo = objRandom.Next(10, 99);
-                        //convert the string values to byte as needed
-                        //NumberFormatInfo provider = new NumberFormatInfo();
-                        // These properties affect the conversion.
-                        //provider.PositiveSign = "pos";
-                        gpsdata _GpsData = null;
-                        //int? countryID = null;
-                        string matchedcontryname = "";
-                        int? matchedcountryid = null;
-
-                        //conver the unquiqe coountry Name to an ID
-                        //store country ID for use later 
-                        // PostalData2Context GeoContext = new PostalData2Context();
-                        //    using (var tempdb = GeoContext)
-                        // {
-                        // GeoService GeoService = new GeoService(tempdb);
-                        //  countryID = GeoService.getcountryidbycountryname(country);
-
-
-                        //verify the country 
-                        if (user.country == "" && user.countryid != null)
-                        {
-                            matchedcountryid = spatialextentions.getcountrycountryidbycountryname(new GeoModel { country = user.country }, _storedProcedures).Result;
-                            matchedcontryname = user.country;
-                        }
-                        else if (user.country != "")
-                        {
-                            matchedcontryname = spatialextentions.getcountrynamebycountryid(new GeoModel { countryid = user.countryid.ToString() }, _storedProcedures);
-                            matchedcountryid = user.countryid;
-                        }
-
-
-
-                        //to do validate city as well
-
-                        //verify all the spatial data
-                        if (matchedcontryname != "")
-                            _GpsData = spatialextentions.getgpsdatabycitycountrypostalcode(new GeoModel { country = user.country, city = user.city, postalcode = user.zippostalcode }, _storedProcedures);
-                        //  }
-
-                        //  int countryID = Api.GeoService.getcountryidbycountryname(user.country);
-
-                        //get the longidtue and latttude 
-                        //   gpsdata _GpsData = Api.GeoService.getgpsdatabycitycountrypostalcode(user.country, tempCityAndStateProvince[0], user.ziporpostalcode);
-
-
-
-                        //split up the city from state province
-                        //Build the profile data table                   
-                        if (_GpsData != null) { objprofileDateEntity.latitude = Convert.ToDouble(_GpsData.latitude); profiledataupdated = true; }
-                        if (_GpsData != null) { objprofileDateEntity.longitude = Convert.ToDouble(_GpsData.longitude); profiledataupdated = true; }
-                        if (_GpsData != null && user.city != "") { objprofileDateEntity.city = user.city; profiledataupdated = true; }
-                        if (_GpsData != null && user.stateprovince != "") { objprofileDateEntity.stateprovince = user.stateprovince; profiledataupdated = true; }
-                        //if (_GpsData != null && (user.region != "" && user.stateprovince =="")) objprofileDateEntity.stateprovince = user.region;
-
-
-
-                        if (_GpsData != null && user.country != "") { objprofileDateEntity.countryid = matchedcountryid; profiledataupdated = true; }
-                        if (_GpsData != null && user.zippostalcode != "") { objprofileDateEntity.postalcode = user.zippostalcode; profiledataupdated = true; }
-                        if (user.genderid != "") { objprofileDateEntity.gender_id = Convert.ToInt16(user.genderid); profiledataupdated = true; }
-                        if (user.birthdate != null) { objprofileDateEntity.birthdate = Convert.ToDateTime(user.birthdate); profiledataupdated = true; }
-                        if (user.phonenumber != "") { objprofileDateEntity.phone = user.phonenumber; profiledataupdated = true; }
-                        //objprofileDateEntity.AboutMe = "Hello";
-
-
-
-                        //set all the entity values
-                        // ObjProfileEntity.username = username;
-                        //changed the encryption to something stronger
-
-                        //only update password if it changed
-                        if (user.verificationcode == user.verificationcode && user.password != null | user.password != "")
-                        {
-                            this.updatepasswordbyprofileid(ObjProfileEntity, Encryption.encryptString(user.password));
-                            profileupdated = true;
-                        }
-                        // ObjProfileEntity.ProfileID = email;
-                        // ObjProfileEntity.ScreenName = screenname;
-                        //need to add a new feild
-                        // ObjProfileEntity.ActivationCode = Common.Encryption.EncodeString(email + screenname);
-                        //Mid(intStart, intStart, 14) & CStr(intLastTwo) 'need to beef this up with the session variable
-                        //ObjProfileEntity.creationdate = System.DateTime.Now;
-
-                        if (profiledataupdated) profiledatarepo.Update(objprofileDateEntity);
-
-
-                        if (profileupdated)
-                        {
-
-
-                            profilerepo.Update(ObjProfileEntity);
-                            ObjProfileEntity.modificationdate = System.DateTime.Now;
-                            //save all changes bro                         
-                            //                        _unitOfWorkAsync
-
-                        }
-                        // ObjProfileEntity.LoginDate = System.DateTime.Now;
-                        // fix this to null
-                        //ObjProfileEntity.ForwardMessages = 1;
-                        //  ObjProfileEntity.SecurityQuestionID = System.Convert.ToByte(user.securityquestion );
-                        //   ObjProfileEntity.SecurityAnswer = user.securityanswer;
-                        //ObjProfileEntity.ProfileStatusID = 1;
-
-
-                        if (profiledataupdated | profileupdated) _unitOfWorkAsync.SaveChangesAsync().DoNotAwait();
-                        //dbContext.AddToprofiledatas(objprofileDateEntity);
-                        // dbContext.AddToprofiles(ObjProfileEntity);
-
-                        // transaction.Commit();
-
-                    }
-                    catch (Exception ex)
-                    {
-                        // transaction.Rollback();
-                        using (var logger = new Logging(applicationEnum.UserAuthorizationService))
-                        {
-
-                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null);
-                        }
-
-                        FaultReason faultreason = new FaultReason("Error in User Authentication service");
-                        string ErrorMessage = "";
-                        string ErrorDetail = "ErrorMessage: " + ex.Message;
-                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-
-
-                        //throw convertedexcption;
-                    }
-                    finally
-                    {
-                        //Api.DisposeGeoService();
-                    }
-                }
-            }
-        }
+       
 
         /// <summary>
         /// puts user account in password reset mode and sets a GUID to the user's email that is needed to allow reset of password
