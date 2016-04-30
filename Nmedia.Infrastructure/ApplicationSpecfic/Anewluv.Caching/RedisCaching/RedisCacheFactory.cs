@@ -679,17 +679,17 @@ namespace Anewluv.Caching.RedisCaching
                 }
                 return photoImagersizerformat;
             }
-            public static List<listitem> getrolelist(IUnitOfWorkAsync context)
+            public static List<lu_role> getrolelist(IUnitOfWorkAsync context)
             {
                IDatabase dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
                  dataCache = GetCache();  // dataCacheFactory.GetDefaultCache();
 
-                 List<listitem> roles = null;
+                List<lu_role> role = null;
                 try
                 {
 
-                    try { if (dataCache != null) roles = dataCache.Get("rolelist") as List<listitem>; }
+                    try { if (dataCache != null) role = dataCache.Get("rolelist") as List<lu_role>; }
                   catch (RedisCommandException ex)
                     {
                         //TO DO LOG and NOTIFY HERE
@@ -701,23 +701,20 @@ namespace Anewluv.Caching.RedisCaching
                        // throw;
                     }
 
-                    if (roles == null)
+                    if (role == null)
                     {
                         // context context = new context();
                         //remafill the Genders list from the repositry and exit
-                        roles = (from o in context.Repository<lu_role>().Queryable().ToList()
-                                   select new listitem
-                                   {
-                                       id = o.id, 
-                                       description = o.description,                                        
-                                       selected = false
-                                   }).ToList();
+                        role = context.Repository<lu_role>().Queryable().OrderBy(x => x.description).ToList();
+                        // Datings context = new modelContext();
+                        // model =  context.Repository<models.Single(c => c.Id == id);
+
 
                         //if we still have no datacahe do tis
                         if (dataCache != null)
-                            dataCache.Set("rolelist", roles);
+                           dataCache.Set("rolelist", role);
 
-                    } return roles;
+                    } return role;
                 }
               catch (RedisCommandException ex)
                 {
@@ -729,7 +726,7 @@ namespace Anewluv.Caching.RedisCaching
                     //put cleanup code here
                    // throw;
                 }
-                return roles;
+                return role;
             }
             public static List<listitem> getsecurityleveltypelist(IUnitOfWorkAsync context)
             {

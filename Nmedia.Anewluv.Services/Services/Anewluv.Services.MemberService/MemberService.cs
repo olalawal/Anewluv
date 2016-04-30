@@ -989,7 +989,7 @@ namespace Anewluv.Services.Members
                     //   string ErrorDetail = "ErrorMessage: " + ex.Message;
                     // throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
 
-                    throw ex;
+                    //throw convertedexcption;
                 }
             }
 

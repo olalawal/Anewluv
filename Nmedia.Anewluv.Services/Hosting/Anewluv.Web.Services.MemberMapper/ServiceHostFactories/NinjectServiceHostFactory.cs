@@ -13,13 +13,8 @@ namespace Anewluv.Web.Services.MemberMapper.ServiceHostFactories
 {
     public class NinjectServiceHostFactory : InjectedServiceHostFactory<IKernel>
     {
-
-
-
         protected override IKernel CreateContainer()
         {
-
-           
             IKernel container = new StandardKernel();
             //container.Load<NinjectModules.AnewLuvContextModule>();  //they both share the context so load it here and only once
             //container.Load<NinjectModules.PostalDataContextModule>(); //used by mapper and posibly members as well

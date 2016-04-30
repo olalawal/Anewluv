@@ -48,17 +48,6 @@ namespace Anewluv.Domain.Data.ViewModels
         [DataMember]
         public List<listitem> genderlist { get; set; }
 
-        //new feilds for edit account     
-
-        [DataMember]
-        public string emailaddress { get; set; }
-        [DataMember]
-        public bool forwardmessages { get; set; }
-        [DataMember]
-        public string securityanswer { get; set; }
-      
-        //roles/suscription
-        public virtual List<listitem> suscriptions { get; set; }
 
       
 

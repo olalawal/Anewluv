@@ -96,13 +96,7 @@ namespace Anewluv.Domain.Data
          [Description("updated profile match settings")]
          updatedprofilematchsettings = 27  ,
          [Description("created profile")]
-         newprofile = 29  ,
-         [Description("Failed Login Attempt")]
-         failedloginattempt = 30,
-         [Description("Open Id Login")]
-         loginopenid = 31,
-         [Description("Failed Open Id Login Attempt")]
-         failedopenidloginattempt = 32,
+         newprofile = 28  
 
 
     }

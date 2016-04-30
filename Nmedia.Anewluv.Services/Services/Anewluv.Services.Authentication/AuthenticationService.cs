@@ -151,7 +151,7 @@ namespace Anewluv.Services.Authentication
             //return null;
         }
 
-        public AnewLuvMembershipUser createusercustom(MembershipUserViewModel model)
+        public async Task<AnewLuvMembershipUser> createusercustom(MembershipUserViewModel model)
         {
             MembershipCreateStatus status;
             return CreateUserCustom(model.username,
@@ -161,9 +161,33 @@ namespace Anewluv.Services.Authentication
                        model.longitude, model.latitude, model.screenname, model.zippostalcode, model.activationcode,
                        model.isApproved,
                        model.providerUserKey, out status);
+
         }
-        
-            
+
+        public async Task<bool> validateuserbyusernamepassword(ProfileModel profile)
+        {
+            var task = Task.Factory.StartNew(() =>
+            {
+                return ValidateUser(profile.username, profile.password);
+            });
+            return await task.ConfigureAwait(false);
+
+
+        }
+
+        //5-82012 updated to only valudate username
+        //overide for validate user that uses just the username, this can be used for pass through auth where a user was already prevalidated via another method
+
+        public bool validateuserbyusername(ProfileModel profile)
+        {
+            return ValidateUser(profile.username);
+        }
+
+        public bool validateuserbyopenid(ProfileModel profile)
+        {
+            return ValidateUser(profile.email, profile.openididentifier, profile.openidprovider);
+        }
+
         /// <summary>
         /// depreciated for the new method 
         /// </summary>
@@ -172,8 +196,7 @@ namespace Anewluv.Services.Authentication
         /// <returns></returns>
         public override bool ValidateUser(string username, string password)
         {
-            var activitylist = new List<ActivityModel>(); 
-            OperationContext ctx = OperationContext.Current;  
+
             var myQuery = new profile();
 
             // _unitOfWorkAsync.DisableProxyCreation = true;
@@ -232,15 +255,55 @@ namespace Anewluv.Services.Authentication
                     //check if decrypted string macthed username to upper  + secret
                     if (actualpasswordstring == decryptedPassword)
                     {
-                        activitylist.Add(Api.AnewLuvLogging.CreateActivity(myQuery.id, null, (int)activitytypeEnum.login, OperationContext.Current));
-                        Anewluv.Api.AsyncCalls.addprofileactivities(activitylist).DoNotAwait();
+                        //log the user logtime here so it is common to silverlight and MVC                  
+                        if (HttpContext.Current != null)
+                        {
+                            //Just for testing that it worked
+                            //TO DO remove when in prod
+                            AsyncCallback callback = result =>
+                            {
+                                //we dont do anything really with the callback so not needed really
+                                //  MemberService.Endupdateuserlogintimebyprofileidandsessionid(result);
+                            };
+
+
+
+                        }
+                        else
+                        {
+
+
+                            //Just for testing that it worked
+                            //TO DO remove when in prod
+                            AsyncCallback callback = result =>
+                            {
+                                //we dont do anything really with the callback so not needed really
+                                //  MemberService.Endupdateuserlogintimebyprofileidandsessionid(result);
+                            };
+
+
+                        }
+
+
+                        //TO DO get geodata from IP address down the line
+                        //also update profile activity
+                        //MemberService.Beginaddprofileactvity(
+                        //  new profileactivity
+                        //  {
+                        //      lu_activitytype = _unitOfWorkAsync.Repository<lu_activitytype>().Query(p => p.id == (int)activitytypeEnum.login)
+                        //      ,
+                        //      creationdate = DateTime.Now,
+                        //      profile_id = myQuery.id,
+                        //      ipaddress = HttpContext.Current.Request.UserHostAddress,
+                        //      routeurl = HttpContext.Current.Request.RawUrl,
+                        //      sessionid = HttpContext.Current != null ? HttpContext.Current.Session.SessionID : null
+                        //  }, null, MemberService);
+
+                        //also update the profiledata for the last login date
                         return true;
-                        
                     }
                     else
                     {
-                        activitylist.Add(Api.AnewLuvLogging.CreateActivity(myQuery.id, null, (int)activitytypeEnum.failedloginattempt, OperationContext.Current));
-                        Anewluv.Api.AsyncCalls.addprofileactivities(activitylist).DoNotAwait();
                         return false;
                     }
 
@@ -268,7 +331,6 @@ namespace Anewluv.Services.Authentication
             }
         }
 
-        //Disabled always returns false
         //5-82012 updated to only valudate username
         //overide for validate user that uses just the username, this can be used for pass through auth where a user was already prevalidated via another method
         public bool ValidateUser(string username)
@@ -341,7 +403,7 @@ namespace Anewluv.Services.Authentication
                         //  }, null, MemberService);
 
                         //also update the profiledata for the last login date
-                        return false;
+                        return true;
                     }
                     else
                     {
@@ -367,12 +429,9 @@ namespace Anewluv.Services.Authentication
             }
         }
 
-        //assumes we always have the email since its required from the openid provider
         public bool ValidateUser(string VerifedEmail, string openidIdentifer, string openidProvidername)
         {
-            var activitylist = new List<ActivityModel>();
-            bool validprofile = false;
-            OperationContext ctx = OperationContext.Current;  
+
             var myprofile = new profile();
             // _unitOfWorkAsync.DisableProxyCreation = true;
             //  using (var db = _unitOfWorkAsync)
@@ -380,17 +439,11 @@ namespace Anewluv.Services.Authentication
                 try
                 {
                     //open ID members are already verifed but it is posublethat a member who is not activated tries to use open ID
-                    //so they could be in order status 1                  
+                    //so they could be in order status 1
+                    myprofile = _unitOfWorkAsync.Repository<profile>().Query(p => p.emailaddress == VerifedEmail && p.status_id <= 2).Select().FirstOrDefault();
 
-                     //Dim ctx As New Entities()
-                    //TO DO add an inactive count login to track how many times a user logs in before they active profile default max should be = 3
-                    //added profile status ID validation as well i.e 2 for activated and is not banned 
-                    var profileresult =  _unitOfWorkAsync.Repository<profile>().Query(p => p.emailaddress == VerifedEmail &&
-                        (p.status_id != (int)profilestatusEnum.Banned | p.status_id != (int)profilestatusEnum.Inactive | p.status_id != (int)profilestatusEnum.ResetingPassword)
-                         ).Include(f=>f.openids)                         
-                     .SelectAsync();
 
-                    myprofile = profileresult.Result.FirstOrDefault();
+
                     //get the openid providoer
                     lu_openidprovider provider = _unitOfWorkAsync.Repository<lu_openidprovider>().Queryable().Where(p => (p.description).ToUpper() == openidProvidername.ToUpper()).FirstOrDefault();
                     if (provider == null) return false;
@@ -400,36 +453,70 @@ namespace Anewluv.Services.Authentication
                     var myopenIDstore = myprofile.openids.Where(p => p.openididentifier == openidIdentifer && provider.description.ToUpper() == openidProvidername.ToUpper() && p.active == true).FirstOrDefault();
 
                     //if we found an openID store for this type
-                    if (myprofile != null)                    {
-                    
-                        //check if this is a new provider if its a new one add it
+                    if (myopenIDstore == null && myprofile != null)
+                    //add the openID provider if its a new one
+                    {
 
-                        if (myopenIDstore != null)
-                        {
-                            validprofile = true;
-                        }
-                        else if (myopenIDstore ==null && provider !=null)
-                        {
-                           profileextentionmethods.createopenid(new ProfileModel { openididentifier = openidIdentifer, openidprovider = openidProvidername, profileid = myprofile.id }, _unitOfWorkAsync);
-                           validprofile = true;
-                        }
-
-                        if (validprofile)
-                        {
-                            activitylist.Add(Api.AnewLuvLogging.CreateActivity(myprofile.id, null, (int)activitytypeEnum.loginopenid, OperationContext.Current));
-                            Anewluv.Api.AsyncCalls.addprofileactivities(activitylist).DoNotAwait();
-                        }
-
-                        return validprofile;
+                        //MemberService.addnewopenidforprofile(new ProfileModel { profileid = myprofile.id });
                     }
-                   
-                    
-                    //invalid user
 
-                    activitylist.Add(Api.AnewLuvLogging.CreateActivity(myprofile.id, null, (int)activitytypeEnum.failedopenidloginattempt, OperationContext.Current));
-                    Anewluv.Api.AsyncCalls.addprofileactivities(activitylist).DoNotAwait();
-                    return validprofile;
-                    
+                    //first you have to get the encrypted sctring by email address and username 
+                    // string encryptedopenidIdentifer = "";
+                    //get profile created date
+                    //DateTime creationdate;
+                    // DateTime? passwordchangedate;
+                    //DateTime EncrpytionChangeDate = new DateTime(2011, 8, 3, 4, 5, 0);        
+
+                    //Dim ctx As New Entities()
+                    //added profile status ID validation as well i.e 2 for activated and is not banned 
+                    // myQuery = datingcontext.profiles.Where(p => p.ProfileID == VerifedEmail && p.ProfileStatusID == 2);
+                    if (myprofile != null)
+                        //log the user logtime here so it is common to silverlight and MVC
+                        if (HttpContext.Current != null)
+                        {
+                            //Just for testing that it worked
+                            //TO DO remove when in prod
+                            AsyncCallback callback = result =>
+                            {
+                                //we dont do anything really with the callback so not needed really
+                                //  MemberService.Endupdateuserlogintimebyprofileidandsessionid(result);
+                            };
+
+
+
+                        }
+                        else
+                        {
+
+
+                            //Just for testing that it worked
+                            //TO DO remove when in prod
+                            AsyncCallback callback = result =>
+                            {
+                                //we dont do anything really with the callback so not needed really
+                                //  MemberService.Endupdateuserlogintimebyprofileidandsessionid(result);
+                            };
+
+                            //use anew  the same DB context
+
+                        }
+                    //TO DO get geodata from IP address down the line
+                    //also update profile activity
+                    //MemberService.Beginaddprofileactvity(
+                    //  new profileactivity
+                    //  {
+                    //      lu_activitytype = _unitOfWorkAsync.Repository<lu_activitytype>().Query(p => p.id == (int)activitytypeEnum.login)
+                    //      ,
+                    //      creationdate = DateTime.Now,
+                    //      profile_id = myprofile.id,
+                    //      ipaddress = HttpContext.Current.Request.UserHostAddress,
+                    //      routeurl = HttpContext.Current.Request.RawUrl,
+                    //      sessionid = HttpContext.Current != null ? HttpContext.Current.Session.SessionID : null
+                    //  }, null, MemberService);
+
+                    //also update the profiledata for the last login date
+                    return true;
+
 
 
                     // datingService.UpdateUserLoginTimeByProfileID(VerifedEmail, HttpContext.Current.Session.SessionID);
@@ -572,6 +659,7 @@ namespace Anewluv.Services.Authentication
                         profile ObjProfileEntity = new profile();
                         profiledata objprofileDataEntity = new profiledata();
                         profilemetadata objprofileMetaDataEntity = new profilemetadata();
+                        
 
                         //TO DO new entity for OPEN ID data
 
@@ -619,11 +707,14 @@ namespace Anewluv.Services.Authentication
                         ObjProfileEntity.status_id = (openidIdentifer == "" || openidIdentifer == null) ? (int)profilestatusEnum.NotActivated : (int)profilestatusEnum.Activated;
                         //auto activate profiles fi we have an openID user since we have verifed thier info
 
+
+
                         //Build the profile data table
                         // objprofileDataEntity.id  = ;
                         //objprofileDataEntity.profile.emailaddress = email;
                         objprofileDataEntity.latitude = Convert.ToDouble(latitude);
                         objprofileDataEntity.longitude = Convert.ToDouble(longitude); //_GpsData.longitude;
+
                       
                             // Create a point using native DbGeography Factory method
                         objprofileDataEntity.location = DbGeography.PointFromText(
@@ -649,7 +740,17 @@ namespace Anewluv.Services.Authentication
                         objprofileDataEntity.aboutme = "Hello";
 
 
+
+                      
+
+
+
                         //get profile and profile datas
+
+
+
+
+
                         //set states 
                         objprofileMetaDataEntity.ObjectState = ObjectState.Added;
                         objprofileDataEntity.ObjectState = ObjectState.Added;
@@ -660,16 +761,38 @@ namespace Anewluv.Services.Authentication
                         ObjProfileEntity.ObjectState = ObjectState.Added;
                         _unitOfWorkAsync.Repository<profile>().InsertOrUpdateGraph(ObjProfileEntity);
 
+                        //objprofileDataEntity.ObjectState = ObjectState.Added;
+                        //_unitOfWorkAsync.Repository<profiledata>().Insert(objprofileDataEntity);
+
+                        //objprofileMetaDataEntity.ObjectState = ObjectState.Added;
+                        //  _unitOfWorkAsync.Repository<profilemetadata>().Insert()
+
                         //TOD DO add open ID identifier as well Profider type to ssoProvider table 
-                        //handling for open ID stuff 
+                        //TO Do prevalidate openid identifer
+                        if (openidIdentifer != "" && openidProvidername != "")
+                        {
+                            openid newopenid = new openid();
+                           
+                            newopenid.active = true;
+                            newopenid.creationdate = DateTime.Now;
+                            var matchedopenid = _unitOfWorkAsync.RepositoryAsync<lu_openidprovider>().Query(z => z.description.ToUpper() == openidProvidername.ToUpper()).SelectAsync();
+                            if (matchedopenid != null)
+                            {
+                                newopenid.openidprovider_id = matchedopenid.Result.FirstOrDefault().id;
+                            }
+                            newopenid.openididentifier = openidIdentifer;
+                            newopenid.profile_id = ObjProfileEntity.id;
+
+                            newopenid.ObjectState = ObjectState.Added;
+                            _unitOfWorkAsync.Repository<openid>().InsertOrUpdateGraph(newopenid);
+
+
+                        }
+
 
                         //_unitOfWorkAsync
                         var i = _unitOfWorkAsync.SaveChanges();
                         // transaction.Commit();
-
-                        //add the open id if this user does not already have one for this provider ?
-                        //openidIdentifer, string openidProvidername
-                        if (openidIdentifer != null) profileextentionmethods.createopenid(new ProfileModel {  openididentifier = openidIdentifer , openidprovider = openidProvidername , profileid = ObjProfileEntity.id  }, _unitOfWorkAsync);
 
                         //add profile activites
                         var activitylist = new List<ActivityModel>();
@@ -893,344 +1016,10 @@ namespace Anewluv.Services.Authentication
                 }
             }
         }
-         
 
-        public async Task updateuser(MembershipUserViewModel user)        {
-
-             await UpdateUserCustom(user);
-        }
-
-        /// <summary>
-        /// used to update all proile stuff that is changable , including password
-        /// </summary>
-        /// <param name="user"></param>
-        /// <returns></returns>
-        public async Task UpdateUserCustom(MembershipUserViewModel user)
+        public void updateuser(MembershipUser user)
         {
-
-
-
-            //  AnewLuvMembershipUser u = (AnewLuvMembershipUser)user;
-            //  using (var db = _unitOfWorkAsync)
-            {
-                //db.IsAuditEnabled = false; //do not audit on adds
-                //   using (var transaction = db.BeginTransaction())
-                {
-                    try
-                    {
-
-                        bool profileupdated = false;
-                        bool profiledataupdated = false;
-                        //get profile and profile datas
-                        var profilerepo = _unitOfWorkAsync.Repository<profile>();
-                        var profiledatarepo = _unitOfWorkAsync.Repository<profiledata>();
-
-                        var ObjProfileEntityresult = await _unitOfWorkAsync.RepositoryAsync<profile>().Query(p => p.id == Convert.ToInt16(user.profileid)).SelectAsync();
-                        profile ObjProfileEntity = ObjProfileEntityresult.FirstOrDefault();
-                        var objprofileDateEntityresult = await _unitOfWorkAsync.RepositoryAsync<profiledata>().Query(p => p.profile_id == Convert.ToInt16(user.profileid)).SelectAsync();
-                        profiledata objprofileDateEntity = objprofileDateEntityresult.FirstOrDefault();
-
-                        // new gpsdata;
-
-                        //string[] tempCityAndStateProvince = user.city.Split(',');
-                        Random objRandom = new Random();
-                        int intStart = objRandom.Next(1, 9);
-                        int intLastTwo = objRandom.Next(10, 99);
-                        //convert the string values to byte as needed
-                        //NumberFormatInfo provider = new NumberFormatInfo();
-                        // These properties affect the conversion.
-                        //provider.PositiveSign = "pos";
-                        gpsdata _GpsData = null;
-                        //int? countryID = null;
-                        string matchedcontryname = "";
-                        int? matchedcountryid = null;
-
-                        //conver the unquiqe coountry Name to an ID
-                        //store country ID for use later 
-                        // PostalData2Context GeoContext = new PostalData2Context();
-                        //    using (var tempdb = GeoContext)
-                        // {
-                        // GeoService GeoService = new GeoService(tempdb);
-                        //  countryID = GeoService.getcountryidbycountryname(country);
-
-
-                        //verify the country 
-                        if (user.country == "" && user.countryid != null)
-                        {
-                            matchedcountryid = spatialextentions.getcountrycountryidbycountryname(new GeoModel { country = user.country }, _storedProcedures).Result;
-                            matchedcontryname = user.country;
-                        }
-                        else if (user.country != "")
-                        {
-                            matchedcontryname = spatialextentions.getcountrynamebycountryid(new GeoModel { countryid = user.countryid.ToString() }, _storedProcedures);
-                            matchedcountryid = user.countryid;
-                        }
-
-
-
-                        //to do validate city as well
-
-                        //verify all the spatial data
-                        if (matchedcontryname != "")
-                            _GpsData = spatialextentions.getgpsdatabycitycountrypostalcode(new GeoModel { country = user.country, city = user.city, postalcode = user.zippostalcode }, _storedProcedures);
-                        //  }
-
-                        //  int countryID = Api.GeoService.getcountryidbycountryname(user.country);
-
-                        //get the longidtue and latttude 
-                        //   gpsdata _GpsData = Api.GeoService.getgpsdatabycitycountrypostalcode(user.country, tempCityAndStateProvince[0], user.ziporpostalcode);
-
-
-
-                        //split up the city from state province
-                        //Build the profile data table                   
-                        if (_GpsData != null) { objprofileDateEntity.latitude = Convert.ToDouble(_GpsData.latitude); profiledataupdated = true; }
-                        if (_GpsData != null) { objprofileDateEntity.longitude = Convert.ToDouble(_GpsData.longitude); profiledataupdated = true; }
-                        if (_GpsData != null && user.city != "") { objprofileDateEntity.city = user.city; profiledataupdated = true; }
-                        if (_GpsData != null && user.stateprovince != "") { objprofileDateEntity.stateprovince = user.stateprovince; profiledataupdated = true; }
-                        //if (_GpsData != null && (user.region != "" && user.stateprovince =="")) objprofileDateEntity.stateprovince = user.region;
-
-
-
-                        if (_GpsData != null && user.country != "") { objprofileDateEntity.countryid = matchedcountryid; profiledataupdated = true; }
-                        if (_GpsData != null && user.zippostalcode != "") { objprofileDateEntity.postalcode = user.zippostalcode; profiledataupdated = true; }
-                        if (user.genderid != "") { objprofileDateEntity.gender_id = Convert.ToInt16(user.genderid); profiledataupdated = true; }
-                        if (user.birthdate != null) { objprofileDateEntity.birthdate = Convert.ToDateTime(user.birthdate); profiledataupdated = true; }
-                        if (user.phonenumber != "") { objprofileDateEntity.phone = user.phonenumber; profiledataupdated = true; }
-                        //objprofileDateEntity.AboutMe = "Hello";
-
-
-
-                        //set all the entity values
-                        // ObjProfileEntity.username = username;
-                        //changed the encryption to something stronger
-
-                        //only update password if it changed
-                        if (user.verificationcode == user.verificationcode && user.password != null | user.password != "")
-                        {
-                            this.updatepasswordbyprofileid(ObjProfileEntity, Encryption.encryptString(user.password));
-                            profileupdated = true;
-                        }
-                        // ObjProfileEntity.ProfileID = email;
-                        // ObjProfileEntity.ScreenName = screenname;
-                        //need to add a new feild
-                        // ObjProfileEntity.ActivationCode = Common.Encryption.EncodeString(email + screenname);
-                        //Mid(intStart, intStart, 14) & CStr(intLastTwo) 'need to beef this up with the session variable
-                        //ObjProfileEntity.creationdate = System.DateTime.Now;
-
-                        if (profiledataupdated) profiledatarepo.Update(objprofileDateEntity);
-
-
-                        if (profileupdated)
-                        {
-
-
-                            profilerepo.Update(ObjProfileEntity);
-                            ObjProfileEntity.modificationdate = System.DateTime.Now;
-                            //save all changes bro                         
-                            //                        _unitOfWorkAsync
-
-                        }
-                        // ObjProfileEntity.LoginDate = System.DateTime.Now;
-                        // fix this to null
-                        //ObjProfileEntity.ForwardMessages = 1;
-                        //  ObjProfileEntity.SecurityQuestionID = System.Convert.ToByte(user.securityquestion );
-                        //   ObjProfileEntity.SecurityAnswer = user.securityanswer;
-                        //ObjProfileEntity.ProfileStatusID = 1;
-
-
-                        if (profiledataupdated | profileupdated)
-                            _unitOfWorkAsync.SaveChangesAsync().DoNotAwait();
-
-
-                        //dbContext.AddToprofiledatas(objprofileDateEntity);
-                        // dbContext.AddToprofiles(ObjProfileEntity);
-
-                        // transaction.Commit();
-
-                    }
-                    catch (Exception ex)
-                    {
-                        // transaction.Rollback();
-                        using (var logger = new Logging(applicationEnum.UserAuthorizationService))
-                        {
-
-                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null);
-                        }
-
-                        FaultReason faultreason = new FaultReason("Error in User Authentication service");
-                        string ErrorMessage = "";
-                        string ErrorDetail = "ErrorMessage: " + ex.Message;
-                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-
-
-                        //throw convertedexcption;
-                    }
-                    finally
-                    {
-                        //Api.DisposeGeoService();
-                    }
-                }
-            }
-        }
-        
-        public async Task UpdateUserCustomNew(MembershipUserViewModel user)
-        {
-
-
-
-            //  AnewLuvMembershipUser u = (AnewLuvMembershipUser)user;
-            //  using (var db = _unitOfWorkAsync)
-            {
-                //db.IsAuditEnabled = false; //do not audit on adds
-                //   using (var transaction = db.BeginTransaction())
-                {
-                    try
-                    {
-
-                        bool updated = false;
-
-                        //get profile and profile datas
-                        // var profilereporesult = await _unitOfWorkAsync.RepositoryAsync<profile>().Query().SelectAsync();
-                        // var profilerepo = profilereporesult.ToList();
-
-                        // var profiledatareporesult = await _unitOfWorkAsync.RepositoryAsync<profiledata>().Query().SelectAsync();
-                        //  var profiledatarepo = profiledatareporesult.ToList();
-
-                        var ObjProfileEntityresult = await _unitOfWorkAsync.RepositoryAsync<profile>().Query(p => p.id == Convert.ToInt16(user.profileid)).SelectAsync();
-                        profile ObjProfileEntity = ObjProfileEntityresult.FirstOrDefault();
-
-                        var objprofileDateEntityresult = await _unitOfWorkAsync.RepositoryAsync<profiledata>().Query(p => p.profile_id == Convert.ToInt16(user.profileid)).SelectAsync();
-
-                        profiledata objprofileDateEntity = objprofileDateEntityresult.FirstOrDefault();
-                        // new gpsdata;
-
-                        string[] tempCityAndStateProvince = user.city.Split(',');
-                        Random objRandom = new Random();
-                        int intStart = objRandom.Next(1, 9);
-                        int intLastTwo = objRandom.Next(10, 99);
-                        //convert the string values to byte as needed
-                        //NumberFormatInfo provider = new NumberFormatInfo();
-                        // These properties affect the conversion.
-                        //provider.PositiveSign = "pos";
-                        gpsdata _GpsData = null;
-                        int? countryID = null;
-
-                        //conver the unquiqe coountry Name to an ID
-                        //store country ID for use later 
-                        // PostalData2Context GeoContext = new PostalData2Context();
-                        //    using (var tempdb = GeoContext)
-                        // {
-                        // GeoService GeoService = new GeoService(tempdb);
-                        //  countryID = GeoService.getcountryidbycountryname(country);
-
-                        var value = spatialextentions.getcountrynamebycountryid(new GeoModel { countryid = user.country }, _storedProcedures);
-
-                        //get the longidtue and latttude 
-                        _GpsData = spatialextentions.getgpsdatabycitycountrypostalcode(new GeoModel { country = user.country, city = tempCityAndStateProvince[0], postalcode = user.zippostalcode }, _storedProcedures);
-                        //  }
-
-                        //  int countryID = Api.GeoService.getcountryidbycountryname(u.country);
-
-                        //get the longidtue and latttude 
-                        //   gpsdata _GpsData = Api.GeoService.getgpsdatabycitycountrypostalcode(u.country, tempCityAndStateProvince[0], u.ziporpostalcode);
-
-
-
-                        //split up the city from state province
-                        //Build the profile data table                   
-                        objprofileDateEntity.latitude = Convert.ToDouble(_GpsData.latitude);
-                        objprofileDateEntity.longitude = Convert.ToDouble(_GpsData.longitude);
-                        objprofileDateEntity.city = tempCityAndStateProvince[0];
-                        objprofileDateEntity.countryregion = "NA";
-
-                        if (tempCityAndStateProvince.Count() == 2)
-                        {
-                            objprofileDateEntity.stateprovince = (string.IsNullOrEmpty(tempCityAndStateProvince[1])) ? "NA" : tempCityAndStateProvince[1];
-                        }
-                        else
-                        {
-                            objprofileDateEntity.stateprovince = "NA";
-                        }
-
-                        objprofileDateEntity.countryid = countryID;
-                        objprofileDateEntity.postalcode = user.zippostalcode;
-                        objprofileDateEntity.gender_id = Int32.Parse(user.genderid);
-                        objprofileDateEntity.birthdate = user.birthdate;
-                        objprofileDateEntity.phone = "NA";
-                        //objprofileDateEntity.AboutMe = "Hello";
-
-
-
-                        //set all the entity values
-                        // ObjProfileEntity.username = username;
-                        //changed the encryption to something stronger
-
-                        //only update password if it changed
-                        if (user.password != null)
-                        {
-                            ObjProfileEntity.password = Encryption.encryptString(user.password);
-                            ObjProfileEntity.passwordChangeddate = DateTime.Now;
-                            ObjProfileEntity.passwordchangecount = (ObjProfileEntity.passwordchangecount == null) ? 1 : ObjProfileEntity.passwordchangecount + 1;
-                        }
-                        // ObjProfileEntity.ProfileID = email;
-                        // ObjProfileEntity.ScreenName = screenname;
-                        //need to add a new feild
-                        // ObjProfileEntity.ActivationCode = Common.Encryption.EncodeString(email + screenname);
-                        //Mid(intStart, intStart, 14) & CStr(intLastTwo) 'need to beef this up with the session variable
-                        //ObjProfileEntity.creationdate = System.DateTime.Now;
-                        ObjProfileEntity.modificationdate = System.DateTime.Now;
-                        // ObjProfileEntity.LoginDate = System.DateTime.Now;
-                        // fix this to null
-                        //ObjProfileEntity.ForwardMessages = 1;
-                        //  ObjProfileEntity.SecurityQuestionID = System.Convert.ToByte(u.securityquestion );
-                        //   ObjProfileEntity.SecurityAnswer = u.securityanswer;
-                        //ObjProfileEntity.ProfileStatusID = 1;
-
-
-
-                        ObjProfileEntity.ObjectState = ObjectState.Modified;
-                        objprofileDateEntity.ObjectState = ObjectState.Modified;
-                        //dbContext.AddToprofiledatas(objprofileDateEntity);
-                        // dbContext.AddToprofiles(ObjProfileEntity);
-                        //  ObjProfileEntity);
-                        //  profiledatarepo.Update(objprofileDateEntity);
-                        //save all changes bro                         
-                        //                        _unitOfWorkAsync
-
-
-                        var i = _unitOfWorkAsync.SaveChanges();
-                        // transaction.Commit();
-
-
-                        var activitylist = new List<ActivityModel>();
-                        activitylist.Add(Api.AnewLuvLogging.CreateActivity(ObjProfileEntity.id, null, (int)activitytypeEnum.updateprofile, OperationContext.Current));
-                        Anewluv.Api.AsyncCalls.addprofileactivities(activitylist).DoNotAwait();
-
-                    }
-                    catch (Exception ex)
-                    {
-                        // transaction.Rollback();
-                        using (var logger = new Logging(applicationEnum.UserAuthorizationService))
-                        {
-
-                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null);
-                        }
-
-                        FaultReason faultreason = new FaultReason("Error in User Authentication service");
-                        string ErrorMessage = "";
-                        string ErrorDetail = "ErrorMessage: " + ex.Message;
-                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-
-
-                        //throw convertedexcption;
-                    }
-                    finally
-                    {
-                        //Api.DisposeGeoService();
-                    }
-                }
-            }
+            UpdateUser(user);
         }
 
         public override MembershipUser GetUser(string username, bool userIsOnline)
@@ -1413,43 +1202,6 @@ namespace Anewluv.Services.Authentication
                 //throw convertedexcption;
             }
         }
-
-        public async Task<bool> checkifopenidalreadyexists(ProfileModel model)
-        {
-
-            try
-            {
-                if (model == null | model.openididentifier == null) return false;
-
-                //while (db.ObjectContext.Connection.State  != System.Data.ConnectionState.Closed)
-                //{
-
-                // db.DisableProxyCreation = true;;
-                //db.DisableLazyLoading = true;
-                var result = await _unitOfWorkAsync.RepositoryAsync<profile>().Query(p => p.emailaddress == model.email && p.openids.Any(z => z.lu_openidprovider.description == model.openidprovider && z.openididentifier == model.openididentifier)).SelectAsync();
-
-
-                if (result.FirstOrDefault() != null) return true;
-                return false;
-
-
-            }
-            catch (Exception ex)
-            {
-                using (var logger = new Logging(applicationEnum.UserAuthorizationService))
-                {
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
-                }
-                //can parse the error to build a more custom error mssage and populate fualt faultreason
-                // logger.Dispose();
-                FaultReason faultreason = new FaultReason("Error in member service");
-                string ErrorMessage = "";
-                string ErrorDetail = "ErrorMessage: " + ex.Message;
-                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-                //throw convertedexcption;
-            }
-        }
-
         /// <summary>
         /// Determines wethare an activation code matches the value in the Initial Catalog= for a given profileid
         /// </summary>
@@ -1970,17 +1722,12 @@ namespace Anewluv.Services.Authentication
 
         }
 
-        /// <summary>
-        /// TO DO re-write it like the method below it with all the main code in the validatye overide for username and password
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
         public async Task<NmediaToken> validateuserandgettoken(ProfileModel model)
         {
 
             var profile = new profile();
             var currenttoken = new NmediaToken();
-            var activitylist = new List<ActivityModel>(); 
+
             
          
 
@@ -2062,9 +1809,6 @@ namespace Anewluv.Services.Authentication
 
                             //for now have it generate a new GUID each time to test 
                             // var existingguid = getcurrentapikeybyprofileid(myQuery.id, db);
-                            
-                            //existing guid has to come from client
-                            var existingguid = !String.IsNullOrEmpty(model.apikey) ? new Guid(model.apikey) : (Guid?)null;
 
                             var guid = Api.AsyncCalls.validateorgetapikeyasync(new ApiKeyValidationModel
                             {
@@ -2073,14 +1817,14 @@ namespace Anewluv.Services.Authentication
                                 useridentifier = currenttoken.id,
                                 application = "Anewluv",
                                 application_id = (int)applicationenum.anewluv,
-                                keyvalue = existingguid
+                                keyvalue = null
                             }).Result;
                             // var guid = getcurrentapikeybyprofileid(myQuery.id,db);
                             if (guid != null)
                                 currenttoken.Apikey = guid;
 
                             //updated activity // TO Do we migght use to replace logtimes below ?
-                            
+                            var activitylist = new List<ActivityModel>(); 
                             activitylist.Add(Api.AnewLuvLogging.CreateActivity(profile.id, guid, (int)activitytypeEnum.login,  OperationContext.Current));
                             Anewluv.Api.AsyncCalls.addprofileactivities(activitylist).DoNotAwait();
 
@@ -2093,118 +1837,12 @@ namespace Anewluv.Services.Authentication
                         }
                         else
                         {
-                            activitylist.Add(Api.AnewLuvLogging.CreateActivity(profile.id, null, (int)activitytypeEnum.failedloginattempt, OperationContext.Current));
-                            Anewluv.Api.AsyncCalls.addprofileactivities(activitylist).DoNotAwait();
-
                             return currenttoken;
                         }
                    // });
                  //   return await task.ConfigureAwait(false);
 
 
-
-                }
-                catch (Exception ex)
-                {
-                    //can parse the error to build a more custom error mssage and populate fualt faultreason
-                    //instantiate logger here so it does not break anything else.
-
-                    using (var logger = new Logging(applicationEnum.UserAuthorizationService))
-                    {
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, profile != null ? profile.id : 0, null);
-                    }
-
-                    FaultReason faultreason = new FaultReason("Error in authenitcation service");
-                    string ErrorMessage = "";
-                    string ErrorDetail = "ErrorMessage: " + ex.Message;
-                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-                }
-                //finally
-                //{
-                //    Api.DisposeMemberService();
-                //}
-
-            }
-        }
-
-        /// <summary>
-        /// proper way to validate call the overdie of validateUser and then use the bool result in the wrapper TO DO fix validateuserandgettoken same
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        public async Task<NmediaToken> validateuserandgettokenbyopenid(ProfileModel model)
-        {
-
-            var profile = new profile();
-            var currenttoken = new NmediaToken();
-            var activitylist = new List<ActivityModel>(); 
-
-            if (model == null | model.email == null && model.openidprovider !="" ) return currenttoken;
-            // _unitOfWorkAsync.DisableProxyCreation = true;
-            //  using (var db = _unitOfWorkAsync)
-            {
-                try
-                {
-                    
-                   var task = Task.Factory.StartNew(() =>
-                        {
-
-
-                             profile = getprofilebybyopenid(model.email, model.openididentifier, model.openidprovider);
-
-                            
-
-                            //TO DO change this to use activity not log time since its a better measure for the data we need 
-                            //FIX the logtime code
-                            //check if decrypted string macthed username to upper  + secret
-                            if (profile !=null)
-                            {
-
-                                //No need to log this since its used the APIkey inspector on checkascccesscore
-                                currenttoken.id = profile.id;
-                                currenttoken.timestamp = DateTime.Now;
-                                //return the profile ID so it can be used for whatver
-
-                                //for now have it generate a new GUID each time to test 
-                                //var existingguid = getcurrentapikeybyprofileid(profile.id, _unitOfWorkAsync );
-                                var existingguid = !String.IsNullOrEmpty(model.apikey) ? new Guid(model.apikey) : (Guid?)null;
-
-
-                                var guid = Api.AsyncCalls.validateorgetapikeyasync(new ApiKeyValidationModel
-                                {
-                                    service = "AuthenticationService",
-                                    username = model.username,
-                                    useridentifier = currenttoken.id,
-                                    application = "Anewluv",
-                                    application_id = (int)applicationenum.anewluv,
-                                    keyvalue = existingguid
-                                }).Result;
-                                // var guid = getcurrentapikeybyprofileid(myQuery.id,db);
-                                if (guid != null)
-                                    currenttoken.Apikey = guid;
-
-
-                                activitylist.Add(Api.AnewLuvLogging.CreateActivity(profile.id, guid, (int)activitytypeEnum.loginopenid, OperationContext.Current));
-                                Anewluv.Api.AsyncCalls.addprofileactivities(activitylist).DoNotAwait();
-
-                                //login time updated here
-                                updateuserlogintime(profile.id, OperationContext.Current, guid.ToString()).DoNotAwait();
-                                return currenttoken;
-                                //get the token here
-
-                            }
-                            else
-                            {
-                                activitylist.Add(Api.AnewLuvLogging.CreateActivity(profile.id, null, (int)activitytypeEnum.failedopenidloginattempt, OperationContext.Current));
-                                Anewluv.Api.AsyncCalls.addprofileactivities(activitylist).DoNotAwait();
-                                currenttoken.message = "no matching email adress";
-                                return currenttoken;
-                            }
-                            // });
-                            //   return await task.ConfigureAwait(false);
-
-                         });
-                        return await task.ConfigureAwait(false);
 
                 }
                 catch (Exception ex)
@@ -2309,7 +1947,176 @@ namespace Anewluv.Services.Authentication
         }
 
 
-       
+        /// <summary>
+        /// used to update all proile stuff that is changable , including password
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public async Task updateuser(MembershipUserViewModel user)
+        {
+
+
+
+            //  AnewLuvMembershipUser u = (AnewLuvMembershipUser)user;
+            //  using (var db = _unitOfWorkAsync)
+            {
+                //db.IsAuditEnabled = false; //do not audit on adds
+                //   using (var transaction = db.BeginTransaction())
+                {
+                    try
+                    {
+
+                        bool profileupdated = false;
+                        bool profiledataupdated = false;
+                        //get profile and profile datas
+                        var profilerepo = _unitOfWorkAsync.Repository<profile>();
+                        var profiledatarepo = _unitOfWorkAsync.Repository<profiledata>();
+
+                        var ObjProfileEntityresult = await _unitOfWorkAsync.RepositoryAsync<profile>().Query(p => p.id == Convert.ToInt16(user.profileid)).SelectAsync();
+                        profile ObjProfileEntity = ObjProfileEntityresult.FirstOrDefault();
+                        var objprofileDateEntityresult = await _unitOfWorkAsync.RepositoryAsync<profiledata>().Query(p => p.profile_id == Convert.ToInt16(user.profileid)).SelectAsync();
+                        profiledata objprofileDateEntity = objprofileDateEntityresult.FirstOrDefault();
+
+                        // new gpsdata;
+
+                        //string[] tempCityAndStateProvince = user.city.Split(',');
+                        Random objRandom = new Random();
+                        int intStart = objRandom.Next(1, 9);
+                        int intLastTwo = objRandom.Next(10, 99);
+                        //convert the string values to byte as needed
+                        //NumberFormatInfo provider = new NumberFormatInfo();
+                        // These properties affect the conversion.
+                        //provider.PositiveSign = "pos";
+                        gpsdata _GpsData = null;
+                        //int? countryID = null;
+                        string matchedcontryname = "";
+                        int? matchedcountryid = null;
+
+                        //conver the unquiqe coountry Name to an ID
+                        //store country ID for use later 
+                        // PostalData2Context GeoContext = new PostalData2Context();
+                        //    using (var tempdb = GeoContext)
+                        // {
+                        // GeoService GeoService = new GeoService(tempdb);
+                        //  countryID = GeoService.getcountryidbycountryname(country);
+
+
+                        //verify the country 
+                        if (user.country == "" && user.countryid != null)
+                        {
+                            matchedcountryid = spatialextentions.getcountrycountryidbycountryname(new GeoModel { country = user.country }, _storedProcedures).Result;
+                            matchedcontryname = user.country;
+                        }
+                        else if (user.country != "")
+                        {
+                            matchedcontryname = spatialextentions.getcountrynamebycountryid(new GeoModel { countryid = user.countryid.ToString() }, _storedProcedures);
+                            matchedcountryid = user.countryid;
+                        }
+
+
+
+                        //to do validate city as well
+
+                        //verify all the spatial data
+                        if (matchedcontryname != "")
+                            _GpsData = spatialextentions.getgpsdatabycitycountrypostalcode(new GeoModel { country = user.country, city = user.city, postalcode = user.zippostalcode }, _storedProcedures);
+                        //  }
+
+                        //  int countryID = Api.GeoService.getcountryidbycountryname(user.country);
+
+                        //get the longidtue and latttude 
+                        //   gpsdata _GpsData = Api.GeoService.getgpsdatabycitycountrypostalcode(user.country, tempCityAndStateProvince[0], user.ziporpostalcode);
+
+
+
+                        //split up the city from state province
+                        //Build the profile data table                   
+                        if (_GpsData != null) { objprofileDateEntity.latitude = Convert.ToDouble(_GpsData.latitude); profiledataupdated = true; }
+                        if (_GpsData != null) { objprofileDateEntity.longitude = Convert.ToDouble(_GpsData.longitude); profiledataupdated = true; }
+                        if (_GpsData != null && user.city != "") { objprofileDateEntity.city = user.city; profiledataupdated = true; }
+                        if (_GpsData != null && user.stateprovince != "") { objprofileDateEntity.stateprovince = user.stateprovince; profiledataupdated = true; }
+                        //if (_GpsData != null && (user.region != "" && user.stateprovince =="")) objprofileDateEntity.stateprovince = user.region;
+
+
+
+                        if (_GpsData != null && user.country != "") { objprofileDateEntity.countryid = matchedcountryid; profiledataupdated = true; }
+                        if (_GpsData != null && user.zippostalcode != "") { objprofileDateEntity.postalcode = user.zippostalcode; profiledataupdated = true; }
+                        if (user.genderid != "") { objprofileDateEntity.gender_id = Convert.ToInt16(user.genderid); profiledataupdated = true; }
+                        if (user.birthdate != null) { objprofileDateEntity.birthdate = Convert.ToDateTime(user.birthdate); profiledataupdated = true; }
+                        if (user.phonenumber != "") { objprofileDateEntity.phone = user.phonenumber; profiledataupdated = true; }
+                        //objprofileDateEntity.AboutMe = "Hello";
+
+
+
+                        //set all the entity values
+                        // ObjProfileEntity.username = username;
+                        //changed the encryption to something stronger
+
+                        //only update password if it changed
+                        if (user.verificationcode == user.verificationcode && user.password != null | user.password != "")
+                        {
+                            this.updatepasswordbyprofileid(ObjProfileEntity, Encryption.encryptString(user.password));
+                            profileupdated = true;
+                        }
+                        // ObjProfileEntity.ProfileID = email;
+                        // ObjProfileEntity.ScreenName = screenname;
+                        //need to add a new feild
+                        // ObjProfileEntity.ActivationCode = Common.Encryption.EncodeString(email + screenname);
+                        //Mid(intStart, intStart, 14) & CStr(intLastTwo) 'need to beef this up with the session variable
+                        //ObjProfileEntity.creationdate = System.DateTime.Now;
+
+                        if (profiledataupdated) profiledatarepo.Update(objprofileDateEntity);
+
+
+                        if (profileupdated)
+                        {
+
+
+                            profilerepo.Update(ObjProfileEntity);
+                            ObjProfileEntity.modificationdate = System.DateTime.Now;
+                            //save all changes bro                         
+                            //                        _unitOfWorkAsync
+
+                        }
+                        // ObjProfileEntity.LoginDate = System.DateTime.Now;
+                        // fix this to null
+                        //ObjProfileEntity.ForwardMessages = 1;
+                        //  ObjProfileEntity.SecurityQuestionID = System.Convert.ToByte(user.securityquestion );
+                        //   ObjProfileEntity.SecurityAnswer = user.securityanswer;
+                        //ObjProfileEntity.ProfileStatusID = 1;
+
+
+                        if (profiledataupdated | profileupdated) _unitOfWorkAsync.SaveChangesAsync().DoNotAwait();
+                        //dbContext.AddToprofiledatas(objprofileDateEntity);
+                        // dbContext.AddToprofiles(ObjProfileEntity);
+
+                        // transaction.Commit();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        // transaction.Rollback();
+                        using (var logger = new Logging(applicationEnum.UserAuthorizationService))
+                        {
+
+                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null);
+                        }
+
+                        FaultReason faultreason = new FaultReason("Error in User Authentication service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+
+                        //throw convertedexcption;
+                    }
+                    finally
+                    {
+                        //Api.DisposeGeoService();
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// puts user account in password reset mode and sets a GUID to the user's email that is needed to allow reset of password
@@ -2617,103 +2424,7 @@ namespace Anewluv.Services.Authentication
 
         }
 
-        //should replace the stub overdide validate profile, saves us from having to call get profile data more than once
-        private profile getprofilebybyopenid(string VerifedEmail, string openidIdentifer, string openidProvidername)
-        {
-            var activitylist = new List<ActivityModel>();
-            bool validprofile = false;
-            OperationContext ctx = OperationContext.Current;
-            var myprofile = new profile();
-            // _unitOfWorkAsync.DisableProxyCreation = true;
-            //  using (var db = _unitOfWorkAsync)
-            {
-                try
-                {
-                    //open ID members are already verifed but it is posublethat a member who is not activated tries to use open ID
-                    //so they could be in order status 1                  
 
-                    //Dim ctx As New Entities()
-                    //TO DO add an inactive count login to track how many times a user logs in before they active profile default max should be = 3
-                    //added profile status ID validation as well i.e 2 for activated and is not banned 
-                    var profileresult = _unitOfWorkAsync.Repository<profile>().Query(p => p.emailaddress == VerifedEmail &&
-                        (p.status_id != (int)profilestatusEnum.Banned | p.status_id != (int)profilestatusEnum.Inactive | p.status_id != (int)profilestatusEnum.ResetingPassword)
-                         ).Include(f => f.openids)
-                     .SelectAsync();
-
-                  
-                 
-
-                    myprofile = profileresult.Result.FirstOrDefault();
-
-                    //no profile found that matches provider id and provider email
-                    if (myprofile == null) return null;
-
-                    //get the openid providoer
-                    lu_openidprovider provider = _unitOfWorkAsync.Repository<lu_openidprovider>().Queryable().Where(p => (p.description).ToUpper() == openidProvidername.ToUpper()).FirstOrDefault();
-                    if (provider == null) return null;
-
-
-                    //check for the openIDidenfier , to see if it was used before , if it was do nothing but normal updates for user
-                    var myopenIDstore = myprofile.openids.Where(p => p.openididentifier == openidIdentifer && provider.description.ToUpper() == openidProvidername.ToUpper() && p.active == true).FirstOrDefault();
-
-                    //if we found an openID store for this type
-                    if (myprofile != null)
-                    {
-
-                        //check if this is a new provider if its a new one add it
-
-                        if (myopenIDstore != null)
-                        {
-                            validprofile = true;
-                        }
-                        else if (myopenIDstore == null && provider != null)
-                        {
-                            profileextentionmethods.createopenid(new ProfileModel { openididentifier = openidIdentifer, openidprovider = openidProvidername, profileid = myprofile.id }, _unitOfWorkAsync);
-                            validprofile = true;
-                        }
-
-                    }
-
-
-                    //invalid user
-                    if (validprofile)
-                    {
-                        return myprofile;
-                    }
-                   
-                    return null;
-
-
-                    // datingService.UpdateUserLoginTimeByProfileID(VerifedEmail, HttpContext.Current.Session.SessionID);
-
-
-                    //    return false;
-                    // }
-
-                }
-                catch (Exception ex)
-                {
-
-                    using (var logger = new Logging(applicationEnum.UserAuthorizationService))
-                    {
-
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, myprofile != null ? myprofile.id : 0, null);
-                    }
-
-
-                    FaultReason faultreason = new FaultReason("Error in authenitcation service");
-                    string ErrorMessage = "";
-                    string ErrorDetail = "ErrorMessage: " + ex.Message;
-                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-                }
-                //finally
-                //{
-                //    Api.DisposeMemberService();
-                //}
-            }
-
-
-        }
 
 
         #endregion

@@ -22,27 +22,16 @@ namespace Anewluv.Domain.Data
         [Description("FaceBook")]
         [EnumMember]
         FaceBook,
-        [Description("Google")] 
+        [Description("Gmail")] 
         [EnumMember]
-        Google,
+        Gmail,
         [Description("Twitter")]
         [EnumMember]
         Twitter,
         [Description("Yahoo")]
         [EnumMember]
-        Yahoo,
-        [Description("Vontake")]
-        [EnumMember]
-        Vontake,
-        [Description("Instgram")]
-        [EnumMember]
-        Instgram,
-        [Description("LinkedIn")]
-        [EnumMember]
-        LinkedIn
+        Yahoo
      
-
-
         
         
 

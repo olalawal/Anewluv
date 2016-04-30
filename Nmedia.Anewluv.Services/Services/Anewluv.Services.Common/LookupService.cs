@@ -515,7 +515,7 @@ namespace Anewluv.Services.Common
 
 
 
-        public List<listitem> getrolelist()
+        public List<lu_role> getrolelist()
         {
 
            

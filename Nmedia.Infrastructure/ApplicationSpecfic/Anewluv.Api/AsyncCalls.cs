@@ -182,11 +182,10 @@ namespace Anewluv.Api
         //old method that returned bool, now we want profileid to validate agains body
         public static async Task<bool> validateuserbyusernamepasswordasync(string username,string password)
         {
-         //Task<bool> returnedTaskTResult =  Api.AuthenticationService.validateuserbyusernamepassword(new ProfileModel { username = username, password = password });
-         //           bool result = await returnedTaskTResult;
-         //           // IsApiKeyValid = await 
-         //           return result;
-            return false;
+         Task<bool> returnedTaskTResult =  Api.AuthenticationService.validateuserbyusernamepassword(new ProfileModel { username = username, password = password });
+                    bool result = await returnedTaskTResult;
+                    // IsApiKeyValid = await 
+                    return result;
 
         }
       

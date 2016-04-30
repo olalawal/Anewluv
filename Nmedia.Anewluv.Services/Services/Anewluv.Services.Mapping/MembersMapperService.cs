@@ -85,6 +85,9 @@ namespace Anewluv.Services.Mapping
 
         }
 
+
+
+
         /// maps a single profile to another
         /// </summary>
         /// <param name="model"></param>
@@ -190,6 +193,7 @@ namespace Anewluv.Services.Mapping
 
             }
         }
+
 
         //TO DO use roles to determine what photos and other data a user sees btw  
         /// <summary>
@@ -809,6 +813,7 @@ namespace Anewluv.Services.Mapping
 
         }
 
+
         //Not implemented
         //TOD modifiy client to not bind from this model but load values asycnh
         //other member viewmodl methods
@@ -990,6 +995,7 @@ namespace Anewluv.Services.Mapping
             }
 
         }
+
 
         //Not implemented yet
         public MembersViewModel getmemberdata(ProfileModel newmodel)
@@ -1635,7 +1641,33 @@ namespace Anewluv.Services.Mapping
 
 
 
-                       
+                        //this.AddRange(pageData.ToList());
+                        // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
+
+
+                        //Come back to these filiters later
+                        //11/20/2011 handle case where  no profiles were found
+                        //if (MemberSearchViewmodels.Count() == 0)
+                        // return null; //getquickmatcheswhenquickmatchesempty(new ProfileModel { profileid = Model.profileid }).Take(maxemailmatches).ToList();
+
+                        //filter our the ones in the right distance and reutnr the top webmacthes
+                        //USes max search results snce this could be called by any other method with a variable set of return macthes or results
+                        // var profiles = (model.maxdistancefromme > 0) ? (from q in MemberSearchViewmodels
+                        //    .Where(a => a.distancefromme.GetValueOrDefault() <= model.maxdistancefromme)
+                        //                                                select q).Take(maxemailmatches)
+                        //                                            :
+                        //     MemberSearchViewmodels.Take(maxemailmatches);
+
+
+                        //               var page = query.OrderBy(p => p.Name)
+                        //   .Select(p => new PersonResult { Name = p.Name })
+                        //   .Skip(skipRows).Take(pageSize)
+                        //   .GroupBy(p => new { Total = query.Count() })
+                        //  .First();
+
+                        //do paging here after last filtering
+                        // int? totalrecordcount = MemberSearchViewmodels.Count;
+                        //handle zero and null paging values
 
                         activitylist.Add(Api.AnewLuvLogging.CreateActivity(Model.profileid,null, (int)activitytypeEnum.quicksearch, ctx));
 
@@ -1681,37 +1713,78 @@ namespace Anewluv.Services.Mapping
 
         }
 
+
         //search functions that should be moved to thier own service when time allows
 
         //quick search for members in the same country for now, no more filters yet
         //this needs to be updated to search based on the user's prefered setting i.e thier looking for settings
-        public async Task<SearchResultsViewModel> getadvancedsearch(SearchSettingsModel Model)
+        public async Task<SearchResultsViewModel> getipquicksearch(quicksearchmodel Model)
         {
 
 
-            var activitylist = new List<ActivityModel>(); OperationContext ctx = OperationContext.Current;
+           // var activitylist = new List<ActivityModel>(); OperationContext ctx = OperationContext.Current;
             //            _unitOfWorkAsync.DisableProxyCreation = false;
             var db = _unitOfWorkAsync;
             {
                 try
                 {
+                    double currentdistance = Model.myselectedmaxdistancefromme ?? 200 ; 
+                    var matches = filtermatches(Model); 
+                    
+                    //get the number of values for male and female
+                    var divisor = Model.numberperpage / 2;
+                    var modulo = Model.numberperpage % 2;
 
-                    var task = Task.Factory.StartNew(() =>
+
+
+                    //check gender counts if they are good continue otherwise reun the query 
+                    while ((matches.Where(z=>z.genderid==(int)genderEnum.Male).Count())  < divisor && (matches.Where(z=>z.genderid==(int)genderEnum.Female).Count() < (divisor + modulo))) 
                     {
+                        Model.myselectedmaxdistancefromme = currentdistance + 500;  //TO DO tune this down from 500 to 50 mile increments 
+                        matches = filtermatches(Model); 
+                    }
 
 
-                       var  matches = membermappingextentions.filteradvancedsearchmatches(Model,_unitOfWorkAsync); 
+
+                    var matchesarray = matches.ToArray();
+                    var matcheslist = matches.ToList();
+                    MemberSearchViewModel[] orderedmathes = new MemberSearchViewModel[matches.Count()];                 
+                    
+                    int index = 0;                   
+                    int activegender = 0;
+                    //foreach (MemberSearchViewModel dd in matches)
+                    
+                    //initlize                 
+                    orderedmathes[index] = matcheslist.First();
+
+                    matcheslist.Remove(orderedmathes[index]); //remove it from source list
+                    //save the current gender
+                    activegender = orderedmathes[index].genderid.GetValueOrDefault();
+
+                     while (index < Model.numberperpage)
+                     {
+                        //increment indexe for list we are building
+                        index = index + 1;                        
+                     
+
+                         //find the first item of opposite gender next
+                        var firstMatch = matcheslist.First(s => s.genderid != activegender);
+                        orderedmathes[index] = firstMatch;
+                        matcheslist.Remove(firstMatch);
+
+                        activegender = orderedmathes[index].genderid.Value;               
+                        
+                    }
 
 
-                        activitylist.Add(Api.AnewLuvLogging.CreateActivity(Model.profileid, null, (int)activitytypeEnum.quicksearch, ctx));
-
-                        if (activitylist.Count() > 0) Anewluv.Api.AsyncCalls.addprofileactivities(activitylist).DoNotAwait();
-
-                        return GenerateSearchSearchResults(matches, Model.page, Model.numberperpage, db);
 
 
-                    });
-                    return await task.ConfigureAwait(false);
+                     return GenerateSearchSearchResults(orderedmathes, Model.page, Model.numberperpage, db);
+
+
+
+
+
 
                 }
                 catch (Exception ex)
@@ -1745,9 +1818,101 @@ namespace Anewluv.Services.Mapping
 
         }
 
+        private IEnumerable<MemberSearchViewModel> filtermatches(quicksearchmodel Model)
+        {
+
+            // SearchResultsViewModel searchresults = new SearchResultsViewModel();
+            //get the  gender's from search settings
+            int genderid = Model.myselectedseekinggenderid.GetValueOrDefault();
+            int mygenderid = Model.myselectediamgenderid.GetValueOrDefault();
+
+
+            // int[,] courseIDs = new int[,] UserProfile.profiledata.searchsettings.FirstOrDefault().searchsettings_Genders.ToList();
+            int AgeTo = Model.myselectedtoage != null ? Model.myselectedtoage.GetValueOrDefault() : 99;
+            int AgeFrom = Model.myselectedfromage != null ? Model.myselectedfromage.GetValueOrDefault() : 18;
+            //Height
+            //int intheightmin = Model.h != null ? Model.heightmin.GetValueOrDefault() : 0;
+            // int intheightmax = Model.heightmax != null ? Model.heightmax.GetValueOrDefault() : 100;
+            //  bool blEvaluateHeights = intheightmin > 0 ? true : false;
+            //get the rest of the values if they are needed in calculations
+            //convert lattitudes from string (needed for JSON) to bool           
+            double? myLongitude = (Model.myselectedlongitude != null) ? Convert.ToDouble(Model.myselectedlongitude) : 0;
+            double? myLattitude = (Model.myselectedlatitude != null) ? Convert.ToDouble(Model.myselectedlatitude) : 0;
+
+
+            //set variables
+            //  List<MemberSearchViewModel> MemberSearchViewmodels;
+            DateTime today = DateTime.Today;
+            DateTime max = today.AddYears(-(AgeFrom + 1));
+            DateTime min = today.AddYears(-AgeTo);
+
+            //get country and city data
+            string countryname = Model.myselectedcountryname;
+            int countryid = Model.myselectedcountryid.GetValueOrDefault();
+            // myselectedcountryid 
+            string stringpostalcode = Model.myselectedpostalcode;
+
+            //added 10/17/20011 so we can toggle postalcode box similar to register 
+            string city = Model.myselectedcity;
+            int photostatus = (Model.myselectedphotostatus != null) ? (int)photostatusEnum.Gallery : (int)photostatusEnum.Nostatus;
+            string stateprovince = Model.myselectedstateprovince;
+            double? maxdistancefromme = Model.myselectedmaxdistancefromme ?? 500;
+
+
+
+            //skip these
+            //get values from the collections to test for , this should already be done in the viewmodel mapper but juts incase they made changes that were not updated
+            //requery all the has tbls
+            HashSet<int> LookingForGenderValues = new HashSet<int>();
+            LookingForGenderValues.Add(genderid);  //add the gender id being searched for
+
+
+
+            var sourcePoint = spatialextentions.CreatePoint(myLattitude.Value, myLongitude.Value);
+            // find any locations within 5 miles ordered by distance
+            //first convert miles value to meters
+            var MaxdistanceInMiles = spatialextentions.MilesToMeters(maxdistancefromme);
+
+         
+
+            //TO DO needs filter for the profile ranking as well , and photo quality etc
+            var matches = _unitOfWorkAsync.Repository<profiledata>()
+                         .Query(z => z.profile.profilemetadata.photos.Any(m => m.photostatus_id == (int)photostatusEnum.Gallery
+                          && z.location.Distance(sourcePoint) <= MaxdistanceInMiles)).Include(z => z.profile).Select()
+                         .OrderBy(y => y.location.Distance(sourcePoint))
+                        .Select
+                        (x => new MemberSearchViewModel
+                        {
+                            //populate values server side to be used later                                                        
+                            
+                            id = x.profile_id,
+                            creationdate = x.profile.creationdate,
+                            profile = x.profile,
+                            distancefromme = x.location.Distance(sourcePoint),
+                            stateprovince = x.stateprovince,
+                            city = x.city,
+                            postalcode = x.postalcode,
+                            countryid = x.countryid,
+                            genderid = x.gender_id,
+                            birthdate = x.birthdate,
+
+                            screenname = x.profile.screenname,
+                            longitude = x.longitude ?? 0,
+                            latitude = x.latitude ?? 0,
+                            lastlogindate = x.profile.logindate
+
+                        }).Take(100);
+
+
+            return matches;
+
+        }
+
+        //search functions that should be moved to thier own service when time allows
+
         //quick search for members in the same country for now, no more filters yet
         //this needs to be updated to search based on the user's prefered setting i.e thier looking for settings
-        public async Task<SearchResultsViewModel> getadvancedsearchold(advancedsearchmodel model)
+        public async Task<SearchResultsViewModel> getadvancedsearch(advancedsearchmodel model)
         {
             var dd = new SearchResultsViewModel();
             //            _unitOfWorkAsync.DisableProxyCreation = false;
@@ -1936,120 +2101,6 @@ namespace Anewluv.Services.Mapping
 
 
         }
-
-        //search functions that should be moved to thier own service when time allows
-
-        //quick search for members in the same country for now, no more filters yet
-        //this needs to be updated to search based on the user's prefered setting i.e thier looking for settings
-        public async Task<SearchResultsViewModel> getipquicksearch(quicksearchmodel Model)
-        {
-
-
-           // var activitylist = new List<ActivityModel>(); OperationContext ctx = OperationContext.Current;
-            //            _unitOfWorkAsync.DisableProxyCreation = false;
-            var db = _unitOfWorkAsync;
-            {
-                try
-                {
-
-                      var task = Task.Factory.StartNew(() =>
-                    {
-
-
-                        double currentdistance = Model.myselectedmaxdistancefromme ?? 200 ; 
-                        var matches = membermappingextentions.filterquicksearchmatches (Model, _unitOfWorkAsync).Take(100); 
-                    
-                        //get the number of values for male and female
-                        var divisor = Model.numberperpage / 2;
-                        var modulo = Model.numberperpage % 2;
-
-
-                        //check gender counts if they are good continue otherwise reun the query 
-                        while ((matches.Where(z=>z.genderid==(int)genderEnum.Male).Count())  < divisor && (matches.Where(z=>z.genderid==(int)genderEnum.Female).Count() < (divisor + modulo))) 
-                        {
-                            Model.myselectedmaxdistancefromme = currentdistance + 500;  //TO DO tune this down from 500 to 50 mile increments 
-                            matches = membermappingextentions.filterquicksearchmatches(Model, _unitOfWorkAsync).Take(100); 
-                        }
-
-
-
-                        var matchesarray = matches.ToArray();
-                        var matcheslist = matches.ToList();
-                        MemberSearchViewModel[] orderedmathes = new MemberSearchViewModel[matches.Count()];                 
-                    
-                        int index = 0;                   
-                        int activegender = 0;
-                        //foreach (MemberSearchViewModel dd in matches)
-                    
-                        //initlize                 
-                        orderedmathes[index] = matcheslist.First();
-
-                        matcheslist.Remove(orderedmathes[index]); //remove it from source list
-                        //save the current gender
-                        activegender = orderedmathes[index].genderid.GetValueOrDefault();
-
-                         while (index < Model.numberperpage)
-                         {
-                            //increment indexe for list we are building
-                            index = index + 1;                        
-                     
-
-                             //find the first item of opposite gender next
-                            var firstMatch = matcheslist.First(s => s.genderid != activegender);
-                            orderedmathes[index] = firstMatch;
-                            matcheslist.Remove(firstMatch);
-
-                            activegender = orderedmathes[index].genderid.Value;               
-                        
-                        }
-
-
-
-
-                         return GenerateSearchSearchResults(orderedmathes, Model.page, Model.numberperpage, db);
-
-
-
-                    });
-                  return await task.ConfigureAwait(false);
-
-
-
-                }
-                catch (Exception ex)
-                {
-
-                    //instantiate logger here so it does not break anything else.
-                    logger = new Logging(applicationEnum.MemberService);
-                    //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
-                    //can parse the error to build a more custom error mssage and populate fualt faultreason
-                    FaultReason faultreason = new FaultReason("Error in member mapper service");
-                    string ErrorMessage = "";
-                    string ErrorDetail = "ErrorMessage: " + ex.Message;
-                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-
-                    //throw convertedexcption;
-                }
-                finally
-                {
-                    //  Api.DisposeGeoService();
-                    //   Api.DisposeMemberService();
-                    //  Api.DisposePhotoService();
-
-                }
-
-            }
-
-
-
-
-
-        }
-
-       
-
-      
 
         //TO DO clean up and just use gener and newest
         internal SearchResultsViewModel getquickmatcheswhenquickmatchesempty(MembersViewModel model, searchsetting perfectmatchsearchsettings, int? page, int? numberperpage, IUnitOfWorkAsync db, IGeoDataStoredProcedures geodb)
@@ -2263,4 +2314,116 @@ namespace Anewluv.Services.Mapping
     }
 }
 
+
+//backup of old code
+
+///// <summary>
+///// asumes modeltomap and profile id is populated
+///// </summary>
+///// <param name="model"></param>
+///// <returns></returns>
+//private MemberSearchViewModel getmembersearchviewmodel(ProfileModel model, IUnitOfWorkAsync db)
+//{
+
+//  //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+
+//    try
+//    {
+//        if (model.profileid.Value != null)
+//        {
+
+
+//            // List<MemberSearchViewModel> models = new List<MemberSearchViewModel>();
+//            MemberSearchViewModel modeltomap = new MemberSearchViewModel();
+//            // modeltomap.id = Convert.ToInt32(profileid);
+//            return mapmembersearchviewmodel(model, db);
+
+
+//        }
+//        return null;
+
+//    }
+//    catch (Exception ex)
+//    {
+
+//        //instantiate logger here so it does not break anything else.
+//        logger = new Logging(applicationEnum.MemberService);
+//        //int profileid = Convert.ToInt32(viewerprofileid);
+//        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(viewerprofileid));
+//        //can parse the error to build a more custom error mssage and populate fualt faultreason
+//        FaultReason faultreason = new FaultReason("Error in member mapper service");
+//        string ErrorMessage = "";
+//        string ErrorDetail = "ErrorMessage: " + ex.Message;
+//        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+//        //throw convertedexcption;
+//    }
+
+
+//}     
+
+
+
+
+////public method that exposes mapper
+///// <summary>
+///// 
+//      /// <summary>
+//        ///  same as above but maps a single profile to a list of other profiles in the model.modelstomap variable
+//        /// </summary>
+//        /// <param name="model"></param>
+//        /// <param name="allphotos"></param>
+//        /// <returns></returns>
+//        public async Task<List<MemberSearchViewModel>> mapmembersearchviewmodels(ProfileModel model)
+//        {
+
+//          //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+//            var geodb = _geodatastoredProcedures;
+//           var db = _unitOfWorkAsync;
+//            {
+//                try
+//                {
+
+//                      var task = Task.Factory.StartNew(() =>
+//                    {
+
+//                       List<MemberSearchViewModel> models = new List<MemberSearchViewModel>();
+//                    ProfileModel tempmodel = model; //temp storage so we can modif it for use in iteration
+//                    foreach (var item in model.modelstomap)
+//                    {
+//                        //set current model for mapping
+//                        tempmodel.modeltomap = item;
+//                        models.Add(membermappingextentions.mapmembersearchviewmodel(model.profileid.Value, item.id, model.allphotos, db, geodb));
+
+//                    }
+//                    return models;
+
+//                    });
+//                    return await task.ConfigureAwait(false);
+
+
+//                }
+//                catch (Exception ex)
+//                {
+
+//                    //instantiate logger here so it does not break anything else.
+//                    logger = new Logging(applicationEnum.MemberService);
+//                    //int profileid = Convert.ToInt32(viewerprofileid);
+//                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid.Value));
+//                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+//                    FaultReason faultreason = new FaultReason("Error in member mapper service");
+//                    string ErrorMessage = "";
+//                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+//                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+//                    //throw convertedexcption;
+//                }
+//                finally
+//                {
+//                   
+//                }
+
+//            }
+
+//        }
 

@@ -410,7 +410,7 @@ namespace Anewluv.Services.Edit
         }
 
 
-        //global search upddate i.e saves a search
+        //global search upddate
         public async Task<AnewluvMessages> searcheditallsettings(SearchSettingsModel searchmodel)
         {            
              //   using (var transaction = _unitOfWorkAsync.BeginTransaction())

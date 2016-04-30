@@ -292,7 +292,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Anewluv\Edit\" />
-    <Folder Include="Anewluv\ViewModels\Account\V2\" />
     <Folder Include="Infrasrtucture\" />
   </ItemGroup>
   <ItemGroup>

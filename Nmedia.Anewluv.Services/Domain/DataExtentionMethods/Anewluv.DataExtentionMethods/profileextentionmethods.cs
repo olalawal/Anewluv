@@ -9,7 +9,6 @@ using Anewluv.Domain.Data.ViewModels;
 using Repository.Pattern.Repositories;
 using Repository.Pattern.UnitOfWork;
 using Nmedia.Infrastructure.Utils;
-using Repository.Pattern.Infrastructure;
 
 
 
@@ -35,7 +34,7 @@ namespace Anewluv.DataExtentionMethods
             return repo.Query(p => p.profile.screenname == model.screenname).Select().FirstOrDefault();
         }
 
-        //removed photo conversions until it can be filtered on other end and no gunarntee on this ?
+        //TO DO add photos and photo conversions maybe ? so we dont need the profile viewmodel
         public static profilemetadata getprofilemetadatabyprofileid(this IRepository<profilemetadata> repo, ProfileModel model)
         {
 
@@ -44,8 +43,7 @@ namespace Anewluv.DataExtentionMethods
                 return repo.Query(p => p.profile_id == model.profileid.Value)
 
                     .Include(x => x.profile)
-                    // potos are filtered by other calls based on roles and blocks actions etc
-                    //.Include(z => z.photos.Select(s => s.photoconversions))
+                       .Include(z => z.photos.Select(s => s.photoconversions))
                           .Include(z => z.profiledata_ethnicity.Select(s => s.lu_ethnicity))
                              .Include(z => z.profiledata_hobby.Select(s => s.lu_hobby))
                                 .Include(z => z.profiledata_hotfeature.Select(s => s.lu_hotfeature))
@@ -53,13 +51,9 @@ namespace Anewluv.DataExtentionMethods
                         .Include(z => z.rateeratingvalues)
                         .Include(z => z.createdactions)
                         .Include(z => z.targetofactions)
-                    // .Include(z => z.applications)
+                        .Include(z => z.applications)
 
                         .Include(x => x.profile.profiledata)
-
-                         //added visibility settings
-                      .Include(x => x.profile.profiledata.visiblitysettings)
-
                          .Include(x => x.profile.profiledata.lu_bodytype)
                          .Include(x => x.profile.profiledata.lu_diet)
                      .Include(x => x.profile.profiledata.lu_drinks)
@@ -85,8 +79,12 @@ namespace Anewluv.DataExtentionMethods
 
 
 
-                           //first search searchsettings since its created when user account is 
-                           .Include(x => x.searchsettings.Select(s => s.details)).Include(x => x.searchsettings.Select(s => s.locations)).Select().FirstOrDefault();
+                           //searchsettings
+                           .Include(x => x.searchsettings.Select(s => s.details))
+                              .Include(x => x.searchsettings.Select(s => s.locations))
+
+
+                    .Select().FirstOrDefault();
             }
             catch (Exception ex)
             {
@@ -97,7 +95,6 @@ namespace Anewluv.DataExtentionMethods
 
         /// <summary>
         /// added roles
-        /// This method is for internal use i.e we do not return this data to UI
         /// </summary>
         /// <param name="repo"></param>
         /// <param name="model"></param>
@@ -105,20 +102,9 @@ namespace Anewluv.DataExtentionMethods
         public static profile getprofilebyprofileid(this IRepository<profile> repo, ProfileModel model)
         {
 
-            return repo.Query(p => p.id == model.profileid.Value)
-
-
-                .Include(x => x.profiledata)
-
-                     //added visibility settings
-                 .Include(x => x.profiledata.visiblitysettings)
-
-                
+            return repo.Query(p => p.id == model.profileid.Value).Include(x => x.profiledata)
               
-                 //do not expose roles to UI i.e inetrnal service only
-                 //the select includes the role object 
                 .Include(p => p.membersinroles.Select(z => z.lu_role))
-
                     .Include(x => x.profiledata)
                      .Include(x => x.profiledata.lu_bodytype)
                      .Include(x => x.profiledata.lu_diet)
@@ -145,13 +131,6 @@ namespace Anewluv.DataExtentionMethods
                         .Include(x => x.profilemetadata.profiledata_hobby)
                        .Include(x => x.profilemetadata.profiledata_hotfeature)
                        .Include(x => x.profilemetadata.profiledata_lookingfor)
-
-                       //added profile metata data stuff
-                .Include(x => x.profilemetadata)
-                   .Include(z => z.profilemetadata.rateeratingvalues)
-                        .Include(z => z.profilemetadata.createdactions)
-                        .Include(z => z.profilemetadata.targetofactions)
-                 .Include(z => z.profilemetadata.applications)
 
 
                 .Include(i => i.profilemetadata.searchsettings.Select(s => s.details)).Select().FirstOrDefault();
@@ -231,11 +210,11 @@ namespace Anewluv.DataExtentionMethods
             //MembersRepository membersrepository = new MembersRepository();
             //get the correct value from DB
             //lazy loading needed
-            var profile = repo.Query(p => p.openids.Any(z=>z.lu_openidprovider.description.ToUpper() == model.openidprovider.ToUpper() && z.openididentifier == model.openididentifier))
+            var profile = repo.Query(p => p.emailaddress == model.email)
                 .Include(x => x.profiledata)
-                .Include(m=>m.openids)
                 .Include(p => p.membersinroles.Select(z => z.lu_role))   
                 .Include(z=>z.profilemetadata).Select().FirstOrDefault();
+
 
             //if we have an active cache we store the current value 
             if (profile != null && profile.openids.Any(p => p.lu_openidprovider.description == model.openidprovider))
@@ -250,15 +229,6 @@ namespace Anewluv.DataExtentionMethods
             //MembersRepository membersrepository = new MembersRepository();
             //get the correct value from DB
             return (repo.Query(p => p.emailaddress == model.email).Select().FirstOrDefault() != null);
-
-
-        }
-
-        public static bool checkifopenidalreadyexists(this IRepository<profile> repo, ProfileModel model)
-        {
-            //MembersRepository membersrepository = new MembersRepository();
-            //get the correct value from DB
-            return (repo.Query(p =>p.emailaddress == model.email &&  p.openids.Any(z=>z.lu_openidprovider.description == model.openidprovider && z.openididentifier == model.openididentifier)).Select().FirstOrDefault() != null);
 
 
         }
@@ -527,26 +497,8 @@ namespace Anewluv.DataExtentionMethods
                 }
          }
 
-
-        public static int createopenid(ProfileModel model, IUnitOfWorkAsync db)
-        {
-
-            var profileOpenIDStore = new openid
-            {
-                active = true,
-                creationdate = DateTime.UtcNow,
-                profile_id = model.profileid.Value,
-                lu_openidprovider = db.Repository<lu_openidprovider>().Queryable().ToList().Where(p => (p.description).ToUpper() == model.openidprovider.ToUpper()).FirstOrDefault(),
-                openididentifier = model.openididentifier,
-                ObjectState = ObjectState.Added
-            };
-
-            db.Repository<openid>().Insert(profileOpenIDStore);
-            var i = db.SaveChanges();
-
-            return profileOpenIDStore.id;
-
-        }
+        
+    
 
     
     
