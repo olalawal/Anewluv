@@ -1202,6 +1202,46 @@ namespace Anewluv.Services.Authentication
                 //throw convertedexcption;
             }
         }
+
+                               
+        public async Task<bool> checkifopenidalreadyexists(ProfileModel model)
+        {
+            try
+            {
+                if (model == null | model.email == null) return false;
+
+                //get profile info an open id info 
+                 var result = await _unitOfWorkAsync.RepositoryAsync<profile>().Query(p => p.emailaddress == model.email).Include(z=>z.openids).SelectAsync();
+
+                 var profile = result.FirstOrDefault();
+
+                 if (profile != null && profile.openids.Count() > 0 && profile.openids.Any(z => z.openididentifier == model.openididentifier))
+                {
+                    return true;
+
+                }
+              
+                return false;
+
+
+            }
+            catch (Exception ex)
+            {
+                using (var logger = new Logging(applicationEnum.UserAuthorizationService))
+                {
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                }
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                // logger.Dispose();
+                FaultReason faultreason = new FaultReason("Error in member service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                //throw convertedexcption;
+            }
+
+        }
+
         /// <summary>
         /// Determines wethare an activation code matches the value in the Initial Catalog= for a given profileid
         /// </summary>
@@ -1738,9 +1778,9 @@ namespace Anewluv.Services.Authentication
                 try
                 {
 
-
-                   // var task = Task.Factory.StartNew(() =>
-                  //  {
+                       //bypass password if openid token is passed
+                    if (model.openididentifier == "" | model.openididentifier == null)
+                    {
 
 
                         // return _unitOfWorkAsync.Repository<profiledata>().getprofiledatabyprofileid(model);
@@ -1824,8 +1864,8 @@ namespace Anewluv.Services.Authentication
                                 currenttoken.Apikey = guid;
 
                             //updated activity // TO Do we migght use to replace logtimes below ?
-                            var activitylist = new List<ActivityModel>(); 
-                            activitylist.Add(Api.AnewLuvLogging.CreateActivity(profile.id, guid, (int)activitytypeEnum.login,  OperationContext.Current));
+                            var activitylist = new List<ActivityModel>();
+                            activitylist.Add(Api.AnewLuvLogging.CreateActivity(profile.id, guid, (int)activitytypeEnum.login, OperationContext.Current));
                             Anewluv.Api.AsyncCalls.addprofileactivities(activitylist).DoNotAwait();
 
 
@@ -1839,8 +1879,72 @@ namespace Anewluv.Services.Authentication
                         {
                             return currenttoken;
                         }
-                   // });
-                 //   return await task.ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        //TO DO refactor this cleaner
+                        //all this happens only if we have matching emails 
+                        //remeber aall  this happens on AFTER we have validated that t he user's open id stuff is correct.
+                        //check if the user has an open id with us already 
+
+                        //Dim ctx As New Entities()
+                        //TO DO add an inactive count login to track how many times a user logs in before they active profile default max should be = 3
+                        //added profile status ID validation as well i.e 2 for activated and is not banned 
+                        var profileresult = await _unitOfWorkAsync.RepositoryAsync<profile>().Query(p => p.emailaddress == model.email &&
+                            (p.status_id != (int)profilestatusEnum.Banned | p.status_id != (int)profilestatusEnum.Inactive | p.status_id != (int)profilestatusEnum.ResetingPassword)
+                             ).Include(z => z.profileactivities).SelectAsync();
+
+                        profile = profileresult.FirstOrDefault();
+
+                        //email address has to match existing email address to add the new openid token
+                        var result = await this.checkifopenidalreadyexists(model);
+
+                        if (result == false)
+                        {
+                            var profileOpenIDStore = new openid
+                            {
+                                active = true,
+                                creationdate = DateTime.UtcNow,
+                                profile_id = model.profileid.Value,
+                                lu_openidprovider = _unitOfWorkAsync.Repository<lu_openidprovider>().Queryable().ToList().Where(p => (p.description).ToUpper() == model.openidprovider.ToUpper()).FirstOrDefault(),
+                                openididentifier = model.openididentifier,
+                                ObjectState = ObjectState.Added
+                            };
+                            _unitOfWorkAsync.Repository<openid>().Insert(profileOpenIDStore);
+                            var i = _unitOfWorkAsync.SaveChanges();
+                        }
+
+                        //No need to log this since its used the APIkey inspector on checkascccesscore
+                        currenttoken.id = profile.id;
+                        currenttoken.timestamp = DateTime.Now;
+                        //return the profile ID so it can be used for whatver
+
+                        //for now have it generate a new GUID each time to test 
+                        // var existingguid = getcurrentapikeybyprofileid(myQuery.id, db);
+
+                        var guid = Api.AsyncCalls.validateorgetapikeyasync(new ApiKeyValidationModel
+                        {
+                            service = "AuthenticationService",
+                            username = model.username,
+                            useridentifier = currenttoken.id,
+                            application = "Anewluv",
+                            application_id = (int)applicationenum.anewluv,
+                            keyvalue = null
+                        }).Result;
+                        // var guid = getcurrentapikeybyprofileid(myQuery.id,db);
+                        if (guid != null)
+                            currenttoken.Apikey = guid;
+
+                        //updated activity // TO Do we migght use to replace logtimes below ?
+                        var activitylist = new List<ActivityModel>();
+                        activitylist.Add(Api.AnewLuvLogging.CreateActivity(profile.id, guid, (int)activitytypeEnum.login, OperationContext.Current));
+                        Anewluv.Api.AsyncCalls.addprofileactivities(activitylist).DoNotAwait();
+
+
+                        //login time updated here
+                        updateuserlogintime(profile.id, OperationContext.Current, guid.ToString()).DoNotAwait();
+                        return currenttoken;
+                    }
 
 
 

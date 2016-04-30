@@ -8,7 +8,7 @@ namespace Anewluv.Domain.Data.ViewModels
 {
     [Serializable]
     [DataContract]
-    public class advancedsearchmodel
+    public class AdvancedSearchModel
     {
 
         [DataMember]

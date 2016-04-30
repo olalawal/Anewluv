@@ -1908,11 +1908,10 @@ namespace Anewluv.Services.Mapping
 
         }
 
-        //search functions that should be moved to thier own service when time allows
-
+      
         //quick search for members in the same country for now, no more filters yet
         //this needs to be updated to search based on the user's prefered setting i.e thier looking for settings
-        public async Task<SearchResultsViewModel> getadvancedsearch(advancedsearchmodel model)
+        public async Task<SearchResultsViewModel> getadvancedsearch(AdvancedSearchModel model)
         {
             var dd = new SearchResultsViewModel();
             //            _unitOfWorkAsync.DisableProxyCreation = false;

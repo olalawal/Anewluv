@@ -55,30 +55,30 @@ namespace Anewluv.Apikey
 
      
         //old way of validating, now we will use a new method so we can get the profile ID and validate it against the message body JSON
-        public static bool ValidateUser(OperationContext operationContext)
-        {
-            var authinfo = Utilities.GetUserNamePassword(operationContext);
+        //public static bool ValidateUser(OperationContext operationContext)
+        //{
+        //    var authinfo = Utilities.GetUserNamePassword(operationContext);
 
-            if (authinfo != null)
-            {
-                //TO DO convert to asynch
-                // AnewluvContext AnewluvContext = new AnewluvContext();
-                //  var IsUserValidated = false;
-                ////  using (var tempdb = new  AnewluvContext())
-                //  {
-                //  AuthenticationService AuthenticationService = new AuthenticationService(tempdb);
-                var dd = AsyncCalls.validateuserbyusernamepasswordasync(authinfo[0], authinfo[1]);
-                return dd.Result;
-                // bool result = await returnedTaskTResult;
-                // IsApiKeyValid = await 
-                // return result;                   
+        //    if (authinfo != null)
+        //    {
+        //        //TO DO convert to asynch
+        //        // AnewluvContext AnewluvContext = new AnewluvContext();
+        //        //  var IsUserValidated = false;
+        //        ////  using (var tempdb = new  AnewluvContext())
+        //        //  {
+        //        //  AuthenticationService AuthenticationService = new AuthenticationService(tempdb);
+        //        var dd = AsyncCalls.validateuserbyusernamepasswordasync(authinfo[0], authinfo[1]);
+        //        return dd.Result;
+        //        // bool result = await returnedTaskTResult;
+        //        // IsApiKeyValid = await 
+        //        // return result;                   
 
-            }
-            return false;
-            //var result = Api.AuthenticationService.validateuserbyusernamepassword(new ProfileModel { username = authinfo[0], password = authinfo[1] });
-            //.0 Api.DisposeAuthenticationService();
-            // return IsUserValidated;
-        }
+        //    }
+        //    return false;
+        //    //var result = Api.AuthenticationService.validateuserbyusernamepassword(new ProfileModel { username = authinfo[0], password = authinfo[1] });
+        //    //.0 Api.DisposeAuthenticationService();
+        //    // return IsUserValidated;
+        //}
 
         #endregion
 
