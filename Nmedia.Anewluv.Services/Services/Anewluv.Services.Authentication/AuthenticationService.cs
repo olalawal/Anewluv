@@ -1771,7 +1771,7 @@ namespace Anewluv.Services.Authentication
             
          
 
-            if (model == null | model.username == null) return currenttoken;
+            if (model == null || model.username == null && model.openididentifier == null ) return currenttoken;
             // _unitOfWorkAsync.DisableProxyCreation = true;
             //  using (var db = _unitOfWorkAsync)
             {

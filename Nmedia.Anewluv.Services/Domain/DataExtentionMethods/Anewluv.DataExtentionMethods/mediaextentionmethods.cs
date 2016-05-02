@@ -153,6 +153,7 @@ namespace Anewluv.DataExtentionMethods
             try
             {
 
+
                 //added roles
                 //filterer out photos that are not approved
                 IQueryable<photoconversion> photomodel = repo.Query(z => z.photo.profile_id == model.profileid.Value &
@@ -184,6 +185,75 @@ namespace Anewluv.DataExtentionMethods
                     photomodel = photomodel.Where(a => a.photo.photostatus_id == model.phototstatusid);                
                
 
+                //format
+                if (model.photoformatid != null)
+                    photomodel = photomodel.Where(a => a.formattype_id == model.photoformatid.Value);
+                if (model.photoformatid == null) //default is medium quality
+                    photomodel = photomodel.Where(a => a.formattype_id ==  (int)photoformatEnum.Medium);
+
+                //only allow admins or the user to view un reviewed photos 
+                if (model.phototapprovalstatusid != null )
+                     photomodel = photomodel.Where(z => z.photo.approvalstatus_id == model.phototapprovalstatusid.Value);     
+                //if no status is requested just show all that are reviewed and approved
+                if (model.phototapprovalstatusid == null)
+                    photomodel = photomodel.Where(z => z.photo.approvalstatus_id != (int)photoapprovalstatusEnum.NotReviewed |
+                        z.photo.approvalstatus_id != (int)photoapprovalstatusEnum.Rejected |
+                        z.photo.approvalstatus_id != (int)photoapprovalstatusEnum.RequiresFurtherInformation);
+             
+
+               
+
+
+                return photomodel;
+
+
+
+            }
+            catch (Exception ex)
+            {
+                //eath the eception
+                // throw ex;
+            }
+
+            return null;
+        }
+
+            public static IQueryable<photoconversion> filterphotosadmin(this IRepository<photoconversion> repo, PhotoModel model)
+        {
+            try
+            {
+
+
+                //added roles
+                //filterer out photos that are not approved
+                IQueryable<photoconversion> photomodel = repo.Query(z => 
+                   // (z.photo.approvalstatus_id != (int)photoapprovalstatusEnum.Rejected) &  //filter not approved
+                    (z.photo.photostatus_id != (int)photostatusEnum.deletedbyadmin))  //filter deleted 
+                     .Include(p=>p.photo)
+                     .Include(p => p.lu_photoformat)
+                    .Include(p => p.photo.profilemetadata)
+                    .Include(p => p.photo.photo_securitylevel.Select(z => z.lu_securityleveltype))
+                    .Include(p => p.photo.profilemetadata.profile.membersinroles.Select(z => z.lu_role))
+                    .Select().AsQueryable();
+
+              
+                //to do roles ? allowing what photos they can view i.e the high rez stuff or more than 2 -3 etc
+
+                //photo id
+                if (model.photoid != null)
+                    photomodel = photomodel.Where(a => a.photo_id == model.photoid).AsQueryable();
+                               
+                //also assumes the viewer is the same as the profile ID
+                //only allow the user who owns them get photos by security level   
+                if (model.photosecuritylevelid != null)
+                    photomodel = photomodel.Where(a => a.photo.photo_securitylevel.Count() > 0 && a.photo.photo_securitylevel.Any(d => d.securityleveltype_id == model.photosecuritylevelid));               
+                if (model.photosecuritylevelid == null) //only grab photos with no status 
+                    photomodel = photomodel.Where(a => a.photo.photo_securitylevel.Count() == 0).AsQueryable();             
+               
+                //status
+                if (model.phototstatusid != null)
+                    photomodel = photomodel.Where(a => a.photo.photostatus_id == model.phototstatusid);               
+               
                 //format
                 if (model.photoformatid != null)
                     photomodel = photomodel.Where(a => a.formattype_id == model.photoformatid.Value);
@@ -290,14 +360,23 @@ namespace Anewluv.DataExtentionMethods
 
         //TO DO Premuim roles get all
         //TO DO needs code to check roles to see how many photos can be viewd etc
-        public static PhotoSearchResultsViewModel getfilteredphotospaged(this IRepository<photoconversion> repo, PhotoModel model)
+        public static PhotoSearchResultsViewModel getfilteredphotospaged(this IRepository<photoconversion> repo, PhotoModel model,bool isadmin)
         {
         
             try
             {
-                var dd = filterphotos(repo, model);
+                IQueryable<photoconversion> photos = null;
+
+                if (isadmin == false)
+                {
+                    photos = filterphotos(repo, model);
+                }
+                else
+                {
+                    photos = filterphotosadmin(repo, model);
+                }
                 //TO DO test the ordering we want the order by date and then the gallery photo first
-                 return pagephotos(dd.OrderBy(z=>z.creationdate).OrderBy(z=>z.photo.photostatus_id).ToList(), model.page, model.numberperpage);
+                 return pagephotos(photos.OrderBy(z=>z.creationdate).OrderBy(z=>z.photo.photostatus_id).ToList(), model.page, model.numberperpage);
 
 
             }

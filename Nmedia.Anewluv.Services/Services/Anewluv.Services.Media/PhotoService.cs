@@ -230,7 +230,7 @@ namespace Anewluv.Services.Media
                        {
                            var repo = _unitOfWorkAsync.Repository<photoconversion>();
                            var dd = mediaextentionmethods.getfilteredphotospaged
-                               (repo, model);
+                               (repo, model,false);
 
                            return dd;
                        }
@@ -1171,13 +1171,27 @@ namespace Anewluv.Services.Media
         /// <param name="model"></param>
         /// <returns></returns>
         public async Task<PhotoSearchResultsViewModel> getadminfilteredphotospaged(PhotoModel model)
-        { 
+        {
 
-        var task = Task.Factory.StartNew(() =>
-                            {
-                                return new PhotoSearchResultsViewModel();
-                            });
-        return await task.ConfigureAwait(false);
+
+            //check the api key matches the profile id pased 
+            var profileidmatchesapikey =  await Api.AsyncCalls.validateapikeybyuseridentifierasync(new
+                            ApiKeyValidationModel { application_id = (int)applicationenum.anewluv, keyvalue = model.apikey.Value, useridentifier = model.profileid.Value });
+            
+             
+
+                if (profileidmatchesapikey)
+                {
+                    var repo = _unitOfWorkAsync.Repository<photoconversion>();
+                    var dd = mediaextentionmethods.getfilteredphotospaged(repo, model,true);
+
+                    return dd;
+                }
+                return null;
+
+               
+
+            
        
         
         }
