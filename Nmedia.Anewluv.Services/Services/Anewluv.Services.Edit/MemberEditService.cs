@@ -964,8 +964,11 @@ namespace Anewluv.Services.Edit
                 //TO DO log actvity ?
                 if (updated)
                 {
-                    p.modificationdate = DateTime.Now;                   
-                    _unitOfWorkAsync.Repository<profile>().InsertOrUpdateGraph(p);
+                    p.modificationdate = DateTime.Now;
+                    p.profiledata.ObjectState = ObjectState.Modified;
+                    p.ObjectState = ObjectState.Modified;                   
+                    _unitOfWorkAsync.Repository<profile>().Update(p);
+                    _unitOfWorkAsync.Repository<profiledata>().Update(p.profiledata);
                     _unitOfWorkAsync.SaveChanges();
                       messages.actvitytypes.Add(activitytypeEnum.updateprofile);
                 }
