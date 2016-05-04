@@ -691,7 +691,7 @@ namespace Anewluv.Services.Authentication
                         ObjProfileEntity.emailaddress = email;
                         //changed the encryption to something stronger
                         //make username upper so that we can get actual mateches withoute user having to type in a case sensitive username
-                        ObjProfileEntity.password = (openidIdentifer != "") ? Encryption.encryptString(password) : openidIdentifer;
+                        ObjProfileEntity.password = (String.IsNullOrEmpty(openidIdentifer)) ? Encryption.encryptString(password) : null;
                         // ObjProfileEntity.id   = email;
                         ObjProfileEntity.screenname = screenname;
                         //need to add a new feild
@@ -769,7 +769,7 @@ namespace Anewluv.Services.Authentication
 
                         //TOD DO add open ID identifier as well Profider type to ssoProvider table 
                         //TO Do prevalidate openid identifer
-                        if (openidIdentifer != "" && openidProvidername != "")
+                        if (!String.IsNullOrEmpty(openidIdentifer) || !String.IsNullOrEmpty(openidProvidername))
                         {
                             openid newopenid = new openid();
                            
