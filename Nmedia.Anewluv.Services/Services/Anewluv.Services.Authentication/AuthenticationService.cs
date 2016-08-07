@@ -1211,11 +1211,12 @@ namespace Anewluv.Services.Authentication
                 if (model == null | model.email == null) return false;
 
                 //get profile info an open id info 
-                 var result = await _unitOfWorkAsync.RepositoryAsync<profile>().Query(p => p.emailaddress == model.email).Include(z=>z.openids).SelectAsync();
+                var result = await _unitOfWorkAsync.RepositoryAsync<profile>().Query(p => p.emailaddress == model.email).Include(z=>z.openids.Select(y => y.lu_openidprovider)).SelectAsync();
 
-                 var profile = result.FirstOrDefault();
+                var profile = result.FirstOrDefault();
 
-                 if (profile != null && profile.openids.Count() > 0 && profile.openids.Any(z => z.openididentifier == model.openididentifier))
+                //added a new condition to make sure the provider is the same overkill but just to be safe if items migrate 
+                if (profile != null && profile.openids.Count() > 0 && profile.openids.Any( z => z.lu_openidprovider.description.ToUpper() == model.openidprovider.ToUpper() && z.openididentifier == model.openididentifier))
                 {
                     return true;
 
@@ -1778,13 +1779,13 @@ namespace Anewluv.Services.Authentication
                 try
                 {
 
-                       //bypass password if openid token is passed
+                       //bypass password if open id token is passed
                     if (model.openididentifier == "" | model.openididentifier == null)
                     {
 
 
                         // return _unitOfWorkAsync.Repository<profiledata>().getprofiledatabyprofileid(model);
-                        //first you have to get the encrypted sctring by email address and username 
+                        //first you have to get the encrypted string by email address and username 
                         string encryptedPassword = "";
                         //get profile created date
                         DateTime creationdate;
@@ -1805,20 +1806,21 @@ namespace Anewluv.Services.Authentication
 
                         profile = profileresult.FirstOrDefault();
 
-                        if (profile.id != 0)
+                      
+                       if (profile != null && profile.id != 0)
                         {
 
-                            //retirve encypted password
+                            //retirve encrypted password
                             encryptedPassword = profile.password;
                             creationdate = profile.creationdate.GetValueOrDefault();
                             passwordchangedate = profile.passwordChangeddate;
                         }
                         else
-                        {
+                        {                           
                             return currenttoken;
                         }
 
-                        //case for if the user account was created before encrpyption algorithm was changed
+                        //case for if the user account was created before encryption algorithm was changed
                         //compare the dates
                         int resultcreateddate = DateTime.Compare(creationdate, EncrpytionChangeDate);
                         int resultpasswordchangedate = DateTime.Compare(passwordchangedate.GetValueOrDefault(), EncrpytionChangeDate);
@@ -1880,11 +1882,12 @@ namespace Anewluv.Services.Authentication
                             return currenttoken;
                         }
                     }
+                    //handling for open ID logins 
                     else
                     {
-                        //TO DO refactor this cleaner
+                        //TO DO re-factor this cleaner
                         //all this happens only if we have matching emails 
-                        //remeber aall  this happens on AFTER we have validated that t he user's open id stuff is correct.
+                        //remember all  this happens on AFTER we have validated that t he user's open id stuff is correct.
                         //check if the user has an open id with us already 
 
                         //Dim ctx As New Entities()
@@ -1896,22 +1899,28 @@ namespace Anewluv.Services.Authentication
 
                         profile = profileresult.FirstOrDefault();
 
-                        //email address has to match existing email address to add the new openid token
+                        //email address has to match existing email address to add the new open id token
                         var result = await this.checkifopenidalreadyexists(model);
 
                         if (result == false)
                         {
-                            var profileOpenIDStore = new openid
+                            //get the provider first
+                            var lu_openidprovider = _unitOfWorkAsync.Repository<lu_openidprovider>().Queryable().ToList().Where(p => (p.description).ToUpper() == model.openidprovider.ToUpper()).FirstOrDefault();
+                            //only add if we have a matching provider
+                            if (lu_openidprovider != null)
                             {
-                                active = true,
-                                creationdate = DateTime.UtcNow,
-                                profile_id = model.profileid.Value,
-                                lu_openidprovider = _unitOfWorkAsync.Repository<lu_openidprovider>().Queryable().ToList().Where(p => (p.description).ToUpper() == model.openidprovider.ToUpper()).FirstOrDefault(),
-                                openididentifier = model.openididentifier,
-                                ObjectState = ObjectState.Added
-                            };
-                            _unitOfWorkAsync.Repository<openid>().Insert(profileOpenIDStore);
-                            var i = _unitOfWorkAsync.SaveChanges();
+                                var profileOpenIDStore = new openid
+                                {
+                                    active = true,
+                                    creationdate = DateTime.UtcNow,
+                                    profile_id = model.profileid.Value,
+                                    lu_openidprovider = lu_openidprovider,
+                                    openididentifier = lu_openidprovider.description,
+                                    ObjectState = ObjectState.Added
+                                };
+                                _unitOfWorkAsync.Repository<openid>().Insert(profileOpenIDStore);
+                                var i = _unitOfWorkAsync.SaveChanges();
+                            }
                         }
 
                         //No need to log this since its used the APIkey inspector on checkascccesscore
@@ -1959,7 +1968,7 @@ namespace Anewluv.Services.Authentication
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, profile != null ? profile.id : 0, null);
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in authenitcation service");
+                    FaultReason faultreason = new FaultReason("Error in authentication service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
