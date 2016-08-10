@@ -1231,11 +1231,7 @@ namespace Anewluv.Services.Mapping
                                                           creationdate = f.creationdate,
                                                           // lastloggedonString = _datingcontext.fnGetLastLoggedOnTime(f.logindate),
                                                           lastlogindate = f.logindate,
-                                                          distancefromme = x.location.Distance(sourcePoint), 
-                                                          //TO DO look at this and explore
-                                                          //  distancefromme = _datingcontext.fnGetDistance((double)x.latitude, (double)x.longitude,myLattitude.Value  , myLongitude.Value   , "Miles")
-                                                          //       lookingforagefrom = x.profile.profilemetadata.searchsettings != null ? x.profile.profilemetadata.searchsettings.FirstOrDefault().agemin.ToString() : "25",
-
+                                                          distancefromme = x.location.Distance(sourcePoint)
 
                                                       }).OrderBy(p => p.distancefromme).ThenByDescending(p => p.creationdate);//.OrderBy(p=>p.creationdate ).Take(maxwebmatches).ToList();
 
