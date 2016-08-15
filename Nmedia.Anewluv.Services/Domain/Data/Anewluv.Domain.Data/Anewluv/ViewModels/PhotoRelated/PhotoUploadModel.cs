@@ -38,6 +38,10 @@ namespace Anewluv.Domain.Data.ViewModels
 
        [DataMember]
        public int? legacysize { get; set; }
+
+        [DataMember]
+        public string openidprovider { get; set; }
         
+
     }  
 }

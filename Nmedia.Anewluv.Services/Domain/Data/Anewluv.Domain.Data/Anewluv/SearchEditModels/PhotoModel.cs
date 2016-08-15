@@ -81,5 +81,13 @@ namespace Anewluv.Domain.Data.ViewModels
         public bool? photoapproved { get; set; }
         public int? photorejectionreasonid  { get; set; }
         public string photoapprovalrejectnote { get; set; }
+
+        //new items for facebbok
+        //search stuff for photos
+        [DataMember]
+        public string openidprovider { get; set; }
+        
+
+
     }
 }

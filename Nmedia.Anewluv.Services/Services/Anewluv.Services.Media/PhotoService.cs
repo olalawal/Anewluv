@@ -1231,17 +1231,19 @@ namespace Anewluv.Services.Media
                                     NewPhoto.imagecaption = item.caption;
                                     NewPhoto.imagename = item.imagename; //11-26-2012 olawal added the name for comparisons 
                                     // NewPhoto.size = item.size.GetValueOrDefault();                        
-                                    //set the rest of the information as needed i.e approval status refecttion etc
+                                    //set the rest of the information as needed i.e approval status refection etc
 
-                                    NewPhoto.lu_photoimagetype = (item.imagetypedescription != "") ?
+                                    NewPhoto.lu_photoimagetype = (!String.IsNullOrEmpty(item.imagetypedescription)) ? 
                                     _unitOfWorkAsync.Repository<lu_photoimagetype>().Queryable().ToList().Where(p => p.description.ToUpper().Contains(item.imagetypedescription.ToUpper())).FirstOrDefault() :
                                     _unitOfWorkAsync.Repository<lu_photoimagetype>().Queryable().ToList().Where(p => p.id == (int)photoimagetypeEnum.other).FirstOrDefault(); 
 
                                     NewPhoto.imagetype_id = NewPhoto.lu_photoimagetype != null ? NewPhoto.lu_photoimagetype.id : (int?)null;
 
-                                    NewPhoto.approvalstatus_id = (int)photoapprovalstatusEnum.NotReviewed;
+                                    //code to handle open id uploaded photo, might need to still verify these at some point
+                                    NewPhoto.approvalstatus_id = !String.IsNullOrEmpty(item.openidprovider) ? (int)photoapprovalstatusEnum.Approved :(int)photoapprovalstatusEnum.NotReviewed;
                                     NewPhoto.rejectionreason_id = null;
-                                    NewPhoto.photostatus_id = (int)photostatusEnum.Nostatus;
+                                    //auto set photos to gallery for open id
+                                    NewPhoto.photostatus_id = !String.IsNullOrEmpty(item.openidprovider) && (item.photostatusid == (int)photostatusEnum.Gallery) ?  (int)photostatusEnum.Gallery : (int)photostatusEnum.Nostatus;
 
                                     var temp = addphotoconverionsb64string(NewPhoto, item);
                                     if (temp.Count > 0)

@@ -579,8 +579,8 @@ namespace Anewluv.Services.Authentication
            object providerUserKey,
            out MembershipCreateStatus status)
         {
-            //set default values for a basic memeber created with just password,
-            //sec question and aswers
+            //set default values for a basic member created with just password,
+            //sec question and answers
             return this.CreateUserCustom(username, password, "", "",
                   email,
                 //  securityQuestion,
@@ -640,7 +640,7 @@ namespace Anewluv.Services.Authentication
 
 
                         //4/12/2013 OLAWAL  added code to make sure that dupe email,username is not allowed is now allowed
-                        //get profile and profile datas
+                        //get profile and profile data's
                         var profilerepo = _unitOfWorkAsync.Repository<profile>();
                         var profiledatarepo = _unitOfWorkAsync.Repository<profiledata>();
 
@@ -690,7 +690,7 @@ namespace Anewluv.Services.Authentication
                         ObjProfileEntity.username = username;
                         ObjProfileEntity.emailaddress = email;
                         //changed the encryption to something stronger
-                        //make username upper so that we can get actual mateches withoute user having to type in a case sensitive username
+                        //make username upper so that we can get actual matches without user having to type in a case sensitive username
                         ObjProfileEntity.password = (String.IsNullOrEmpty(openidIdentifer)) ? Encryption.encryptString(password) : null;
                         // ObjProfileEntity.id   = email;
                         ObjProfileEntity.screenname = screenname;
@@ -704,7 +704,7 @@ namespace Anewluv.Services.Authentication
                         ObjProfileEntity.forwardmessages = 1;
                         //  ObjProfileEntity.SecurityQuestionID = 1;                
                         // ObjProfileEntity.SecurityAnswer =  securityAnswer;
-                        ObjProfileEntity.status_id = (openidIdentifer == "" || openidIdentifer == null) ? (int)profilestatusEnum.NotActivated : (int)profilestatusEnum.Activated;
+                        ObjProfileEntity.status_id = (!String.IsNullOrEmpty(openidIdentifer)) ? (int)profilestatusEnum.NotActivated : (int)profilestatusEnum.Activated;
                         //auto activate profiles fi we have an openID user since we have verifed thier info
 
 
@@ -726,7 +726,7 @@ namespace Anewluv.Services.Authentication
                         objprofileDataEntity.countryregion = "NA";
 
 
-                        objprofileDataEntity.stateprovince = (stateprovince == null || stateprovince == "") ? "" : stateprovince;
+                        objprofileDataEntity.stateprovince = (!String.IsNullOrEmpty(stateprovince)) ? "" : stateprovince;
 
                         objprofileDataEntity.countryid = countryid;
                         objprofileDataEntity.postalcode = zippostalcode;
@@ -761,75 +761,91 @@ namespace Anewluv.Services.Authentication
                         ObjProfileEntity.ObjectState = ObjectState.Added;
                         _unitOfWorkAsync.Repository<profile>().InsertOrUpdateGraph(ObjProfileEntity);
 
-                        //objprofileDataEntity.ObjectState = ObjectState.Added;
-                        //_unitOfWorkAsync.Repository<profiledata>().Insert(objprofileDataEntity);
+                        if (!String.IsNullOrEmpty(openidIdentifer))
+                            createopenid(new ProfileModel { profileid = ObjProfileEntity.id, openididentifier = openidIdentifer, openidprovider = openidProvidername }).DoNotAwait();
 
-                        //objprofileMetaDataEntity.ObjectState = ObjectState.Added;
-                        //  _unitOfWorkAsync.Repository<profilemetadata>().Insert()
 
-                        //TOD DO add open ID identifier as well Profider type to ssoProvider table 
-                        //TO Do prevalidate openid identifer
-                        if (!String.IsNullOrEmpty(openidIdentifer) || !String.IsNullOrEmpty(openidProvidername))
+                        _unitOfWorkAsync.SaveChanges();
+
+                        //_unitOfWorkAsync
+
+                        // transaction.Commit();
+
+                        //add profile activities
+                        var activitylist = new List<ActivityModel>();
+                        activitylist.Add(Api.AnewLuvLogging.CreateActivity(ObjProfileEntity.id, null, (int)activitytypeEnum.newprofile, OperationContext.Current));
+                        Anewluv.Api.AsyncCalls.addprofileactivities(activitylist).DoNotAwait();
+
+                        // create emails
+                        var EmailModels = new List<EmailModel>();
+                       
+                        if (!String.IsNullOrEmpty(openidIdentifer))
                         {
-                            openid newopenid = new openid();
                            
-                            newopenid.active = true;
-                            newopenid.creationdate = DateTime.Now;
-                            var matchedopenid = _unitOfWorkAsync.RepositoryAsync<lu_openidprovider>().Query(z => z.description.ToUpper() == openidProvidername.ToUpper()).SelectAsync();
-                            if (matchedopenid != null)
+                            EmailModels.Add(new EmailModel
                             {
-                                newopenid.openidprovider_id = matchedopenid.Result.FirstOrDefault().id;
-                            }
-                            newopenid.openididentifier = openidIdentifer;
-                            newopenid.profile_id = ObjProfileEntity.id;
+                                templateid = (int)templateenum.MemberCreatedJianRainOrOPenIDMemberNotification,
+                                messagetypeid = (int)messagetypeenum.UserUpdate,
+                                addresstypeid = (int)addresstypeenum.SiteUser,
+                                openidprovidername = openidProvidername,
+                                emailaddress = email,                                
+                                screenname = screenname,
+                                username = username
 
-                            newopenid.ObjectState = ObjectState.Added;
-                            _unitOfWorkAsync.Repository<openid>().InsertOrUpdateGraph(newopenid);
+                            });
+
+                            EmailModels.Add(new EmailModel
+                            {
+                                templateid = (int)templateenum.MemberCreatedJainRanOrOpenIDAdminNotification,
+                                messagetypeid = (int)messagetypeenum.SysAdminUpdate,
+                                addresstypeid = (int)addresstypeenum.SystemAdmin,
+                                openidprovidername = openidProvidername,
+                                emailaddress = email,
+                                screenname = screenname,
+                                username = username
+                            });
+                        }
+                        else
+                        {
+                            EmailModels.Add(new EmailModel
+                            {
+                                templateid = (int)templateenum.MemberCreatedMemberNotification,
+                                messagetypeid = (int)messagetypeenum.UserUpdate,
+                                addresstypeid = (int)addresstypeenum.SiteUser,
+                                activationcode = ObjProfileEntity.activationcode,
+                                emailaddress = email,
+                                screenname = screenname,
+                                username = username
+
+                            });
+
+                            EmailModels.Add(new EmailModel
+                            {
+                                templateid = (int)templateenum.MemberCreatedAdminNotification,
+                                messagetypeid = (int)messagetypeenum.SysAdminUpdate,
+                                addresstypeid = (int)addresstypeenum.SystemAdmin,
+                                emailaddress = email,
+                                screenname = screenname,
+                                username = username
+                            });
 
 
                         }
 
 
-                        //_unitOfWorkAsync
-                        var i = _unitOfWorkAsync.SaveChanges();
-                        // transaction.Commit();
-
-                        //add profile activites
-                        var activitylist = new List<ActivityModel>();
-                        activitylist.Add(Api.AnewLuvLogging.CreateActivity(ObjProfileEntity.id, null, (int)activitytypeEnum.newprofile, OperationContext.Current));
-                        Anewluv.Api.AsyncCalls.addprofileactivities(activitylist).DoNotAwait();
 
 
                         //send the emails
                         //**************************************
-                        var EmailModels = new List<EmailModel>();
 
-                        
-                        EmailModels.Add(new EmailModel
-                        {
-                            templateid = (int)templateenum.MemberCreatedMemberNotification,
-                            messagetypeid = (int)messagetypeenum.UserUpdate,
-                            addresstypeid = (int)addresstypeenum.SiteUser,
-                            activationcode = ObjProfileEntity.activationcode,
-                            emailaddress = email,
-                            screenname = screenname,
-                            username = username
 
-                        });
-                        EmailModels.Add(new EmailModel
-                        {
-                            templateid = (int)templateenum.MemberCreatedAdminNotification,
-                            messagetypeid = (int)messagetypeenum.SysAdminUpdate,
-                            addresstypeid = (int)addresstypeenum.SystemAdmin,
-                            emailaddress = email,
-                            screenname = screenname,
-                            username = username
-                        });
-                        //this sends both admin and user emails  
+                       
+                      
+                        //this sends both ad-min and user emails  
                         Api.AsyncCalls.sendmessagesbytemplate(EmailModels);
                         //************* end of email send ************************
 
-                        //populate the object to send back so we do not have to requery from athe service side
+                        //populate the object to send back so we do not have to re-query from the service side
                         profile profile = _unitOfWorkAsync.Repository<profile>().getprofilebyusername(new ProfileModel { username = username });
                         membershipprovider.profileid = profile.id;
                         membershipprovider.Email = email;
@@ -1240,6 +1256,55 @@ namespace Anewluv.Services.Authentication
                 throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
                 //throw convertedexcption;
             }
+
+        }
+
+
+
+        public async Task<bool> createopenid(ProfileModel model)
+        {
+            try
+            {
+                if (!String.IsNullOrEmpty(model.openididentifier) || !String.IsNullOrEmpty(model.openidprovider))
+                {
+                    openid newopenid = new openid();
+
+                    newopenid.active = true;
+                    newopenid.creationdate = DateTime.Now;
+                    var matchedopenid = await _unitOfWorkAsync.RepositoryAsync<lu_openidprovider>().Query(z => z.description.ToUpper() == model.openidprovider.ToUpper()).SelectAsync();
+                    if (matchedopenid != null)
+                    {
+                        newopenid.openidprovider_id = matchedopenid.FirstOrDefault().id;
+                    }
+                    newopenid.openididentifier = model.openididentifier;
+                    newopenid.profile_id = model.profileid.GetValueOrDefault();
+
+                    newopenid.ObjectState = ObjectState.Added;
+                    _unitOfWorkAsync.Repository<openid>().InsertOrUpdateGraph(newopenid);
+
+                    return true;
+
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                using (var logger = new Logging(applicationEnum.UserAuthorizationService))
+                {
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                }
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                // logger.Dispose();
+                FaultReason faultreason = new FaultReason("Error in member service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                //throw convertedexcption;
+            }
+
+            return false;
 
         }
 
@@ -1771,18 +1836,19 @@ namespace Anewluv.Services.Authentication
 
             
          
-
+            //hard exit if no username or open id identifier
             if (model == null || model.username == null && model.openididentifier == null ) return currenttoken;
             // _unitOfWorkAsync.DisableProxyCreation = true;
             //  using (var db = _unitOfWorkAsync)
             {
                 try
                 {
+                                      
 
-                       //bypass password if open id token is passed
+                  
+                    //If we have no open id identifier use username and password verification
                     if (model.openididentifier == "" | model.openididentifier == null)
                     {
-
 
                         // return _unitOfWorkAsync.Repository<profiledata>().getprofiledatabyprofileid(model);
                         //first you have to get the encrypted string by email address and username 
@@ -1794,10 +1860,10 @@ namespace Anewluv.Services.Authentication
                         string decryptedPassword;
                         string actualpasswordstring;
 
-                        if (model == null) return null;
 
 
-                        //Dim ctx As New Entities()
+
+                        //we need profile id regardless
                         //TO DO add an inactive count login to track how many times a user logs in before they active profile default max should be = 3
                         //added profile status ID validation as well i.e 2 for activated and is not banned 
                         var profileresult = await _unitOfWorkAsync.RepositoryAsync<profile>().Query(p => p.username == model.username &&
@@ -1806,8 +1872,10 @@ namespace Anewluv.Services.Authentication
 
                         profile = profileresult.FirstOrDefault();
 
-                      
-                       if (profile != null && profile.id != 0)
+
+
+
+                        if (profile != null && profile.id != 0)
                         {
 
                             //retirve encrypted password
@@ -1839,10 +1907,76 @@ namespace Anewluv.Services.Authentication
 
 
                         //TO DO change this to use activity not log time since its a better measure for the data we need 
-                        //FIX the logtime code
-                        //check if decrypted string macthed username to upper  + secret
+                        //FIX the log time code
+                        //check if decrypted string matched username to upper  + secret
                         if (actualpasswordstring == decryptedPassword)
                         {
+
+                            //No need to log this since its used the APIkey inspector on checkascccesscore
+                            currenttoken.id = profile.id;
+                            currenttoken.timestamp = DateTime.Now;
+                            //return the profile ID so it can be used for whatver
+
+                            //for now have it generate a new GUID each time to test 
+                            // var existingguid = getcurrentapikeybyprofileid(myQuery.id, db);
+
+                            var guid = Api.AsyncCalls.validateorgetapikeyasync(new ApiKeyValidationModel
+                            {
+                                service = "AuthenticationService",
+                                username = model.username,
+                                useridentifier = currenttoken.id,
+                                application = "Anewluv",
+                                application_id = (int)applicationenum.anewluv,
+                                keyvalue = null
+                            }).Result;
+                            // var guid = getcurrentapikeybyprofileid(myQuery.id,db);
+                            if (guid != null)
+                                currenttoken.Apikey = guid;
+
+                            //updated activity // TO Do we might use to replace log-times below ?
+                            var activitylist = new List<ActivityModel>();
+                            activitylist.Add(Api.AnewLuvLogging.CreateActivity(profile.id, guid, (int)activitytypeEnum.login, OperationContext.Current));
+                            Anewluv.Api.AsyncCalls.addprofileactivities(activitylist).DoNotAwait();
+
+
+                            //login time updated here
+                            updateuserlogintime(profile.id, OperationContext.Current, guid.ToString()).DoNotAwait();
+                            return currenttoken;
+                            //get the token here
+
+                        }
+                        else
+                        {
+                            return currenttoken;
+                        }
+                    }
+                    //handling for open ID logins 
+                    else
+                    {
+
+
+                        //TO DO add an inactive count login to track how many times a user logs in before they active profile default max should be = 3
+                        //added profile status ID validation as well i.e 2 for activated and is not banned 
+
+                        // return _unitOfWorkAsync.Repository<profiledata>().getprofiledatabyprofileid(model);
+                        //first you have to get the encrypted string by email address and username 
+
+                        DateTime creationdate =DateTime.Now;
+                       
+                     
+                        //so we want to use the open ID identifier to get the profile                        
+
+                        //get profile info an open id info 
+                        var profileresult = await _unitOfWorkAsync.RepositoryAsync<profile>().Query(p => p.openids.Any(z=>z.openididentifier == model.openididentifier)   &&
+                            (p.status_id != (int)profilestatusEnum.Banned | p.status_id != (int)profilestatusEnum.Inactive | p.status_id != (int)profilestatusEnum.ResetingPassword)
+                        ).Include(z => z.openids.Select(y => y.lu_openidprovider)).SelectAsync();
+
+                         profile = profileresult.FirstOrDefault();
+
+                        //added a new condition to make sure the provider is the same overkill but just to be safe if items migrate 
+                        if (profile != null && profile.openids.Count() > 0 && profile.openids.Any(z => z.lu_openidprovider.description.ToUpper() == model.openidprovider.ToUpper() && z.openididentifier == model.openididentifier))
+                        {
+                            
 
                             //No need to log this since its used the APIkey inspector on checkascccesscore
                             currenttoken.id = profile.id;
@@ -1874,85 +2008,13 @@ namespace Anewluv.Services.Authentication
                             //login time updated here
                             updateuserlogintime(profile.id, OperationContext.Current, guid.ToString()).DoNotAwait();
                             return currenttoken;
-                            //get the token here
-
                         }
                         else
                         {
                             return currenttoken;
                         }
-                    }
-                    //handling for open ID logins 
-                    else
-                    {
-                        //TO DO re-factor this cleaner
-                        //all this happens only if we have matching emails 
-                        //remember all  this happens on AFTER we have validated that t he user's open id stuff is correct.
-                        //check if the user has an open id with us already 
-
-                        //Dim ctx As New Entities()
-                        //TO DO add an inactive count login to track how many times a user logs in before they active profile default max should be = 3
-                        //added profile status ID validation as well i.e 2 for activated and is not banned 
-                        var profileresult = await _unitOfWorkAsync.RepositoryAsync<profile>().Query(p => p.emailaddress == model.email &&
-                            (p.status_id != (int)profilestatusEnum.Banned | p.status_id != (int)profilestatusEnum.Inactive | p.status_id != (int)profilestatusEnum.ResetingPassword)
-                             ).Include(z => z.profileactivities).SelectAsync();
-
-                        profile = profileresult.FirstOrDefault();
-
-                        //email address has to match existing email address to add the new open id token
-                        var result = await this.checkifopenidalreadyexists(model);
-
-                        if (result == false)
-                        {
-                            //get the provider first
-                            var lu_openidprovider = _unitOfWorkAsync.Repository<lu_openidprovider>().Queryable().ToList().Where(p => (p.description).ToUpper() == model.openidprovider.ToUpper()).FirstOrDefault();
-                            //only add if we have a matching provider
-                            if (lu_openidprovider != null)
-                            {
-                                var profileOpenIDStore = new openid
-                                {
-                                    active = true,
-                                    creationdate = DateTime.UtcNow,
-                                    profile_id = model.profileid.Value,
-                                    lu_openidprovider = lu_openidprovider,
-                                    openididentifier = lu_openidprovider.description,
-                                    ObjectState = ObjectState.Added
-                                };
-                                _unitOfWorkAsync.Repository<openid>().Insert(profileOpenIDStore);
-                                var i = _unitOfWorkAsync.SaveChanges();
-                            }
-                        }
-
-                        //No need to log this since its used the APIkey inspector on checkascccesscore
-                        currenttoken.id = profile.id;
-                        currenttoken.timestamp = DateTime.Now;
-                        //return the profile ID so it can be used for whatver
-
-                        //for now have it generate a new GUID each time to test 
-                        // var existingguid = getcurrentapikeybyprofileid(myQuery.id, db);
-
-                        var guid = Api.AsyncCalls.validateorgetapikeyasync(new ApiKeyValidationModel
-                        {
-                            service = "AuthenticationService",
-                            username = model.username,
-                            useridentifier = currenttoken.id,
-                            application = "Anewluv",
-                            application_id = (int)applicationenum.anewluv,
-                            keyvalue = null
-                        }).Result;
-                        // var guid = getcurrentapikeybyprofileid(myQuery.id,db);
-                        if (guid != null)
-                            currenttoken.Apikey = guid;
-
-                        //updated activity // TO Do we migght use to replace logtimes below ?
-                        var activitylist = new List<ActivityModel>();
-                        activitylist.Add(Api.AnewLuvLogging.CreateActivity(profile.id, guid, (int)activitytypeEnum.login, OperationContext.Current));
-                        Anewluv.Api.AsyncCalls.addprofileactivities(activitylist).DoNotAwait();
-
-
-                        //login time updated here
-                        updateuserlogintime(profile.id, OperationContext.Current, guid.ToString()).DoNotAwait();
-                        return currenttoken;
+                        
+                       
                     }
 
 
