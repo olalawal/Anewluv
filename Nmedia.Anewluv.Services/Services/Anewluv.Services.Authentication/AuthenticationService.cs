@@ -761,11 +761,14 @@ namespace Anewluv.Services.Authentication
                         ObjProfileEntity.ObjectState = ObjectState.Added;
                         _unitOfWorkAsync.Repository<profile>().InsertOrUpdateGraph(ObjProfileEntity);
 
+                      
+                        _unitOfWorkAsync.SaveChanges();
+
+
                         if (!String.IsNullOrEmpty(openidIdentifer))
                             createopenid(new ProfileModel { profileid = ObjProfileEntity.id, openididentifier = openidIdentifer, openidprovider = openidProvidername }).DoNotAwait();
 
 
-                        _unitOfWorkAsync.SaveChanges();
 
                         //_unitOfWorkAsync
 
@@ -1281,6 +1284,9 @@ namespace Anewluv.Services.Authentication
 
                     newopenid.ObjectState = ObjectState.Added;
                     _unitOfWorkAsync.Repository<openid>().InsertOrUpdateGraph(newopenid);
+
+
+                    _unitOfWorkAsync.SaveChangesAsync().DoNotAwait();
 
                     return true;
 
