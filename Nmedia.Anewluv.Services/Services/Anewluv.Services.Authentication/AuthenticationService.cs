@@ -1977,6 +1977,8 @@ namespace Anewluv.Services.Authentication
                             (p.status_id != (int)profilestatusEnum.Banned | p.status_id != (int)profilestatusEnum.Inactive | p.status_id != (int)profilestatusEnum.ResetingPassword)
                         ).Include(z => z.openids.Select(y => y.lu_openidprovider)).SelectAsync();
 
+
+
                          profile = profileresult.FirstOrDefault();
 
                         //added a new condition to make sure the provider is the same overkill but just to be safe if items migrate 
@@ -2015,6 +2017,12 @@ namespace Anewluv.Services.Authentication
                             updateuserlogintime(profile.id, OperationContext.Current, guid.ToString()).DoNotAwait();
                             return currenttoken;
                         }
+                        else if (profile != null && profile.openids.Count() > 0 && !profile.openids.Any(z => z.lu_openidprovider.description.ToUpper() == model.openidprovider.ToUpper() && z.openididentifier == model.openididentifier))
+                        {
+                            //new open id idenmtifier
+
+                        }
+
                         else
                         {
                             return currenttoken;
