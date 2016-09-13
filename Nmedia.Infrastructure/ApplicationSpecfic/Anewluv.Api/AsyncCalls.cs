@@ -209,6 +209,24 @@ namespace Anewluv.Api
             await Api.MemberService.addprofileactivities(activitymodels);
         }
 
+        public static async Task<bool> addnewopenidforprofile(ProfileModel model)
+        {
+
+            try
+            {
+                Task<bool> returnedTaskTResult = Api.MemberService.addnewopenidforprofile(model);
+                bool result = await returnedTaskTResult;
+                // IsApiKeyValid = await 
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var dd = "";
+            }
+
+            return false;
+        }
+
         public static async Task updateuserlogintimeasync(ProfileModel model)
         {
             // Api.MemberService.addprofileactvity(activity);

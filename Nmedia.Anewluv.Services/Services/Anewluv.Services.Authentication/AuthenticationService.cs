@@ -1959,7 +1959,7 @@ namespace Anewluv.Services.Authentication
                     //handling for open ID logins 
                     else
                     {
-
+                        bool validuser = false;
 
                         //TO DO add an inactive count login to track how many times a user logs in before they active profile default max should be = 3
                         //added profile status ID validation as well i.e 2 for activated and is not banned 
@@ -1973,7 +1973,7 @@ namespace Anewluv.Services.Authentication
                         //so we want to use the open ID identifier to get the profile                        
 
                         //get profile info an open id info 
-                        var profileresult = await _unitOfWorkAsync.RepositoryAsync<profile>().Query(p => p.openids.Any(z=>z.openididentifier == model.openididentifier)   &&
+                        var profileresult = await _unitOfWorkAsync.RepositoryAsync<profile>().Query(p => p.emailaddress== model.email |  p.openids.Any(z=>z.openididentifier == model.openididentifier)   &&
                             (p.status_id != (int)profilestatusEnum.Banned | p.status_id != (int)profilestatusEnum.Inactive | p.status_id != (int)profilestatusEnum.ResetingPassword)
                         ).Include(z => z.openids.Select(y => y.lu_openidprovider)).SelectAsync();
 
@@ -1984,7 +1984,32 @@ namespace Anewluv.Services.Authentication
                         //added a new condition to make sure the provider is the same overkill but just to be safe if items migrate 
                         if (profile != null && profile.openids.Count() > 0 && profile.openids.Any(z => z.lu_openidprovider.description.ToUpper() == model.openidprovider.ToUpper() && z.openididentifier == model.openididentifier))
                         {
-                            
+
+                            validuser = true;
+                           
+                        }
+                        //only add a new provider if email addresses match
+                        else if (profile != null &&  model.email == profile.emailaddress && profile.openids.Count() > 0 && !profile.openids.Any(z => z.lu_openidprovider.description.ToUpper() == model.openidprovider.ToUpper() && z.openididentifier == model.openididentifier))
+                        {
+
+                            //TO do figure out why this wont work 
+                            //new open id idenmtifier
+                            //Anewluv.Api.AsyncCalls.addnewopenidforprofile(new ProfileModel { profileid = profile.id, openididentifier = model.openididentifier,openidprovider = model.openidprovider, email = model.email }).DoNotAwait();
+                            //TO DO do we let users log on if this fails ?
+
+                            var dd= this.addopenid(new ProfileModel { profileid = profile.id, openididentifier = model.openididentifier, openidprovider = model.openidprovider, email = model.email });
+                            validuser = true;
+                            //TO DO add activity and email message for this 
+
+                        }
+                        else
+                        {
+                            validuser = false;
+                        }
+
+                        //if user is valid allow the login
+                        if (validuser)
+                        {
 
                             //No need to log this since its used the APIkey inspector on checkascccesscore
                             currenttoken.id = profile.id;
@@ -2015,20 +2040,10 @@ namespace Anewluv.Services.Authentication
 
                             //login time updated here
                             updateuserlogintime(profile.id, OperationContext.Current, guid.ToString()).DoNotAwait();
-                            return currenttoken;
-                        }
-                        else if (profile != null && profile.openids.Count() > 0 && !profile.openids.Any(z => z.lu_openidprovider.description.ToUpper() == model.openidprovider.ToUpper() && z.openididentifier == model.openididentifier))
-                        {
-                            //new open id idenmtifier
-
+                          
                         }
 
-                        else
-                        {
-                            return currenttoken;
-                        }
-                        
-                       
+                        return currenttoken;
                     }
 
 
@@ -2537,12 +2552,7 @@ namespace Anewluv.Services.Authentication
         private profile updatepasswordbyprofileid(profile profile, string encryptedpassword)
         {
 
-            //// 
-            {
-                // ////do not audit on adds
-                //   using (var transaction = db.BeginTransaction())
-                {
-                    try
+             try
                     {
                         // var profilerepo = _unitOfWorkAsync.Repository<profile>();
                         //var myProfile = profilerepo.getprofilebyprofileid(model);
@@ -2565,8 +2575,53 @@ namespace Anewluv.Services.Authentication
 
                         //throw convertedexcption;
                     }
+                
+            
+
+        }
+
+        private bool addopenid(ProfileModel model)
+        {
+
+            try
+            {
+
+                var query1 = _unitOfWorkAsync.Repository<lu_openidprovider>().Query(p => (p.description).ToUpper() == model.openidprovider.ToUpper()).Select();
+
+                var openidprovider = query1.FirstOrDefault();
+
+                if (openidprovider != null)
+                {
+                    var myQuery = _unitOfWorkAsync.Repository<profile>().Query(p => p.id == model.profileid.Value && p.openids.Any(f => f.openididentifier != model.openididentifier && f.lu_openidprovider.description.ToUpper() != model.openidprovider.ToUpper())).Select();
+
+                    if (myQuery != null)
+                    {
+                        var profileOpenIDStore = new openid
+                        {
+                            active = true,
+                            creationdate = DateTime.UtcNow,
+                            profile_id = model.profileid.Value,
+                            openidprovider_id = openidprovider.id,
+                            openididentifier = model.openididentifier,
+                            ObjectState = ObjectState.Added
+                        };
+                        _unitOfWorkAsync.Repository<openid>().Insert(profileOpenIDStore);
+                        var i = _unitOfWorkAsync.SaveChangesAsync();
+                        // transaction.Commit();
+
+                        return true;
+
+                    }
                 }
+
+               
             }
+            catch (Exception ex)
+            {
+                var dd = "logthis";
+            }
+
+            return false;
 
         }
 

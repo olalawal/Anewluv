@@ -490,7 +490,7 @@ namespace Anewluv.Services.Members
 
         }
 
-        public bool addnewopenidforprofile(ProfileModel model)
+        public async Task<bool> addnewopenidforprofile(ProfileModel model)
         {
 
 
@@ -501,20 +501,36 @@ namespace Anewluv.Services.Members
                     try
                     {
 
-                        var profileOpenIDStore = new openid
-                        {
-                            active = true,
-                            creationdate = DateTime.UtcNow,
-                            profile_id = model.profileid.Value,
-                            lu_openidprovider = _unitOfWorkAsync.Repository<lu_openidprovider>().Queryable().ToList().Where(p => (p.description).ToUpper() == model.openidprovider.ToUpper()).FirstOrDefault(),
-                            openididentifier = model.openididentifier,
-                            ObjectState = ObjectState.Added
-                        };
-                        _unitOfWorkAsync.Repository<openid>().Insert(profileOpenIDStore);
-                        var i = _unitOfWorkAsync.SaveChanges();
-                        // transaction.Commit();
+                        var query1 = await _unitOfWorkAsync.RepositoryAsync<lu_openidprovider>().Query(p => (p.description).ToUpper() == model.openidprovider.ToUpper()).SelectAsync();
 
-                        return true;
+                        var openidprovider = query1.FirstOrDefault();
+
+                        if (openidprovider !=null)
+                        {
+                            var myQuery = await _unitOfWorkAsync.RepositoryAsync<profile>().Query(p => p.id == model.profileid.Value && p.openids.Any(f => f.openididentifier != model.openididentifier && f.lu_openidprovider.description.ToUpper() != model.openidprovider.ToUpper())).SelectAsync();
+
+                            if (myQuery == null)
+                            {
+                                var profileOpenIDStore = new openid
+                                {
+                                    active = true,
+                                    creationdate = DateTime.UtcNow,
+                                    profile_id = model.profileid.Value,
+                                    openidprovider_id = openidprovider.id,
+                                    openididentifier = model.openididentifier,
+                                    ObjectState = ObjectState.Added
+                                };
+                                _unitOfWorkAsync.Repository<openid>().Insert(profileOpenIDStore);
+                                var i = _unitOfWorkAsync.SaveChangesAsync();
+                                // transaction.Commit();
+
+                            }
+                        }
+
+                        return false;
+
+
+
                     }
                     catch (Exception ex)
                     {
