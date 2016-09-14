@@ -726,7 +726,7 @@ namespace Anewluv.Services.Authentication
                         objprofileDataEntity.countryregion = "NA";
 
 
-                        objprofileDataEntity.stateprovince = (!String.IsNullOrEmpty(stateprovince)) ? "" : stateprovince;
+                        objprofileDataEntity.stateprovince = String.IsNullOrEmpty(stateprovince) ? "" : stateprovince;
 
                         objprofileDataEntity.countryid = countryid;
                         objprofileDataEntity.postalcode = zippostalcode;
