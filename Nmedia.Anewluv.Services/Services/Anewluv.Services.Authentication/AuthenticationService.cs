@@ -1989,7 +1989,7 @@ namespace Anewluv.Services.Authentication
                            
                         }
                         //only add a new provider if email addresses match
-                        else if (profile != null &&  model.email == profile.emailaddress && profile.openids.Count() > 0 && !profile.openids.Any(z => z.lu_openidprovider.description.ToUpper() == model.openidprovider.ToUpper() && z.openididentifier == model.openididentifier))
+                        else if (profile != null &&  model.email == profile.emailaddress && !profile.openids.Any(z => z.lu_openidprovider.description.ToUpper() == model.openidprovider.ToUpper() && z.openididentifier == model.openididentifier))
                         {
 
                             //TO do figure out why this wont work 

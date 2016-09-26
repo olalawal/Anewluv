@@ -15,7 +15,10 @@ namespace Anewluv.Domain.Data.ViewModels
         {
             this.photostoupload = new List<PhotoUploadModel>();
         }
-        
+
+        //search stuff for photos
+        [DataMember]
+        public bool? isadmin { get; set; }
 
         //search stuff for photos
         [DataMember]
@@ -30,7 +33,7 @@ namespace Anewluv.Domain.Data.ViewModels
         [DataMember]
         public int? phototstatusid { get; set; }
         [DataMember]
-        public int? phototapprovalstatusid { get; set; }
+        public int? photoapprovalstatusid { get; set; }
         [DataMember]
         public int? photoformatid { get; set; }
 

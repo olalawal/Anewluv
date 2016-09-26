@@ -192,10 +192,10 @@ namespace Anewluv.DataExtentionMethods
                     photomodel = photomodel.Where(a => a.formattype_id ==  (int)photoformatEnum.Medium);
 
                 //only allow admins or the user to view un reviewed photos 
-                if (model.phototapprovalstatusid != null )
-                     photomodel = photomodel.Where(z => z.photo.approvalstatus_id == model.phototapprovalstatusid.Value);     
+                if (model.photoapprovalstatusid != null )
+                     photomodel = photomodel.Where(z => z.photo.approvalstatus_id == model.photoapprovalstatusid.Value);     
                 //if no status is requested just show all that are reviewed and approved
-                if (model.phototapprovalstatusid == null)
+                if (model.photoapprovalstatusid == null)
                     photomodel = photomodel.Where(z => z.photo.approvalstatus_id != (int)photoapprovalstatusEnum.NotReviewed |
                         z.photo.approvalstatus_id != (int)photoapprovalstatusEnum.Rejected |
                         z.photo.approvalstatus_id != (int)photoapprovalstatusEnum.RequiresFurtherInformation);
@@ -218,14 +218,16 @@ namespace Anewluv.DataExtentionMethods
             return null;
         }
 
-            public static IQueryable<photoconversion> filterphotosadmin(this IRepository<photoconversion> repo, PhotoModel model)
+
+        //admin photo filter no profile id check security on this
+       public static IQueryable<photoconversion> filterphotosadmin(this IRepository<photoconversion> repo, PhotoModel model)
         {
             try
             {
 
 
                 //added roles
-                //filterer out photos that are not approved
+                //filterer out photos that are deleted only
                 IQueryable<photoconversion> photomodel = repo.Query(z => 
                    // (z.photo.approvalstatus_id != (int)photoapprovalstatusEnum.Rejected) &  //filter not approved
                     (z.photo.photostatus_id != (int)photostatusEnum.deletedbyadmin))  //filter deleted 
@@ -261,10 +263,10 @@ namespace Anewluv.DataExtentionMethods
                     photomodel = photomodel.Where(a => a.formattype_id ==  (int)photoformatEnum.Medium);
 
                 //only allow admins or the user to view un reviewed photos 
-                if (model.phototapprovalstatusid != null )
-                     photomodel = photomodel.Where(z => z.photo.approvalstatus_id == model.phototapprovalstatusid.Value);     
+                if (model.photoapprovalstatusid != null )
+                     photomodel = photomodel.Where(z => z.photo.approvalstatus_id == model.photoapprovalstatusid.Value);     
                 //if no status is requested just show all that are reviewed and approved
-                if (model.phototapprovalstatusid == null)
+                if (model.photoapprovalstatusid == null)
                     photomodel = photomodel.Where(z => z.photo.approvalstatus_id != (int)photoapprovalstatusEnum.NotReviewed |
                         z.photo.approvalstatus_id != (int)photoapprovalstatusEnum.Rejected |
                         z.photo.approvalstatus_id != (int)photoapprovalstatusEnum.RequiresFurtherInformation);
@@ -360,7 +362,7 @@ namespace Anewluv.DataExtentionMethods
 
         //TO DO Premuim roles get all
         //TO DO needs code to check roles to see how many photos can be viewd etc
-        public static PhotoSearchResultsViewModel getfilteredphotospaged(this IRepository<photoconversion> repo, PhotoModel model,bool isadmin)
+        public static PhotoSearchResultsViewModel getfilteredphotospaged(this IRepository<photoconversion> repo, PhotoModel model,profile profile,bool isadmin)
         {
         
             try
@@ -373,7 +375,15 @@ namespace Anewluv.DataExtentionMethods
                 }
                 else
                 {
-                    photos = filterphotosadmin(repo, model);
+                    //if we have a profile and the user is in the admin role in that profile allow this search
+                    if (profile != null && profile.membersinroles.Any(z => z.role_id == (int)roleEnum.Admin))
+                    {
+                        photos = filterphotosadmin(repo, model);
+                    }
+                    else
+                    {
+                        return new PhotoSearchResultsViewModel { results = new List<PhotoViewModel>(), totalresults = 0 };
+                    }
                 }
                 //TO DO test the ordering we want the order by date and then the gallery photo first
                  return pagephotos(photos.OrderBy(z=>z.creationdate).OrderBy(z=>z.photo.photostatus_id).ToList(), model.page, model.numberperpage);

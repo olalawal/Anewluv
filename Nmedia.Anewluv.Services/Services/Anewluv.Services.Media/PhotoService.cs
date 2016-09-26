@@ -220,24 +220,30 @@ namespace Anewluv.Services.Media
            {
                try
                {
-                   var task = Task.Factory.StartNew(() =>
-                   {
+                
                        //check the api key matches the profile id pased 
                        var profileidmatchesapikey = Api.AsyncCalls.validateapikeybyuseridentifierasync(new
                                        ApiKeyValidationModel { application_id = (int)applicationenum.anewluv, keyvalue = model.apikey.Value, useridentifier = model.profileid.Value }).Result;
 
                        if (profileidmatchesapikey)
                        {
+                           //get the profile details needed for some stuff
+                           var profileresult = await _unitOfWorkAsync.RepositoryAsync<profile>().Query(p => p.id == model.profileid.Value &&
+                             (p.status_id != (int)profilestatusEnum.Banned | p.status_id != (int)profilestatusEnum.Inactive | p.status_id != (int)profilestatusEnum.ResetingPassword)
+                              ).Include(z => z.membersinroles).SelectAsync();
+
+                           var profile = profileresult.FirstOrDefault();
+                           
+                          
                            var repo = _unitOfWorkAsync.Repository<photoconversion>();
                            var dd = mediaextentionmethods.getfilteredphotospaged
-                               (repo, model,false);
+                               (repo, model,profile,model.isadmin.GetValueOrDefault());
 
                            return dd;
                        }
                        return null;
 
-                   });
-                   return await task.ConfigureAwait(false);
+                  
 
 
                }
@@ -1165,36 +1171,39 @@ namespace Anewluv.Services.Media
 
         }
 
-        /// <summary>
-        /// allows for getting photos that are not approved yet
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        public async Task<PhotoSearchResultsViewModel> getadminfilteredphotospaged(PhotoModel model)
-        {
+        ///// <summary>
+        ///// allows for getting photos that are not approved yet
+        ///// </summary>
+        ///// <param name="model"></param>
+        ///// <returns></returns>
+        //public async Task<PhotoSearchResultsViewModel> getadminfilteredphotospaged(PhotoModel model)
+        //{
 
 
-            //check the api key matches the profile id pased 
-            var profileidmatchesapikey =  await Api.AsyncCalls.validateapikeybyuseridentifierasync(new
-                            ApiKeyValidationModel { application_id = (int)applicationenum.anewluv, keyvalue = model.apikey.Value, useridentifier = model.profileid.Value });
+        //    //check the api key matches the profile id pased 
+        //    var profileidmatchesapikey =  await Api.AsyncCalls.validateapikeybyuseridentifierasync(new
+        //                    ApiKeyValidationModel { application_id = (int)applicationenum.anewluv, keyvalue = model.apikey.Value, useridentifier = model.profileid.Value });
             
              
 
-                if (profileidmatchesapikey)
-                {
-                    var repo = _unitOfWorkAsync.Repository<photoconversion>();
-                    var dd = mediaextentionmethods.getfilteredphotospaged(repo, model,true);
+        //        if (profileidmatchesapikey)
+        //        {
+        //           //check roles 
 
-                    return dd;
-                }
-                return null;
+
+        //            var repo = _unitOfWorkAsync.Repository<photoconversion>();
+        //            var dd = mediaextentionmethods.getfilteredphotospaged(repo, model,true);
+
+        //            return dd;
+        //        }
+        //        return null;
 
                
 
             
        
         
-        }
+        //}
 
         #endregion
 
