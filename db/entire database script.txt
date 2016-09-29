@@ -1,0 +1,2766 @@
+USE [master]
+GO
+/****** Object:  Database [Anewluv]    Script Date: 09/29/2016 01:13:24 ******/
+CREATE DATABASE [Anewluv] ON  PRIMARY 
+( NAME = N'Anewluv', FILENAME = N'E:\AnewluvFinal\Anewluv.mdf' , SIZE = 5204992KB , MAXSIZE = UNLIMITED, FILEGROWTH = 1024KB )
+ LOG ON 
+( NAME = N'Anewluv_log', FILENAME = N'E:\AnewluvFinal\Anewluv_log.ldf' , SIZE = 112384KB , MAXSIZE = 2048GB , FILEGROWTH = 10%)
+GO
+ALTER DATABASE [Anewluv] SET COMPATIBILITY_LEVEL = 100
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [Anewluv].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [Anewluv] SET ANSI_NULL_DEFAULT OFF
+GO
+ALTER DATABASE [Anewluv] SET ANSI_NULLS OFF
+GO
+ALTER DATABASE [Anewluv] SET ANSI_PADDING OFF
+GO
+ALTER DATABASE [Anewluv] SET ANSI_WARNINGS OFF
+GO
+ALTER DATABASE [Anewluv] SET ARITHABORT OFF
+GO
+ALTER DATABASE [Anewluv] SET AUTO_CLOSE OFF
+GO
+ALTER DATABASE [Anewluv] SET AUTO_CREATE_STATISTICS ON
+GO
+ALTER DATABASE [Anewluv] SET AUTO_SHRINK OFF
+GO
+ALTER DATABASE [Anewluv] SET AUTO_UPDATE_STATISTICS ON
+GO
+ALTER DATABASE [Anewluv] SET CURSOR_CLOSE_ON_COMMIT OFF
+GO
+ALTER DATABASE [Anewluv] SET CURSOR_DEFAULT  GLOBAL
+GO
+ALTER DATABASE [Anewluv] SET CONCAT_NULL_YIELDS_NULL OFF
+GO
+ALTER DATABASE [Anewluv] SET NUMERIC_ROUNDABORT OFF
+GO
+ALTER DATABASE [Anewluv] SET QUOTED_IDENTIFIER OFF
+GO
+ALTER DATABASE [Anewluv] SET RECURSIVE_TRIGGERS OFF
+GO
+ALTER DATABASE [Anewluv] SET  DISABLE_BROKER
+GO
+ALTER DATABASE [Anewluv] SET AUTO_UPDATE_STATISTICS_ASYNC OFF
+GO
+ALTER DATABASE [Anewluv] SET DATE_CORRELATION_OPTIMIZATION OFF
+GO
+ALTER DATABASE [Anewluv] SET TRUSTWORTHY OFF
+GO
+ALTER DATABASE [Anewluv] SET ALLOW_SNAPSHOT_ISOLATION OFF
+GO
+ALTER DATABASE [Anewluv] SET PARAMETERIZATION SIMPLE
+GO
+ALTER DATABASE [Anewluv] SET READ_COMMITTED_SNAPSHOT OFF
+GO
+ALTER DATABASE [Anewluv] SET HONOR_BROKER_PRIORITY OFF
+GO
+ALTER DATABASE [Anewluv] SET  READ_WRITE
+GO
+ALTER DATABASE [Anewluv] SET RECOVERY FULL
+GO
+ALTER DATABASE [Anewluv] SET  MULTI_USER
+GO
+ALTER DATABASE [Anewluv] SET PAGE_VERIFY CHECKSUM
+GO
+ALTER DATABASE [Anewluv] SET DB_CHAINING OFF
+GO
+EXEC sys.sp_db_vardecimal_storage_format N'Anewluv', N'ON'
+GO
+USE [Anewluv]
+GO
+/****** Object:  User [anewluvdba]    Script Date: 09/29/2016 01:13:24 ******/
+CREATE USER [anewluvdba] FOR LOGIN [anewluv] WITH DEFAULT_SCHEMA=[dbo]
+GO
+/****** Object:  Table [dbo].[profileactivitygeodatas]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[profileactivitygeodatas](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[city] [nvarchar](max) NULL,
+	[regionname] [nvarchar](max) NULL,
+	[continent] [nvarchar](max) NULL,
+	[countryId] [int] NULL,
+	[countrycode] [nvarchar](max) NULL,
+	[countryname] [nvarchar](max) NULL,
+	[creationdate] [datetime] NULL,
+	[lattitude] [float] NULL,
+	[longitude] [float] NULL,
+	[activity_id] [int] NOT NULL,
+ CONSTRAINT [PK_dbo.profileactivitygeodatas] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_activity_id] ON [dbo].[profileactivitygeodatas] 
+(
+	[activity_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[communicationquotas]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[communicationquotas](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[active] [bit] NULL,
+	[quotadescription] [nvarchar](max) NULL,
+	[quotaname] [nvarchar](max) NULL,
+	[quotaroleid] [int] NULL,
+	[quotavalue] [int] NULL,
+	[updaterprofile_id] [int] NOT NULL,
+	[updatedate] [datetime] NULL,
+ CONSTRAINT [PK_dbo.communicationquotas] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_updaterprofile_id] ON [dbo].[communicationquotas] 
+(
+	[updaterprofile_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[visiblitysettings_country]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[visiblitysettings_country](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[countryId] [nvarchar](max) NULL,
+	[countryname] [nvarchar](max) NULL,
+	[visiblitysetting_id] [int] NOT NULL,
+ CONSTRAINT [PK_dbo.visiblitysettings_country] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_visiblitysetting_id] ON [dbo].[visiblitysettings_country] 
+(
+	[visiblitysetting_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[visiblitysettings]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[visiblitysettings](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[profile_id] [int] NOT NULL,
+	[agemaxvisibility] [int] NULL,
+	[ageminvisibility] [int] NULL,
+	[chatvisiblitytointerests] [bit] NULL,
+	[chatvisiblitytolikes] [bit] NULL,
+	[chatvisiblitytomatches] [bit] NULL,
+	[chatvisiblitytopeeks] [bit] NULL,
+	[chatvisiblitytosearch] [bit] NULL,
+	[lastupdatedate] [datetime] NULL,
+	[mailchatrequest] [bit] NULL,
+	[mailintrests] [bit] NULL,
+	[maillikes] [bit] NULL,
+	[mailmatches] [bit] NULL,
+	[mailnews] [bit] NULL,
+	[mailpeeks] [bit] NULL,
+	[profilevisiblity] [bit] NULL,
+	[saveofflinechat] [bit] NULL,
+	[steathpeeks] [bit] NULL,
+ CONSTRAINT [PK_dbo.visiblitysettings] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_profile_id] ON [dbo].[visiblitysettings] 
+(
+	[profile_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[systempagesettings]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[systempagesettings](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[bodycssstylename] [nvarchar](max) NULL,
+	[description] [nvarchar](max) NULL,
+	[hitCount] [int] NULL,
+	[ismasterpage] [bit] NULL,
+	[path] [nvarchar](max) NULL,
+	[title] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.systempagesettings] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[__MigrationHistory]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[__MigrationHistory](
+	[MigrationId] [nvarchar](150) NOT NULL,
+	[ContextKey] [nvarchar](300) NOT NULL,
+	[Model] [varbinary](max) NOT NULL,
+	[ProductVersion] [nvarchar](32) NOT NULL,
+ CONSTRAINT [PK_dbo.__MigrationHistory] PRIMARY KEY CLUSTERED 
+(
+	[MigrationId] ASC,
+	[ContextKey] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[ratings]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[ratings](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+	[ratingmaxvalue] [int] NULL,
+	[ratingweight] [int] NULL,
+	[increment] [bigint] NULL,
+ CONSTRAINT [PK_dbo.ratings] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_photostatus]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_photostatus](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_photostatus] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_photorejectionreason]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_photorejectionreason](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+	[userMessage] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_photorejectionreason] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_photoimagetype]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_photoimagetype](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_photoimagetype] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_photoImagersizerformat]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_photoImagersizerformat](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_photoImagersizerformat] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_humor]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_humor](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_humor] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_hotfeature]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_hotfeature](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_hotfeature] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_hobby]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_hobby](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_hobby] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_height]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_height](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_height] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_havekids]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_havekids](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_havekids] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_haircolor]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_haircolor](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_haircolor] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[visiblitysettings_gender]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[visiblitysettings_gender](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[visiblitysetting_id] [int] NOT NULL,
+	[gender_id] [int] NULL,
+ CONSTRAINT [PK_dbo.visiblitysettings_gender] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_gender_id] ON [dbo].[visiblitysettings_gender] 
+(
+	[gender_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_visiblitysetting_id] ON [dbo].[visiblitysettings_gender] 
+(
+	[visiblitysetting_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_gender]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_gender](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_gender] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_flagyesno]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_flagyesno](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_flagyesno] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_eyecolor]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_eyecolor](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_eyecolor] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_exercise]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_exercise](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_exercise] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_ethnicity]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_ethnicity](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_ethnicity] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_employmentstatus]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_employmentstatus](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_employmentstatus] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_educationlevel]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_educationlevel](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_educationlevel] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_drinks]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_drinks](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_drinks] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_diet]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_diet](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_diet] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_defaultmailboxfolder]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_defaultmailboxfolder](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_defaultmailboxfolder] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_bodytype]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_bodytype](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_bodytype] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_applicationtype]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_applicationtype](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_applicationtype] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_applicationtransfertype]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_applicationtransfertype](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_applicationtransfertype] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_applicationpaymenttype]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_applicationpaymenttype](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_applicationpaymenttype] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_activitytype]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_activitytype](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_activitytype] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_actiontype]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_actiontype](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_actiontype] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_abusetype]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_abusetype](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_abusetype] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_photoapprovalstatus]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_photoapprovalstatus](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_photoapprovalstatus] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_openidprovider]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_openidprovider](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_openidprovider] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_notetype]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_notetype](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_notetype] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_maritalstatus]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_maritalstatus](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_maritalstatus] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_lookingfor]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_lookingfor](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_lookingfor] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_livingsituation]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_livingsituation](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_livingsituation] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_incomelevel]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_incomelevel](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_incomelevel] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_iconImagersizerformat]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_iconImagersizerformat](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_iconImagersizerformat] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_wantskids]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_wantskids](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_wantskids] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_sortbytype]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_sortbytype](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_sortbytype] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_smokes]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_smokes](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_smokes] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_sign]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_sign](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[month] [nvarchar](max) NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_sign] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_showme]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_showme](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_showme] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_securityquestion]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_securityquestion](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_securityquestion] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_securityleveltype]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_securityleveltype](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_securityleveltype] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_searchsettingdetailtype]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_searchsettingdetailtype](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_searchsettingdetailtype] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_role]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_role](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_role] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_religiousattendance]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_religiousattendance](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_religiousattendance] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_religion]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_religion](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_religion] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_profilestatus]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_profilestatus](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_profilestatus] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_profilefiltertype]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_profilefiltertype](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_profilefiltertype] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_profession]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_profession](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_profession] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_politicalview]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_politicalview](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.lu_politicalview] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_photostatusdescription]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_photostatusdescription](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+	[photostatus_id] [int] NULL,
+ CONSTRAINT [PK_dbo.lu_photostatusdescription] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_photostatus_id] ON [dbo].[lu_photostatusdescription] 
+(
+	[photostatus_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_iconformat]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_iconformat](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+	[iconImagersizerformat_id] [int] NOT NULL,
+	[iconImageresizerformat_id] [int] NULL,
+ CONSTRAINT [PK_dbo.lu_iconformat] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_iconImageresizerformat_id] ON [dbo].[lu_iconformat] 
+(
+	[iconImageresizerformat_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[lu_photoformat]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[lu_photoformat](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+	[photoImagersizerformat_id] [int] NOT NULL,
+ CONSTRAINT [PK_dbo.lu_photoformat] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_photoImagersizerformat_id] ON [dbo].[lu_photoformat] 
+(
+	[photoImagersizerformat_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[profiledatas]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[profiledatas](
+	[profile_id] [int] NOT NULL,
+	[age] [int] NULL,
+	[birthdate] [datetime] NULL,
+	[city] [nvarchar](max) NULL,
+	[countryregion] [nvarchar](max) NULL,
+	[stateprovince] [nvarchar](max) NULL,
+	[countryid] [int] NULL,
+	[longitude] [float] NULL,
+	[latitude] [float] NULL,
+	[aboutme] [nvarchar](max) NULL,
+	[height] [bigint] NULL,
+	[mycatchyintroLine] [nvarchar](max) NULL,
+	[phone] [nvarchar](max) NULL,
+	[postalcode] [nvarchar](max) NULL,
+	[visibilitysettings_id] [int] NULL,
+	[gender_id] [int] NULL,
+	[bodytype_id] [int] NULL,
+	[eyecolor_id] [int] NULL,
+	[haircolor_id] [int] NULL,
+	[diet_id] [int] NULL,
+	[drinking_id] [int] NULL,
+	[exercise_id] [int] NULL,
+	[humor_id] [int] NULL,
+	[politicalview_id] [int] NULL,
+	[religion_id] [int] NULL,
+	[religiousattendance_id] [int] NULL,
+	[sign_id] [int] NULL,
+	[smoking_id] [int] NULL,
+	[educationlevel_id] [int] NULL,
+	[employmentstatus_id] [int] NULL,
+	[kidstatus_id] [int] NULL,
+	[incomelevel_id] [int] NULL,
+	[livingsituation_id] [int] NULL,
+	[maritalstatus_id] [int] NULL,
+	[profession_id] [int] NULL,
+	[wantsKidstatus_id] [int] NULL,
+	[visiblitysetting_id] [int] NULL,
+	[location] [geography] NULL,
+ CONSTRAINT [PK_dbo.profiledatas] PRIMARY KEY CLUSTERED 
+(
+	[profile_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_bodytype_id] ON [dbo].[profiledatas] 
+(
+	[bodytype_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_diet_id] ON [dbo].[profiledatas] 
+(
+	[diet_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_drinking_id] ON [dbo].[profiledatas] 
+(
+	[drinking_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_educationlevel_id] ON [dbo].[profiledatas] 
+(
+	[educationlevel_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_employmentstatus_id] ON [dbo].[profiledatas] 
+(
+	[employmentstatus_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_exercise_id] ON [dbo].[profiledatas] 
+(
+	[exercise_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_eyecolor_id] ON [dbo].[profiledatas] 
+(
+	[eyecolor_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_gender_id] ON [dbo].[profiledatas] 
+(
+	[gender_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_haircolor_id] ON [dbo].[profiledatas] 
+(
+	[haircolor_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_humor_id] ON [dbo].[profiledatas] 
+(
+	[humor_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_incomelevel_id] ON [dbo].[profiledatas] 
+(
+	[incomelevel_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_kidstatus_id] ON [dbo].[profiledatas] 
+(
+	[kidstatus_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_livingsituation_id] ON [dbo].[profiledatas] 
+(
+	[livingsituation_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_maritalstatus_id] ON [dbo].[profiledatas] 
+(
+	[maritalstatus_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_politicalview_id] ON [dbo].[profiledatas] 
+(
+	[politicalview_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_profession_id] ON [dbo].[profiledatas] 
+(
+	[profession_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_profile_id] ON [dbo].[profiledatas] 
+(
+	[profile_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_religion_id] ON [dbo].[profiledatas] 
+(
+	[religion_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_religiousattendance_id] ON [dbo].[profiledatas] 
+(
+	[religiousattendance_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_sign_id] ON [dbo].[profiledatas] 
+(
+	[sign_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_smoking_id] ON [dbo].[profiledatas] 
+(
+	[smoking_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_visiblitysetting_id] ON [dbo].[profiledatas] 
+(
+	[visiblitysetting_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_wantsKidstatus_id] ON [dbo].[profiledatas] 
+(
+	[wantsKidstatus_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[profileactivities]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[profileactivities](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[creationdate] [datetime] NULL,
+	[ipaddress] [nvarchar](max) NULL,
+	[profile_id] [int] NULL,
+	[sessionid] [nvarchar](max) NULL,
+	[apikey] [uniqueidentifier] NULL,
+	[useragent] [nvarchar](max) NULL,
+	[routeurl] [nvarchar](max) NULL,
+	[actionname] [nvarchar](max) NULL,
+	[profileactivitygeodata_id] [int] NULL,
+	[activitytype_id] [int] NULL,
+ CONSTRAINT [PK_dbo.profileactivities] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_activitytype_id] ON [dbo].[profileactivities] 
+(
+	[activitytype_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_profile_id] ON [dbo].[profileactivities] 
+(
+	[profile_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_profileactivitygeodata_id] ON [dbo].[profileactivities] 
+(
+	[profileactivitygeodata_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[profiles]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[profiles](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[username] [nvarchar](max) NULL,
+	[emailaddress] [nvarchar](max) NULL,
+	[screenname] [nvarchar](max) NULL,
+	[activationcode] [nvarchar](max) NULL,
+	[dailsentmessagequota] [int] NULL,
+	[dailysentemailquota] [int] NULL,
+	[forwardmessages] [tinyint] NULL,
+	[logindate] [datetime] NULL,
+	[modificationdate] [datetime] NULL,
+	[creationdate] [datetime] NULL,
+	[readprivacystatement] [bit] NULL,
+	[readtemsofuse] [bit] NULL,
+	[password] [nvarchar](max) NULL,
+	[apikey] [uniqueidentifier] NOT NULL,
+	[passwordChangeddate] [datetime] NULL,
+	[passwordchangecount] [int] NULL,
+	[failedpasswordchangedate] [datetime] NULL,
+	[failedpasswordchangeattemptcount] [int] NULL,
+	[salt] [nvarchar](max) NULL,
+	[securityanswer] [nvarchar](max) NULL,
+	[sentemailquotahitcount] [int] NULL,
+	[sentmessagequotahitcount] [int] NULL,
+	[passwordchangeattempts] [int] NULL,
+	[status_id] [int] NOT NULL,
+	[securityquestion_id] [int] NULL,
+	[passwordresettoken] [nvarchar](max) NULL,
+	[passwordresetwindow] [datetime] NULL,
+	[isuseradmin] [bit] NULL,
+ CONSTRAINT [PK_dbo.profiles] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_securityquestion_id] ON [dbo].[profiles] 
+(
+	[securityquestion_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_status_id] ON [dbo].[profiles] 
+(
+	[status_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[userlogtimes]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[userlogtimes](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[logintime] [datetime] NULL,
+	[logouttime] [datetime] NULL,
+	[offline] [bit] NULL,
+	[profile_id] [int] NOT NULL,
+	[sessionid] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.userlogtimes] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_profile_id] ON [dbo].[userlogtimes] 
+(
+	[profile_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[profilemetadatas]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[profilemetadatas](
+	[profile_id] [int] NOT NULL,
+ CONSTRAINT [PK_dbo.profilemetadatas] PRIMARY KEY CLUSTERED 
+(
+	[profile_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_profile_id] ON [dbo].[profilemetadatas] 
+(
+	[profile_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[openids]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[openids](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[active] [bit] NULL,
+	[creationdate] [datetime] NULL,
+	[openididentifier] [nvarchar](max) NULL,
+	[profile_id] [int] NOT NULL,
+	[openidprovider_id] [int] NULL,
+ CONSTRAINT [PK_dbo.openids] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_openidprovider_id] ON [dbo].[openids] 
+(
+	[openidprovider_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_profile_id] ON [dbo].[openids] 
+(
+	[profile_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[membersinroles]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[membersinroles](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[active] [bit] NULL,
+	[profile_id] [int] NOT NULL,
+	[roleexpiredate] [datetime] NULL,
+	[rolestartdate] [datetime] NULL,
+	[role_id] [int] NOT NULL,
+ CONSTRAINT [PK_dbo.membersinroles] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_profile_id] ON [dbo].[membersinroles] 
+(
+	[profile_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_role_id] ON [dbo].[membersinroles] 
+(
+	[role_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[mailboxfolders]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[mailboxfolders](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[profile_id] [int] NOT NULL,
+	[active] [int] NULL,
+	[displayname] [nvarchar](max) NULL,
+	[creationdate] [datetime] NULL,
+	[deleteddate] [datetime] NULL,
+	[maxsizeinbytes] [int] NULL,
+	[defaultfolder_id] [int] NULL,
+ CONSTRAINT [PK_dbo.mailboxfolders] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_defaultfolder_id] ON [dbo].[mailboxfolders] 
+(
+	[defaultfolder_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_profile_id] ON [dbo].[mailboxfolders] 
+(
+	[profile_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[actions]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[actions](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[creator_profile_id] [int] NOT NULL,
+	[target_profile_id] [int] NOT NULL,
+	[actiontype_id] [int] NOT NULL,
+	[creationdate] [datetime] NULL,
+	[viewdate] [datetime] NULL,
+	[modificationdate] [datetime] NULL,
+	[deletedbycreatordate] [datetime] NULL,
+	[deletedbytargetdate] [datetime] NULL,
+	[active] [bit] NOT NULL,
+ CONSTRAINT [PK_dbo.actions] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_actiontype_id] ON [dbo].[actions] 
+(
+	[actiontype_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_creator_profile_id] ON [dbo].[actions] 
+(
+	[creator_profile_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_target_profile_id] ON [dbo].[actions] 
+(
+	[target_profile_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[applications]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[applications](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[applicationtype_id] [int] NOT NULL,
+	[transfertype_id] [int] NULL,
+	[paymenttype_id] [int] NOT NULL,
+	[profile_id] [int] NOT NULL,
+	[purchaserprofile_id] [int] NOT NULL,
+	[creationdate] [datetime] NOT NULL,
+	[active] [bit] NOT NULL,
+	[deactivationdate] [datetime] NULL,
+	[purchasedate] [datetime] NOT NULL,
+	[lasttransferdate] [datetime] NULL,
+	[activateddate] [datetime] NULL,
+	[expirationdate] [datetime] NULL,
+ CONSTRAINT [PK_dbo.applications] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_applicationtype_id] ON [dbo].[applications] 
+(
+	[applicationtype_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_paymenttype_id] ON [dbo].[applications] 
+(
+	[paymenttype_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_profile_id] ON [dbo].[applications] 
+(
+	[profile_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[mailupdatefreqencies]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[mailupdatefreqencies](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[updatefreqency] [int] NULL,
+	[profile_id] [int] NOT NULL,
+ CONSTRAINT [PK_dbo.mailupdatefreqencies] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_profile_id] ON [dbo].[mailupdatefreqencies] 
+(
+	[profile_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[mailboxmessages]    Script Date: 09/29/2016 01:13:26 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[mailboxmessages](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[creationdate] [datetime] NULL,
+	[recipient_id] [int] NOT NULL,
+	[sender_id] [int] NOT NULL,
+	[body] [nvarchar](max) NULL,
+	[subject] [nvarchar](max) NULL,
+	[sizeinbtyes] [int] NULL,
+ CONSTRAINT [PK_dbo.mailboxmessages] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_recipient_id] ON [dbo].[mailboxmessages] 
+(
+	[recipient_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_sender_id] ON [dbo].[mailboxmessages] 
+(
+	[sender_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+/****** Object:  StoredProcedure [dbo].[sp_MemberPermanently]    Script Date: 09/29/2016 01:13:27 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE [dbo].[sp_MemberPermanently]
+	-- Add the parameters for the stored procedure here
+@S_No
+int 
+	
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+
+   --delete mail stuff
+   delete from mailboxmessages where recipient_id = @S_No 
+      delete from mailboxmessages where sender_id = @S_No 
+    
+    --delete activities
+    delete from profileactivities where profile_id  =@S_No
+    
+    --delete actions to and from
+   	 DELETE FROM actions
+WHERE creator_profile_id =@S_No
+
+   	 DELETE FROM actions
+WHERE target_profile_id =@S_No
+   
+   --now delete meta data 
+	 DELETE FROM profilemetadatas
+WHERE profile_id =@S_No
+
+DELETE FROM profiledatas
+
+
+WHERE profile_id = @S_No
+
+--finally delete the profile now
+delete from profiles where id =@S_No
+
+END
+GO
+/****** Object:  Table [dbo].[photoalbums]    Script Date: 09/29/2016 01:13:27 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[photoalbums](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[description] [nvarchar](max) NULL,
+	[profile_id] [int] NOT NULL,
+ CONSTRAINT [PK_dbo.photoalbums] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_profile_id] ON [dbo].[photoalbums] 
+(
+	[profile_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[photos]    Script Date: 09/29/2016 01:13:27 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[photos](
+	[id] [uniqueidentifier] NOT NULL,
+	[size] [bigint] NOT NULL,
+	[profile_id] [int] NOT NULL,
+	[creationdate] [datetime] NULL,
+	[imagecaption] [nvarchar](max) NULL,
+	[imagename] [nvarchar](max) NULL,
+	[providername] [nvarchar](max) NULL,
+	[rejectionreason_id] [int] NULL,
+	[photostatus_id] [int] NULL,
+	[approvalstatus_id] [int] NULL,
+	[imagetype_id] [int] NULL,
+	[landingpagevisiblity] [bit] NULL,
+	[adminmodificationdate] [datetime] NULL,
+	[adminmodiferprofile_id] [int] NULL,
+	[modificationdate] [datetime] NULL,
+ CONSTRAINT [PK_dbo.photos] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_adminmodiferprofile_id] ON [dbo].[photos] 
+(
+	[adminmodiferprofile_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_approvalstatus_id] ON [dbo].[photos] 
+(
+	[approvalstatus_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_imagetype_id] ON [dbo].[photos] 
+(
+	[imagetype_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_photostatus_id] ON [dbo].[photos] 
+(
+	[photostatus_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_profile_id] ON [dbo].[photos] 
+(
+	[profile_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_rejectionreason_id] ON [dbo].[photos] 
+(
+	[rejectionreason_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[profiledata_lookingfor]    Script Date: 09/29/2016 01:13:27 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[profiledata_lookingfor](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[profile_id] [int] NOT NULL,
+	[lookingfor_id] [int] NULL,
+ CONSTRAINT [PK_dbo.profiledata_lookingfor] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_lookingfor_id] ON [dbo].[profiledata_lookingfor] 
+(
+	[lookingfor_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_profile_id] ON [dbo].[profiledata_lookingfor] 
+(
+	[profile_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[profiledata_hotfeature]    Script Date: 09/29/2016 01:13:27 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[profiledata_hotfeature](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[profile_id] [int] NOT NULL,
+	[hotfeature_id] [int] NULL,
+ CONSTRAINT [PK_dbo.profiledata_hotfeature] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_hotfeature_id] ON [dbo].[profiledata_hotfeature] 
+(
+	[hotfeature_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_profile_id] ON [dbo].[profiledata_hotfeature] 
+(
+	[profile_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[profiledata_hobby]    Script Date: 09/29/2016 01:13:27 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[profiledata_hobby](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[profile_id] [int] NOT NULL,
+	[hobby_id] [int] NULL,
+ CONSTRAINT [PK_dbo.profiledata_hobby] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_hobby_id] ON [dbo].[profiledata_hobby] 
+(
+	[hobby_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_profile_id] ON [dbo].[profiledata_hobby] 
+(
+	[profile_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[profiledata_ethnicity]    Script Date: 09/29/2016 01:13:27 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[profiledata_ethnicity](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[profile_id] [int] NOT NULL,
+	[ethnicty_id] [int] NULL,
+ CONSTRAINT [PK_dbo.profiledata_ethnicity] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_ethnicty_id] ON [dbo].[profiledata_ethnicity] 
+(
+	[ethnicty_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_profile_id] ON [dbo].[profiledata_ethnicity] 
+(
+	[profile_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[ratingvalues]    Script Date: 09/29/2016 01:13:27 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[ratingvalues](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[rating_id] [int] NOT NULL,
+	[raterprofile_id] [int] NOT NULL,
+	[rateeprofile_id] [int] NOT NULL,
+	[date] [datetime] NULL,
+	[value] [float] NULL,
+ CONSTRAINT [PK_dbo.ratingvalues] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_rateeprofile_id] ON [dbo].[ratingvalues] 
+(
+	[rateeprofile_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_raterprofile_id] ON [dbo].[ratingvalues] 
+(
+	[raterprofile_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_rating_id] ON [dbo].[ratingvalues] 
+(
+	[rating_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[searchsettings]    Script Date: 09/29/2016 01:13:27 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[searchsettings](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[profile_id] [int] NOT NULL,
+	[agemax] [int] NULL,
+	[agemin] [int] NULL,
+	[creationdate] [datetime] NULL,
+	[distancefromme] [int] NULL,
+	[heightmax] [int] NULL,
+	[heightmin] [int] NULL,
+	[lastupdatedate] [datetime] NULL,
+	[myperfectmatch] [bit] NULL,
+	[savedsearch] [bit] NULL,
+	[searchname] [nvarchar](max) NULL,
+	[searchrank] [int] NULL,
+	[systemmatch] [bit] NULL,
+ CONSTRAINT [PK_dbo.searchsettings] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_profile_id] ON [dbo].[searchsettings] 
+(
+	[profile_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[searchsettingdetails]    Script Date: 09/29/2016 01:13:27 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[searchsettingdetails](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[searchsetting_id] [int] NOT NULL,
+	[searchsettingdetailtype_id] [int] NOT NULL,
+	[value] [int] NOT NULL,
+	[creationdate] [datetime] NULL,
+	[modificationdate] [datetime] NULL,
+	[active] [bit] NOT NULL,
+ CONSTRAINT [PK_dbo.searchsettingdetails] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_searchsetting_id] ON [dbo].[searchsettingdetails] 
+(
+	[searchsetting_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_searchsettingdetailtype_id] ON [dbo].[searchsettingdetails] 
+(
+	[searchsettingdetailtype_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[searchsetting_location]    Script Date: 09/29/2016 01:13:27 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[searchsetting_location](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[city] [nvarchar](max) NULL,
+	[countryid] [int] NULL,
+	[postalcode] [nvarchar](max) NULL,
+	[searchsetting_id] [int] NOT NULL,
+ CONSTRAINT [PK_dbo.searchsetting_location] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_searchsetting_id] ON [dbo].[searchsetting_location] 
+(
+	[searchsetting_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[notes]    Script Date: 09/29/2016 01:13:27 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[notes](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[notetype_id] [int] NOT NULL,
+	[action_id] [int] NOT NULL,
+	[abusetype_id] [int] NULL,
+	[notedetail] [nvarchar](max) NULL,
+	[creationdate] [datetime] NULL,
+	[reviewdate] [datetime] NULL,
+ CONSTRAINT [PK_dbo.notes] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_abusetype_id] ON [dbo].[notes] 
+(
+	[abusetype_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_action_id] ON [dbo].[notes] 
+(
+	[action_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_notetype_id] ON [dbo].[notes] 
+(
+	[notetype_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[photoreviews]    Script Date: 09/29/2016 01:13:27 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[photoreviews](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[notes] [nvarchar](max) NULL,
+	[creationdate] [datetime] NULL,
+	[reviewerprofile_id] [int] NOT NULL,
+	[photo_id] [uniqueidentifier] NOT NULL,
+ CONSTRAINT [PK_dbo.photoreviews] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_photo_id] ON [dbo].[photoreviews] 
+(
+	[photo_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_reviewerprofile_id] ON [dbo].[photoreviews] 
+(
+	[reviewerprofile_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[photophotoalbum]    Script Date: 09/29/2016 01:13:27 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[photophotoalbum](
+	[photophotoalbumid] [int] IDENTITY(1,1) NOT NULL,
+	[photo_id] [uniqueidentifier] NOT NULL,
+	[photoalbum_id] [int] NOT NULL,
+ CONSTRAINT [PK_dbo.photophotoalbum] PRIMARY KEY CLUSTERED 
+(
+	[photophotoalbumid] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_photo_id] ON [dbo].[photophotoalbum] 
+(
+	[photo_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_photoalbum_id] ON [dbo].[photophotoalbum] 
+(
+	[photoalbum_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[photoconversions]    Script Date: 09/29/2016 01:13:27 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[photoconversions](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[photo_id] [uniqueidentifier] NOT NULL,
+	[creationdate] [datetime] NULL,
+	[description] [nvarchar](max) NULL,
+	[image] [varbinary](max) NULL,
+	[size] [bigint] NOT NULL,
+	[formattype_id] [int] NOT NULL,
+ CONSTRAINT [PK_dbo.photoconversions] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+CREATE NONCLUSTERED INDEX [IX_formattype_id] ON [dbo].[photoconversions] 
+(
+	[formattype_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_photo_id] ON [dbo].[photoconversions] 
+(
+	[photo_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[photoalbum_securitylevel]    Script Date: 09/29/2016 01:13:27 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[photoalbum_securitylevel](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[photoalbum_id] [int] NOT NULL,
+	[securityleveltype_id] [int] NULL,
+ CONSTRAINT [PK_dbo.photoalbum_securitylevel] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_photoalbum_id] ON [dbo].[photoalbum_securitylevel] 
+(
+	[photoalbum_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_securityleveltype_id] ON [dbo].[photoalbum_securitylevel] 
+(
+	[securityleveltype_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[photo_securitylevel]    Script Date: 09/29/2016 01:13:27 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[photo_securitylevel](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[photo_id] [uniqueidentifier] NOT NULL,
+	[securityleveltype_id] [int] NULL,
+ CONSTRAINT [PK_dbo.photo_securitylevel] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_photo_id] ON [dbo].[photo_securitylevel] 
+(
+	[photo_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_securityleveltype_id] ON [dbo].[photo_securitylevel] 
+(
+	[securityleveltype_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[mailboxmessagefolders]    Script Date: 09/29/2016 01:13:27 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[mailboxmessagefolders](
+	[mailboxfolder_id] [int] NOT NULL,
+	[mailboxmessage_id] [int] NOT NULL,
+	[deleted] [bit] NULL,
+	[deleteddate] [datetime] NULL,
+	[moved] [bit] NULL,
+	[movedate] [datetime] NULL,
+	[draft] [bit] NULL,
+	[draftdate] [datetime] NULL,
+	[flagged] [bit] NOT NULL,
+	[flaggeddate] [datetime] NULL,
+	[read] [bit] NULL,
+	[readdate] [datetime] NULL,
+	[recent] [bit] NULL,
+	[replied] [bit] NULL,
+	[replieddate] [datetime] NULL,
+ CONSTRAINT [PK_dbo.mailboxmessagefolders] PRIMARY KEY CLUSTERED 
+(
+	[mailboxfolder_id] ASC,
+	[mailboxmessage_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_mailboxfolder_id] ON [dbo].[mailboxmessagefolders] 
+(
+	[mailboxfolder_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_mailboxmessage_id] ON [dbo].[mailboxmessagefolders] 
+(
+	[mailboxmessage_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[applicationroles]    Script Date: 09/29/2016 01:13:28 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[applicationroles](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[active] [bit] NULL,
+	[application_id] [int] NOT NULL,
+	[roleexpiredate] [datetime] NULL,
+	[rolestartdate] [datetime] NULL,
+	[deactivationdate] [datetime] NULL,
+	[creationdate] [datetime] NULL,
+	[role_id] [int] NOT NULL,
+ CONSTRAINT [PK_dbo.applicationroles] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_application_id] ON [dbo].[applicationroles] 
+(
+	[application_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_role_id] ON [dbo].[applicationroles] 
+(
+	[role_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[applicationiconconversions]    Script Date: 09/29/2016 01:13:28 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[applicationiconconversions](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[application_id] [int] NOT NULL,
+	[creationdate] [datetime] NULL,
+	[image] [varbinary](max) NULL,
+	[size] [bigint] NOT NULL,
+	[iconformat_id] [int] NULL,
+ CONSTRAINT [PK_dbo.applicationiconconversions] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+CREATE NONCLUSTERED INDEX [IX_application_id] ON [dbo].[applicationiconconversions] 
+(
+	[application_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_iconformat_id] ON [dbo].[applicationiconconversions] 
+(
+	[iconformat_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+/****** Object:  ForeignKey [FK_dbo.profileactivitygeodatas_dbo.profileactivities_activity_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[profileactivitygeodatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profileactivitygeodatas_dbo.profileactivities_activity_id] FOREIGN KEY([activity_id])
+REFERENCES [dbo].[profileactivities] ([id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[profileactivitygeodatas] CHECK CONSTRAINT [FK_dbo.profileactivitygeodatas_dbo.profileactivities_activity_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.communicationquotas_dbo.profiledatas_updaterprofile_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[communicationquotas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.communicationquotas_dbo.profiledatas_updaterprofile_id] FOREIGN KEY([updaterprofile_id])
+REFERENCES [dbo].[profiledatas] ([profile_id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[communicationquotas] CHECK CONSTRAINT [FK_dbo.communicationquotas_dbo.profiledatas_updaterprofile_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.visiblitysettings_country_dbo.visiblitysettings_visiblitysetting_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[visiblitysettings_country]  WITH CHECK ADD  CONSTRAINT [FK_dbo.visiblitysettings_country_dbo.visiblitysettings_visiblitysetting_id] FOREIGN KEY([visiblitysetting_id])
+REFERENCES [dbo].[visiblitysettings] ([id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[visiblitysettings_country] CHECK CONSTRAINT [FK_dbo.visiblitysettings_country_dbo.visiblitysettings_visiblitysetting_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.visiblitysettings_dbo.profiledatas_profile_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[visiblitysettings]  WITH CHECK ADD  CONSTRAINT [FK_dbo.visiblitysettings_dbo.profiledatas_profile_id] FOREIGN KEY([profile_id])
+REFERENCES [dbo].[profiledatas] ([profile_id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[visiblitysettings] CHECK CONSTRAINT [FK_dbo.visiblitysettings_dbo.profiledatas_profile_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.visiblitysettings_gender_dbo.lu_gender_gender_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[visiblitysettings_gender]  WITH CHECK ADD  CONSTRAINT [FK_dbo.visiblitysettings_gender_dbo.lu_gender_gender_id] FOREIGN KEY([gender_id])
+REFERENCES [dbo].[lu_gender] ([id])
+GO
+ALTER TABLE [dbo].[visiblitysettings_gender] CHECK CONSTRAINT [FK_dbo.visiblitysettings_gender_dbo.lu_gender_gender_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.visiblitysettings_gender_dbo.visiblitysettings_visiblitysetting_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[visiblitysettings_gender]  WITH CHECK ADD  CONSTRAINT [FK_dbo.visiblitysettings_gender_dbo.visiblitysettings_visiblitysetting_id] FOREIGN KEY([visiblitysetting_id])
+REFERENCES [dbo].[visiblitysettings] ([id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[visiblitysettings_gender] CHECK CONSTRAINT [FK_dbo.visiblitysettings_gender_dbo.visiblitysettings_visiblitysetting_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.lu_photostatusdescription_dbo.lu_photostatus_photostatus_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[lu_photostatusdescription]  WITH CHECK ADD  CONSTRAINT [FK_dbo.lu_photostatusdescription_dbo.lu_photostatus_photostatus_id] FOREIGN KEY([photostatus_id])
+REFERENCES [dbo].[lu_photostatus] ([id])
+GO
+ALTER TABLE [dbo].[lu_photostatusdescription] CHECK CONSTRAINT [FK_dbo.lu_photostatusdescription_dbo.lu_photostatus_photostatus_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.lu_iconformat_dbo.lu_iconImagersizerformat_iconImageresizerformat_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[lu_iconformat]  WITH CHECK ADD  CONSTRAINT [FK_dbo.lu_iconformat_dbo.lu_iconImagersizerformat_iconImageresizerformat_id] FOREIGN KEY([iconImageresizerformat_id])
+REFERENCES [dbo].[lu_iconImagersizerformat] ([id])
+GO
+ALTER TABLE [dbo].[lu_iconformat] CHECK CONSTRAINT [FK_dbo.lu_iconformat_dbo.lu_iconImagersizerformat_iconImageresizerformat_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.lu_photoformat_dbo.lu_photoImagersizerformat_photoImagersizerformat_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[lu_photoformat]  WITH CHECK ADD  CONSTRAINT [FK_dbo.lu_photoformat_dbo.lu_photoImagersizerformat_photoImagersizerformat_id] FOREIGN KEY([photoImagersizerformat_id])
+REFERENCES [dbo].[lu_photoImagersizerformat] ([id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[lu_photoformat] CHECK CONSTRAINT [FK_dbo.lu_photoformat_dbo.lu_photoImagersizerformat_photoImagersizerformat_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_bodytype_bodytype_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_bodytype_bodytype_id] FOREIGN KEY([bodytype_id])
+REFERENCES [dbo].[lu_bodytype] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_bodytype_bodytype_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_diet_diet_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_diet_diet_id] FOREIGN KEY([diet_id])
+REFERENCES [dbo].[lu_diet] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_diet_diet_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_drinks_drinking_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_drinks_drinking_id] FOREIGN KEY([drinking_id])
+REFERENCES [dbo].[lu_drinks] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_drinks_drinking_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_educationlevel_educationlevel_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_educationlevel_educationlevel_id] FOREIGN KEY([educationlevel_id])
+REFERENCES [dbo].[lu_educationlevel] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_educationlevel_educationlevel_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_employmentstatus_employmentstatus_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_employmentstatus_employmentstatus_id] FOREIGN KEY([employmentstatus_id])
+REFERENCES [dbo].[lu_employmentstatus] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_employmentstatus_employmentstatus_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_exercise_exercise_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_exercise_exercise_id] FOREIGN KEY([exercise_id])
+REFERENCES [dbo].[lu_exercise] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_exercise_exercise_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_eyecolor_eyecolor_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_eyecolor_eyecolor_id] FOREIGN KEY([eyecolor_id])
+REFERENCES [dbo].[lu_eyecolor] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_eyecolor_eyecolor_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_gender_gender_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_gender_gender_id] FOREIGN KEY([gender_id])
+REFERENCES [dbo].[lu_gender] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_gender_gender_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_haircolor_haircolor_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_haircolor_haircolor_id] FOREIGN KEY([haircolor_id])
+REFERENCES [dbo].[lu_haircolor] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_haircolor_haircolor_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_havekids_kidstatus_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_havekids_kidstatus_id] FOREIGN KEY([kidstatus_id])
+REFERENCES [dbo].[lu_havekids] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_havekids_kidstatus_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_humor_humor_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_humor_humor_id] FOREIGN KEY([humor_id])
+REFERENCES [dbo].[lu_humor] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_humor_humor_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_incomelevel_incomelevel_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_incomelevel_incomelevel_id] FOREIGN KEY([incomelevel_id])
+REFERENCES [dbo].[lu_incomelevel] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_incomelevel_incomelevel_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_livingsituation_livingsituation_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_livingsituation_livingsituation_id] FOREIGN KEY([livingsituation_id])
+REFERENCES [dbo].[lu_livingsituation] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_livingsituation_livingsituation_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_maritalstatus_maritalstatus_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_maritalstatus_maritalstatus_id] FOREIGN KEY([maritalstatus_id])
+REFERENCES [dbo].[lu_maritalstatus] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_maritalstatus_maritalstatus_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_politicalview_politicalview_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_politicalview_politicalview_id] FOREIGN KEY([politicalview_id])
+REFERENCES [dbo].[lu_politicalview] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_politicalview_politicalview_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_profession_profession_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_profession_profession_id] FOREIGN KEY([profession_id])
+REFERENCES [dbo].[lu_profession] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_profession_profession_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_religion_religion_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_religion_religion_id] FOREIGN KEY([religion_id])
+REFERENCES [dbo].[lu_religion] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_religion_religion_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_religiousattendance_religiousattendance_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_religiousattendance_religiousattendance_id] FOREIGN KEY([religiousattendance_id])
+REFERENCES [dbo].[lu_religiousattendance] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_religiousattendance_religiousattendance_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_sign_sign_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_sign_sign_id] FOREIGN KEY([sign_id])
+REFERENCES [dbo].[lu_sign] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_sign_sign_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_smokes_smoking_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_smokes_smoking_id] FOREIGN KEY([smoking_id])
+REFERENCES [dbo].[lu_smokes] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_smokes_smoking_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_wantskids_wantsKidstatus_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_wantskids_wantsKidstatus_id] FOREIGN KEY([wantsKidstatus_id])
+REFERENCES [dbo].[lu_wantskids] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_wantskids_wantsKidstatus_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.profiles_profile_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.profiles_profile_id] FOREIGN KEY([profile_id])
+REFERENCES [dbo].[profiles] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.profiles_profile_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.visiblitysettings_visiblitysetting_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.visiblitysettings_visiblitysetting_id] FOREIGN KEY([visiblitysetting_id])
+REFERENCES [dbo].[visiblitysettings] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.visiblitysettings_visiblitysetting_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profileactivities_dbo.lu_activitytype_activitytype_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[profileactivities]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profileactivities_dbo.lu_activitytype_activitytype_id] FOREIGN KEY([activitytype_id])
+REFERENCES [dbo].[lu_activitytype] ([id])
+GO
+ALTER TABLE [dbo].[profileactivities] CHECK CONSTRAINT [FK_dbo.profileactivities_dbo.lu_activitytype_activitytype_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profileactivities_dbo.profileactivitygeodatas_profileactivitygeodata_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[profileactivities]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profileactivities_dbo.profileactivitygeodatas_profileactivitygeodata_id] FOREIGN KEY([profileactivitygeodata_id])
+REFERENCES [dbo].[profileactivitygeodatas] ([id])
+GO
+ALTER TABLE [dbo].[profileactivities] CHECK CONSTRAINT [FK_dbo.profileactivities_dbo.profileactivitygeodatas_profileactivitygeodata_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profileactivities_dbo.profiles_profile_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[profileactivities]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profileactivities_dbo.profiles_profile_id] FOREIGN KEY([profile_id])
+REFERENCES [dbo].[profiles] ([id])
+GO
+ALTER TABLE [dbo].[profileactivities] CHECK CONSTRAINT [FK_dbo.profileactivities_dbo.profiles_profile_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiles_dbo.lu_profilestatus_status_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[profiles]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiles_dbo.lu_profilestatus_status_id] FOREIGN KEY([status_id])
+REFERENCES [dbo].[lu_profilestatus] ([id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[profiles] CHECK CONSTRAINT [FK_dbo.profiles_dbo.lu_profilestatus_status_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiles_dbo.lu_securityquestion_securityquestion_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[profiles]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiles_dbo.lu_securityquestion_securityquestion_id] FOREIGN KEY([securityquestion_id])
+REFERENCES [dbo].[lu_securityquestion] ([id])
+GO
+ALTER TABLE [dbo].[profiles] CHECK CONSTRAINT [FK_dbo.profiles_dbo.lu_securityquestion_securityquestion_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.userlogtimes_dbo.profiles_profile_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[userlogtimes]  WITH CHECK ADD  CONSTRAINT [FK_dbo.userlogtimes_dbo.profiles_profile_id] FOREIGN KEY([profile_id])
+REFERENCES [dbo].[profiles] ([id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[userlogtimes] CHECK CONSTRAINT [FK_dbo.userlogtimes_dbo.profiles_profile_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profilemetadatas_dbo.profiles_profile_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[profilemetadatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profilemetadatas_dbo.profiles_profile_id] FOREIGN KEY([profile_id])
+REFERENCES [dbo].[profiles] ([id])
+GO
+ALTER TABLE [dbo].[profilemetadatas] CHECK CONSTRAINT [FK_dbo.profilemetadatas_dbo.profiles_profile_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.openids_dbo.lu_openidprovider_openidprovider_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[openids]  WITH CHECK ADD  CONSTRAINT [FK_dbo.openids_dbo.lu_openidprovider_openidprovider_id] FOREIGN KEY([openidprovider_id])
+REFERENCES [dbo].[lu_openidprovider] ([id])
+GO
+ALTER TABLE [dbo].[openids] CHECK CONSTRAINT [FK_dbo.openids_dbo.lu_openidprovider_openidprovider_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.openids_dbo.profiles_profile_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[openids]  WITH CHECK ADD  CONSTRAINT [FK_dbo.openids_dbo.profiles_profile_id] FOREIGN KEY([profile_id])
+REFERENCES [dbo].[profiles] ([id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[openids] CHECK CONSTRAINT [FK_dbo.openids_dbo.profiles_profile_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.membersinroles_dbo.lu_role_role_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[membersinroles]  WITH CHECK ADD  CONSTRAINT [FK_dbo.membersinroles_dbo.lu_role_role_id] FOREIGN KEY([role_id])
+REFERENCES [dbo].[lu_role] ([id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[membersinroles] CHECK CONSTRAINT [FK_dbo.membersinroles_dbo.lu_role_role_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.membersinroles_dbo.profiles_profile_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[membersinroles]  WITH CHECK ADD  CONSTRAINT [FK_dbo.membersinroles_dbo.profiles_profile_id] FOREIGN KEY([profile_id])
+REFERENCES [dbo].[profiles] ([id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[membersinroles] CHECK CONSTRAINT [FK_dbo.membersinroles_dbo.profiles_profile_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.mailboxfolders_dbo.lu_defaultmailboxfolder_defaultfolder_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[mailboxfolders]  WITH CHECK ADD  CONSTRAINT [FK_dbo.mailboxfolders_dbo.lu_defaultmailboxfolder_defaultfolder_id] FOREIGN KEY([defaultfolder_id])
+REFERENCES [dbo].[lu_defaultmailboxfolder] ([id])
+GO
+ALTER TABLE [dbo].[mailboxfolders] CHECK CONSTRAINT [FK_dbo.mailboxfolders_dbo.lu_defaultmailboxfolder_defaultfolder_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.mailboxfolders_dbo.profilemetadatas_profile_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[mailboxfolders]  WITH CHECK ADD  CONSTRAINT [FK_dbo.mailboxfolders_dbo.profilemetadatas_profile_id] FOREIGN KEY([profile_id])
+REFERENCES [dbo].[profilemetadatas] ([profile_id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[mailboxfolders] CHECK CONSTRAINT [FK_dbo.mailboxfolders_dbo.profilemetadatas_profile_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.actions_dbo.lu_actiontype_actiontype_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[actions]  WITH CHECK ADD  CONSTRAINT [FK_dbo.actions_dbo.lu_actiontype_actiontype_id] FOREIGN KEY([actiontype_id])
+REFERENCES [dbo].[lu_actiontype] ([id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[actions] CHECK CONSTRAINT [FK_dbo.actions_dbo.lu_actiontype_actiontype_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.actions_dbo.profilemetadatas_creator_profile_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[actions]  WITH CHECK ADD  CONSTRAINT [FK_dbo.actions_dbo.profilemetadatas_creator_profile_id] FOREIGN KEY([creator_profile_id])
+REFERENCES [dbo].[profilemetadatas] ([profile_id])
+GO
+ALTER TABLE [dbo].[actions] CHECK CONSTRAINT [FK_dbo.actions_dbo.profilemetadatas_creator_profile_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.actions_dbo.profilemetadatas_target_profile_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[actions]  WITH CHECK ADD  CONSTRAINT [FK_dbo.actions_dbo.profilemetadatas_target_profile_id] FOREIGN KEY([target_profile_id])
+REFERENCES [dbo].[profilemetadatas] ([profile_id])
+GO
+ALTER TABLE [dbo].[actions] CHECK CONSTRAINT [FK_dbo.actions_dbo.profilemetadatas_target_profile_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.applications_dbo.lu_applicationpaymenttype_paymenttype_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[applications]  WITH CHECK ADD  CONSTRAINT [FK_dbo.applications_dbo.lu_applicationpaymenttype_paymenttype_id] FOREIGN KEY([paymenttype_id])
+REFERENCES [dbo].[lu_applicationpaymenttype] ([id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[applications] CHECK CONSTRAINT [FK_dbo.applications_dbo.lu_applicationpaymenttype_paymenttype_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.applications_dbo.lu_applicationtransfertype_applicationtype_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[applications]  WITH CHECK ADD  CONSTRAINT [FK_dbo.applications_dbo.lu_applicationtransfertype_applicationtype_id] FOREIGN KEY([applicationtype_id])
+REFERENCES [dbo].[lu_applicationtransfertype] ([id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[applications] CHECK CONSTRAINT [FK_dbo.applications_dbo.lu_applicationtransfertype_applicationtype_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.applications_dbo.lu_applicationtype_applicationtype_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[applications]  WITH CHECK ADD  CONSTRAINT [FK_dbo.applications_dbo.lu_applicationtype_applicationtype_id] FOREIGN KEY([applicationtype_id])
+REFERENCES [dbo].[lu_applicationtype] ([id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[applications] CHECK CONSTRAINT [FK_dbo.applications_dbo.lu_applicationtype_applicationtype_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.applications_dbo.profilemetadatas_profile_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[applications]  WITH CHECK ADD  CONSTRAINT [FK_dbo.applications_dbo.profilemetadatas_profile_id] FOREIGN KEY([profile_id])
+REFERENCES [dbo].[profilemetadatas] ([profile_id])
+GO
+ALTER TABLE [dbo].[applications] CHECK CONSTRAINT [FK_dbo.applications_dbo.profilemetadatas_profile_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.mailupdatefreqencies_dbo.profilemetadatas_profile_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[mailupdatefreqencies]  WITH CHECK ADD  CONSTRAINT [FK_dbo.mailupdatefreqencies_dbo.profilemetadatas_profile_id] FOREIGN KEY([profile_id])
+REFERENCES [dbo].[profilemetadatas] ([profile_id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[mailupdatefreqencies] CHECK CONSTRAINT [FK_dbo.mailupdatefreqencies_dbo.profilemetadatas_profile_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.mailboxmessages_dbo.profilemetadatas_recipient_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[mailboxmessages]  WITH CHECK ADD  CONSTRAINT [FK_dbo.mailboxmessages_dbo.profilemetadatas_recipient_id] FOREIGN KEY([recipient_id])
+REFERENCES [dbo].[profilemetadatas] ([profile_id])
+GO
+ALTER TABLE [dbo].[mailboxmessages] CHECK CONSTRAINT [FK_dbo.mailboxmessages_dbo.profilemetadatas_recipient_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.mailboxmessages_dbo.profilemetadatas_sender_id]    Script Date: 09/29/2016 01:13:26 ******/
+ALTER TABLE [dbo].[mailboxmessages]  WITH CHECK ADD  CONSTRAINT [FK_dbo.mailboxmessages_dbo.profilemetadatas_sender_id] FOREIGN KEY([sender_id])
+REFERENCES [dbo].[profilemetadatas] ([profile_id])
+GO
+ALTER TABLE [dbo].[mailboxmessages] CHECK CONSTRAINT [FK_dbo.mailboxmessages_dbo.profilemetadatas_sender_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.photoalbums_dbo.profilemetadatas_profile_id]    Script Date: 09/29/2016 01:13:27 ******/
+ALTER TABLE [dbo].[photoalbums]  WITH CHECK ADD  CONSTRAINT [FK_dbo.photoalbums_dbo.profilemetadatas_profile_id] FOREIGN KEY([profile_id])
+REFERENCES [dbo].[profilemetadatas] ([profile_id])
+GO
+ALTER TABLE [dbo].[photoalbums] CHECK CONSTRAINT [FK_dbo.photoalbums_dbo.profilemetadatas_profile_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.photos_dbo.lu_photoapprovalstatus_approvalstatus_id]    Script Date: 09/29/2016 01:13:27 ******/
+ALTER TABLE [dbo].[photos]  WITH CHECK ADD  CONSTRAINT [FK_dbo.photos_dbo.lu_photoapprovalstatus_approvalstatus_id] FOREIGN KEY([approvalstatus_id])
+REFERENCES [dbo].[lu_photoapprovalstatus] ([id])
+GO
+ALTER TABLE [dbo].[photos] CHECK CONSTRAINT [FK_dbo.photos_dbo.lu_photoapprovalstatus_approvalstatus_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.photos_dbo.lu_photoimagetype_imagetype_id]    Script Date: 09/29/2016 01:13:27 ******/
+ALTER TABLE [dbo].[photos]  WITH CHECK ADD  CONSTRAINT [FK_dbo.photos_dbo.lu_photoimagetype_imagetype_id] FOREIGN KEY([imagetype_id])
+REFERENCES [dbo].[lu_photoimagetype] ([id])
+GO
+ALTER TABLE [dbo].[photos] CHECK CONSTRAINT [FK_dbo.photos_dbo.lu_photoimagetype_imagetype_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.photos_dbo.lu_photorejectionreason_rejectionreason_id]    Script Date: 09/29/2016 01:13:27 ******/
+ALTER TABLE [dbo].[photos]  WITH CHECK ADD  CONSTRAINT [FK_dbo.photos_dbo.lu_photorejectionreason_rejectionreason_id] FOREIGN KEY([rejectionreason_id])
+REFERENCES [dbo].[lu_photorejectionreason] ([id])
+GO
+ALTER TABLE [dbo].[photos] CHECK CONSTRAINT [FK_dbo.photos_dbo.lu_photorejectionreason_rejectionreason_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.photos_dbo.lu_photostatus_photostatus_id]    Script Date: 09/29/2016 01:13:27 ******/
+ALTER TABLE [dbo].[photos]  WITH CHECK ADD  CONSTRAINT [FK_dbo.photos_dbo.lu_photostatus_photostatus_id] FOREIGN KEY([photostatus_id])
+REFERENCES [dbo].[lu_photostatus] ([id])
+GO
+ALTER TABLE [dbo].[photos] CHECK CONSTRAINT [FK_dbo.photos_dbo.lu_photostatus_photostatus_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.photos_dbo.profilemetadatas_profile_id]    Script Date: 09/29/2016 01:13:27 ******/
+ALTER TABLE [dbo].[photos]  WITH CHECK ADD  CONSTRAINT [FK_dbo.photos_dbo.profilemetadatas_profile_id] FOREIGN KEY([profile_id])
+REFERENCES [dbo].[profilemetadatas] ([profile_id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[photos] CHECK CONSTRAINT [FK_dbo.photos_dbo.profilemetadatas_profile_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.photos_dbo.profiles_adminmodiferprofile_id]    Script Date: 09/29/2016 01:13:27 ******/
+ALTER TABLE [dbo].[photos]  WITH CHECK ADD  CONSTRAINT [FK_dbo.photos_dbo.profiles_adminmodiferprofile_id] FOREIGN KEY([adminmodiferprofile_id])
+REFERENCES [dbo].[profiles] ([id])
+GO
+ALTER TABLE [dbo].[photos] CHECK CONSTRAINT [FK_dbo.photos_dbo.profiles_adminmodiferprofile_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledata_lookingfor_dbo.lu_lookingfor_lookingfor_id]    Script Date: 09/29/2016 01:13:27 ******/
+ALTER TABLE [dbo].[profiledata_lookingfor]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledata_lookingfor_dbo.lu_lookingfor_lookingfor_id] FOREIGN KEY([lookingfor_id])
+REFERENCES [dbo].[lu_lookingfor] ([id])
+GO
+ALTER TABLE [dbo].[profiledata_lookingfor] CHECK CONSTRAINT [FK_dbo.profiledata_lookingfor_dbo.lu_lookingfor_lookingfor_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledata_lookingfor_dbo.profilemetadatas_profile_id]    Script Date: 09/29/2016 01:13:27 ******/
+ALTER TABLE [dbo].[profiledata_lookingfor]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledata_lookingfor_dbo.profilemetadatas_profile_id] FOREIGN KEY([profile_id])
+REFERENCES [dbo].[profilemetadatas] ([profile_id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[profiledata_lookingfor] CHECK CONSTRAINT [FK_dbo.profiledata_lookingfor_dbo.profilemetadatas_profile_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledata_hotfeature_dbo.lu_hotfeature_hotfeature_id]    Script Date: 09/29/2016 01:13:27 ******/
+ALTER TABLE [dbo].[profiledata_hotfeature]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledata_hotfeature_dbo.lu_hotfeature_hotfeature_id] FOREIGN KEY([hotfeature_id])
+REFERENCES [dbo].[lu_hotfeature] ([id])
+GO
+ALTER TABLE [dbo].[profiledata_hotfeature] CHECK CONSTRAINT [FK_dbo.profiledata_hotfeature_dbo.lu_hotfeature_hotfeature_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledata_hotfeature_dbo.profilemetadatas_profile_id]    Script Date: 09/29/2016 01:13:27 ******/
+ALTER TABLE [dbo].[profiledata_hotfeature]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledata_hotfeature_dbo.profilemetadatas_profile_id] FOREIGN KEY([profile_id])
+REFERENCES [dbo].[profilemetadatas] ([profile_id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[profiledata_hotfeature] CHECK CONSTRAINT [FK_dbo.profiledata_hotfeature_dbo.profilemetadatas_profile_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledata_hobby_dbo.lu_hobby_hobby_id]    Script Date: 09/29/2016 01:13:27 ******/
+ALTER TABLE [dbo].[profiledata_hobby]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledata_hobby_dbo.lu_hobby_hobby_id] FOREIGN KEY([hobby_id])
+REFERENCES [dbo].[lu_hobby] ([id])
+GO
+ALTER TABLE [dbo].[profiledata_hobby] CHECK CONSTRAINT [FK_dbo.profiledata_hobby_dbo.lu_hobby_hobby_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledata_hobby_dbo.profilemetadatas_profile_id]    Script Date: 09/29/2016 01:13:27 ******/
+ALTER TABLE [dbo].[profiledata_hobby]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledata_hobby_dbo.profilemetadatas_profile_id] FOREIGN KEY([profile_id])
+REFERENCES [dbo].[profilemetadatas] ([profile_id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[profiledata_hobby] CHECK CONSTRAINT [FK_dbo.profiledata_hobby_dbo.profilemetadatas_profile_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledata_ethnicity_dbo.lu_ethnicity_ethnicty_id]    Script Date: 09/29/2016 01:13:27 ******/
+ALTER TABLE [dbo].[profiledata_ethnicity]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledata_ethnicity_dbo.lu_ethnicity_ethnicty_id] FOREIGN KEY([ethnicty_id])
+REFERENCES [dbo].[lu_ethnicity] ([id])
+GO
+ALTER TABLE [dbo].[profiledata_ethnicity] CHECK CONSTRAINT [FK_dbo.profiledata_ethnicity_dbo.lu_ethnicity_ethnicty_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledata_ethnicity_dbo.profilemetadatas_profile_id]    Script Date: 09/29/2016 01:13:27 ******/
+ALTER TABLE [dbo].[profiledata_ethnicity]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledata_ethnicity_dbo.profilemetadatas_profile_id] FOREIGN KEY([profile_id])
+REFERENCES [dbo].[profilemetadatas] ([profile_id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[profiledata_ethnicity] CHECK CONSTRAINT [FK_dbo.profiledata_ethnicity_dbo.profilemetadatas_profile_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.ratingvalues_dbo.profilemetadatas_rateeprofile_id]    Script Date: 09/29/2016 01:13:27 ******/
+ALTER TABLE [dbo].[ratingvalues]  WITH CHECK ADD  CONSTRAINT [FK_dbo.ratingvalues_dbo.profilemetadatas_rateeprofile_id] FOREIGN KEY([rateeprofile_id])
+REFERENCES [dbo].[profilemetadatas] ([profile_id])
+GO
+ALTER TABLE [dbo].[ratingvalues] CHECK CONSTRAINT [FK_dbo.ratingvalues_dbo.profilemetadatas_rateeprofile_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.ratingvalues_dbo.profilemetadatas_raterprofile_id]    Script Date: 09/29/2016 01:13:27 ******/
+ALTER TABLE [dbo].[ratingvalues]  WITH CHECK ADD  CONSTRAINT [FK_dbo.ratingvalues_dbo.profilemetadatas_raterprofile_id] FOREIGN KEY([raterprofile_id])
+REFERENCES [dbo].[profilemetadatas] ([profile_id])
+GO
+ALTER TABLE [dbo].[ratingvalues] CHECK CONSTRAINT [FK_dbo.ratingvalues_dbo.profilemetadatas_raterprofile_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.ratingvalues_dbo.ratings_rating_id]    Script Date: 09/29/2016 01:13:27 ******/
+ALTER TABLE [dbo].[ratingvalues]  WITH CHECK ADD  CONSTRAINT [FK_dbo.ratingvalues_dbo.ratings_rating_id] FOREIGN KEY([rating_id])
+REFERENCES [dbo].[ratings] ([id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[ratingvalues] CHECK CONSTRAINT [FK_dbo.ratingvalues_dbo.ratings_rating_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.searchsettings_dbo.profilemetadatas_profile_id]    Script Date: 09/29/2016 01:13:27 ******/
+ALTER TABLE [dbo].[searchsettings]  WITH CHECK ADD  CONSTRAINT [FK_dbo.searchsettings_dbo.profilemetadatas_profile_id] FOREIGN KEY([profile_id])
+REFERENCES [dbo].[profilemetadatas] ([profile_id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[searchsettings] CHECK CONSTRAINT [FK_dbo.searchsettings_dbo.profilemetadatas_profile_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.searchsettingdetails_dbo.lu_searchsettingdetailtype_searchsettingdetailtype_id]    Script Date: 09/29/2016 01:13:27 ******/
+ALTER TABLE [dbo].[searchsettingdetails]  WITH CHECK ADD  CONSTRAINT [FK_dbo.searchsettingdetails_dbo.lu_searchsettingdetailtype_searchsettingdetailtype_id] FOREIGN KEY([searchsettingdetailtype_id])
+REFERENCES [dbo].[lu_searchsettingdetailtype] ([id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[searchsettingdetails] CHECK CONSTRAINT [FK_dbo.searchsettingdetails_dbo.lu_searchsettingdetailtype_searchsettingdetailtype_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.searchsettingdetails_dbo.searchsettings_searchsetting_id]    Script Date: 09/29/2016 01:13:27 ******/
+ALTER TABLE [dbo].[searchsettingdetails]  WITH CHECK ADD  CONSTRAINT [FK_dbo.searchsettingdetails_dbo.searchsettings_searchsetting_id] FOREIGN KEY([searchsetting_id])
+REFERENCES [dbo].[searchsettings] ([id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[searchsettingdetails] CHECK CONSTRAINT [FK_dbo.searchsettingdetails_dbo.searchsettings_searchsetting_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.searchsetting_location_dbo.searchsettings_searchsetting_id]    Script Date: 09/29/2016 01:13:27 ******/
+ALTER TABLE [dbo].[searchsetting_location]  WITH CHECK ADD  CONSTRAINT [FK_dbo.searchsetting_location_dbo.searchsettings_searchsetting_id] FOREIGN KEY([searchsetting_id])
+REFERENCES [dbo].[searchsettings] ([id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[searchsetting_location] CHECK CONSTRAINT [FK_dbo.searchsetting_location_dbo.searchsettings_searchsetting_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.notes_dbo.actions_action_id]    Script Date: 09/29/2016 01:13:27 ******/
+ALTER TABLE [dbo].[notes]  WITH CHECK ADD  CONSTRAINT [FK_dbo.notes_dbo.actions_action_id] FOREIGN KEY([action_id])
+REFERENCES [dbo].[actions] ([id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[notes] CHECK CONSTRAINT [FK_dbo.notes_dbo.actions_action_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.notes_dbo.lu_abusetype_abusetype_id]    Script Date: 09/29/2016 01:13:27 ******/
+ALTER TABLE [dbo].[notes]  WITH CHECK ADD  CONSTRAINT [FK_dbo.notes_dbo.lu_abusetype_abusetype_id] FOREIGN KEY([abusetype_id])
+REFERENCES [dbo].[lu_abusetype] ([id])
+GO
+ALTER TABLE [dbo].[notes] CHECK CONSTRAINT [FK_dbo.notes_dbo.lu_abusetype_abusetype_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.notes_dbo.lu_notetype_notetype_id]    Script Date: 09/29/2016 01:13:27 ******/
+ALTER TABLE [dbo].[notes]  WITH CHECK ADD  CONSTRAINT [FK_dbo.notes_dbo.lu_notetype_notetype_id] FOREIGN KEY([notetype_id])
+REFERENCES [dbo].[lu_notetype] ([id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[notes] CHECK CONSTRAINT [FK_dbo.notes_dbo.lu_notetype_notetype_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.photoreviews_dbo.photos_photo_id]    Script Date: 09/29/2016 01:13:27 ******/
+ALTER TABLE [dbo].[photoreviews]  WITH CHECK ADD  CONSTRAINT [FK_dbo.photoreviews_dbo.photos_photo_id] FOREIGN KEY([photo_id])
+REFERENCES [dbo].[photos] ([id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[photoreviews] CHECK CONSTRAINT [FK_dbo.photoreviews_dbo.photos_photo_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.photoreviews_dbo.profilemetadatas_reviewerprofile_id]    Script Date: 09/29/2016 01:13:27 ******/
+ALTER TABLE [dbo].[photoreviews]  WITH CHECK ADD  CONSTRAINT [FK_dbo.photoreviews_dbo.profilemetadatas_reviewerprofile_id] FOREIGN KEY([reviewerprofile_id])
+REFERENCES [dbo].[profilemetadatas] ([profile_id])
+GO
+ALTER TABLE [dbo].[photoreviews] CHECK CONSTRAINT [FK_dbo.photoreviews_dbo.profilemetadatas_reviewerprofile_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.photophotoalbum_dbo.photoalbums_photoalbum_id]    Script Date: 09/29/2016 01:13:27 ******/
+ALTER TABLE [dbo].[photophotoalbum]  WITH CHECK ADD  CONSTRAINT [FK_dbo.photophotoalbum_dbo.photoalbums_photoalbum_id] FOREIGN KEY([photoalbum_id])
+REFERENCES [dbo].[photoalbums] ([id])
+GO
+ALTER TABLE [dbo].[photophotoalbum] CHECK CONSTRAINT [FK_dbo.photophotoalbum_dbo.photoalbums_photoalbum_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.photophotoalbum_dbo.photos_photo_id]    Script Date: 09/29/2016 01:13:27 ******/
+ALTER TABLE [dbo].[photophotoalbum]  WITH CHECK ADD  CONSTRAINT [FK_dbo.photophotoalbum_dbo.photos_photo_id] FOREIGN KEY([photo_id])
+REFERENCES [dbo].[photos] ([id])
+GO
+ALTER TABLE [dbo].[photophotoalbum] CHECK CONSTRAINT [FK_dbo.photophotoalbum_dbo.photos_photo_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.photoconversions_dbo.lu_photoformat_formattype_id]    Script Date: 09/29/2016 01:13:27 ******/
+ALTER TABLE [dbo].[photoconversions]  WITH CHECK ADD  CONSTRAINT [FK_dbo.photoconversions_dbo.lu_photoformat_formattype_id] FOREIGN KEY([formattype_id])
+REFERENCES [dbo].[lu_photoformat] ([id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[photoconversions] CHECK CONSTRAINT [FK_dbo.photoconversions_dbo.lu_photoformat_formattype_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.photoconversions_dbo.photos_photo_id]    Script Date: 09/29/2016 01:13:27 ******/
+ALTER TABLE [dbo].[photoconversions]  WITH CHECK ADD  CONSTRAINT [FK_dbo.photoconversions_dbo.photos_photo_id] FOREIGN KEY([photo_id])
+REFERENCES [dbo].[photos] ([id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[photoconversions] CHECK CONSTRAINT [FK_dbo.photoconversions_dbo.photos_photo_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.photoalbum_securitylevel_dbo.lu_securityleveltype_securityleveltype_id]    Script Date: 09/29/2016 01:13:27 ******/
+ALTER TABLE [dbo].[photoalbum_securitylevel]  WITH CHECK ADD  CONSTRAINT [FK_dbo.photoalbum_securitylevel_dbo.lu_securityleveltype_securityleveltype_id] FOREIGN KEY([securityleveltype_id])
+REFERENCES [dbo].[lu_securityleveltype] ([id])
+GO
+ALTER TABLE [dbo].[photoalbum_securitylevel] CHECK CONSTRAINT [FK_dbo.photoalbum_securitylevel_dbo.lu_securityleveltype_securityleveltype_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.photoalbum_securitylevel_dbo.photoalbums_photoalbum_id]    Script Date: 09/29/2016 01:13:27 ******/
+ALTER TABLE [dbo].[photoalbum_securitylevel]  WITH CHECK ADD  CONSTRAINT [FK_dbo.photoalbum_securitylevel_dbo.photoalbums_photoalbum_id] FOREIGN KEY([photoalbum_id])
+REFERENCES [dbo].[photoalbums] ([id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[photoalbum_securitylevel] CHECK CONSTRAINT [FK_dbo.photoalbum_securitylevel_dbo.photoalbums_photoalbum_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.photo_securitylevel_dbo.lu_securityleveltype_securityleveltype_id]    Script Date: 09/29/2016 01:13:27 ******/
+ALTER TABLE [dbo].[photo_securitylevel]  WITH CHECK ADD  CONSTRAINT [FK_dbo.photo_securitylevel_dbo.lu_securityleveltype_securityleveltype_id] FOREIGN KEY([securityleveltype_id])
+REFERENCES [dbo].[lu_securityleveltype] ([id])
+GO
+ALTER TABLE [dbo].[photo_securitylevel] CHECK CONSTRAINT [FK_dbo.photo_securitylevel_dbo.lu_securityleveltype_securityleveltype_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.photo_securitylevel_dbo.photos_photo_id]    Script Date: 09/29/2016 01:13:27 ******/
+ALTER TABLE [dbo].[photo_securitylevel]  WITH CHECK ADD  CONSTRAINT [FK_dbo.photo_securitylevel_dbo.photos_photo_id] FOREIGN KEY([photo_id])
+REFERENCES [dbo].[photos] ([id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[photo_securitylevel] CHECK CONSTRAINT [FK_dbo.photo_securitylevel_dbo.photos_photo_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.mailboxmessagefolders_dbo.mailboxfolders_mailboxfolder_id]    Script Date: 09/29/2016 01:13:27 ******/
+ALTER TABLE [dbo].[mailboxmessagefolders]  WITH CHECK ADD  CONSTRAINT [FK_dbo.mailboxmessagefolders_dbo.mailboxfolders_mailboxfolder_id] FOREIGN KEY([mailboxfolder_id])
+REFERENCES [dbo].[mailboxfolders] ([id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[mailboxmessagefolders] CHECK CONSTRAINT [FK_dbo.mailboxmessagefolders_dbo.mailboxfolders_mailboxfolder_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.mailboxmessagefolders_dbo.mailboxmessages_mailboxmessage_id]    Script Date: 09/29/2016 01:13:27 ******/
+ALTER TABLE [dbo].[mailboxmessagefolders]  WITH CHECK ADD  CONSTRAINT [FK_dbo.mailboxmessagefolders_dbo.mailboxmessages_mailboxmessage_id] FOREIGN KEY([mailboxmessage_id])
+REFERENCES [dbo].[mailboxmessages] ([id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[mailboxmessagefolders] CHECK CONSTRAINT [FK_dbo.mailboxmessagefolders_dbo.mailboxmessages_mailboxmessage_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.applicationroles_dbo.applications_application_id]    Script Date: 09/29/2016 01:13:28 ******/
+ALTER TABLE [dbo].[applicationroles]  WITH CHECK ADD  CONSTRAINT [FK_dbo.applicationroles_dbo.applications_application_id] FOREIGN KEY([application_id])
+REFERENCES [dbo].[applications] ([id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[applicationroles] CHECK CONSTRAINT [FK_dbo.applicationroles_dbo.applications_application_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.applicationroles_dbo.lu_role_role_id]    Script Date: 09/29/2016 01:13:28 ******/
+ALTER TABLE [dbo].[applicationroles]  WITH CHECK ADD  CONSTRAINT [FK_dbo.applicationroles_dbo.lu_role_role_id] FOREIGN KEY([role_id])
+REFERENCES [dbo].[lu_role] ([id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[applicationroles] CHECK CONSTRAINT [FK_dbo.applicationroles_dbo.lu_role_role_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.applicationiconconversions_dbo.applications_application_id]    Script Date: 09/29/2016 01:13:28 ******/
+ALTER TABLE [dbo].[applicationiconconversions]  WITH CHECK ADD  CONSTRAINT [FK_dbo.applicationiconconversions_dbo.applications_application_id] FOREIGN KEY([application_id])
+REFERENCES [dbo].[applications] ([id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[applicationiconconversions] CHECK CONSTRAINT [FK_dbo.applicationiconconversions_dbo.applications_application_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.applicationiconconversions_dbo.lu_iconformat_iconformat_id]    Script Date: 09/29/2016 01:13:28 ******/
+ALTER TABLE [dbo].[applicationiconconversions]  WITH CHECK ADD  CONSTRAINT [FK_dbo.applicationiconconversions_dbo.lu_iconformat_iconformat_id] FOREIGN KEY([iconformat_id])
+REFERENCES [dbo].[lu_iconformat] ([id])
+GO
+ALTER TABLE [dbo].[applicationiconconversions] CHECK CONSTRAINT [FK_dbo.applicationiconconversions_dbo.lu_iconformat_iconformat_id]
+GO
