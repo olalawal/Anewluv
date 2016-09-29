@@ -1,0 +1,190 @@
+USE [Anewluv]
+GO
+/****** Object:  Table [dbo].[profiledatas]    Script Date: 09/29/2016 01:11:32 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[profiledatas](
+	[profile_id] [int] NOT NULL,
+	[age] [int] NULL,
+	[birthdate] [datetime] NULL,
+	[city] [nvarchar](max) NULL,
+	[countryregion] [nvarchar](max) NULL,
+	[stateprovince] [nvarchar](max) NULL,
+	[countryid] [int] NULL,
+	[longitude] [float] NULL,
+	[latitude] [float] NULL,
+	[aboutme] [nvarchar](max) NULL,
+	[height] [bigint] NULL,
+	[mycatchyintroLine] [nvarchar](max) NULL,
+	[phone] [nvarchar](max) NULL,
+	[postalcode] [nvarchar](max) NULL,
+	[visibilitysettings_id] [int] NULL,
+	[gender_id] [int] NULL,
+	[bodytype_id] [int] NULL,
+	[eyecolor_id] [int] NULL,
+	[haircolor_id] [int] NULL,
+	[diet_id] [int] NULL,
+	[drinking_id] [int] NULL,
+	[exercise_id] [int] NULL,
+	[humor_id] [int] NULL,
+	[politicalview_id] [int] NULL,
+	[religion_id] [int] NULL,
+	[religiousattendance_id] [int] NULL,
+	[sign_id] [int] NULL,
+	[smoking_id] [int] NULL,
+	[educationlevel_id] [int] NULL,
+	[employmentstatus_id] [int] NULL,
+	[kidstatus_id] [int] NULL,
+	[incomelevel_id] [int] NULL,
+	[livingsituation_id] [int] NULL,
+	[maritalstatus_id] [int] NULL,
+	[profession_id] [int] NULL,
+	[wantsKidstatus_id] [int] NULL,
+	[visiblitysetting_id] [int] NULL,
+	[location] [geography] NULL,
+ CONSTRAINT [PK_dbo.profiledatas] PRIMARY KEY CLUSTERED 
+(
+	[profile_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_bodytype_bodytype_id]    Script Date: 09/29/2016 01:11:32 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_bodytype_bodytype_id] FOREIGN KEY([bodytype_id])
+REFERENCES [dbo].[lu_bodytype] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_bodytype_bodytype_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_diet_diet_id]    Script Date: 09/29/2016 01:11:32 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_diet_diet_id] FOREIGN KEY([diet_id])
+REFERENCES [dbo].[lu_diet] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_diet_diet_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_drinks_drinking_id]    Script Date: 09/29/2016 01:11:32 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_drinks_drinking_id] FOREIGN KEY([drinking_id])
+REFERENCES [dbo].[lu_drinks] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_drinks_drinking_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_educationlevel_educationlevel_id]    Script Date: 09/29/2016 01:11:32 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_educationlevel_educationlevel_id] FOREIGN KEY([educationlevel_id])
+REFERENCES [dbo].[lu_educationlevel] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_educationlevel_educationlevel_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_employmentstatus_employmentstatus_id]    Script Date: 09/29/2016 01:11:32 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_employmentstatus_employmentstatus_id] FOREIGN KEY([employmentstatus_id])
+REFERENCES [dbo].[lu_employmentstatus] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_employmentstatus_employmentstatus_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_exercise_exercise_id]    Script Date: 09/29/2016 01:11:32 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_exercise_exercise_id] FOREIGN KEY([exercise_id])
+REFERENCES [dbo].[lu_exercise] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_exercise_exercise_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_eyecolor_eyecolor_id]    Script Date: 09/29/2016 01:11:32 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_eyecolor_eyecolor_id] FOREIGN KEY([eyecolor_id])
+REFERENCES [dbo].[lu_eyecolor] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_eyecolor_eyecolor_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_gender_gender_id]    Script Date: 09/29/2016 01:11:32 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_gender_gender_id] FOREIGN KEY([gender_id])
+REFERENCES [dbo].[lu_gender] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_gender_gender_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_haircolor_haircolor_id]    Script Date: 09/29/2016 01:11:32 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_haircolor_haircolor_id] FOREIGN KEY([haircolor_id])
+REFERENCES [dbo].[lu_haircolor] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_haircolor_haircolor_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_havekids_kidstatus_id]    Script Date: 09/29/2016 01:11:32 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_havekids_kidstatus_id] FOREIGN KEY([kidstatus_id])
+REFERENCES [dbo].[lu_havekids] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_havekids_kidstatus_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_humor_humor_id]    Script Date: 09/29/2016 01:11:32 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_humor_humor_id] FOREIGN KEY([humor_id])
+REFERENCES [dbo].[lu_humor] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_humor_humor_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_incomelevel_incomelevel_id]    Script Date: 09/29/2016 01:11:32 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_incomelevel_incomelevel_id] FOREIGN KEY([incomelevel_id])
+REFERENCES [dbo].[lu_incomelevel] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_incomelevel_incomelevel_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_livingsituation_livingsituation_id]    Script Date: 09/29/2016 01:11:32 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_livingsituation_livingsituation_id] FOREIGN KEY([livingsituation_id])
+REFERENCES [dbo].[lu_livingsituation] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_livingsituation_livingsituation_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_maritalstatus_maritalstatus_id]    Script Date: 09/29/2016 01:11:32 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_maritalstatus_maritalstatus_id] FOREIGN KEY([maritalstatus_id])
+REFERENCES [dbo].[lu_maritalstatus] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_maritalstatus_maritalstatus_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_politicalview_politicalview_id]    Script Date: 09/29/2016 01:11:32 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_politicalview_politicalview_id] FOREIGN KEY([politicalview_id])
+REFERENCES [dbo].[lu_politicalview] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_politicalview_politicalview_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_profession_profession_id]    Script Date: 09/29/2016 01:11:32 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_profession_profession_id] FOREIGN KEY([profession_id])
+REFERENCES [dbo].[lu_profession] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_profession_profession_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_religion_religion_id]    Script Date: 09/29/2016 01:11:32 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_religion_religion_id] FOREIGN KEY([religion_id])
+REFERENCES [dbo].[lu_religion] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_religion_religion_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_religiousattendance_religiousattendance_id]    Script Date: 09/29/2016 01:11:32 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_religiousattendance_religiousattendance_id] FOREIGN KEY([religiousattendance_id])
+REFERENCES [dbo].[lu_religiousattendance] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_religiousattendance_religiousattendance_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_sign_sign_id]    Script Date: 09/29/2016 01:11:32 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_sign_sign_id] FOREIGN KEY([sign_id])
+REFERENCES [dbo].[lu_sign] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_sign_sign_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_smokes_smoking_id]    Script Date: 09/29/2016 01:11:32 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_smokes_smoking_id] FOREIGN KEY([smoking_id])
+REFERENCES [dbo].[lu_smokes] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_smokes_smoking_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.lu_wantskids_wantsKidstatus_id]    Script Date: 09/29/2016 01:11:32 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.lu_wantskids_wantsKidstatus_id] FOREIGN KEY([wantsKidstatus_id])
+REFERENCES [dbo].[lu_wantskids] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.lu_wantskids_wantsKidstatus_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.profiles_profile_id]    Script Date: 09/29/2016 01:11:32 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.profiles_profile_id] FOREIGN KEY([profile_id])
+REFERENCES [dbo].[profiles] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.profiles_profile_id]
+GO
+/****** Object:  ForeignKey [FK_dbo.profiledatas_dbo.visiblitysettings_visiblitysetting_id]    Script Date: 09/29/2016 01:11:32 ******/
+ALTER TABLE [dbo].[profiledatas]  WITH CHECK ADD  CONSTRAINT [FK_dbo.profiledatas_dbo.visiblitysettings_visiblitysetting_id] FOREIGN KEY([visiblitysetting_id])
+REFERENCES [dbo].[visiblitysettings] ([id])
+GO
+ALTER TABLE [dbo].[profiledatas] CHECK CONSTRAINT [FK_dbo.profiledatas_dbo.visiblitysettings_visiblitysetting_id]
+GO
