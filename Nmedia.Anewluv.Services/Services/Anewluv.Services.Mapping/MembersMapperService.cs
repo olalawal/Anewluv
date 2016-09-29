@@ -1637,33 +1637,13 @@ namespace Anewluv.Services.Mapping
 
 
 
-                        //this.AddRange(pageData.ToList());
-                        // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
+                        //if we find no records in the city and state location, we want to use the zip postal code to check using logitude and lattitude of that zip postcal and do a range search using distance
+                         
 
 
-                        //Come back to these filiters later
-                        //11/20/2011 handle case where  no profiles were found
-                        //if (MemberSearchViewmodels.Count() == 0)
-                        // return null; //getquickmatcheswhenquickmatchesempty(new ProfileModel { profileid = Model.profileid }).Take(maxemailmatches).ToList();
 
-                        //filter our the ones in the right distance and reutnr the top webmacthes
-                        //USes max search results snce this could be called by any other method with a variable set of return macthes or results
-                        // var profiles = (model.maxdistancefromme > 0) ? (from q in MemberSearchViewmodels
-                        //    .Where(a => a.distancefromme.GetValueOrDefault() <= model.maxdistancefromme)
-                        //                                                select q).Take(maxemailmatches)
-                        //                                            :
-                        //     MemberSearchViewmodels.Take(maxemailmatches);
+                       
 
-
-                        //               var page = query.OrderBy(p => p.Name)
-                        //   .Select(p => new PersonResult { Name = p.Name })
-                        //   .Skip(skipRows).Take(pageSize)
-                        //   .GroupBy(p => new { Total = query.Count() })
-                        //  .First();
-
-                        //do paging here after last filtering
-                        // int? totalrecordcount = MemberSearchViewmodels.Count;
-                        //handle zero and null paging values
 
                         activitylist.Add(Api.AnewLuvLogging.CreateActivity(Model.profileid,null, (int)activitytypeEnum.quicksearch, ctx));
 
