@@ -206,7 +206,7 @@ namespace Anewluv.DataExtentionMethods
                    // strCity = String.Format("{0}%", strCity) '11/13/2009 addded wild ca
 
 
-                   var gpsdata = _storedProcedures.GetGPSDatasByPostalCodeandCity(model.country, model.city, model.postalcode);
+                   var gpsdata = _storedProcedures.GetGPSDatasByCountryIdPostalCode(model.country, model.postalcode);
                    return gpsdata.ToList().FirstOrDefault();
                    //var s = _postalcontext.GetGpsDataSingleByCityCountryAndPostalCode(countryname, postalcode, city);
                    //if (gpsdata != null)

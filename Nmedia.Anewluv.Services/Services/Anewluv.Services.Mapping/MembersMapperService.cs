@@ -32,6 +32,7 @@ using System.Threading.Tasks;
 using Anewluv.Api;
 using Nmedia.Infrastructure.DependencyInjection;
 using Repository.Pattern.UnitOfWork;
+using GeoData.Domain.Models.ViewModels;
 
 
 
@@ -1529,14 +1530,8 @@ namespace Anewluv.Services.Mapping
                         // int[,] courseIDs = new int[,] UserProfile.profiledata.searchsettings.FirstOrDefault().searchsettings_Genders.ToList();
                         int AgeTo = Model.myselectedtoage != null ? Model.myselectedtoage.GetValueOrDefault() : 99;
                         int AgeFrom = Model.myselectedfromage != null ? Model.myselectedfromage.GetValueOrDefault() : 18;
-                        //Height
-                        //int intheightmin = Model.h != null ? Model.heightmin.GetValueOrDefault() : 0;
-                        // int intheightmax = Model.heightmax != null ? Model.heightmax.GetValueOrDefault() : 100;
-                        //  bool blEvaluateHeights = intheightmin > 0 ? true : false;
-                        //get the rest of the values if they are needed in calculations
-                        //convert lattitudes from string (needed for JSON) to bool           
-                        double? myLongitude = (Model.myselectedlongitude != null) ? Convert.ToDouble(Model.myselectedlongitude) : 0;
-                        double? myLattitude = (Model.myselectedlatitude != null) ? Convert.ToDouble(Model.myselectedlatitude) : 0;
+
+                       
 
 
                         //set variables
@@ -1548,70 +1543,41 @@ namespace Anewluv.Services.Mapping
                         //get country and city data
                         string countryname = Model.myselectedcountryname;
                         int countryid = Model.myselectedcountryid.GetValueOrDefault();
-                        // myselectedcountryid 
+                        
                         string stringpostalcode = Model.myselectedpostalcode;
 
                         //added 10/17/20011 so we can toggle postalcode box similar to register 
                         string city = Model.myselectedcity;
                         int photostatus = (Model.myselectedphotostatus != null) ? (int)photostatusEnum.Gallery : (int)photostatusEnum.Nostatus;
                         string stateprovince = Model.myselectedstateprovince;
-                        double? maxdistancefromme = Model.myselectedmaxdistancefromme;
-
-
+                        double? maxdistancefromme = Model.myselectedmaxdistancefromme ?? 500;
 
                         //skip these
-                        //get values from the collections to test for , this should already be done in the viewmodel mapper but juts incase they made changes that were not updated
-                        //requery all the has tbls
+                        //get values from the collections to test for , this should already be done in the viewmodel mapper but juts incase they made changes that were not updated                       
                         HashSet<int> LookingForGenderValues = new HashSet<int>();
-                        LookingForGenderValues.Add(genderid);  //add the gender id being searched for
+                        LookingForGenderValues.Add(genderid);  //add the gender id being searched for                       
 
 
-                        ////Appearacnce seache settings values         
+                        //GPS stuff
 
-                        ////set a value to determine weather to evaluate hights i.e if this user has not height values whats the point ?
-
-                        //HashSet<int> LookingForBodyTypesValues = new HashSet<int>();
-                        //LookingForBodyTypesValues = (Model != null) ? new HashSet<int>(Model.searchsetting_bodytype.Select(c => c.id)) : LookingForBodyTypesValues;
-
-                        //HashSet<int> LookingForEthnicityValues = new HashSet<int>();
-                        //LookingForEthnicityValues = (Model != null) ? new HashSet<int>(Model.searchsetting_ethnicity.Select(c => c.id)) : LookingForEthnicityValues;
-
-                        //HashSet<int> LookingForEyeColorValues = new HashSet<int>();
-                        //LookingForEyeColorValues = (Model != null) ? new HashSet<int>(Model.searchsetting_eyecolor.Select(c => c.id)) : LookingForEyeColorValues;
-
-                        //HashSet<int> LookingForHairColorValues = new HashSet<int>();
-                        //LookingForHairColorValues = (Model != null) ? new HashSet<int>(Model.searchsetting_haircolor.Select(c => c.id)) : LookingForHairColorValues;
-
-                        //HashSet<int> LookingForHotFeatureValues = new HashSet<int>();
-                        //LookingForHotFeatureValues = (Model != null) ? new HashSet<int>(Model.searchsetting_hotfeature.Select(c => c.id)) : LookingForHotFeatureValues;
-
-                        // var photostest = _datingcontext.profiles.Where(p => (p.profilemetadata.photos.Any(z => z.photostatus != null && z.photostatus.id != (int)photostatusEnum.Gallery)));
-
-                        //add more values as we get more members 
-
-
-
-                        var sourcePoint = spatialextentions.CreatePoint(myLattitude.Value, myLongitude.Value);
+                        //update the latt and long if its empty
+                        Model = updatelatlong(Model);
+                        //get the anchor point from this users da
+                        var sourcePoint = spatialextentions.CreatePoint(Model.myselectedlatitude.Value, Model.myselectedlongitude.Value);
                         // find any locations within 5 miles ordered by distance
                         //first convert miles value to meters
                         var MaxdistanceInMiles = spatialextentions.MilesToMeters(maxdistancefromme);
 
 
-                     
 
                         //TO DO change the photostatus thing to where if maybe, based on HAS PHOTOS only matches
-                        var MemberSearchViewmodels = (from x in db.Repository<profiledata>().Queryable().Where(p => p.birthdate > min && p.birthdate <= max &&
-                         p.countryid == countryid && p.city == city && p.stateprovince == stateprovince)
-                                        .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.lu_gender.id)).ToList() //using whereIF predicate function  
-
-                                                      //Appearance filtering not implemented yet                        
-                                                      //Only evealuate if the user searching actually has height values they look for 
-                                                      //we have to filter on the back end now since we cant use UDFs
-                                                      // .WhereIf(model.maxdistancefromme  > 0, a => _datingcontext.fnGetDistance((double)a.latitude, (double)a.longitude, Convert.ToDouble(model.Mylattitude) ,Convert.ToDouble(model.MyLongitude), "Miles") <= model.maxdistancefromme)
+                        var MemberSearchViewmodels = (from x in db.Repository<profiledata>().Queryable().Where(p => p.location.Distance(sourcePoint) <= MaxdistanceInMiles).Where(p => p.birthdate > min && p.birthdate <= max)
+                        .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.lu_gender.id)).ToList() //using whereIF predicate function  
                                                       join f in db.Repository<profile>().Queryable() on x.profile_id equals f.id
+                                                      
                                                       select new MemberSearchViewModel
                                                       {
-                                                          
+
                                                           // MyCatchyIntroLineQuickSearch = x.AboutMe,
                                                           id = x.profile_id,
                                                           stateprovince = x.stateprovince,
@@ -1624,30 +1590,20 @@ namespace Anewluv.Services.Mapping
                                                           screenname = f.screenname,
                                                           longitude = x.longitude ?? 0,
                                                           latitude = x.latitude ?? 0,
-                                                          creationdate = f.creationdate,
+                                                          creationdate = f.creationdate,                                                         
                                                           // lastloggedonString = _datingcontext.fnGetLastLoggedOnTime(f.logindate),
                                                           lastlogindate = f.logindate,
-                                                          distancefromme = x.location.Distance(sourcePoint), 
-                                                          //TO DO look at this and explore
-                                                          //  distancefromme = _datingcontext.fnGetDistance((double)x.latitude, (double)x.longitude,myLattitude.Value  , myLongitude.Value   , "Miles")
-                                                          //       lookingforagefrom = x.profile.profilemetadata.searchsettings != null ? x.profile.profilemetadata.searchsettings.FirstOrDefault().agemin.ToString() : "25",
-                                                          //lookingForageto = x.profile.profilemetadata.searchsettings != null ? x.profile.profilemetadata.searchsettings.FirstOrDefault().agemax.ToString() : "45",
-                                                      }).OrderByDescending(p => p.hasgalleryphoto == true).OrderBy(p => p.distancefromme).ThenByDescending(p => p.creationdate).ToList();//.OrderBy(p=>p.creationdate ).Take(maxwebmatches).ToList();
+                                                          distancefromme = x.location.Distance(sourcePoint),
+                                                          hasgalleryphoto = db.Repository<photo>().Queryable().Where(i => i.profile_id == x.profile_id && i.photostatus_id == (int)photostatusEnum.Gallery).FirstOrDefault() != null ? true : false,
+                                                      }).OrderByDescending(p => p.hasgalleryphoto == true).ThenBy(p => p.distancefromme).ThenByDescending(p => p.creationdate).ToList();//.OrderBy(p=>p.creationdate ).Take(maxwebmatches).ToList();
 
-
-
-
-                        //if we find no records in the city and state location, we want to use the zip postal code to check using logitude and lattitude of that zip postcal and do a range search using distance
-                         
-
-
-
-                       
-
+                      
 
                         activitylist.Add(Api.AnewLuvLogging.CreateActivity(Model.profileid,null, (int)activitytypeEnum.quicksearch, ctx));
-
                         if (activitylist.Count() > 0) Anewluv.Api.AsyncCalls.addprofileactivities(activitylist).DoNotAwait();
+
+                        //use the filter by distance to get all in the reange
+
 
                         return GenerateSearchSearchResults(MemberSearchViewmodels, Model.page, Model.numberperpage, db);
 
@@ -1705,7 +1661,8 @@ namespace Anewluv.Services.Mapping
                 try
                 {
                     double currentdistance = Model.myselectedmaxdistancefromme ?? 200 ; 
-                    var matches = filtermatches(Model); 
+                    //get the matches using the current lat long we have
+                    var matches = filteripsearchmatches(Model); 
                     
                     //get the number of values for male and female
                     var divisor = Model.numberperpage / 2;
@@ -1717,7 +1674,7 @@ namespace Anewluv.Services.Mapping
                     while ((matches.Where(z=>z.genderid==(int)genderEnum.Male).Count())  < divisor && (matches.Where(z=>z.genderid==(int)genderEnum.Female).Count() < (divisor + modulo))) 
                     {
                         Model.myselectedmaxdistancefromme = currentdistance + 500;  //TO DO tune this down from 500 to 50 mile increments 
-                        matches = filtermatches(Model); 
+                        matches = filteripsearchmatches(Model); 
                     }
 
 
@@ -1794,43 +1751,45 @@ namespace Anewluv.Services.Mapping
 
         }
 
-        private IEnumerable<MemberSearchViewModel> filtermatches(quicksearchmodel Model)
+        private IEnumerable<MemberSearchViewModel> filteripsearchmatches(quicksearchmodel Model)
         {
-
-            // SearchResultsViewModel searchresults = new SearchResultsViewModel();
-            //get the  gender's from search settings
-            int genderid = Model.myselectedseekinggenderid.GetValueOrDefault();
-            int mygenderid = Model.myselectediamgenderid.GetValueOrDefault();
-
-
-            // int[,] courseIDs = new int[,] UserProfile.profiledata.searchsettings.FirstOrDefault().searchsettings_Genders.ToList();
-            int AgeTo = Model.myselectedtoage != null ? Model.myselectedtoage.GetValueOrDefault() : 99;
-            int AgeFrom = Model.myselectedfromage != null ? Model.myselectedfromage.GetValueOrDefault() : 18;
-            //Height
-            //int intheightmin = Model.h != null ? Model.heightmin.GetValueOrDefault() : 0;
-            // int intheightmax = Model.heightmax != null ? Model.heightmax.GetValueOrDefault() : 100;
-            //  bool blEvaluateHeights = intheightmin > 0 ? true : false;
-            //get the rest of the values if they are needed in calculations
-            //convert lattitudes from string (needed for JSON) to bool           
+            IEnumerable<gpsdata> gpsdata = new List<gpsdata>();
             double? myLongitude = (Model.myselectedlongitude != null) ? Convert.ToDouble(Model.myselectedlongitude) : 0;
             double? myLattitude = (Model.myselectedlatitude != null) ? Convert.ToDouble(Model.myselectedlatitude) : 0;
+           
 
+            ////get the lat and long of the search city if we don't have it
+            //if (myLattitude ==null && myLongitude == null)
+            //{
+            //    if (Model.myselectedpostalcode == null && Model.myselectedstateprovince !="" && Model.myselectedcity != "" )
+            //    {
+            //         gpsdata = _geodatastoredProcedures.GetGPSDataByCountryIdAndCityStateProvince(Model.myselectedcountryid.ToString(), Model.myselectedcity,Model.myselectedstateprovince);
+                  
+            //    }
+            //    else if (Model.myselectedpostalcode != null )
+            //    {
+            //         gpsdata = _geodatastoredProcedures.GetGPSDatasByCountryIdPostalCode(Model.myselectedcountryid.ToString(), Model.myselectedpostalcode);
+            //    }
+            //    else
+            //    {
+            //        return new List<MemberSearchViewModel>();
+            //    }
+            //}
 
-            //set variables
-            //  List<MemberSearchViewModel> MemberSearchViewmodels;
-            DateTime today = DateTime.Today;
-            DateTime max = today.AddYears(-(AgeFrom + 1));
-            DateTime min = today.AddYears(-AgeTo);
+            //if (gpsdata.Count() > 0)
+            //{
+            //    var currentgpsdata = gpsdata.FirstOrDefault();
+            //    myLongitude = (currentgpsdata.longitude != null) ? Convert.ToDouble(currentgpsdata.longitude) : 0;
+            //    myLattitude = (currentgpsdata.latitude != null) ? Convert.ToDouble(currentgpsdata.latitude) : 0;
+            //}
+
 
             //get country and city data
             string countryname = Model.myselectedcountryname;
             int countryid = Model.myselectedcountryid.GetValueOrDefault();
-            // myselectedcountryid 
+           
             string stringpostalcode = Model.myselectedpostalcode;
-
-            //added 10/17/20011 so we can toggle postalcode box similar to register 
-            string city = Model.myselectedcity;
-            int photostatus = (Model.myselectedphotostatus != null) ? (int)photostatusEnum.Gallery : (int)photostatusEnum.Nostatus;
+           
             string stateprovince = Model.myselectedstateprovince;
             double? maxdistancefromme = Model.myselectedmaxdistancefromme ?? 500;
 
@@ -1839,8 +1798,8 @@ namespace Anewluv.Services.Mapping
             //skip these
             //get values from the collections to test for , this should already be done in the viewmodel mapper but juts incase they made changes that were not updated
             //requery all the has tbls
-            HashSet<int> LookingForGenderValues = new HashSet<int>();
-            LookingForGenderValues.Add(genderid);  //add the gender id being searched for
+            //HashSet<int> LookingForGenderValues = new HashSet<int>();
+           // LookingForGenderValues.Add(genderid);  //add the gender id being searched for
 
 
 
@@ -1884,7 +1843,130 @@ namespace Anewluv.Services.Mapping
 
         }
 
-      
+        private IEnumerable<MemberSearchViewModel> filtermatchesbydistance(quicksearchmodel Model)
+        {
+            IEnumerable<gpsdata> gpsdata = new List<gpsdata>();
+            double? myLongitude = (Model.myselectedlongitude != null) ? Convert.ToDouble(Model.myselectedlongitude) : 0;
+            double? myLattitude = (Model.myselectedlatitude != null) ? Convert.ToDouble(Model.myselectedlatitude) : 0;
+
+
+            //get the lat and long of the search city if we don't have it
+            if (myLattitude == null && myLongitude == null)
+            {
+                if (Model.myselectedpostalcode == null && Model.myselectedstateprovince != "" && Model.myselectedcity != "")
+                {
+                    gpsdata = _geodatastoredProcedures.GetGPSDataByCountryIdAndCityStateProvince(Model.myselectedcountryid.ToString(), Model.myselectedcity, Model.myselectedstateprovince);
+
+                }
+                else if (Model.myselectedpostalcode != null)
+                {
+                    gpsdata = _geodatastoredProcedures.GetGPSDatasByCountryIdPostalCode(Model.myselectedcountryid.ToString(), Model.myselectedpostalcode);
+                }
+                else
+                {
+                    return new List<MemberSearchViewModel>();
+                }
+            }
+
+            if (gpsdata.Count() > 0)
+            {
+                var currentgpsdata = gpsdata.FirstOrDefault();
+                myLongitude = (currentgpsdata.longitude != null) ? Convert.ToDouble(currentgpsdata.longitude) : 0;
+                myLattitude = (currentgpsdata.latitude != null) ? Convert.ToDouble(currentgpsdata.latitude) : 0;
+            }
+
+
+            //get country and city data
+            string countryname = Model.myselectedcountryname;
+            int countryid = Model.myselectedcountryid.GetValueOrDefault();
+
+            string stringpostalcode = Model.myselectedpostalcode;
+
+            string stateprovince = Model.myselectedstateprovince;
+            double? maxdistancefromme = Model.myselectedmaxdistancefromme ?? 500;
+            
+
+            var sourcePoint = spatialextentions.CreatePoint(myLattitude.Value, myLongitude.Value);
+            // find any locations within 5 miles ordered by distance
+            //first convert miles value to meters
+            var MaxdistanceInMiles = spatialextentions.MilesToMeters(maxdistancefromme);
+
+
+
+            //TO DO needs filter for the profile ranking as well , and photo quality etc
+            var matches = _unitOfWorkAsync.Repository<profiledata>()
+                         .Query(z => z.location.Distance(sourcePoint) <= MaxdistanceInMiles).Include(z => z.profile).Select()
+                         .OrderBy(y => y.location.Distance(sourcePoint))
+                        .Select
+                        (x => new MemberSearchViewModel
+                        {
+                            //populate values server side to be used later                                                        
+
+                            id = x.profile_id,
+                            creationdate = x.profile.creationdate,
+                            profile = x.profile,
+                            distancefromme = x.location.Distance(sourcePoint),
+                            stateprovince = x.stateprovince,
+                            city = x.city,
+                            postalcode = x.postalcode,
+                            countryid = x.countryid,
+                            genderid = x.gender_id,
+                            birthdate = x.birthdate,
+                            screenname = x.profile.screenname,
+                            longitude = x.longitude ?? 0,
+                            latitude = x.latitude ?? 0,
+                            lastlogindate = x.profile.logindate
+
+                        });
+
+
+            return matches;
+
+        }
+
+        private quicksearchmodel updatelatlong(quicksearchmodel Model)
+        {
+            IEnumerable<gpsdata> gpsdata = new List<gpsdata>();
+            double? myLongitude = (Model.myselectedlongitude != null) ? Convert.ToDouble(Model.myselectedlongitude) : 0;
+            double? myLattitude = (Model.myselectedlatitude != null) ? Convert.ToDouble(Model.myselectedlatitude) : 0;
+
+
+            //get the lat and long of the search city if we don't have it
+            if ((myLattitude == 0 | myLattitude ==null) && (myLongitude == null | myLongitude == 0))
+            {
+                if ( string.IsNullOrEmpty(Model.myselectedpostalcode) && ! string.IsNullOrEmpty(Model.myselectedstateprovince)  && ! string.IsNullOrEmpty(Model.myselectedcity))
+                {
+                    gpsdata = _geodatastoredProcedures.GetGPSDataByCountryIdAndCityStateProvince(Model.myselectedcountryid.ToString(), Model.myselectedcity, Model.myselectedstateprovince);
+
+                }
+                else if ( ! string.IsNullOrEmpty(Model.myselectedpostalcode))
+                {
+                    gpsdata = _geodatastoredProcedures.GetGPSDatasByCountryIdPostalCode(Model.myselectedcountryid.ToString(), Model.myselectedpostalcode);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+
+            if (gpsdata.Count() > 0)
+            {
+                var currentgpsdata = gpsdata.FirstOrDefault();
+                myLongitude = (currentgpsdata.longitude != null) ? Convert.ToDouble(currentgpsdata.longitude) : 0;
+                myLattitude = (currentgpsdata.latitude != null) ? Convert.ToDouble(currentgpsdata.latitude) : 0;
+            }
+
+
+
+            Model.myselectedlatitude = myLattitude;
+            Model.myselectedlongitude = myLongitude;
+
+            return Model;
+
+
+        }
+
+
         //quick search for members in the same country for now, no more filters yet
         //this needs to be updated to search based on the user's prefered setting i.e thier looking for settings
         public async Task<SearchResultsViewModel> getadvancedsearch(AdvancedSearchModel model)
@@ -2260,14 +2342,14 @@ namespace Anewluv.Services.Mapping
                     screenname = x.screenname,
                     longitude = x.longitude ?? 0,
                     latitude = x.latitude ?? 0,
-
-                    hasgalleryphoto = db.Repository<photo>().Queryable().Where(i => i.profile_id == x.id && i.photostatus_id == (int)photostatusEnum.Gallery).FirstOrDefault() != null ? true : false,
+                    //TO DO only pull this in the orignal query
+                    hasgalleryphoto = db.Repository<photo>().Queryable().Where(i => i.profile_id == x.id && i.photostatus_id == (int)photostatusEnum.Gallery).FirstOrDefault() != null ? true : false ,
                     creationdate = x.creationdate,
                     city = Extensions.Chop(x.city, 11),
                     lastloggedonstring = profileextentionmethods.getlastloggedinstring(x.lastlogindate.GetValueOrDefault()),
                     lastlogindate =  x.lastlogindate,
                     distancefromme = spatialextentions.MetersToMiles(x.distancefromme), //TO DO toggle based on country of viewwe i.e globalize
-                    galleryphoto = db.Repository<photoconversion>().getgalleryphotomodelbyprofileid(x.id, (int)photoformatEnum.Medium),
+                    galleryphoto =  db.Repository<photoconversion>().getgalleryphotomodelbyprofileid(x.id, (int)photoformatEnum.Medium) ,
                     lookingforagefrom = x.lookingforagefrom,
                     lookingForageto = x.lookingForageto,
                     online = db.Repository<profile>().getuseronlinestatus(new ProfileModel { profileid = x.id })

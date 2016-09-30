@@ -16,12 +16,22 @@ public interface IGeoDataStoredProcedures
 
 
      IEnumerable<CityList> CityListbycountryNamePostalcodeandCity(string countryname, string filter, string PostalCodeList);
-   
-      IEnumerable<gpsdata> GetGPSDatasByPostalCodeandCity(string countryname,string cityname, string PostalCode );
- 
-     IEnumerable<gpsdata> GetGPSDataByCountryAndCity(string countryname, string cityname );
-    
-     IEnumerable<PostalCodeList> GetPostalCodesByCountryNameCityandPrefix(string countryname,string cityname, string filter);
+
+
+
+     IEnumerable<gpsdata> GetGPSDatasByCountryIdPostalCode(string countryid, string PostalCode);
+
+    IEnumerable<gpsdata> GetGPSDatasByCountryPostalCode(string countryname, string PostalCode);
+
+    IEnumerable<gpsdata> GetGPSDataByCountryAndCityStateProvince(string countryname, string cityname, string stateprovince);
+
+    IEnumerable<gpsdata> GetGPSDataByCountryIdAndCityStateProvince(string countryid, string cityname, string stateprovince);
+
+    IEnumerable<gpsdata> GetGPSDataByCountryAndCity(string countryname, string cityname);
+
+    IEnumerable<gpsdata> GetGPSDataByCountryIdAndCity(string countryid, string cityname);
+
+    IEnumerable<PostalCodeList> GetPostalCodesByCountryNameCityandPrefix(string countryname,string cityname, string filter);
    
      IEnumerable<PostalCodeList> GetPostalCodesByCountryNameCity(string countryname, string cityname);
    

@@ -56,7 +56,7 @@ namespace GeoData.Domain.Models
     }
 
 
-          public async Task<int> GetCountryCountryIDByCountryName(string countryname)
+     public async Task<int> GetCountryCountryIDByCountryName(string countryname)
     {
         string query = "sp_GetCountryIDByCountryName";
         SqlParameter parameter = new SqlParameter("@CountryName", countryname);
@@ -111,10 +111,35 @@ namespace GeoData.Domain.Models
        return Database.SqlQuery<CityList>(query + " @StrcountryDatabaseName,@StrPrefixText,@StrPostalCode", parameters);
     }
 
-     public IEnumerable<gpsdata> GetGPSDatasByPostalCodeandCity(string countryname,string cityname, string PostalCode )
+
+
+    public IEnumerable<gpsdata> GetGPSDatasByCountryIdPostalCode(string countryid, string PostalCode)
     {
 
-        string query = "GetGPSDatasByPostalCodeandCity";
+        string query = "sp_GetGPSDataByCountryIdAndPostalCode";
+
+        SqlParameter parameter = new SqlParameter("@StrCountryId", countryid);
+        parameter.ParameterName = "@StrCountryId";
+        parameter.SqlDbType = System.Data.SqlDbType.VarChar;
+        parameter.Size = 50;
+
+            SqlParameter parameter2 = new SqlParameter("@StrPostalCode", PostalCode);
+        parameter2.ParameterName = "@StrPostalCode";
+        parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
+        parameter2.Size = 40;
+
+      
+        var parameters = new object[] { parameter, parameter2 };
+
+        //var gpsdatalist = db.ExecuteStoredProcedure<gpsdata>(query + " @StrcountryDatabaseName,@StrPostalCode,@StrCity ", parameters).ToList();
+
+        return Database.SqlQuery<gpsdata>(query + " @StrCountryId,@StrPostalCode", parameters).ToListAsync().Result;
+    }
+
+    public IEnumerable<gpsdata> GetGPSDatasByCountryPostalCode(string countryname, string PostalCode )
+    {
+
+        string query = "sp_GetGPSDataByCountryAndPostalCode";
 
         SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", countryname);
         parameter.ParameterName = "@StrcountryDatabaseName";
@@ -124,23 +149,23 @@ namespace GeoData.Domain.Models
         SqlParameter parameter2 = new SqlParameter("@StrPostalCode", PostalCode);
         parameter2.ParameterName = "@StrPostalCode";
         parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
-        parameter2.Size = 40;
+        parameter2.Size = 50;
 
-        SqlParameter parameter3 = new SqlParameter("@StrCity", cityname);
-        parameter3.ParameterName = "@StrCity";
-        parameter3.SqlDbType = System.Data.SqlDbType.VarChar;
-        parameter3.Size = 100;
+     
 
-        var parameters = new object[] { parameter, parameter2, parameter3 };
+        var parameters = new object[] { parameter, parameter2};
 
         //var gpsdatalist = db.ExecuteStoredProcedure<gpsdata>(query + " @StrcountryDatabaseName,@StrPostalCode,@StrCity ", parameters).ToList();
 
-        return Database.SqlQuery<gpsdata>(query + " @StrcountryDatabaseName,@StrPostalCode,@StrCity ", parameters);
+        return Database.SqlQuery<gpsdata>(query + " @StrcountryDatabaseName,@StrPostalCode", parameters).ToListAsync().Result;
     }
 
-    public IEnumerable<gpsdata> GetGPSDataByCountryAndCity(string countryname, string cityname )
+
+
+
+    public IEnumerable<gpsdata> GetGPSDataByCountryAndCityStateProvince(string countryname, string cityname,string stateprovince )
     {
-        string query = "sp_GetGPSDataByCountryAndCity";
+        string query = "sp_GetGPSDataByCountryAndCityAndStateProvince";
 
         SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", countryname);
         parameter.ParameterName = "@StrcountryDatabaseName";
@@ -153,14 +178,95 @@ namespace GeoData.Domain.Models
         parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
         parameter2.Size = 100;
 
-        var parameters = new object[] { parameter, parameter2 };
+
+        SqlParameter parameter3 = new SqlParameter("@StrStateProvince", stateprovince);
+        parameter3.ParameterName = "@StrStateProvince";
+        parameter3.SqlDbType = System.Data.SqlDbType.VarChar;
+        parameter3.Size = 100;
+
+            var parameters = new object[] { parameter, parameter2,parameter3 };
 
        // var gpsdatalist = db.ExecuteStoredProcedure<gpsdata>(query + " @StrcountryDatabaseName,@StrCity ", parameters).ToList();
 
-        return Database.SqlQuery<gpsdata>(query + " @StrcountryDatabaseName,@StrCity ", parameters);
+        return Database.SqlQuery<gpsdata>(query + " @StrcountryDatabaseName,@StrCity,@StrStateProvince ", parameters).ToListAsync().Result;
     }
+                                
+    public IEnumerable<gpsdata> GetGPSDataByCountryIdAndCityStateProvince(string countryid, string cityname, string stateprovince)
+        {
+            string query = "sp_GetGPSDataByCountryIdAndCityAndStateProvince";
 
-    public IEnumerable<PostalCodeList> GetPostalCodesByCountryNameCityandPrefix(string countryname,string cityname, string filter)
+            SqlParameter parameter = new SqlParameter("@StrCountryId", countryid);
+            parameter.ParameterName = "@StrCountryId";
+            parameter.SqlDbType = System.Data.SqlDbType.VarChar;
+            parameter.Size = 50;
+
+
+            SqlParameter parameter2 = new SqlParameter("@StrCity", cityname);
+            parameter2.ParameterName = "@StrCity";
+            parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
+            parameter2.Size = 100;
+
+
+            SqlParameter parameter3 = new SqlParameter("@StrStateProvince", stateprovince);
+            parameter3.ParameterName = "@StrStateProvince";
+            parameter3.SqlDbType = System.Data.SqlDbType.VarChar;
+            parameter3.Size = 100;
+
+            var parameters = new object[] { parameter, parameter2, parameter3 };
+
+            // var gpsdatalist = db.ExecuteStoredProcedure<gpsdata>(query + " @StrcountryDatabaseName,@StrCity ", parameters).ToList();
+
+            return Database.SqlQuery<gpsdata>(query + " @StrCountryId,@StrCity,@StrStateProvince ", parameters).ToListAsync().Result;
+        }
+
+    public IEnumerable<gpsdata> GetGPSDataByCountryAndCity(string countryname, string cityname)
+        {
+            string query = "sp_GetGPSDataByCountryAndCity";
+
+            SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", countryname);
+            parameter.ParameterName = "@StrcountryDatabaseName";
+            parameter.SqlDbType = System.Data.SqlDbType.VarChar;
+            parameter.Size = 50;
+
+
+            SqlParameter parameter2 = new SqlParameter("@StrCity", cityname);
+            parameter2.ParameterName = "@StrCity";
+            parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
+            parameter2.Size = 100;
+
+            var parameters = new object[] { parameter, parameter2 };
+
+           //var gpsdatalist = db.ExecuteStoredProcedure<gpsdata>(query + " @StrcountryDatabaseName,@StrCity ", parameters).ToList();
+
+            return Database.SqlQuery<gpsdata>(query + " @StrcountryDatabaseName,@StrCity", parameters);
+        }
+
+    public IEnumerable<gpsdata> GetGPSDataByCountryIdAndCity(string countryid, string cityname)
+        {
+            string query = "sp_GetGPSDataByCountryIdAndCity";
+
+            SqlParameter parameter = new SqlParameter("@StrCountryId", countryid);
+            parameter.ParameterName = "@StrCountryId";
+            parameter.SqlDbType = System.Data.SqlDbType.VarChar;
+            parameter.Size = 50;
+
+
+            SqlParameter parameter2 = new SqlParameter("@StrCity", cityname);
+            parameter2.ParameterName = "@StrCity";
+            parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
+            parameter2.Size = 100;
+
+
+            var parameters = new object[] { parameter, parameter2 };
+
+            // var gpsdatalist = db.ExecuteStoredProcedure<gpsdata>(query + " @StrcountryDatabaseName,@StrCity ", parameters).ToList();
+
+            return Database.SqlQuery<gpsdata>(query + " @StrCountryId,@StrCity", parameters).ToListAsync().Result;
+        }
+
+
+       
+        public IEnumerable<PostalCodeList> GetPostalCodesByCountryNameCityandPrefix(string countryname,string cityname, string filter)
     {
         try
         {

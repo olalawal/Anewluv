@@ -124,8 +124,7 @@ namespace Anewluv.Services.Spatial
                     {
 
 
-                        var task = Task.Factory.StartNew(() =>
-                        {
+                      
 
                             //4-24-2012 fixed code to hanlde if we did not have a postcal code
                             gpsdata gpsData = new gpsdata();
@@ -145,7 +144,8 @@ namespace Anewluv.Services.Spatial
                                 //});
                                 //gpsData = myresult.Result;
 
-                                gpsData = this.getgpsdatabycountrycity(geomodel, _unitOfWorkAsync);
+                                var result = await this.getgpsdatabycountrycity(geomodel);
+                                gpsData = result;
                             }
                             else
                             {
@@ -178,9 +178,7 @@ namespace Anewluv.Services.Spatial
 
                             return model;
 
-                        });
-                        return await task.ConfigureAwait(false);
-
+                     
                      
 
                       
@@ -481,7 +479,7 @@ namespace Anewluv.Services.Spatial
                             // strCity = String.Format("{0}%", strCity) '11/13/2009 addded wild ca
 
 
-                            var gpsdatalist = _storedProcedures.GetGPSDatasByPostalCodeandCity(model.country, model.city, model.postalcode);
+                            var gpsdatalist = _storedProcedures.GetGPSDatasByCountryPostalCode(model.country,  model.postalcode);
                             return ((from s in gpsdatalist.ToList() select new gpsdata { latitude = s.latitude, longitude = s.longitude, state_province = s.state_province }).ToList());
             
 
@@ -510,7 +508,7 @@ namespace Anewluv.Services.Spatial
               
             }
 
-            public async Task<gpsdata> getgpsdatabycountrycity(GeoModel model)
+            public async Task<gpsdata> getgpsdatabycountrycitystateprovince(GeoModel model)
             {
 
                 //_unitOfWorkAsync.DisableProxyCreation = true;
@@ -522,7 +520,7 @@ namespace Anewluv.Services.Spatial
                         var task = Task.Factory.StartNew(() =>
                         {
 
-                            return getgpsdatabycountrycity(model, _unitOfWorkAsync);
+                            return getgpsdatabycountrycitystateprovince(model, _unitOfWorkAsync);
 
                         });
                         return await task.ConfigureAwait(false);
@@ -550,7 +548,46 @@ namespace Anewluv.Services.Spatial
                
             }
 
-            public async Task<gpsdata> getgpsdatabycitycountrypostalcode(GeoModel model)
+            public async Task<gpsdata> getgpsdatabycountrycity(GeoModel model)
+            {
+
+                //_unitOfWorkAsync.DisableProxyCreation = true;
+                //using (var db = _unitOfWorkAsync)
+                {
+                    try
+                    {
+
+                        var task = Task.Factory.StartNew(() =>
+                        {                           
+                           return getgpsdatabycountrycity(model, _unitOfWorkAsync);
+
+                        });
+                        return await task.ConfigureAwait(false);
+
+
+
+                    }
+                    catch (Exception ex)
+                    {
+
+                        Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(model.country.ToString(), "", "", ex.Message, ex.InnerException);
+                        new Logging(applicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, convertedexcption);
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in GeoService service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                        //throw convertedexcption;
+                    }
+
+                }
+
+
+
+            }
+
+        public async Task<gpsdata> getgpsdatabycitycountrypostalcode(GeoModel model)
             {
              //_unitOfWorkAsync.DisableProxyCreation = true;
                 //using (var db = _unitOfWorkAsync)
@@ -1261,7 +1298,7 @@ namespace Anewluv.Services.Spatial
 
          
 
-            private gpsdata getgpsdatabycountrycity(GeoModel model, IUnitOfWorkAsync db)
+            private gpsdata getgpsdatabycountrycitystateprovince(GeoModel model, IUnitOfWorkAsync db)
                         {
 
                             //_unitOfWorkAsync.DisableProxyCreation = true;
@@ -1279,7 +1316,7 @@ namespace Anewluv.Services.Spatial
                                     // strCity = String.Format("{0}%", strCity) '11/13/2009 addded wild ca
 
                      
-                                      var gpsdatalist = _storedProcedures.GetGPSDataByCountryAndCity(model.country, model.city);
+                                      var gpsdatalist = _storedProcedures.GetGPSDataByCountryAndCityStateProvince(model.country, model.city,model.stateprovince);
                                     //  var gpsdatalist = _postalcontext.GetGpsDataByCountryAndCity(countryname, city);
                                     return ((from s in gpsdatalist.ToList() select new gpsdata { latitude = s.latitude, longitude = s.longitude, state_province = s.state_province }).ToList().FirstOrDefault());
 
@@ -1304,17 +1341,61 @@ namespace Anewluv.Services.Spatial
 
 
                         }
-            #endregion
 
-            #region "Spatial Functions"
+        private gpsdata getgpsdatabycountrycity(GeoModel model, IUnitOfWorkAsync db)
+        {
+
+            //_unitOfWorkAsync.DisableProxyCreation = true;
+
+            try
+            {
+                if (model.country == null | model.city == null) return null;
+
+
+                //IQueryable<GpsData> functionReturnValue = default(IQueryable<GpsData>);
+
+                List<gpsdata> _GpsData = new List<gpsdata>();
+                model.country = string.Format(model.country.Replace(" ", ""));
+                // fix country names if theres a space
+                // strCity = String.Format("{0}%", strCity) '11/13/2009 addded wild ca
+
+
+                var gpsdatalist = _storedProcedures.GetGPSDataByCountryAndCity(model.country, model.city);
+                //  var gpsdatalist = _postalcontext.GetGpsDataByCountryAndCity(countryname, city);
+                return ((from s in gpsdatalist.ToList() select new gpsdata { latitude = s.latitude, longitude = s.longitude, state_province = s.state_province }).ToList().FirstOrDefault());
+
+
+            }
+            catch (Exception ex)
+            {
+
+                Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(model.country.ToString(), "", "", ex.Message, ex.InnerException);
+                new Logging(applicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, convertedexcption);
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in GeoService service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                //throw convertedexcption;
+            }
+
+
+
+
+
+        }
+        #endregion
+
+        #region "Spatial Functions"
 
 
 
 
 
 
-            // use this function to get distance at the same time, add it to the model
-            public async Task<double?> getdistancebetweenmembers(GeoModel model)
+        // use this function to get distance at the same time, add it to the model
+        public async Task<double?> getdistancebetweenmembers(GeoModel model)
             {
                 var task = Task.Factory.StartNew(() =>
                 {
