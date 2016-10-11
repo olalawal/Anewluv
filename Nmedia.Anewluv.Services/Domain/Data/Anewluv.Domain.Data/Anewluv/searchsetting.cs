@@ -59,5 +59,29 @@ namespace Anewluv.Domain.Data
 
         public virtual ICollection<searchsettingdetail> details { get; set; }
         public virtual ICollection<searchsetting_location> locations { get; set; }
+        
+        public string selectedcountryname { get; set; }
+       
+        public int? selectedcountryid { get; set; }
+      
+        public string selectedpostalcode { get; set; }
+        //added 10/17/20011 so we can toggle postalcode box similar to register
+       
+        public bool? selectedpostalcodestatus { get; set; }
+       
+        public string selectedcity { get; set; }     
+       
+        public string selectedstateprovince { get; set; }
+       
+        //gps data added 10/17/2011       
+        public double? selectedlongitude { get; set; }
+       
+        public double? selectedlatitude { get; set; }
+
+
+
     }
+
+
+
 }

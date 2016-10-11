@@ -11,6 +11,11 @@ to migrate changes to the model open up package manager console and run the foll
 
 
 
+TO add A NEW MIGRATTION
+Anewluv.Domain.Migrations
+Add-Migration Addedlocationdatatosearch -f -ConfigurationTypeName "Anewluv.Domain.Migrations.Configuration" -verbose
+THEN UPDdate dadatbase
+Update-database -TargetMigration  "201610082346227_Addedlocationdatatosearch" -ConfigurationTypeName "Anewluv.Domain.Migrations.Configuration"
 
 
 ***IMPORTANT if you keep getting and error saying the connection string does not eexist and it does take the Domain or target porject off

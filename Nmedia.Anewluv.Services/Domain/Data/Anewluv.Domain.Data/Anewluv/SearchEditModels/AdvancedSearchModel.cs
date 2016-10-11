@@ -30,10 +30,13 @@ namespace Anewluv.Domain.Data.ViewModels
         public int? searchrank { get; set; }
         [DataMember]
         public int? viewindex { get; set; }
-      
-     
+        [DataMember]
+        public int? page { get; set; }
+        [DataMember]
+        public int? numberperpage { get; set; }
 
-     
+
+
 
     }
 }

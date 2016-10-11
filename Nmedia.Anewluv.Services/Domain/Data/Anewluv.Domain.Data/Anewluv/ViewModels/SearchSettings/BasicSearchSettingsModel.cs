@@ -64,6 +64,27 @@ namespace Anewluv.Domain.Data.ViewModels
         [DataMember]
         public List<age> agelist { get; set; }
         //Viewmodel only feild for lisitng locations 
+    
+        [DataMember]
+        public string selectedcountryname { get; set; }
+
+        [DataMember]
+        public int? selectedcountryid { get; set; }
+
+        [DataMember]
+        public string selectedpostalcode { get; set; }
+        //added 10/17/20011 so we can toggle postalcode box similar to register
+        [DataMember]
+        public bool? selectedpostalcodestatus { get; set; }
+        [DataMember]
+        public string selectedcity { get; set; }
+        [DataMember]
+        public string selectedstateprovince { get; set; }
+        [DataMember]
+        //gps data added 10/17/2011       
+        public double? selectedlongitude { get; set; }
+        [DataMember]
+        public double? selectedlatitude { get; set; }
         [DataMember]
         public List<searchsetting_location> locationlist { get; set; }
     }

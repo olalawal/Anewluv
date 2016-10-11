@@ -26,9 +26,9 @@ namespace Anewluv.Domain.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
-            SeedMethods.seedgenerallookups(context);
-            SeedMethods.seedcriterialookups(context);
-            SeedMethods.seedapplicationlookups(context);
+           // SeedMethods.seedgenerallookups(context);
+           // SeedMethods.seedcriterialookups(context);
+          //  SeedMethods.seedapplicationlookups(context);
         }
     }
 }
