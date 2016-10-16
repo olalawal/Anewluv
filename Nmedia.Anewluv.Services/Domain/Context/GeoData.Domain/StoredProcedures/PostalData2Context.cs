@@ -265,149 +265,7 @@ namespace GeoData.Domain.Models
         }
 
 
-       
-        public IEnumerable<PostalCodeList> GetPostalCodesByCountryNameCityandPrefix(string countryname,string cityname, string filter)
-    {
-        try
-        {
-            string query = "sp_GetPostalCodesByCountryNameCityandPrefix";
-
-            SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", countryname);
-            parameter.ParameterName = "@StrcountryDatabaseName";
-            parameter.SqlDbType = System.Data.SqlDbType.VarChar;
-            parameter.Size = 50;
-
-            SqlParameter parameter2 = new SqlParameter("@StrCity", cityname);
-            parameter2.ParameterName = "@StrCity";
-            parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
-            parameter2.Size = 100;
-
-            SqlParameter parameter3 = new SqlParameter("@StrprefixText", filter);
-            parameter3.ParameterName = "@StrprefixText";
-            parameter3.SqlDbType = System.Data.SqlDbType.VarChar;
-            parameter3.Size = 40;
-
-            var parameters = new object[] { parameter, parameter2, parameter3 };
-
-            //   var postalcodes = db.ExecuteStoredProcedure<PostalCodeList>(query + " @StrcountryDatabaseName,@StrCity,@StrprefixText", parameters).ToList();
-            ////
-            return Database.SqlQuery<PostalCodeList>(query + " @StrcountryDatabaseName,@StrCity,@StrprefixText", parameters);
-        }
-        catch (Exception ex) { throw ex; }
-    }
-
-    public IEnumerable<PostalCodeList> GetPostalCodesByCountryNameCity(string countryname, string cityname)
-    {
-        string query = "sp_GetPostalCodesByCountryNameCity";
-
-        SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", countryname);
-        parameter.ParameterName = "@StrcountryDatabaseName";
-        parameter.SqlDbType = System.Data.SqlDbType.VarChar;
-        parameter.Size = 50;
-
-
-        SqlParameter parameter2 = new SqlParameter("@StrCity", cityname);
-        parameter2.ParameterName = "@StrCity";
-        parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
-        parameter2.Size = 100;
-
-        var parameters = new object[] { parameter, parameter2 };
-
-        //var postalcodelist = _unitOfWorkAsync.ExecuteStoredProcedure<PostalCodeList>(query + " @StrcountryDatabaseName,@StrCity", parameters).ToList();
-
-        return Database.SqlQuery<PostalCodeList>(query + " @StrcountryDatabaseName,@StrCity", parameters);
-    }
-
-    public IEnumerable<PostalCodeList> ValidatePostalCodeByCountryNameandCity(string countryname, string cityname, string strpostalcode)
-    {
-        try
-        {
-            string query = "sp_ValidatePostalCodeByCountryNameandCity";
-
-            SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", countryname);
-            parameter.ParameterName = "@StrcountryDatabaseName";
-            parameter.SqlDbType = System.Data.SqlDbType.VarChar;
-            parameter.Size = 50;
-
-            SqlParameter parameter2 = new SqlParameter("@StrCity", cityname);
-            parameter2.ParameterName = "@StrCity";
-            parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
-            parameter2.Size = 100;
-
-            SqlParameter parameter3 = new SqlParameter("@StrPostalCode", strpostalcode);
-            parameter3.ParameterName = "@StrPostalCode";
-            parameter3.SqlDbType = System.Data.SqlDbType.VarChar;
-            parameter3.Size = 40;
-
-
-            var parameters = new object[] { parameter, parameter2, parameter3 };
-
-            //  var foundpostalcodes = db.ExecuteStoredProcedure<PostalCodeList>().ToList();
-
-           return Database.SqlQuery<PostalCodeList>(query + " @StrcountryDatabaseName,@StrCity,@StrPostalCode", parameters);
-
-          
-        }
-        catch (Exception ex)
-        {
-            throw ex;
-        }
-    }
-
-    public IEnumerable<PostalCodeList> GetPostalCodesByCountryAndLatLong(string countryname, string lattitude, string longitude)
-    {
-        string query = "sp_GetPostalCodesByCountryAndLatLong";
-
-        SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", countryname);
-        parameter.ParameterName = "@StrcountryDatabaseName";
-        parameter.SqlDbType = System.Data.SqlDbType.VarChar;
-        parameter.Size = 50;
-
-        SqlParameter parameter2 = new SqlParameter("@StrLattitude", lattitude);
-        parameter2.ParameterName = "@StrLattitude";
-        parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
-        parameter2.Size = 25;
-
-        SqlParameter parameter3 = new SqlParameter("@StrLongitude", longitude);
-        parameter3.ParameterName = "@StrLongitude";
-        parameter3.SqlDbType = System.Data.SqlDbType.VarChar;
-        parameter3.Size = 25;
-
-
-        var parameters = new object[] { parameter, parameter2, parameter3 };
-
-
-       // var geopostalcodes = db.ExecuteStoredProcedure<PostalCodeList>();
-        return Database.SqlQuery<PostalCodeList>(query + " @StrcountryDatabaseName.@StrLattitude,@StrLongitude", parameters);
-    }
-
-    public IEnumerable<PostalCodeList> GetPostalCodesByCountryNameCityandStateProvince(string  countryname,string cityname,string stateprovince)
-    {
-        string query = "sp_GetPostalCodeByCountryNameCityandStateProvince";
-
-        SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", countryname);
-        parameter.ParameterName = "@StrcountryDatabaseName";
-        parameter.SqlDbType = System.Data.SqlDbType.VarChar;
-        parameter.Size = 50;
-
-        SqlParameter parameter2 = new SqlParameter("@StrCity", cityname);
-        parameter2.ParameterName = "@StrCity";
-        parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
-        parameter2.Size = 50;
-
-        SqlParameter parameter3 = new SqlParameter("StrStateProvince", stateprovince);
-        parameter3.ParameterName = "@StrStateProvince";
-        parameter3.SqlDbType = System.Data.SqlDbType.VarChar;
-        parameter3.Size = 100;
-
-
-        var parameters = new object[] { parameter, parameter2, parameter3 };
-
-       // var geopostalcodes = db.ExecuteStoredProcedure<PostalCodeList>().ToList();
-
-        return Database.SqlQuery<PostalCodeList>(query + " @StrcountryDatabaseName,@StrCity,@StrStateProvince", parameters);
-    }
-
+   
     public IEnumerable<CityList> CityListbycountryNamePostalcodeandCity(string countryname,string filter)
     {
         string query = "sp_CityListbycountryNamePostalcodeandCity";
@@ -501,8 +359,153 @@ namespace GeoData.Domain.Models
         return Database.SqlQuery<PostalCodeList>(query + " @StrcountryID,@StrCity,@StrPrefixText" + " ", parameters);
     }
 
+        //postal codes
 
-    public async Task<PostalCodeList> GetPostalCodeByCountryNameandCity(string countryname, string city)
+
+        public IEnumerable<PostalCodeList> GetPostalCodesByCountryNameCityandPrefix(string countryname, string cityname, string filter)
+        {
+            try
+            {
+                string query = "sp_GetPostalCodesByCountryNameCityandPrefix";
+
+                SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", countryname);
+                parameter.ParameterName = "@StrcountryDatabaseName";
+                parameter.SqlDbType = System.Data.SqlDbType.VarChar;
+                parameter.Size = 50;
+
+                SqlParameter parameter2 = new SqlParameter("@StrCity", cityname);
+                parameter2.ParameterName = "@StrCity";
+                parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
+                parameter2.Size = 100;
+
+                SqlParameter parameter3 = new SqlParameter("@StrprefixText", filter);
+                parameter3.ParameterName = "@StrprefixText";
+                parameter3.SqlDbType = System.Data.SqlDbType.VarChar;
+                parameter3.Size = 40;
+
+                var parameters = new object[] { parameter, parameter2, parameter3 };
+
+                //   var postalcodes = db.ExecuteStoredProcedure<PostalCodeList>(query + " @StrcountryDatabaseName,@StrCity,@StrprefixText", parameters).ToList();
+                ////
+                return Database.SqlQuery<PostalCodeList>(query + " @StrcountryDatabaseName,@StrCity,@StrprefixText", parameters);
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        public IEnumerable<PostalCodeList> GetPostalCodesByCountryNameCity(string countryname, string cityname)
+        {
+            string query = "sp_GetGeoPostalCodesByCountryNameandCity";
+
+            SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", countryname);
+            parameter.ParameterName = "@StrcountryDatabaseName";
+            parameter.SqlDbType = System.Data.SqlDbType.VarChar;
+            parameter.Size = 50;
+
+
+            SqlParameter parameter2 = new SqlParameter("@StrCity", cityname);
+            parameter2.ParameterName = "@StrCity";
+            parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
+            parameter2.Size = 100;
+
+            var parameters = new object[] { parameter, parameter2 };
+
+            //var postalcodelist = _unitOfWorkAsync.ExecuteStoredProcedure<PostalCodeList>(query + " @StrcountryDatabaseName,@StrCity", parameters).ToList();
+
+            return Database.SqlQuery<PostalCodeList>(query + " @StrcountryDatabaseName,@StrCity", parameters);
+        }
+
+        public IEnumerable<PostalCodeList> ValidatePostalCodeByCountryNameandCity(string countryname, string cityname, string strpostalcode)
+        {
+            try
+            {
+                string query = "sp_ValidatePostalCodeByCountryNameandCity";
+
+                SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", countryname);
+                parameter.ParameterName = "@StrcountryDatabaseName";
+                parameter.SqlDbType = System.Data.SqlDbType.VarChar;
+                parameter.Size = 50;
+
+                SqlParameter parameter2 = new SqlParameter("@StrCity", cityname);
+                parameter2.ParameterName = "@StrCity";
+                parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
+                parameter2.Size = 100;
+
+                SqlParameter parameter3 = new SqlParameter("@StrPostalCode", strpostalcode);
+                parameter3.ParameterName = "@StrPostalCode";
+                parameter3.SqlDbType = System.Data.SqlDbType.VarChar;
+                parameter3.Size = 40;
+
+
+                var parameters = new object[] { parameter, parameter2, parameter3 };
+
+                //  var foundpostalcodes = db.ExecuteStoredProcedure<PostalCodeList>().ToList();
+
+                return Database.SqlQuery<PostalCodeList>(query + " @StrcountryDatabaseName,@StrCity,@StrPostalCode", parameters);
+
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public IEnumerable<PostalCodeList> GetPostalCodesByCountryAndLatLong(string countryname, string lattitude, string longitude)
+        {
+            string query = "sp_GetPostalCodesByCountryAndLatLong";
+
+            SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", countryname);
+            parameter.ParameterName = "@StrcountryDatabaseName";
+            parameter.SqlDbType = System.Data.SqlDbType.VarChar;
+            parameter.Size = 50;
+
+            SqlParameter parameter2 = new SqlParameter("@StrLattitude", lattitude);
+            parameter2.ParameterName = "@StrLattitude";
+            parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
+            parameter2.Size = 25;
+
+            SqlParameter parameter3 = new SqlParameter("@StrLongitude", longitude);
+            parameter3.ParameterName = "@StrLongitude";
+            parameter3.SqlDbType = System.Data.SqlDbType.VarChar;
+            parameter3.Size = 25;
+
+
+            var parameters = new object[] { parameter, parameter2, parameter3 };
+
+
+            // var geopostalcodes = db.ExecuteStoredProcedure<PostalCodeList>();
+            return Database.SqlQuery<PostalCodeList>(query + " @StrcountryDatabaseName.@StrLattitude,@StrLongitude", parameters);
+        }
+
+        public IEnumerable<PostalCodeList> GetPostalCodesByCountryNameCityandStateProvince(string countryname, string cityname, string stateprovince)
+        {
+            string query = "sp_GetGeoPostalCodesByCountryNameCityandStateProvince";
+
+            SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", countryname);
+            parameter.ParameterName = "@StrcountryDatabaseName";
+            parameter.SqlDbType = System.Data.SqlDbType.VarChar;
+            parameter.Size = 50;
+
+            SqlParameter parameter2 = new SqlParameter("@StrCity", cityname);
+            parameter2.ParameterName = "@StrCity";
+            parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
+            parameter2.Size = 50;
+
+            SqlParameter parameter3 = new SqlParameter("StrStateProvince", stateprovince);
+            parameter3.ParameterName = "@StrStateProvince";
+            parameter3.SqlDbType = System.Data.SqlDbType.VarChar;
+            parameter3.Size = 100;
+
+
+            var parameters = new object[] { parameter, parameter2, parameter3 };
+
+            // var geopostalcodes = db.ExecuteStoredProcedure<PostalCodeList>().ToList();
+
+            return Database.SqlQuery<PostalCodeList>(query + " @StrcountryDatabaseName,@StrCity,@StrStateProvince", parameters);
+        }
+
+
+        public async Task<PostalCodeList> GetGeoPostalCodeByCountryNameandCity(string countryname, string city)
     {
         string query = "sp_GetGeoPostalCodeByCountryNameandCity";
 
@@ -521,7 +524,32 @@ namespace GeoData.Domain.Models
         return await Database.SqlQuery<PostalCodeList>(query + " @StrcountryDatabaseName,@StrCity", parameters).FirstOrDefaultAsync();
     }
 
-    public bool GetPostalCodeStatusByCountryID(string countryid)
+
+        public async Task<PostalCodeList> GetGeoPostalCodeByCountryNameandCityandStateProvince(string countryname, string city, string stateprovince)
+        {
+            string query = "sp_GetGeoPostalCodesByCountryNameCityandStateProvince";
+
+            SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", countryname);
+            parameter.ParameterName = "@StrcountryDatabaseName";
+            parameter.SqlDbType = System.Data.SqlDbType.VarChar;
+            parameter.Size = 50;
+
+            SqlParameter parameter2 = new SqlParameter("@StrCity", city);
+            parameter2.ParameterName = "@StrCity";
+            parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
+            parameter2.Size = 50;
+
+            SqlParameter parameter3 = new SqlParameter("@StrStateProvince", stateprovince);
+            parameter3.ParameterName = "@StrStateProvince";
+            parameter3.SqlDbType = System.Data.SqlDbType.VarChar;
+            parameter3.Size = 50;
+
+            var parameters = new object[] { parameter, parameter2,parameter3 };
+
+            return await Database.SqlQuery<PostalCodeList>(query + " @StrcountryDatabaseName,@StrCity,@StrStateProvince", parameters).FirstOrDefaultAsync();
+        }
+
+        public bool GetPostalCodeStatusByCountryID(string countryid)
     {
 
         string query = "sp_GetPostalCodeStatusByCountryID";

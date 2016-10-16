@@ -49,9 +49,13 @@ public interface IGeoDataStoredProcedures
 
      IEnumerable<PostalCodeList> GetPostalCodesByCountryIDCityandPrefix(string countryid,string cityname,string filter);
 
-     Task<PostalCodeList> GetPostalCodeByCountryNameandCity(string countryname, string city);
+     Task<PostalCodeList> GetGeoPostalCodeByCountryNameandCity(string countryname, string city);
 
-     bool GetPostalCodeStatusByCountryID(string countryid);
+
+     Task<PostalCodeList> GetGeoPostalCodeByCountryNameandCityandStateProvince(string countryname, string city,string stateprovince);
+
+
+        bool GetPostalCodeStatusByCountryID(string countryid);
 
      bool  GetPostalCodeStatusBycountryName(string countryname);
 

@@ -1259,7 +1259,7 @@ namespace Anewluv.Services.Spatial
                         //11/13/2009 addded wild ca
 
 
-                        var postalcode = _storedProcedures.GetPostalCodeByCountryNameandCity(model.country, model.city).Result;
+                        var postalcode = _storedProcedures.GetGeoPostalCodeByCountryNameandCity(model.country, model.city).Result;
 
                         //  var postalcodelist = _postalcontext.getpostalcodesbycountrynamecity(countryname, city);
                         if (postalcode != null)
@@ -1290,15 +1290,71 @@ namespace Anewluv.Services.Spatial
 
             }
 
-    
+        //gets a list of postal codes by coutnry name and city
+        //No using internal method
+        public async Task<postalcode> getpostalcodebycountrynamecitystateprovince(GeoModel model)
+        {
+
+            //_unitOfWorkAsync.DisableProxyCreation = true;
+
+            try
+            {
+
+
+                var task = Task.Factory.StartNew(() =>
+                {
+
+                    if (model.country == null | model.city == null | model.stateprovince ==null) return null;
+
+
+                    //added 5/12/2011 to handle empty countries
+                    if (model.country == null) return null;
+
+                    //List<PostalCodeList> _PostalCodeList = new List<PostalCodeList>();                      
+                    model.country = string.Format(model.country.Replace(" ", ""));
+                    // fix country names if theres a space
+                    // StrprefixText = string.Format("%{0}%", StrprefixText);
+                    //11/13/2009 addded wild ca
+
+
+                    var postalcode = _storedProcedures.GetGeoPostalCodeByCountryNameandCityandStateProvince(model.country, model.city,model.stateprovince).Result;
+
+                    //  var postalcodelist = _postalcontext.getpostalcodesbycountrynamecity(countryname, city);
+                    if (postalcode != null)
+                    {
+                        return (new postalcode { postalcodevalue = postalcode.PostalCode, latitude = postalcode.LATITUDE, longitude = postalcode.LONGITUDE });
+                    }
+                    return null;
+                });
+                return await task.ConfigureAwait(false);
 
 
 
-            #region "private shared functions"
 
-         
+            }
+            catch (Exception ex)
+            {
 
-            private gpsdata getgpsdatabycountrycitystateprovince(GeoModel model, IUnitOfWorkAsync db)
+                Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(model.country.ToString(), "", "", ex.Message, ex.InnerException);
+                new Logging(applicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, convertedexcption);
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in GeoService service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                //throw convertedexcption;
+            }
+
+        }
+
+
+
+        #region "private shared functions"
+
+
+
+        private gpsdata getgpsdatabycountrycitystateprovince(GeoModel model, IUnitOfWorkAsync db)
                         {
 
                             //_unitOfWorkAsync.DisableProxyCreation = true;
