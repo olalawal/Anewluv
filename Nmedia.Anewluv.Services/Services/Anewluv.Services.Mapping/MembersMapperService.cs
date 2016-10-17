@@ -1659,9 +1659,9 @@ namespace Anewluv.Services.Mapping
 
                     var task = Task.Factory.StartNew(() =>
                     {
-                        
 
-                        // int[,] courseIDs = new int[,] UserProfile.profiledata.searchsettings.FirstOrDefault().searchsettings_Genders.ToList();
+
+                        bool showmememberswithphotos = false;
                         int AgeTo = Model.basicsearchsettings.agemax != null ? Model.basicsearchsettings.agemax.GetValueOrDefault() : 99;
                         int AgeFrom = Model.basicsearchsettings.agemin != null ? Model.basicsearchsettings.agemin.GetValueOrDefault() : 18;
                         //Height
@@ -1690,8 +1690,16 @@ namespace Anewluv.Services.Mapping
                         //GPS stuff
 
                         //update the latt and long if its empty
-                       var  GpsModel = updatelatlong(new quicksearchmodel { myselectedcountryid = countryid , myselectedcity = city,
-                            myselectedlatitude =Model.basicsearchsettings.selectedlatitude, myselectedlongitude = Model.basicsearchsettings.selectedlongitude ,
+
+                        double lattitude;
+                        if (!double.TryParse(Model.basicsearchsettings.selectedlatitude, out lattitude))
+                            lattitude = 0.0;
+                        double longitude;
+                        if (!double.TryParse(Model.basicsearchsettings.selectedlongitude, out longitude))
+                            longitude = 0.0;
+
+                        var  GpsModel = updatelatlong(new quicksearchmodel { myselectedcountryid = countryid , myselectedcity = city,
+                            myselectedlatitude =lattitude, myselectedlongitude = longitude ,
                               myselectedcountryname = Model.basicsearchsettings.selectedcountryname, myselectedpostalcode = Model.basicsearchsettings.selectedpostalcode } );
                         //get the anchor point from this users da
                         var sourcePoint = spatialextentions.CreatePoint(GpsModel.myselectedlatitude.Value, GpsModel.myselectedlongitude.Value);
@@ -1701,8 +1709,14 @@ namespace Anewluv.Services.Mapping
 
 
 
+
+                        if (Model.basicsearchsettings.showmelist != null)
+                        {
+                            showmememberswithphotos = Model.basicsearchsettings.showmelist.Any(z => z.id == (int)showmeEnum.MembersWithPhotos && z.selected == true) ? true : false;
+
+                        }
                         //get values from the collections to test for , this should already be done in the viewmodel mapper but juts incase they made changes that were not updated
-                       // requery all the has tbls
+                        // requery all the has tbls
                         HashSet<int> LookingForGenderValues = new HashSet<int>();
                         LookingForGenderValues = (Model.basicsearchsettings.genderlist != null) ? new HashSet<int>(Model.basicsearchsettings.genderlist.Where(z => z.selected == true).Select(c => c.id).ToList()) : LookingForGenderValues;
 
@@ -1712,22 +1726,46 @@ namespace Anewluv.Services.Mapping
                         ////set a value to determine weather to evaluate hights i.e if this user has not height values whats the point ?
 
                         HashSet<int> LookingForBodyTypesValues = new HashSet<int>();
-                       // var values = Model.appearancesearchsettings.bodytypelist.Where(z => z.selected == true).Select(c => c.id).ToList();
                         LookingForBodyTypesValues = (Model.appearancesearchsettings.bodytypelist != null) ? new HashSet<int>(Model.appearancesearchsettings.bodytypelist.Where(z => z.selected == true).Select(c => c.id).ToList()) : LookingForBodyTypesValues;
 
-                        //HashSet<int> LookingForEthnicityValues = new HashSet<int>();
-                        //LookingForEthnicityValues = (Model != null) ? new HashSet<int>(Model.searchsetting_ethnicity.Select(c => c.id)) : LookingForEthnicityValues;
+                        HashSet<int> LookingForEthnicityValues = new HashSet<int>();
+                        LookingForEthnicityValues = (Model.appearancesearchsettings.ethnicitylist != null) ? new HashSet<int>(Model.appearancesearchsettings.ethnicitylist.Where(z => z.selected == true).Select(c => c.id).ToList()) : LookingForEthnicityValues;
 
-                        //HashSet<int> LookingForEyeColorValues = new HashSet<int>();
-                        //LookingForEyeColorValues = (Model != null) ? new HashSet<int>(Model.searchsetting_eyecolor.Select(c => c.id)) : LookingForEyeColorValues;
+                        HashSet<int> LookingForEyeColorValues = new HashSet<int>();
+                        LookingForEyeColorValues = (Model.appearancesearchsettings.eyecolorlist != null) ? new HashSet<int>(Model.appearancesearchsettings.eyecolorlist.Where(z => z.selected == true).Select(c => c.id).ToList()) : LookingForEyeColorValues;
 
-                        //HashSet<int> LookingForHairColorValues = new HashSet<int>();
-                        //LookingForHairColorValues = (Model != null) ? new HashSet<int>(Model.searchsetting_haircolor.Select(c => c.id)) : LookingForHairColorValues;
+                        HashSet<int> LookingForHairColorValues = new HashSet<int>();
+                        LookingForHairColorValues = (Model.appearancesearchsettings.haircolorlist != null) ? new HashSet<int>(Model.appearancesearchsettings.haircolorlist .Where(z => z.selected == true).Select(c => c.id).ToList()) : LookingForHairColorValues;
 
-                        //HashSet<int> LookingForHotFeatureValues = new HashSet<int>();
-                        //LookingForHotFeatureValues = (Model != null) ? new HashSet<int>(Model.searchsetting_hotfeature.Select(c => c.id)) : LookingForHotFeatureValues;
+                        HashSet<int> LookingForHotFeatureValues = new HashSet<int>();
+                        LookingForHotFeatureValues = (Model.appearancesearchsettings.haircolorlist != null) ? new HashSet<int>(Model.appearancesearchsettings.hotfeaturelist.Where(z => z.selected == true).Select(c => c.id).ToList()) : LookingForHotFeatureValues;
 
-                        // var photostest = _datingcontext.profiles.Where(p => (p.profilemetadata.photos.Any(z => z.photostatus != null && z.photostatus.id != (int)photostatusEnum.Gallery)));
+
+                      
+                        //final working query need to intergrate below
+                        var dd2 = (from x in db.Repository<profiledata>().Queryable().Where(p => p.location.Distance(sourcePoint) <= MaxdistanceInMiles)
+
+                                   .WhereIf(LookingForEthnicityValues.Count > 0,p=> p.profile.profilemetadata.profiledata_ethnicity.Any(r => LookingForEthnicityValues.Contains(r.lu_ethnicity.id)))
+                                   .WhereIf(LookingForEyeColorValues.Count > 0, z => LookingForEyeColorValues.Contains(z.lu_eyecolor.id)).ToList()
+                                   join f in db.Repository<profile>().Queryable() on x.profile_id equals f.id
+                                   join m in db.Repository<profilemetadata>().Queryable() on x.profile_id equals m.profile_id
+                                   select new
+                                   {
+                                       f = f,
+                                       x = x,
+                                       z = m
+                                   }
+
+
+                                  ).AsQueryable();
+
+                        var testquery = dd2.ToList();
+
+                        // var otherblocks = db.Repository<action>().getothersactionsbyprofileidandactiontype(model.profileid.Value, (int)actiontypeEnum.Block);
+                        //  mailboxmessagefolderlist = (from m in mailboxmessagefolderlist.Where(a => a.mailboxmessage.sender_id == model.profileid.Value)
+                        //   where (!otherblocks.Any(f => f.target_profile_id != m.mailboxmessage.sender_id))
+                        //   select m).AsQueryable();
+
 
 
                         //TO DO add code to filter out blocked members
@@ -1737,11 +1775,19 @@ namespace Anewluv.Services.Mapping
                         //   select m).AsQueryable();
 
                         //add more values as we get more members 
-                        //TO DO change the photostatus thing to where if maybe, based on HAS PHOTOS only matches
+                        //TO DO change the photostatus thing to where if maybe, based o n HAS PHOTOS only matches
                         var MemberSearchViewmodels = (from x in db.Repository<profiledata>().Queryable().Where(p => p.location.Distance(sourcePoint) <= MaxdistanceInMiles)
-                                                      .Where(p => p.birthdate > min && p.birthdate <= max && p.height > intheightmin && p.height <= intheightmax)
-                                        .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.lu_gender.id))
-                                        .WhereIf(LookingForBodyTypesValues.Count > 0, z => LookingForBodyTypesValues.Contains(z.lu_bodytype.id)).ToList()
+                                                  .Where(p => p.birthdate > min && p.birthdate <= max && p.height > intheightmin && p.height <= intheightmax)
+                                                  .Where(m => m.profile.profilemetadata.profiledata_ethnicity.All(s =>s.profile_id == m.profile_id && LookingForEthnicityValues.Contains(s.lu_ethnicity.id)))
+                                    .WhereIf(showmememberswithphotos, z => z.profile.profilemetadata.photos.Any(f => f.lu_photostatus.id == (int)photostatusEnum.Gallery))  //pics out only profiles that have a gallery phot
+                                    .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.lu_gender.id))
+
+                                    //appearance filters
+                                    .WhereIf(LookingForBodyTypesValues.Count > 0, z => LookingForBodyTypesValues.Contains(z.lu_bodytype.id)).ToList()
+                                   
+                                        .WhereIf(LookingForEyeColorValues.Count > 0, z => LookingForEyeColorValues.Contains(z.lu_eyecolor.id)).ToList()
+                                        .WhereIf(LookingForHairColorValues.Count > 0, z => LookingForHairColorValues.Contains(z.lu_bodytype.id)).ToList()
+                                       // .WhereIf(LookingForHotFeatureValues.Count > 0, z => LookingForHotFeatureValues.Contains(z.lu_bodytype.id)).ToList()
                                                       join f in db.Repository<profile>().Queryable() on x.profile_id equals f.id
                                                       select new MemberSearchViewModel
                                                       {

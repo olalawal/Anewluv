@@ -82,9 +82,9 @@ namespace Anewluv.Domain.Data.ViewModels
         public string selectedstateprovince { get; set; }
         [DataMember]
         //gps data added 10/17/2011       
-        public double? selectedlongitude { get; set; }
+        public string selectedlongitude { get; set; }
         [DataMember]
-        public double? selectedlatitude { get; set; }
+        public string selectedlatitude { get; set; }
         [DataMember]
         public List<searchsetting_location> locationlist { get; set; }
     }
