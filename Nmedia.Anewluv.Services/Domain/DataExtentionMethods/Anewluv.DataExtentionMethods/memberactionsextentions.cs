@@ -76,6 +76,10 @@ namespace Anewluv.DataExtentionMethods
                     p.target_profile_id == profileid).Include(z => z.creatorprofilemetadata.profile).Select().AsQueryable();
         }
 
+
+        //all actions involving this Profile
+
+
         #endregion
 
 

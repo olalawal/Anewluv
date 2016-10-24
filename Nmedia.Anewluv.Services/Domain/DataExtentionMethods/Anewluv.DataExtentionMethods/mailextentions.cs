@@ -41,11 +41,13 @@ namespace Anewluv.DataExtentionMethods
                     .Select().AsQueryable();
 
 
-                //remove profiles that blocked me  .i,e should be invlisble to me
+                //TO DO test
+                //TO DO filter out the blocks
+                mailboxmessagefolderlist = mailboxmessagefolderlist.Where(z => !otherblocks.Any(d => d.target_profile_id == d.creator_profile_id));
 
 
                 //return mailboxmessagefolderlist;
-                
+
                 //to do roles ? allowing what photos they can view i.e the high rez stuff or more than 2 -3 etc
 
                 //folder id
@@ -97,10 +99,10 @@ namespace Anewluv.DataExtentionMethods
                     )
                     .Include(p => p.profilemetadata.profile).Include(p => p.profilemetadata.profile.membersinroles.Select(z =>z.lu_role))
                     .Include(p => p.mailboxmessagefolders.Select(z => z.mailboxmessage)).Select().AsQueryable();
-                  
-                 
+
+                //TO DO test
                 //TO DO filter out the blocks
-                //  mailboxfolderlist = mailboxfolderlist.Where(z => !otherblocks.Any(d => d.target_profile_id == z.)
+                mailboxfolderlist = mailboxfolderlist.Where(z => !otherblocks.Any(d => d.target_profile_id == d.creator_profile_id));
                     
 
                 //remove profiles that blocked me  .i,e should be invlisble to me

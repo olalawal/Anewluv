@@ -1742,11 +1742,40 @@ namespace Anewluv.Services.Mapping
 
 
                       
-                        //final working query need to intergrate below
-                        var dd2 = (from x in db.Repository<profiledata>().Queryable().Where(p => p.location.Distance(sourcePoint) <= MaxdistanceInMiles)
+                        //remove profiles of members this user has blocked or have blocked this user
 
-                                   .WhereIf(LookingForEthnicityValues.Count > 0,p=> p.profile.profilemetadata.profiledata_ethnicity.Any(r => LookingForEthnicityValues.Contains(r.lu_ethnicity.id)))
+                        var blocks = db.Repository<action>().getmyactionsbyprofileidandactiontype(Model.profileid.Value, (int)actiontypeEnum.Block).ToList();
+                        var blocksByOthers = db.Repository<action>().getothersactionsbyprofileidandactiontype(Model.profileid.Value, (int)actiontypeEnum.Block).ToList();
+
+                        //TO DO find a way to combine thes e
+                        //filter out blocked profiles 
+                        var MyActiveblocks = from c in blocks
+                                             select new
+                                             {
+                                                 ProfilesBlockedId = c.target_profile_id
+
+                                             };
+
+                        //filter out blocked profiles 
+                        var OthersActiveblocks = from c in blocksByOthers
+                                                 select new
+                                             {
+                                                 ProfiledBlockedmeId = c.creator_profile_id
+
+                                             };
+
+                        //TO Do add filters of other stuff like my instrests etc via same method as above
+
+
+
+                        //final working query need to intergrate below
+                        //10-23-2016 fixed code to filter blocks from both sides TO DO need to apply to all other bits
+                        var dd2 = (from x in db.Repository<profiledata>().Queryable().Where(p => p.location.Distance(sourcePoint) <= MaxdistanceInMiles
+                                   && p.profile.status_id != (int)profilestatusEnum.Banned | p.profile.status_id != (int)profilestatusEnum.Inactive) //block filtering and inactive and banned code                                                                   
+                                   .WhereIf(LookingForEthnicityValues.Count > 0, p => p.profile.profilemetadata.profiledata_ethnicity.Any(r => LookingForEthnicityValues.Contains(r.lu_ethnicity.id))) //sepecial since these ones are many to many
                                    .WhereIf(LookingForEyeColorValues.Count > 0, z => LookingForEyeColorValues.Contains(z.lu_eyecolor.id)).ToList()
+                                   .Where(m=>  !MyActiveblocks.Any(b => b.ProfilesBlockedId == m.profile_id )).Where(n=> !OthersActiveblocks.Any(c => c.ProfiledBlockedmeId == n.profile_id))  //fliter out blocks from both sides
+                                  
                                    join f in db.Repository<profile>().Queryable() on x.profile_id equals f.id
                                    join m in db.Repository<profilemetadata>().Queryable() on x.profile_id equals m.profile_id
                                    select new
@@ -1761,18 +1790,8 @@ namespace Anewluv.Services.Mapping
 
                         var testquery = dd2.ToList();
 
-                        // var otherblocks = db.Repository<action>().getothersactionsbyprofileidandactiontype(model.profileid.Value, (int)actiontypeEnum.Block);
-                        //  mailboxmessagefolderlist = (from m in mailboxmessagefolderlist.Where(a => a.mailboxmessage.sender_id == model.profileid.Value)
-                        //   where (!otherblocks.Any(f => f.target_profile_id != m.mailboxmessage.sender_id))
-                        //   select m).AsQueryable();
 
 
-
-                        //TO DO add code to filter out blocked members
-                        // var otherblocks = db.Repository<action>().getothersactionsbyprofileidandactiontype(model.profileid.Value, (int)actiontypeEnum.Block);
-                        //  mailboxmessagefolderlist = (from m in mailboxmessagefolderlist.Where(a => a.mailboxmessage.sender_id == model.profileid.Value)
-                        //   where (!otherblocks.Any(f => f.target_profile_id != m.mailboxmessage.sender_id))
-                        //   select m).AsQueryable();
 
                         //add more values as we get more members 
                         //TO DO change the photostatus thing to where if maybe, based o n HAS PHOTOS only matches
