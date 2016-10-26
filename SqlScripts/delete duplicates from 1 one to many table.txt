@@ -1,0 +1,9 @@
+WITH CTE AS 
+(SELECT *,RN=ROW_NUMBER() OVER(PARTITION BY profile_id,hotfeature_id ORDER BY id) 
+ FROM profiledata_hotfeature)
+
+
+DELETE FROM CTE WHERE RN>1
+
+
+SELECT * FROM CTE WHERE RN>1

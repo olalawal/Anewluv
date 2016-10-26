@@ -1718,7 +1718,7 @@ namespace Anewluv.Services.Mapping
                         //get values from the collections to test for , this should already be done in the viewmodel mapper but juts incase they made changes that were not updated
                         // requery all the has tbls
                         HashSet<int> LookingForGenderValues = new HashSet<int>();
-                        LookingForGenderValues = (Model.basicsearchsettings.genderlist != null) ? new HashSet<int>(Model.basicsearchsettings.genderlist.Where(z => z.selected == true).Select(c => c.id).ToList()) : LookingForGenderValues;
+                        LookingForGenderValues = (Model.basicsearchsettings.genderlist != null) ? new HashSet<int>(Model.basicsearchsettings.genderlist.Where(z => z.selected == true & z.id !=0 ).Select(c => c.id).ToList()) : LookingForGenderValues;
 
 
                         ////Appearacnce seache settings values         
@@ -1726,22 +1726,49 @@ namespace Anewluv.Services.Mapping
                         ////set a value to determine weather to evaluate hights i.e if this user has not height values whats the point ?
 
                         HashSet<int> LookingForBodyTypesValues = new HashSet<int>();
-                        LookingForBodyTypesValues = (Model.appearancesearchsettings.bodytypelist != null) ? new HashSet<int>(Model.appearancesearchsettings.bodytypelist.Where(z => z.selected == true).Select(c => c.id).ToList()) : LookingForBodyTypesValues;
-
+                        LookingForBodyTypesValues = (Model.appearancesearchsettings.bodytypelist != null) ? new HashSet<int>(Model.appearancesearchsettings.bodytypelist.Where(z => z.selected == true & z.id !=0 ).Select(c => c.id).ToList()) : LookingForBodyTypesValues;
                         HashSet<int> LookingForEthnicityValues = new HashSet<int>();
-                        LookingForEthnicityValues = (Model.appearancesearchsettings.ethnicitylist != null) ? new HashSet<int>(Model.appearancesearchsettings.ethnicitylist.Where(z => z.selected == true).Select(c => c.id).ToList()) : LookingForEthnicityValues;
-
+                        LookingForEthnicityValues = (Model.appearancesearchsettings.ethnicitylist != null) ? new HashSet<int>(Model.appearancesearchsettings.ethnicitylist.Where(z => z.selected == true & z.id !=0 ).Select(c => c.id).ToList()) : LookingForEthnicityValues;
                         HashSet<int> LookingForEyeColorValues = new HashSet<int>();
-                        LookingForEyeColorValues = (Model.appearancesearchsettings.eyecolorlist != null) ? new HashSet<int>(Model.appearancesearchsettings.eyecolorlist.Where(z => z.selected == true).Select(c => c.id).ToList()) : LookingForEyeColorValues;
-
+                        LookingForEyeColorValues = (Model.appearancesearchsettings.eyecolorlist != null) ? new HashSet<int>(Model.appearancesearchsettings.eyecolorlist.Where(z => z.selected == true & z.id !=0 ).Select(c => c.id).ToList()) : LookingForEyeColorValues;
                         HashSet<int> LookingForHairColorValues = new HashSet<int>();
-                        LookingForHairColorValues = (Model.appearancesearchsettings.haircolorlist != null) ? new HashSet<int>(Model.appearancesearchsettings.haircolorlist .Where(z => z.selected == true).Select(c => c.id).ToList()) : LookingForHairColorValues;
-
+                        LookingForHairColorValues = (Model.appearancesearchsettings.haircolorlist != null) ? new HashSet<int>(Model.appearancesearchsettings.haircolorlist .Where(z => z.selected == true & z.id !=0 ).Select(c => c.id).ToList()) : LookingForHairColorValues;
                         HashSet<int> LookingForHotFeatureValues = new HashSet<int>();
-                        LookingForHotFeatureValues = (Model.appearancesearchsettings.haircolorlist != null) ? new HashSet<int>(Model.appearancesearchsettings.hotfeaturelist.Where(z => z.selected == true).Select(c => c.id).ToList()) : LookingForHotFeatureValues;
+                        LookingForHotFeatureValues = (Model.appearancesearchsettings.hotfeaturelist != null) ? new HashSet<int>(Model.appearancesearchsettings.hotfeaturelist.Where(z => z.selected == true & z.id !=0 ).Select(c => c.id).ToList()) : LookingForHotFeatureValues;
+
+                        //character settings search
+                        HashSet<int> LookingForhumorValues = new HashSet<int>();
+                        LookingForhumorValues = (Model.charactersearchsettings.humorlist != null) ? new HashSet<int>(Model.charactersearchsettings.humorlist.Where(z => z.selected == true & z.id !=0 ).Select(c => c.id).ToList()) : LookingForhumorValues;
+
+                        HashSet<int> LookingFordietValues = new HashSet<int>();
+                        LookingFordietValues = (Model.charactersearchsettings.dietlist != null) ? new HashSet<int>(Model.charactersearchsettings.dietlist.Where(z => z.selected == true & z.id !=0 ).Select(c => c.id).ToList()) : LookingFordietValues;
+
+                        HashSet<int> LookingForhobbyValues = new HashSet<int>();
+                        LookingForhobbyValues = (Model.charactersearchsettings.hobbylist != null) ? new HashSet<int>(Model.charactersearchsettings.hobbylist.Where(z => z.selected == true & z.id !=0 ).Select(c => c.id).ToList()) : LookingForhobbyValues;
+
+                        HashSet<int> LookingFordrinksValues = new HashSet<int>();
+                        LookingFordrinksValues = (Model.charactersearchsettings.drinkslist != null) ? new HashSet<int>(Model.charactersearchsettings.drinkslist.Where(z => z.selected == true & z.id !=0 ).Select(c => c.id).ToList()) : LookingFordrinksValues;
+
+                        HashSet<int> LookingForexerciseValues = new HashSet<int>();
+                        LookingForexerciseValues = (Model.charactersearchsettings.exerciselist != null) ? new HashSet<int>(Model.charactersearchsettings.exerciselist.Where(z => z.selected == true & z.id !=0 ).Select(c => c.id).ToList()) : LookingForexerciseValues;
+
+                        HashSet<int> LookingForsmokesValues = new HashSet<int>();
+                        LookingForsmokesValues = (Model.charactersearchsettings.smokeslist != null) ? new HashSet<int>(Model.charactersearchsettings.smokeslist.Where(z => z.selected == true & z.id !=0 ).Select(c => c.id).ToList()) : LookingForsmokesValues;
+
+                        HashSet<int> LookingForsignValues = new HashSet<int>();
+                        LookingForsignValues = (Model.charactersearchsettings.signlist != null) ? new HashSet<int>(Model.charactersearchsettings.signlist.Where(z => z.selected == true & z.id !=0 ).Select(c => c.id).ToList()) : LookingForsignValues;
+
+                        HashSet<int> LookingForpoliticalviewValues = new HashSet<int>();
+                        LookingForpoliticalviewValues = (Model.charactersearchsettings.politicalviewlist != null) ? new HashSet<int>(Model.charactersearchsettings.politicalviewlist.Where(z => z.selected == true & z.id !=0 ).Select(c => c.id).ToList()) : LookingForpoliticalviewValues;
+
+                        HashSet<int> LookingForreligionValues = new HashSet<int>();
+                        LookingForreligionValues = (Model.charactersearchsettings.religionlist != null) ? new HashSet<int>(Model.charactersearchsettings.religionlist.Where(z => z.selected == true & z.id !=0 ).Select(c => c.id).ToList()) : LookingForreligionValues;
+
+                        HashSet<int> LookingForreligiousattendanceValues = new HashSet<int>();
+                        LookingForreligiousattendanceValues = (Model.charactersearchsettings.religiousattendancelist != null) ? new HashSet<int>(Model.charactersearchsettings.religiousattendancelist.Where(z => z.selected == true & z.id !=0 ).Select(c => c.id).ToList()) : LookingForreligiousattendanceValues;
 
 
-                      
+
                         //remove profiles of members this user has blocked or have blocked this user
 
                         var blocks = db.Repository<action>().getmyactionsbyprofileidandactiontype(Model.profileid.Value, (int)actiontypeEnum.Block).ToList();
@@ -1772,8 +1799,17 @@ namespace Anewluv.Services.Mapping
                         //10-23-2016 fixed code to filter blocks from both sides TO DO need to apply to all other bits
                         var dd2 = (from x in db.Repository<profiledata>().Queryable().Where(p => p.location.Distance(sourcePoint) <= MaxdistanceInMiles
                                    && p.profile.status_id != (int)profilestatusEnum.Banned | p.profile.status_id != (int)profilestatusEnum.Inactive) //block filtering and inactive and banned code                                                                   
-                                   .WhereIf(LookingForEthnicityValues.Count > 0, p => p.profile.profilemetadata.profiledata_ethnicity.Any(r => LookingForEthnicityValues.Contains(r.lu_ethnicity.id))) //sepecial since these ones are many to many
-                                   .WhereIf(LookingForEyeColorValues.Count > 0, z => LookingForEyeColorValues.Contains(z.lu_eyecolor.id)).ToList()
+                                   // appearance search
+                                   .WhereIf(LookingForEthnicityValues.Count > 0, p =>  p.profile.profilemetadata.profiledata_ethnicity.Any(r => LookingForEthnicityValues.Contains(r.lu_ethnicity.id))) //sepecial since these ones are many to many
+                                   .WhereIf(LookingForHotFeatureValues.Count > 0, m => m.profile.profilemetadata.profiledata_hotfeature.Any(s => LookingForHotFeatureValues.Contains(s.lu_hotfeature.id)))
+                                   .WhereIf(LookingForEyeColorValues.Count > 0, z => LookingForEyeColorValues.Contains(z.lu_eyecolor.id))
+                                   .WhereIf(LookingForBodyTypesValues.Count > 0, z => LookingForBodyTypesValues.Contains(z.lu_eyecolor.id))
+                                   .WhereIf(LookingForHairColorValues.Count > 0, z => LookingForHairColorValues.Contains(z.lu_bodytype.id))  //need a to list at the end it seems 
+
+                                    //character settings 
+                                   .WhereIf(LookingForhobbyValues.Count > 0 , p => p.profile.profilemetadata.profiledata_hobby.Any(r => LookingForhobbyValues.Contains(r.lu_hobby.id))) //sepecial since these ones are many to many
+                                   .WhereIf(LookingForhumorValues.Count > 0, z => LookingForhumorValues.Contains(z.lu_humor.id)).ToList()
+
                                    .Where(m=>  !MyActiveblocks.Any(b => b.ProfilesBlockedId == m.profile_id )).Where(n=> !OthersActiveblocks.Any(c => c.ProfiledBlockedmeId == n.profile_id))  //fliter out blocks from both sides
                                   
                                    join f in db.Repository<profile>().Queryable() on x.profile_id equals f.id
