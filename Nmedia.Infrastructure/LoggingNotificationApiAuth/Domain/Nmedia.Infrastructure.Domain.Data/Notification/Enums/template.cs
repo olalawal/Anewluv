@@ -18,10 +18,12 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
     [DataContract]
     public  enum templateenum : int
     {
-       
+       //shared template for logging
         [Description("Generic error message")]
         [EnumMember]
         GenericErrorMessage = 1,
+
+        //anewluv templates
 
         [Description("ContactUs Member Mesage")]
         [EnumMember]
@@ -166,6 +168,8 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
         [Description("Password Change Admin Notification")]
         [EnumMember]
         MemberPasswordChangedAdminNotification = 38,
+
+        //NigeriaConnections Templates
 
     }
 

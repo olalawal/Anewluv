@@ -223,7 +223,8 @@ namespace Nmedia.Services.Notification
 
                         //TO DO cache all these 
                         lu_template template = (from x in (_unitOfWorkAsync.Repository<lu_template>().Queryable().ToList().Where(f => f.id == (int)templateenum.GenericErrorMessage)) select x).FirstOrDefault(); 
-                        lu_messagetype messagetype = (from x in (_unitOfWorkAsync.Repository<lu_messagetype>().Queryable().ToList().Where(f => f.id == (int)(messagetypeenum.DeveloperError))) select x).FirstOrDefault(); 
+                        lu_messagetype messagetype = (from x in (_unitOfWorkAsync.Repository<lu_messagetype>().Queryable().ToList().Where(f => f.id == (int)(messagetypeenum.DeveloperError))) select x).FirstOrDefault();
+                        //lu_application application = (from x in (_unitOfWorkAsync.Repository<lu_application>().Queryable().ToList().Where(f => f.id == error.application.id)) select x).FirstOrDefault();
 
                         var recipientemailaddresss =  
                         await _unitOfWorkAsync.RepositoryAsync<address>().Query(f=> f.addresstype.id == (int)(addresstypeenum.Developer)).SelectAsync();
@@ -231,7 +232,7 @@ namespace Nmedia.Services.Notification
                         //TO DO show the profile id 
                         EmailViewModel returnmodel = new EmailViewModel
                         {
-                            EmailModel  = new EmailModel { subject = template.subject.description, body = template.body.description }
+                            EmailModel  = new EmailModel { subject = template.subject.description, body = template.body.description,applicationid = error.application.id , applicationname = error.application.description }
                         };
                        
 

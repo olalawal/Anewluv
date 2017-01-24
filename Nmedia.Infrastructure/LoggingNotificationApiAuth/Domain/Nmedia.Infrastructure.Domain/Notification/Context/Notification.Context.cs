@@ -39,6 +39,8 @@ namespace Nmedia.Infrastructure.Domain
         public DbSet<lu_templatesubject> lu_templatesubject { get; set; }
         public DbSet<message> messages { get; set; }
 
+        public DbSet<lu_application> lu_application { get; set; }  //matches API application table
+
 
 
         static NotificationContext()

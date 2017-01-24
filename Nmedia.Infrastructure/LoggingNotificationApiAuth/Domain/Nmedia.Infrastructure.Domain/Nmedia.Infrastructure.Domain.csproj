@@ -81,6 +81,14 @@
     <Compile Include="Notification\Migrations\201407131935192_first.Designer.cs">
       <DependentUpon>201407131935192_first.cs</DependentUpon>
     </Compile>
+    <Compile Include="Notification\Migrations\201701240243429_newest.cs" />
+    <Compile Include="Notification\Migrations\201701240243429_newest.Designer.cs">
+      <DependentUpon>201701240243429_newest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Notification\Migrations\201701240755542_moregeneric.cs" />
+    <Compile Include="Notification\Migrations\201701240755542_moregeneric.Designer.cs">
+      <DependentUpon>201701240755542_moregeneric.cs</DependentUpon>
+    </Compile>
     <Compile Include="Notification\Migrations\Configuration.cs" />
     <Compile Include="Notification\ModelBuilder\NotificationModelbuilder.cs" />
     <Compile Include="Notification\Migrations\SeedMethods.cs" />
@@ -128,6 +136,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Notification\Migrations\201407131935192_first.resx">
       <DependentUpon>201407131935192_first.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Notification\Migrations\201701240243429_newest.resx">
+      <DependentUpon>201701240243429_newest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Notification\Migrations\201701240755542_moregeneric.resx">
+      <DependentUpon>201701240755542_moregeneric.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

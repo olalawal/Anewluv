@@ -41,6 +41,14 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
         [DataMember()]
         public DateTime? removaldate { get; set; }
 
+        [DataMember()]
+        public int? application_id { get; set; }
+
+        [DataMember()]
+        public virtual lu_application application { get; set; }
+
+
+
         public static address Create(Action<address> init)
         {
             var address = new address();

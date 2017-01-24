@@ -41,6 +41,11 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
         [DataMember()]
         public virtual lu_templatesubject subject { get; set; }
 
+        //[DataMember()]
+        //public int? application_id { get; set; }
+        //[DataMember()]
+        //public virtual lu_application application { get; set; }
+
         public static lu_template Create(Action<lu_template> init)
         {
             var messagetemplate = new lu_template();

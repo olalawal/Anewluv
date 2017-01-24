@@ -14,9 +14,13 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
      [DataMember]
      public int addresstypeid { get; set; }    
      [DataMember] public int templateid { get; set; }
- 
 
-     [DataMember] public string emailaddress { get; set; }
+    [DataMember]
+    public int applicationid { get; set; }
+
+    [DataMember]
+    public string applicationname { get; set; }
+    [DataMember] public string emailaddress { get; set; }
      //[DataMember] public addresstypeenum addresstypefrom { get; set; }
      // [DataMember] public string from { get; set; }  //only used in contact us
 
@@ -44,8 +48,20 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
      public string activationcode { get; set; }  //Personal user updates strored here
      [DataMember]
      public string openidprovidername { get; set; }  //tells the admins what provider i,e facebook, IG etc was used to validte this user
-     //[DataMember]
-    // public int? addresstypeid { get; set; }  //Personal user updates strored here
+                                                     //[DataMember]
+                                                     // public int? addresstypeid { get; set; }  //Personal user updates strored here
+
+     //new feilds to make the templates generic to any dating site
+
+    [DataMember]
+    public string logourl   { get; set; }
+    [DataMember]
+    public string  emaildeliverystring  { get; set; }
+    [DataMember]
+    public string photourl  { get; set; }
+    [DataMember]
+    public string  bottombulleturl  { get; set; }
+
 
     }
 }

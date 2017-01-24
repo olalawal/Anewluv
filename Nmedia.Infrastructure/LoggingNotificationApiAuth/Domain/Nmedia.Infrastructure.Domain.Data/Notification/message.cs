@@ -58,6 +58,7 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
         [DataMember()]
         public bool? sent { get; set; }
 
+       
 
         public static message Create(Action<message> init)
         {

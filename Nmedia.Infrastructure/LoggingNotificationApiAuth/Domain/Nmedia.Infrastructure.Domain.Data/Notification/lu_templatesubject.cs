@@ -33,7 +33,10 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
          [DataMember()]
          public DateTime? removaldate { get; set; }
 
-
+        //[DataMember()]
+        //public int? application_id { get; set; }
+        //[DataMember()]
+        //public virtual lu_application application { get; set; }
 
         public static lu_templatesubject Create(Action<lu_templatesubject> init)
         {

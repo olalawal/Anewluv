@@ -27,7 +27,6 @@ namespace Nmedia.Infrastructure.Domain.Notification.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
-            SeedMethodsNotificationModel.seedgenerallookups(context);
         }
     }
 }

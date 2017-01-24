@@ -84,6 +84,7 @@
     <Compile Include="Notification\Enums\templatebody.cs" />
     <Compile Include="Notification\Enums\templatefilename.cs" />
     <Compile Include="Notification\Enums\templatesubject.cs" />
+    <Compile Include="Notification\lu_application.cs" />
     <Compile Include="Notification\lu_addressType.cs" />
     <Compile Include="Notification\lu_messageType.cs" />
     <Compile Include="Notification\lu_news.cs" />

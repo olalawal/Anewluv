@@ -7,6 +7,7 @@ delete from   [Promotions].[dbo].[lu_promoter]
  *** end of misc sql ****
 
 
+
 to migrate changes to the model open up package manager console and run the following command 
 
 
@@ -57,8 +58,16 @@ by running 'Add-Migration InitialMigrations' again.
 after you make changes to the data model you can update the Initial Catalog= using the command :
   Update-database -f -verbose -ConfigurationTypeName "Configuration"
 multiple context examples :
-  Update-database -f -verbose -ConfigurationTypeName "WellsFargo.Infrastructure.Domain.Notification.Migrations.Configuration"
+  Update-database -f -verbose -ConfigurationTypeName "Nmedia.Infrastructure.Domain.Notification.Migrations.Configuration"
   Update-database -f -verbose -ConfigurationTypeName "WellsFargo.Infrastructure.Domain.Logging.Migrations.Configuration"
+
+
+   *** if you see this error on update ***
+ Unable to update database to match the current model because there are pending changes and automatic migration is disabled. Either write the pending model changes to a code-based migration or enable automatic migration. Set DbMigrationsConfiguration.AutomaticMigrationsEnabled to true to enable automatic migration.
+You can use the Add-Migration command to write the pending model changes to a code-based migration.
+*******
+-add a new migration and give it a name
+
 2)
 to run a specific migration 
  Update-database -TargetMigration "201306051636172_InitialMigrations" -ConfigurationTypeName "Configuration"

@@ -23,7 +23,12 @@ namespace Nmedia.Infrastructure.Domain
 
             //set up required fiel lookups
             modelBuilder.Entity<systemaddress>().HasRequired(t => t.systemaddresstype).WithMany().HasForeignKey(p => p.systemaddresstype_id).WillCascadeOnDelete(false);
+
             modelBuilder.Entity<address>().HasRequired(t => t.addresstype).WithMany().HasForeignKey(p => p.addresstype_id).WillCascadeOnDelete(false);
+            modelBuilder.Entity<address>().HasOptional(t => t.application).WithMany().HasForeignKey(p => p.application_id).WillCascadeOnDelete(false);
+
+    
+
             modelBuilder.Entity<message>().HasRequired(t => t.messagetype).WithMany().HasForeignKey(p => p.messagetype_id).WillCascadeOnDelete(false); ;
             modelBuilder.Entity<message>().HasOptional(t => t.template).WithMany().HasForeignKey(p => p.template_id).WillCascadeOnDelete(false);
             modelBuilder.Entity<message>().HasRequired(t => t.systemaddress).WithMany().HasForeignKey(p => p.systemaddress_id).WillCascadeOnDelete(false); ;
@@ -36,6 +41,13 @@ namespace Nmedia.Infrastructure.Domain
             modelBuilder.Entity<lu_template>().HasRequired(t => t.body).WithMany().HasForeignKey(p => p.body_id).WillCascadeOnDelete(false);
             modelBuilder.Entity<lu_template>().HasRequired(t => t.subject).WithMany().HasForeignKey(p => p.subject_id).WillCascadeOnDelete(false);
             modelBuilder.Entity<lu_template>().HasRequired(t => t.filename).WithMany().HasForeignKey(p => p.filename_id).WillCascadeOnDelete(false);
+
+            //add required application feilds
+         //   modelBuilder.Entity<lu_template>().HasOptional(t => t.application).WithMany().HasForeignKey(p => p.application_id).WillCascadeOnDelete(false);
+         //   modelBuilder.Entity<lu_templatebody>().HasOptional(t => t.application).WithMany().HasForeignKey(p => p.application_id).WillCascadeOnDelete(false);
+           // modelBuilder.Entity<lu_templatesubject>().HasOptional(t => t.application).WithMany().HasForeignKey(p => p.application_id).WillCascadeOnDelete(false);
+
+
             #endregion
 
             //many to many for address and recipeints
