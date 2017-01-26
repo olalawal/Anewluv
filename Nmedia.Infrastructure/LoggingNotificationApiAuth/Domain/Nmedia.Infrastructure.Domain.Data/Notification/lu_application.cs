@@ -28,6 +28,9 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
         public DateTime? removaldate { get; set; }
 
         [DataMember]
+        public string fromemailaddress { get; set; }
+
+        [DataMember]
         public string logourl { get; set; }
         [DataMember]
         public string emaildeliverystring { get; set; }
@@ -51,6 +54,6 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
         [DataMember]
         public string loginURL { get; set; }
 
-
+       // noreply @anewluv.com
     }
 }

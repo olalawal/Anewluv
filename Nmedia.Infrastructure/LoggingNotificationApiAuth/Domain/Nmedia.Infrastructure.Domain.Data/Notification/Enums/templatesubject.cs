@@ -67,7 +67,7 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
         [EnumMember]
         MemberActivationCodeRecoveredMemberNotification = 12,
 
-        [Description("A Profile ActivationCode has been Recovered!")]
+        [Description("A Profile ActivationCode has been Recovered! on {0}")]
         [EnumMember]
         MemberActivationCodeRecoveredAdminNotification = 13,
 
@@ -95,15 +95,15 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
         [EnumMember]
         MemberRecivedLikeAdminNotification = 19,
 
-        [Description("You have a new Interest on {0} ")]
+        [Description("You have a new Interest on {0} ! ")]
         [EnumMember]
         MemberRecivedInterestMemberNotification = 20,
 
-        [Description("A Member has sent an Interest to another member on {0} ")]
+        [Description("A Member has sent an Interest to another member on {0} !")]
         [EnumMember]
         MemberRecivedInterestAdminNotification = 21,
 
-        [Description("You have a new Chat Request on {0}")]
+        [Description("You have a new Chat Request on {0} !")]
         [EnumMember]
         MemberRecivedChatRequestMemberNotification = 22,
 

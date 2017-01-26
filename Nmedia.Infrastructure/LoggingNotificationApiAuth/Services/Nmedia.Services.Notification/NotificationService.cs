@@ -224,7 +224,7 @@ namespace Nmedia.Services.Notification
                         //TO DO cache all these 
                         lu_template template = (from x in (_unitOfWorkAsync.Repository<lu_template>().Queryable().ToList().Where(f => f.id == (int)templateenum.GenericErrorMessage)) select x).FirstOrDefault(); 
                         lu_messagetype messagetype = (from x in (_unitOfWorkAsync.Repository<lu_messagetype>().Queryable().ToList().Where(f => f.id == (int)(messagetypeenum.DeveloperError))) select x).FirstOrDefault();
-                        //lu_application application = (from x in (_unitOfWorkAsync.Repository<lu_application>().Queryable().ToList().Where(f => f.id == error.application.id)) select x).FirstOrDefault();
+                        lu_application application = (from x in (_unitOfWorkAsync.Repository<lu_application>().Queryable().ToList().Where(f => f.id == error.application.id)) select x).FirstOrDefault();
 
                         var recipientemailaddresss =  
                         await _unitOfWorkAsync.RepositoryAsync<address>().Query(f=> f.addresstype.id == (int)(addresstypeenum.Developer)).SelectAsync();
@@ -250,7 +250,7 @@ namespace Nmedia.Services.Notification
                             c.ObjectState = ObjectState.Added;
                         }));
 
-                        message.sent = message.body != null ? sendemail(message) : false;//attempt to send the message
+                        message.sent = message.body != null ? sendemail(message,application.fromemailaddress) : false;//attempt to send the message
                         message.sendattempts = message.body != null ? 1 : 0;
                         _unitOfWorkAsync.Repository<message>().Insert(message);
                       await  _unitOfWorkAsync.SaveChangesAsync();
@@ -296,7 +296,8 @@ namespace Nmedia.Services.Notification
                     //Id's messed up in DB use the first 
                     //6	1	Anewluv@sendmail.com	NULL	smtp.sendgrid.net	olawal	azure_b5dd8d41de89841c3093bbb13c07425d@azure.com	kw8LHWnK9rnH7zQ	True	2015-04-20 00:00:00.000	NULL               
                     var result = _unitOfWorkAsync.Repository<systemaddress>().Query(a => a.id == (int)systemaddresseenum.SendGridSMTPrelay).Select();
-                    var systemsenderaddress = result.FirstOrDefault();
+                   
+                var systemsenderaddress = result.FirstOrDefault();
                     //11-29-2013 get the template path from web config
                     var TemplatePath = ConfigurationManager.AppSettings["razortemplatefilelocation"];
 
@@ -307,8 +308,14 @@ namespace Nmedia.Services.Notification
 
                             if (model != null)
                             {
-                                EmailViewModel currentEmailViewModel = new EmailViewModel();
+
+                            //we cant assume that a batch of messages are from the same applicaiton, either way this is easier for now
+                            lu_application application = (from x in (_unitOfWorkAsync.Repository<lu_application>().Queryable().ToList().Where(f => f.id == model.applicationid)) select x).FirstOrDefault();
+
+
+                            EmailViewModel currentEmailViewModel = new EmailViewModel();
                                 message message = new message();
+
 
                                 //get or set addresstype
                                 model.addresstypeid = getorverifyaddresstypebytemplate(model);
@@ -344,7 +351,7 @@ namespace Nmedia.Services.Notification
                                 }));
 
 
-                                message.sent = message.body != null ? sendemail(message) : false;//attempt to send the message
+                                message.sent = message.body != null ? sendemail(message,application.fromemailaddress) : false;//attempt to send the message
                                 message.sendattempts = message.body != null ? 1 : 0;
                                 //  db.Add(message);
                                 // int j = db.Commit();
@@ -458,6 +465,8 @@ namespace Nmedia.Services.Notification
             try
             {
 
+
+
                 string subject = ((templatesubjectenum)model.templateid).ToDescription() ;
                 string body = ((templatebodyenum)model.templateid).ToDescription();
                 templateenum selectedtemplate = (templateenum)model.templateid;
@@ -467,6 +476,8 @@ namespace Nmedia.Services.Notification
                 {
                     case templateenum.GenericErrorMessage:
                         // Console.WriteLine("Case 1");
+                        model.subject = subject;
+                        model.body = string.Format(body, model.screenname, model.username, model.passwordtoken);
                         break;
                     case templateenum.MemberPasswordResetMemberNotification:
                         model.subject = subject;
@@ -735,7 +746,7 @@ namespace Nmedia.Services.Notification
         //TO DO this should be handled as a separate send for each so we can update the susccess individually
         //Private reusable internal functions  
         //TO DO this should be handled as a separate send for each so we can update the susccess individually
-        private bool sendemail(message message)
+        private bool sendemail(message message,string fromemailaddress)
         {
             bool isEmailSendSuccessfully = false;
 
@@ -744,7 +755,7 @@ namespace Nmedia.Services.Notification
             {
                 //SmtpClient oSmtpClient = new SmtpClient();
                 //MailMessage oMailMessage = new MailMessage();
-                var FromAddress = "noreply@anewluv.com"; // (message.systemaddress == null | message.systemaddress.emailaddress == null | message.systemaddress.emailaddress == "") ? "MISReporting@wellsfargo.com" : message.systemaddress.emailaddress;
+                var FromAddress = fromemailaddress; // (message.systemaddress == null | message.systemaddress.emailaddress == null | message.systemaddress.emailaddress == "") ? "MISReporting@wellsfargo.com" : message.systemaddress.emailaddress;
 
                 foreach (address recip_loopVariable in message.recipients)
                 {

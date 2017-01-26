@@ -89,6 +89,10 @@
     <Compile Include="Notification\Migrations\201701240755542_moregeneric.Designer.cs">
       <DependentUpon>201701240755542_moregeneric.cs</DependentUpon>
     </Compile>
+    <Compile Include="Notification\Migrations\201701260751475_addedfromaddress.cs" />
+    <Compile Include="Notification\Migrations\201701260751475_addedfromaddress.Designer.cs">
+      <DependentUpon>201701260751475_addedfromaddress.cs</DependentUpon>
+    </Compile>
     <Compile Include="Notification\Migrations\Configuration.cs" />
     <Compile Include="Notification\ModelBuilder\NotificationModelbuilder.cs" />
     <Compile Include="Notification\Migrations\SeedMethods.cs" />
@@ -142,6 +146,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Notification\Migrations\201701240755542_moregeneric.resx">
       <DependentUpon>201701240755542_moregeneric.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Notification\Migrations\201701260751475_addedfromaddress.resx">
+      <DependentUpon>201701260751475_addedfromaddress.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

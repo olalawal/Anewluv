@@ -20,7 +20,7 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
 
     public enum templatebodyenum : int
     {
-        [Description("The Member <b>{0}</b> has generated the following error </br> Error: </br> {1} ")]
+        [Description("The Member <b>{0}</b> has generated the following error on the application : {2} </br> Error: </br> {1} ")]
         [EnumMember]
         GenericErrorMessage = 1,
 
@@ -34,7 +34,7 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
         MemberContactUsAdminMessage = 3,
 
         //profile created
-        [Description("Thank you for creating a profile at {2} <p></p> {2}   provides a new and refreshing way to  meet people from all walks of life.  <p></p> You have <b> FREE </b> access to our exclusive geo-targeting system to link up with members from all around the world! <p></p>  you can easily search for members any distance from you and you will always get acurate REAL results unlike some other websites.  <p></p> Our system spans  hundreds of countries all around the world.  <p></p> We are also adding new features every month <p></p> So get started today! Please click on the link below to activate your profile. <b>If you are unable to activate your profile with the provided link, try copying the activation code directly from this email and pasting it into the activation code box on our activation page</br> Your username is : <b>{0}</>  and  Your activation code is:  <b>  {1} </b> <p></p><a href='{3}/?username={0}?activationcode={1}'>Activate your account on {4}</a><p></p> ")]
+        [Description("Thank you for creating a profile at {2} <p></p> {2}   provides a new and refreshing way to  meet people from all walks of life.  <p></p> You have <b> FREE </b> access to our exclusive Geo-targeting system to link up with members from all around the world! <p></p>  you can easily search for members any distance from you and you will always get accurate REAL results unlike some other websites.  <p></p> Our system spans  hundreds of countries all around the world.  <p></p> We are also adding new features every month <p></p> So get started today! Please click on the link below to activate your profile. <b>If you are unable to activate your profile with the provided link, try copying the activation code directly from this email and pasting it into the activation code box on our activation page</br> Your username is : <b>{0}</>  and  Your activation code is:  <b>  {1} </b> <p></p> {3} <p></p> ")]
         [EnumMember]
         MemberCreatedMemberNotification = 4,
 
@@ -46,17 +46,20 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
         [Description("Dear <b>{0}</b> ,<p></p> Thank you for creating a profile at {2} <p></p> {2}   provides a new and refreshing way to  meet people from all walks of life.  <p></p> You have <b> FREE </b> access to our exclusive Geo-targeting system to link up with members from all around the world! <p></p>  you can easily search for members any distance from you and you will always get accurate REAL results unlike some other websites.  <p></p> Our system spans  hundreds of countries all around the world.  <p></p> We are also adding new features every month <p></p> You profile has already been activated since you signed in with {1} , please make sure you information was correctly uploaded by checking your profile details on our website  </b> </br> Your user name is: <b> {2} </b><p></p>  - The {3} Team <p></p>  ")]
         [EnumMember]
         MemberCreatedJianRainOrOPenIDMemberNotification = 6,
+
         [Description("A new profile for the user <b>{0}</b> with email  <b>{1}</b>  has been created via OpenID or JainRain using: {2} ")]
         [EnumMember]
         MemberCreatedJainRanOrOpenIDAdminNotification = 7,
 
         //member password change notification
-        [Description("Dear {0} ,<p></p> You have initiated an Account recovery on {3} , Your Username is <b> {1} </b> You must reset your password within the next 30 minutes by clicking this reset link <br><a href='{4}'>Reset your password on {5}</a>")]
+        [Description("Dear {0} ,<p></p> You have initiated an Account recovery on {2} , Your Username is <b> {1} </b> You must reset your password within the next 30 minutes by clicking this reset link <br>{3}")]
         [EnumMember]
         MemberPasswordResetMemberNotification = 8,
         [Description("An Account has been recovered on {2} by the user <b>{0}</b> with email :<b>{1}</b>")]
         [EnumMember]
         MemberPasswordResetAdminNotification = 9,
+
+        //***************** TEST above first for the URLS then, do account recovery on Nigeriaconnections first ***************************//
 
         //profile activated 
         [Description("Dear {0} ,<p></p>  Your account has been activated on , You can now log in to your account at <p></p> {1}  <p></p> {2}")]
@@ -69,7 +72,7 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
 
 
         //Activation code recovered 
-        [Description("Dear {0} ,<p></p>You have recovered you activation code  </br>  Please click on the link below to activate your profile. <b>If you are unable to activate your profile with the provided link, try copying the activation code directly from this email and pasting it into the activation code box on our activation page</br><p></p><a href=\'http://www.AnewLuv.com/Account/LandingSPA/?activationcode={1}'>Activiate your account on www.Anewluv.com</a><p></p>")]
+        [Description("Dear {0} ,<p></p>You have recovered you activation code  </br>  Please click on the link below to activate your profile. <b>If you are unable to activate your profile with the provided link, try copying the activation code directly from this email and pasting it into the activation code box on our activation page</br><p></p>{1}<p></p>")]
         [EnumMember]
         MemberActivationCodeRecoveredMemberNotification = 12,
         [Description("A Profile ActivationCode for the user {0} with email address : {1} has been recovered on AnewLuv.com")]
